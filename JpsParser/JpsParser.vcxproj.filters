@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{d4880dee-617f-4c72-93d7-442423c2c26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Log">
+      <UniqueIdentifier>{703ad91e-d1a5-45d3-b1ac-05fb2999e316}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Util">
+      <UniqueIdentifier>{4f953bf4-61bb-4b8b-b582-6fa1b34a7f7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Settings">
+      <UniqueIdentifier>{b5fa1583-6cad-4479-9d5e-1528474ae2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GREIS">
+      <UniqueIdentifier>{46290229-ddc5-4675-815c-183cd232898a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Exceptions">
+      <UniqueIdentifier>{efb6d50d-a82b-48fe-a2d0-d8d8c86b011e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{2c5f0b63-f47c-4a7e-bdb9-eb1f4f8c9dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Database">
+      <UniqueIdentifier>{fa03a132-ae54-4b60-b9a0-c40079c7a2c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Common\Log\Log.cpp">
+      <Filter>Common\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Settings\Settings.cpp">
+      <Filter>Common\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GreisMessage.cpp">
+      <Filter>GREIS</Filter>
+    </ClCompile>
+    <ClCompile Include="JpsFile.cpp">
+      <Filter>GREIS</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\Log\Log.h">
+      <Filter>Common\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util\singleton.h">
+      <Filter>Common\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Settings\Settings.h">
+      <Filter>Common\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Exceptions\DatabaseException.h">
+      <Filter>Common\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Exceptions\DataStructureException.h">
+      <Filter>Common\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Exceptions\Exception.h">
+      <Filter>Common\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Exceptions\FileException.h">
+      <Filter>Common\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisMessage.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util\macros.h">
+      <Filter>Common\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util\File.h">
+      <Filter>Common\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisMessageStream.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util\commonBoost.h">
+      <Filter>Common\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisException.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Exceptions\InvalidOperationException.h">
+      <Filter>Common\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisChecksum.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisTypes.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="JpsFile.h">
+      <Filter>GREIS</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseWriter.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Database\Connection.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Database\DatabaseHelper.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Database\DataInserter.h">
+      <Filter>Common\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util\BitConverter.h">
+      <Filter>Common\Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
