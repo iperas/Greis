@@ -14,7 +14,7 @@
 #include <boost/thread/thread.hpp>
 #endif
 
-namespace Common
+namespace Util
 {
     template<class T>
     class Singleton
@@ -47,18 +47,17 @@ namespace Common
         Singleton(const Singleton&);
         Singleton& operator=(const Singleton&);
     };
-} // Common
+}
 
 #define SINGLETON_BLOCK(ClassName)\
 public:\
     virtual ~ClassName();\
 protected:\
-    friend class ::Common::Singleton<ClassName>;\
-    ClassName();\
+    friend class ::Util::Singleton<ClassName>;\
     ClassName(ClassName const&) {}\
     ClassName inline& operator=(ClassName const&) { return *this; }\
 private:
 
-#define SINGLETON_INSTANCE(ClassName) ::Common::Singleton<ClassName>::Instance()
+#define SINGLETON_INSTANCE(ClassName) ::Util::Singleton<ClassName>::Instance()
 
 #endif // SINGLETON_H

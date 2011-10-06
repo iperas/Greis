@@ -4,7 +4,9 @@
 #include <QString>
 #include <string>
 
-#include "../Util/singleton.h"
+#include "Util/Singleton.h"
+
+using namespace Util;
 
 using std::string;
 
@@ -14,6 +16,8 @@ namespace Common
     {
         SINGLETON_BLOCK(Log)
     public:
+        Log();
+
         void addError(const QString& message, const QString& details = QString());
         void addWarning(const QString& message, const QString& details = QString());
         void addInfo(const QString& message, const QString& details = QString());

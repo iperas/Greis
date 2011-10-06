@@ -3,7 +3,9 @@
 
 #include <QSettings>
 #include <QString>
-#include "../Util/singleton.h"
+#include "Util/Singleton.h"
+
+using namespace Util;
 
 namespace Common
 {
@@ -11,6 +13,8 @@ namespace Common
     {
         SINGLETON_BLOCK(Settings)
     public:
+        Settings();
+
         bool Initialize(const QString& settingsFile);
         void setValue(const QString& key, const QVariant& value);
         QVariant value(const QString & key, const QVariant & defaultValue = QVariant()) const;

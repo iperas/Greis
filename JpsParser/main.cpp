@@ -18,8 +18,45 @@
 using namespace std;
 using namespace Greis;
 
+#include "Util/Logger.h"
+
+void foo(void*)
+{
+    log4cxx::LoggerPtr logger = log4cxx::Logger::getRootLogger();
+    for(int i=0;i<10;++i){
+        LOG4CXX_DEBUG((logger),  L"debug" << L"other debug message");
+        LOG4CXX_TRACE((logger),  L"trace");
+        LOG4CXX_INFO((logger),  L"привет, мир!");
+        LOG4CXX_WARN((logger),  L"WARN");
+        LOG4CXX_ERROR((logger),  L"error");
+        LOG4CXX_FATAL((logger),  L"FATAL");
+    }
+}
+
+#include <windows.h>
+
 int main(int argc, char *argv[])
 {
+    setlocale(LC_ALL, "Russian_Russia.OCP");	//иначе русский не будет нормально работать
+
+    TCHAR selfName[MAX_PATH];
+    HMODULE hModule = GetModuleHandle(NULL);
+    GetModuleFileName(hModule, selfName, _countof(selfName));
+    std::wstring configFile(selfName);
+    configFile.append(L".logconfig");
+    log4cxx::xml::DOMConfigurator::configure(configFile);
+
+    log4cxx::xml::DOMConfigurator::configure(L"D:/Documents/svn_ifz_ipg/Projects/trunk/src/JpsParser/JpsParser/logger.config.xml");
+
+    for(int i=0;i<10;++i){
+        foo(NULL);
+        //_beginthread(foo,0,NULL);
+    }
+
+    std::cin.get();
+
+    return 0;
+
     try
     {
         std::setlocale(LC_ALL, "Russian_Russia.1251");

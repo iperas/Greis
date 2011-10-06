@@ -25,6 +25,12 @@
     <Filter Include="Common\Database">
       <UniqueIdentifier>{fa03a132-ae54-4b60-b9a0-c40079c7a2c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Refactored">
+      <UniqueIdentifier>{954f9204-7cca-427c-a68e-42fe18db887a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Refactored\Util">
+      <UniqueIdentifier>{fc37742d-e91d-4414-9aab-cc9749ce6667}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Log\Log.cpp">
@@ -44,9 +50,6 @@
   <ItemGroup>
     <ClInclude Include="Common\Log\Log.h">
       <Filter>Common\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Util\singleton.h">
-      <Filter>Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Common\Settings\Settings.h">
       <Filter>Common\Settings</Filter>
@@ -108,5 +111,14 @@
     <ClInclude Include="Common\Util\BitConverter.h">
       <Filter>Common\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Util\Logger.h">
+      <Filter>Refactored\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Singleton.h">
+      <Filter>Refactored\Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="logger.config.xml" />
   </ItemGroup>
 </Project>
