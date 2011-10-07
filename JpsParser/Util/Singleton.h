@@ -50,8 +50,6 @@ namespace Util
 }
 
 #define SINGLETON_BLOCK(ClassName)\
-public:\
-    virtual ~ClassName();\
 protected:\
     friend class ::Util::Singleton<ClassName>;\
     ClassName(ClassName const&) {}\

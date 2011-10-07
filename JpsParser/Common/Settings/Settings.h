@@ -14,6 +14,7 @@ namespace Common
         SINGLETON_BLOCK(Settings)
     public:
         Settings();
+        ~Settings();
 
         bool Initialize(const QString& settingsFile);
         void setValue(const QString& key, const QVariant& value);

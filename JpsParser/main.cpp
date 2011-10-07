@@ -33,30 +33,8 @@ void foo(void*)
     }
 }
 
-#include <windows.h>
-
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "Russian_Russia.OCP");	//иначе русский не будет нормально работать
-
-    TCHAR selfName[MAX_PATH];
-    HMODULE hModule = GetModuleHandle(NULL);
-    GetModuleFileName(hModule, selfName, _countof(selfName));
-    std::wstring configFile(selfName);
-    configFile.append(L".logconfig");
-    log4cxx::xml::DOMConfigurator::configure(configFile);
-
-    log4cxx::xml::DOMConfigurator::configure(L"D:/Documents/svn_ifz_ipg/Projects/trunk/src/JpsParser/JpsParser/logger.config.xml");
-
-    for(int i=0;i<10;++i){
-        foo(NULL);
-        //_beginthread(foo,0,NULL);
-    }
-
-    std::cin.get();
-
-    return 0;
-
     try
     {
         std::setlocale(LC_ALL, "Russian_Russia.1251");
@@ -71,6 +49,11 @@ int main(int argc, char *argv[])
         QTextCodec::setCodecForLocale(codec);
         QTextCodec::setCodecForTr(codec);
 
+        const wchar_t* ay = QCoreApplication::applicationDirPath().toStdWString().c_str();
+        wstring cf = ay;
+        //cf = L"1";
+        // static init
+        sLogger.Initialize(QCoreApplication::applicationDirPath() + "logger.config.xml");
         sLog.Initialize(false, QCoreApplication::applicationDirPath() + "/converter.log");
         sSettings.Initialize(QCoreApplication::applicationDirPath() + "/config.ini");
         QStringList args = a.arguments();

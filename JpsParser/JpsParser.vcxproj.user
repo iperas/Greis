@@ -3,9 +3,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommandArguments>"D:\Documents\svn_ifz_ipg\Projects\trunk\JpsParser\DataSample\ipg_2011_03_22_00.00.00.jps" "D:/Documents/svn_ifz_ipg/Projects/trunk/JpsParser/DataSample/ipg100310 145037.jps"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(LOG4CXX)\bin\$(PlatformToolset)\$(Configuration)
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments>"D:\Documents\svn_ifz_ipg\Projects\trunk\JpsParser\DataSample\ipg_2011_03_22_00.00.00.jps" "D:/Documents/svn_ifz_ipg/Projects/trunk/JpsParser/DataSample/ipg100310 145037.jps"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(LOG4CXX)\bin\$(PlatformToolset)\$(Configuration)
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
   </PropertyGroup>
 </Project>

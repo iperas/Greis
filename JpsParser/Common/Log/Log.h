@@ -17,6 +17,7 @@ namespace Common
         SINGLETON_BLOCK(Log)
     public:
         Log();
+        ~Log();
 
         void addError(const QString& message, const QString& details = QString());
         void addWarning(const QString& message, const QString& details = QString());

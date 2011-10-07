@@ -24,11 +24,50 @@ namespace Util
     class Logger
     {
         SINGLETON_BLOCK(Logger)
+    private:
+        log4cxx::LoggerPtr _logger;
     public:
 
+        Logger() {}
+
+        void Initialize(const QString& configFile)
+        {
+            log4cxx::xml::DOMConfigurator::configure(configFile.toStdWString());
+            _logger = log4cxx::Logger::getRootLogger();
+        }
+
+        void Debug(const QString& message)
+        {
+            LOG4CXX_DEBUG(_logger, message.toStdWString());
+        }
+
+        void Trace(const QString& message)
+        {
+            LOG4CXX_TRACE(_logger, message.toStdWString());
+        }
+
+        void Info(const QString& message)
+        {
+            LOG4CXX_INFO(_logger, message.toStdWString());
+        }
+
+        void Warn(const QString& message)
+        {
+            LOG4CXX_WARN(_logger, message.toStdWString());
+        }
+
+        void Error(const QString& message)
+        {
+            LOG4CXX_ERROR(_logger, message.toStdWString());
+        }
+
+        void Fatal(const QString& message)
+        {
+            LOG4CXX_FATAL(_logger, message.toStdWString());
+        }
     };
 }
 
-//#define sLog SINGLETON_INSTANCE(::Util::Log)
+#define sLogger SINGLETON_INSTANCE(::Util::Logger)
 
 #endif // Logger_h__
