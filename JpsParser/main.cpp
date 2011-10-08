@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
         // static init
         sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
+        StdMessage_t::parseXml();
         sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
         QStringList args = a.arguments();
 

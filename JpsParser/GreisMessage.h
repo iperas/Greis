@@ -13,6 +13,9 @@
 #include "GreisChecksum.h"
 
 #include <boost/format.hpp>
+#include <QtXml/QtXml>
+#include "Util/File.h"
+#include "Util/Logger.h"
 
 using std::string;
 using std::vector;
@@ -113,6 +116,36 @@ namespace Greis
         {
             memcpy(&_message[0], p_message, p_length);
         }
+
+        //---
+        static void parseXml()
+        {
+            QDomDocument doc;
+            QFilePtr file = File::OpenReadBinary("D:/Documents/svn_ifz_ipg/Projects/trunk/src/JpsParser/GreisDocParser/bin/Debug/output.txt");
+            if (!doc.setContent(file.get()))
+            {
+                file->close();
+                return;
+            }
+            file->close();
+
+            // print out the element names of all elements that are direct children
+            // of the outermost element.
+            QDomElement docElem = doc.documentElement();
+
+            QDomNode n = docElem.firstChild();
+            while(!n.isNull())
+            {
+                QDomElement e = n.toElement(); // try to convert the node to an element.
+                if(!e.isNull())
+                {
+                    sLogger.Info(e.attribute("Title"));
+                    //cout << qPrintable(e.tagName()) << endl; // the node really is an element.
+                }
+                n = n.nextSibling();
+            }
+        }
+        //---
 
         virtual string toString() const
         {

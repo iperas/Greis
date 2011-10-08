@@ -25,6 +25,13 @@ namespace GreisDocParser
         f8, // f8 | IEEE-754 double precision floating point | 8
     }*/
 
+    public enum ValidationTypes
+    {
+        Checksum,
+        ChecksumAsHexAscii,
+        Crc16
+    }
+
     [Serializable]
     public class StandardMessage
     {
@@ -43,8 +50,10 @@ namespace GreisDocParser
         public string Name { get; set; }
         [XmlAttribute]
         public int Size { get; set; }
+        [XmlArrayItem("Code")]
         public List<string> Codes { get; set; }
         public List<Variable> Variables { get; set; }
+        public ValidationTypes Validation { get; set; }
     }
 
     [Serializable]
@@ -232,13 +241,36 @@ namespace GreisDocParser
                         lastAddedVariables = variables;
                         msg.Variables.AddRange(variables);
                     }
+                    // Checksum or crc16?
+                    if (msg.Variables.Count > 0)
+                    {
+                        var lastVar = msg.Variables.Last();
+                        if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum")
+                        {
+                            msg.Validation = ValidationTypes.Checksum;
+                        }
+                        if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum formatted as hexadecimal")
+                        {
+                            msg.Validation = ValidationTypes.ChecksumAsHexAscii;
+                        }
+                        if (lastVar.Name == "crc16" && lastVar.Comment.Contains("16-bit CRC"))
+                        {
+                            msg.Validation = ValidationTypes.Crc16;
+                        }
+                    }
+
                     messages.Add(msg);
                 }
+                var knownSize = messages.Where(m => m.Size != StandardMessage.DynamicSize).ToList();
+                var unknownSize = messages.Where(m => m.Size == StandardMessage.DynamicSize).ToList();
+                // serializing
                 var serializer = new XmlSerializer(typeof (List<StandardMessage>));
                 using (var outFile = File.Create(textBoxOutputPath.Text))
                 {
                     serializer.Serialize(outFile, messages);
                 }
+                // end
+                MessageBox.Show("Parsing successfully complete!");
             }
             catch (Exception ex)
             {
