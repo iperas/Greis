@@ -1,8 +1,7 @@
 #ifndef JpsFile_h__
 #define JpsFile_h__
 
-#include "Common/Util/macros.h"
-#include "Common/Util/commonBoost.h"
+#include "Util/Macro.h"
 #include "GreisMessage.h"
 #include "GreisMessageStream.h"
 #include <list>

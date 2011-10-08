@@ -1,8 +1,7 @@
 #ifndef DatabaseException_h__
 #define DatabaseException_h__
 
-#include <QtCore/QtCore>
-#include "Exception.h"
+#include "Util/Exception.h"
 
 class DatabaseException : public Exception
 {

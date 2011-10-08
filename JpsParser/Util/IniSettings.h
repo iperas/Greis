@@ -1,20 +1,18 @@
-#ifndef __SettingsController_h__
-#define __SettingsController_h__
+#ifndef IniSettings_h__
+#define IniSettings_h__
 
 #include <QSettings>
 #include <QString>
 #include "Util/Singleton.h"
 
-using namespace Util;
-
-namespace Common
+namespace Util
 {
-    class Settings
+    class IniSettings
     {
-        SINGLETON_BLOCK(Settings)
+        SINGLETON_BLOCK(IniSettings)
     public:
-        Settings();
-        ~Settings();
+        IniSettings();
+        ~IniSettings();
 
         bool Initialize(const QString& settingsFile);
         void setValue(const QString& key, const QVariant& value);
@@ -28,6 +26,6 @@ namespace Common
     };
 }
 
-#define sSettings SINGLETON_INSTANCE(::Common::Settings)
+#define sIniSettings SINGLETON_INSTANCE(::Util::IniSettings)
 
-#endif
+#endif // IniSettings_h__

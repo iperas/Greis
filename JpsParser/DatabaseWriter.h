@@ -6,8 +6,8 @@
 #include <memory>
 #include "Common/Exceptions/DatabaseException.h"
 #include "Common/Database/DatabaseHelper.h"
-#include "Common/Settings/Settings.h"
-#include "Common/Log/Log.h"
+#include "Util/IniSettings.h"
+#include "Util/Logger.h"
 #include "Common/Database/DataInserter.h"
 #include "Common/Database/Connection.h"
 #include "JpsFile.h"
@@ -65,7 +65,7 @@ public:
 
     void AddData(JpsFile_t::Pointer_t jpsFile)
     {
-        sLog.addInfo(QString("Добавление данных из источника '%1' в базу данных...").arg(jpsFile->filename()));
+        sLogger.Info(QString("Добавление данных из источника '%1' в базу данных...").arg(jpsFile->filename()));
         /*QVector<QString> insertingColumns;
         QVector<int> insertingIndexes;
         int unixTimeColumnIndex;
@@ -151,7 +151,7 @@ public:
             dataInserter.AddRow(insertDataLine);
         }
         dataInserter.Flush();*/
-        sLog.addInfo(QString("...завершено."));
+        sLogger.Info(QString("...завершено."));
     }
 };
 

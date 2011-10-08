@@ -6,8 +6,8 @@
 #include <boost/shared_ptr.hpp>
 #include "Common/Exceptions/DatabaseException.h"
 #include "DatabaseHelper.h"
-#include "Common/Settings/Settings.h"
-#include "Common/Log/Log.h"
+#include "Util/IniSettings.h"
+#include "Util/Logger.h"
 
 class Connection
 {
@@ -59,23 +59,23 @@ public:
 	{
 		Connection ci;
 		ci._settingsPrefix = settingsPrefix;
-		ci.Driver = sSettings.value(settingsPrefix + ".Driver", "").toString();
-		ci.DatabaseName = sSettings.value(settingsPrefix + ".DatabaseName", "").toString();
-		ci.Username = sSettings.value(settingsPrefix + ".Username", "").toString();
-		ci.Password = sSettings.value(settingsPrefix + ".Password", "").toString();
-		ci.Hostname = sSettings.value(settingsPrefix + ".Hostname", "").toString();
-		ci.Port = sSettings.value(settingsPrefix + ".Port", 0).toInt();
+		ci.Driver = sIniSettings.value(settingsPrefix + ".Driver", "").toString();
+		ci.DatabaseName = sIniSettings.value(settingsPrefix + ".DatabaseName", "").toString();
+		ci.Username = sIniSettings.value(settingsPrefix + ".Username", "").toString();
+		ci.Password = sIniSettings.value(settingsPrefix + ".Password", "").toString();
+		ci.Hostname = sIniSettings.value(settingsPrefix + ".Hostname", "").toString();
+		ci.Port = sIniSettings.value(settingsPrefix + ".Port", 0).toInt();
 		return ci;
 	}
 
 	void ToSettings()
 	{
-		sSettings.setValue(_settingsPrefix + ".Driver", Driver);
-		sSettings.setValue(_settingsPrefix + ".DatabaseName", DatabaseName);
-		sSettings.setValue(_settingsPrefix + ".Username", Username);
-		sSettings.setValue(_settingsPrefix + ".Password", Password);
-		sSettings.setValue(_settingsPrefix + ".Hostname", Hostname);
-		sSettings.setValue(_settingsPrefix + ".Port", Port);
+		sIniSettings.setValue(_settingsPrefix + ".Driver", Driver);
+		sIniSettings.setValue(_settingsPrefix + ".DatabaseName", DatabaseName);
+		sIniSettings.setValue(_settingsPrefix + ".Username", Username);
+		sIniSettings.setValue(_settingsPrefix + ".Password", Password);
+		sIniSettings.setValue(_settingsPrefix + ".Hostname", Hostname);
+		sIniSettings.setValue(_settingsPrefix + ".Port", Port);
 	}
 };
 

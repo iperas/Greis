@@ -1,9 +1,9 @@
-#ifndef macros_h__
-#define macros_h__
+#ifndef macro_h__
+#define macro_h__
 
 #include <boost/static_assert.hpp>
 
-/**** helper macros ****/
+/* ----------------- Internal macro (do not use it) ------------------- */
 
 /* turn a numeric literal into a hex constant
 (avoids problems with leading zeroes)
@@ -21,21 +21,23 @@
 	+((x&0x0F000000LU)?64:0) \
 	+((x&0xF0000000LU)?128:0)
 
-/* *** user macros *** */
+/* ----------------- 'B8(01010101) => decimal-value' converters ------------------- */
 
-/* for upto 8-bit binary constants */
+/* for upto 8-bit binary constants. Usage: B8(01010101) => decimal-value */
 #define B8(d) ((unsigned char)B8__(HEX__(d)))
 
-/* for upto 16-bit binary constants, MSB first */
+/* for upto 16-bit binary constants, MSB first. Usage: B16(01010101, 01010101) => decimal-value */
 #define B16(dmsb,dlsb) (((unsigned short)B8(dmsb)<< \
 	+ B8(dlsb))
 
-/* for upto 32-bit binary constants, MSB first */
+/* for upto 32-bit binary constants, MSB first. Usage: B32(01010101, 01010101, 01010101, 01010101) => decimal-value */
 #define B32(dmsb,db2,db3,dlsb) (((unsigned long)B8(dmsb)<<24) \
 	+ ((unsigned long)B8(db2)<<16) \
 	+ ((unsigned long)B8(db3)<< \
 	+ B8(dlsb))
 
-#define VALIDATE_TYPE_SIZE(TYPENAME, EXPECTEDSIZE) BOOST_STATIC_ASSERT(sizeof(TYPENAME) == EXPECTEDSIZE/*, "The size of "#TYPENAME" is incorrect"*/)
+/* ----------------- Type size static assertion ------------------- */
 
-#endif // macros_h__
+#define VALIDATE_TYPE_SIZE(TYPENAME, EXPECTEDSIZE) BOOST_STATIC_ASSERT(sizeof(TYPENAME) == EXPECTEDSIZE)
+
+#endif // macro_h__

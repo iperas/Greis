@@ -1,9 +1,9 @@
 #ifndef GreisMessage_h__
 #define GreisMessage_h__
 
-#include "Common/Util/macros.h"
-#include "Common/Util/commonBoost.h"
-#include "Common/Exceptions/InvalidOperationException.h"
+#include "Util/Macro.h"
+#include "Util/SharedPtr.h"
+#include "Util/InvalidOperationException.h"
 #include <cassert>
 #include <string>
 #include <vector>
@@ -12,9 +12,13 @@
 #include "GreisTypes.h"
 #include "GreisChecksum.h"
 
+#include <boost/format.hpp>
+
 using std::string;
 using std::vector;
 using std::map;
+
+using namespace Util;
 
 namespace stringBoost = boost::algorithm;
 

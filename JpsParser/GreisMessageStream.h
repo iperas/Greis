@@ -2,8 +2,8 @@
 #define GreisMessageStream_h__
 
 #include <QtCore/QtCore>
-#include "Common/Util/File.h"
-#include "Common/Log/Log.h"
+#include "Util/File.h"
+#include "Util/Logger.h"
 #include <string>
 #include "GreisException.h"
 
@@ -61,7 +61,7 @@ NextLabel: // avoiding stack overflow in recursive call
                 if (eom == 0)
                 {
                     // Файл закончился до появления eom символа
-                    sLog.addWarning(QString("Unexpected end of file, readed %1 body bytes of non-standard text message, expected EOM.").arg(body.size()));
+                    sLogger.Warn(QString("Unexpected end of file, readed %1 body bytes of non-standard text message, expected EOM.").arg(body.size()));
                     return nullPtr;
                 }
                 NonStdTextMessage_t::Pointer_t msg = NonStdTextMessage_t::Pointer_t(new NonStdTextMessage_t(id, body, eom));
@@ -91,7 +91,7 @@ NextLabel: // avoiding stack overflow in recursive call
                     if (id0 < minSM || id0 > maxSM || id1 < minSM || id1 > maxSM)
                     {
                         _file->read(1);
-                        sLog.addWarning(QString("1 byte skipped."));
+                        sLogger.Warn(QString("1 byte skipped."));
                         goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
                     }
                     // message len
@@ -106,14 +106,14 @@ NextLabel: // avoiding stack overflow in recursive call
                     QByteArray data = _file->read(msgLen + StdMsgHeaderLen);
                     if (data.size() != msgLen + StdMsgHeaderLen)
                     {
-                        sLog.addWarning(QString("Unexpected end of file, readed %1 bytes of standard message, expected %2.")
+                        sLogger.Warn(QString("Unexpected end of file, readed %1 bytes of standard message, expected %2.")
                             .arg(data.size()).arg(msgLen + StdMsgHeaderLen));
                         return nullPtr;
                     }
                     StdMessage_t::Pointer_t msg = StdMessageFactory_t::Create(data.data(), msgLen + StdMsgHeaderLen);
                     if (skipInvalid && !msg->validate())
                     {
-                        sLog.addWarning(QString("Invalid message."), QString("Skip this one and look forward."));
+                        sLogger.Warn(QString("Invalid message. ") + QString("Skip this one and look forward."));
                         goto NextLabel;
                     }
                     //sLog.addInfo(msg->toString());
@@ -121,8 +121,8 @@ NextLabel: // avoiding stack overflow in recursive call
                 } else {
                     // Данные еще есть, но это не Greis-сообщение
                     _file->read(1);
-                    sLog.addWarning(QString("Unexpected end of file"), 
-                        QString("cant read whole standard message header, readed: %1, expected: 1. Skip 1 byte and try to find Non-standard Text Message.")
+                    sLogger.Warn(QString("Unexpected end of file. ") +
+                        QString("Cannot read whole standard message header, readed: %1, expected: 1. Skip 1 byte and try to find Non-standard Text Message.")
                             .arg(header.size()));
                     goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
                 }
@@ -138,7 +138,7 @@ NextLabel: // avoiding stack overflow in recursive call
 
     private:
         QString _filename;
-        FilePtr _file;
+        QFilePtr _file;
         static const int StdMsgHeaderLen = 5;
     };
 }

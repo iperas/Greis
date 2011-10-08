@@ -2,14 +2,13 @@
 #include <iostream>
 #include <clocale>
 #include <locale>
-#include "Common/Exceptions/Exception.h"
-#include "Common/Log/Log.h"
-#include "Common/Settings/Settings.h"
+#include "Util/Exception.h"
+#include "Util/IniSettings.h"
 
 #include "GreisMessage.h"
 #include "GreisMessageStream.h"
 #include "JpsFile.h"
-#include "Common/Exceptions/FileException.h"
+#include "Util/FileException.h"
 #include "DatabaseWriter.h"
 
 #include <fstream>
@@ -19,19 +18,10 @@ using namespace std;
 using namespace Greis;
 
 #include "Util/Logger.h"
+#include "Util/Path.h"
+#include "Util/BitConverter.h"
 
-void foo(void*)
-{
-    log4cxx::LoggerPtr logger = log4cxx::Logger::getRootLogger();
-    for(int i=0;i<10;++i){
-        LOG4CXX_DEBUG((logger),  L"debug" << L"other debug message");
-        LOG4CXX_TRACE((logger),  L"trace");
-        LOG4CXX_INFO((logger),  L"привет, мир!");
-        LOG4CXX_WARN((logger),  L"WARN");
-        LOG4CXX_ERROR((logger),  L"error");
-        LOG4CXX_FATAL((logger),  L"FATAL");
-    }
-}
+using namespace Util;
 
 int main(int argc, char *argv[])
 {
@@ -49,18 +39,14 @@ int main(int argc, char *argv[])
         QTextCodec::setCodecForLocale(codec);
         QTextCodec::setCodecForTr(codec);
 
-        const wchar_t* ay = QCoreApplication::applicationDirPath().toStdWString().c_str();
-        wstring cf = ay;
-        //cf = L"1";
         // static init
-        sLogger.Initialize(QCoreApplication::applicationDirPath() + "logger.config.xml");
-        sLog.Initialize(false, QCoreApplication::applicationDirPath() + "/converter.log");
-        sSettings.Initialize(QCoreApplication::applicationDirPath() + "/config.ini");
+        sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
+        sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
         QStringList args = a.arguments();
 
         if (args.count() < 2)
         {
-            sLog.addError(QString("Invalid command line arguments. Usage: JpsParser <input Jps file>"));
+            sLogger.Error(QString("Invalid command line arguments. Usage: JpsParser <input Jps file>"));
             return 1;
         }
         QString filename = args[1];
@@ -100,7 +86,7 @@ int main(int argc, char *argv[])
     }
     catch (Exception& e)
     {
-        sLog.addError(e.what());
+        sLogger.Error(e.what());
         return 1;
     }
 }

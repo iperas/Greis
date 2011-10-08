@@ -2,8 +2,8 @@
 #define DataInserter_h__
 
 #include <QtCore/QtCore>
-#include "../Exceptions/Exception.h"
-#include "../Log/Log.h"
+#include "Util/Exception.h"
+#include "Util/Logger.h"
 #include "Connection.h"
 #include "DatabaseHelper.h"
 
@@ -15,7 +15,7 @@ class DataInserter
     Connection* _connection;
     DatabaseHelper* _dbHelper;
 public:
-    // insertTemplate: "INSERT INTO <table name>(<column name> [<column name>]) VALUES "
+    // insertTemplate: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES "
     // connection: pointer to connection class
     DataInserter(const QString& insertTemplate, Connection* connection)
     {
@@ -26,7 +26,7 @@ public:
         _rowsAdded = 0;
     }
 
-    // rowValueInBrackets: "(<value for col1> [<value for col #>])"
+    // rowValueInBrackets: "(<value for col1>[, <value for col #>])"
     void AddRow(const QString& rowValueInBrackets)
     {
         // Выполнение запроса если необходимо
@@ -53,7 +53,7 @@ public:
         {
             _dbHelper->ExecuteQuery(ResultQuery());
             _resultInsertQuery = _insertTemplate;
-            sLog.addInfo(QString("Добавлено %1 записей...").arg(_rowsAdded));
+            sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
             _rowsAdded = 0;
         }
     }

@@ -1,7 +1,7 @@
 #ifndef Logger_h__
 #define Logger_h__
 
-#include "Util/Singleton.h"
+#include "Singleton.h"
 
 //apache log4cxx
 #pragma warning(push)

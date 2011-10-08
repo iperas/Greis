@@ -5,7 +5,7 @@ namespace Greis
 {
     namespace Types
     {
-        // Type Name | Meaning | Length in Bytes
+                                    // Type Name | Meaning | Length in Bytes
         typedef char a1;            // a1 | ASCII character | 1
         typedef char i1;            // i1 | signed integer | 1
         typedef short i2;           // i2 | signed integer | 2

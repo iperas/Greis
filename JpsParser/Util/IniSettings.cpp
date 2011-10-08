@@ -1,5 +1,4 @@
-#include "Settings.h"
-#include "../Log/Log.h"
+#include "IniSettings.h"
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -8,20 +7,20 @@
 #include <QMap>
 #include <QTextCodec>
 
-namespace Common
+namespace Util
 {
-    Settings::Settings()
+    IniSettings::IniSettings()
     {
         _pSettings = 0;
     }
 
-    Settings::~Settings()
+    IniSettings::~IniSettings()
     {
         if (_pSettings)
             delete _pSettings;
     }
 
-    bool Settings::Initialize(const QString& settingsFile)
+    bool IniSettings::Initialize(const QString& settingsFile)
     {
         _settingsFile = settingsFile;
         _pSettings = new QSettings(_settingsFile, QSettings::IniFormat);
@@ -29,12 +28,12 @@ namespace Common
         return true;
     }
 
-    void Settings::setValue( const QString& key, const QVariant& value )
+    void IniSettings::setValue( const QString& key, const QVariant& value )
     {
         _pSettings->setValue(key, value);
     }
 
-    QVariant Settings::value( const QString & key, const QVariant & defaultValue /*= QVariant()*/ ) const
+    QVariant IniSettings::value( const QString & key, const QVariant & defaultValue /*= QVariant()*/ ) const
     {
         return _pSettings->value(key, defaultValue);
     }

@@ -1,8 +1,7 @@
 #ifndef DataStructureException_h__
 #define DataStructureException_h__
 
-#include <QtCore/QtCore>
-#include "Exception.h"
+#include "Util/Exception.h"
 
 class DataStructureException : public Exception
 {
