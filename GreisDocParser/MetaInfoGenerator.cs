@@ -5,12 +5,23 @@ using System.Text.RegularExpressions;
 
 namespace GreisDocParser
 {
+    public enum MessageTypes
+    {
+        AlmanacsAndEphemeris,
+        Other
+    }
+
     public class MetaInfoGenerator
     {
-        private List<string> _messagesWithFillBehavior = new List<string>() { "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", "ID", "GD", "LD", "ED", "rT", "RE", "ER", "EV", ">>", "PM" };
-        private List<string> _messagesWithUniformFillBehavior = new List<string>() { "gC" };
-        // rM - page 340, smartass rules
+        private static readonly List<string> _messagesWithFillBehavior = new List<string>() { "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", "ID", "GD", "LD", "ED", "rT", "RE", "ER", "==", ">>", "PM" };
+
+        private static readonly List<string> _almanacsAndEphemerisMessages = new List<string>() { "GA", "EA", "NA", "WA", "GE", "NE", "WE", "EN" };
+
+        private static readonly List<string> _messagesWithUniformFillBehavior = new List<string>() { "gC" };
+        // rM - page 340, smartass rules (dynamic customTypes SvData2 & SlotRec also here)
         // LH - page 346, smartass rules
+
+        private static readonly List<string> _structsWithFixedSize = new List<string>() { "SvData0", "SvData1", "ClkOffs" };
 
         public static MetaInfo FromUserManual(string rawText)
         {
@@ -38,11 +49,8 @@ namespace GreisDocParser
                     msg.Codes.Add(capture.Value);
                 }
                 msg.Name = m.Groups["name"].Value;
-                int size;
-                if (Int32.TryParse(m.Groups["size"].Value, out size))
-                {
-                    msg.Size = size;
-                }
+                msg.Size = parseSize(msg.Codes[0], m.Groups["size"].Value);
+                msg.Type = getMessageType(msg.Codes[0]);
 
                 // Parsing variables
                 var content = m.Groups["content"].Value;
@@ -76,11 +84,7 @@ namespace GreisDocParser
             {
                 var ct = new CustomType();
                 ct.Name = m.Groups["name"].Value;
-                int size;
-                if (Int32.TryParse(m.Groups["size"].Value, out size))
-                {
-                    ct.Size = size;
-                }
+                ct.Size = parseSize(ct.Name, m.Groups["size"].Value);
                 var content = m.Groups["content"].Value;
                 ct.Variables.AddRange(parseContent(content));
                 customTypes.Add(ct);
@@ -106,11 +110,43 @@ namespace GreisDocParser
                     {
                         usages[i].Type = typeName + i;
                         defList[i].Name = typeName + i;
+                        if (defList[i].Size == (int) SizeSpecialValues.Dynamic)
+                        {
+                            defList[i].Size = parseSize(defList[i].Name, "");
+                        }
                     }
                 }
             }
             metaInfo.CustomTypes = customTypes.Where(t => !String.IsNullOrEmpty(t.Name)).ToList();
             return metaInfo;
+        }
+
+        private static MessageTypes getMessageType(string code)
+        {
+            if (_almanacsAndEphemerisMessages.Contains(code))
+            {
+                return MessageTypes.AlmanacsAndEphemeris;
+            }
+            return MessageTypes.Other;
+        }
+
+        private static int parseSize(string codeOrStructName, string sizeStr)
+        {
+            int size;
+            if (int.TryParse(sizeStr, out size))
+            {
+                return size;
+            }
+            if (_messagesWithFillBehavior.Contains(codeOrStructName) ||
+                _messagesWithUniformFillBehavior.Contains(codeOrStructName))
+            {
+                return (int) SizeSpecialValues.Fill;
+            }
+            if (_structsWithFixedSize.Contains(codeOrStructName))
+            {
+                return (int) SizeSpecialValues.Fixed;
+            }
+            return (int) SizeSpecialValues.Dynamic;
         }
 
         private static List<Variable> parseContent(string content)
