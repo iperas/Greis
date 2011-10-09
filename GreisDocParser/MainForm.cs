@@ -1,129 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace GreisDocParser
 {
-    public enum GreisType
-    {
-        a1, // a1 | ASCII character | 1
-        i1, // i1 | signed integer | 1
-        i2, // i2 | signed integer | 2
-        i4, // i4 | signed integer | 4
-        u1, // u1 | unsigned integer | 1
-        u2, // u2 | unsigned integer | 2
-        u4, // u4 | unsigned integer | 4
-        f4, // f4 | IEEE-754 single precision floating point | 4
-        f8, // f8 | IEEE-754 double precision floating point | 8
-    }
-
-    [Serializable]
-    public class CustomType
-    {
-        public CustomType()
-        {
-            Variables = new List<Variable>();
-            Size = DynamicSize;
-        }
-
-        public const int DynamicSize = -1;
-
-        [XmlAttribute]
-        public string Name { get; set; }
-        [XmlAttribute]
-        public int Size { get; set; }
-        public List<Variable> Variables { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format(@"{0} {{{1}}}", Name, Size == -1 ? "?" : Size.ToString());
-        }
-    }
-
-    public class MetaInfo
-    {
-        public List<StandardMessage> StandardMessages { get; set; }
-        
-    }
-
-    public enum ValidationTypes
-    {
-        Checksum,
-        ChecksumAsHexAscii,
-        Crc16
-    }
-
-    [Serializable]
-    public class StandardMessage
-    {
-        public StandardMessage()
-        {
-            Codes = new List<string>();
-            Variables = new List<Variable>();
-            Size = DynamicSize;
-        }
-
-        public const int DynamicSize = -1;
-
-        [XmlAttribute]
-        public string Title { get; set; }
-        [XmlAttribute]
-        public string Name { get; set; }
-        [XmlAttribute]
-        public int Size { get; set; }
-        [XmlArrayItem("Code")]
-        public List<string> Codes { get; set; }
-        public List<Variable> Variables { get; set; }
-        public ValidationTypes Validation { get; set; }
-
-        public override string ToString()
-        {
-            return Title;
-        }
-    }
-
-    [Serializable]
-    public class Variable
-    {
-        public Variable()
-        {
-            Dimensions = new List<int>();
-        }
-
-        public const int DynamicSize = -1;
-
-        [XmlAttribute]
-        public string Type { get; set; }
-        [XmlAttribute]
-        public string Name { get; set; }
-        [XmlAttribute]
-        public List<int> Dimensions { get; set; }
-        [XmlAttribute]
-        public string RequiredValue { get; set; }
-        public string Comment { get; set; }
-
-        public override string ToString()
-        {
-            string dimStr;
-            if (Dimensions.Count == 1 && Dimensions[0] == 1)
-            {
-                dimStr = "";
-            } else
-            {
-                dimStr = string.Concat(Dimensions.Select(v => string.Concat("[", v == DynamicSize ? "" : v.ToString(), "]")));
-            }
-            return string.Format(@"{0} {1}{2}", Type, Name, dimStr);
-        }
-    }
-
     public partial class MainForm : Form
     {
         public MainForm()
@@ -166,101 +52,12 @@ namespace GreisDocParser
                     text = textBoxInputText.Text;
                 }
 
-                // Retrieving standard messages
-                var messages = new List<StandardMessage>();
-                var matches = Regex.Matches(text, @"^(?<title>\[(?<code>[\x30-\x7E]{2})\](,\s*\[(?<code>[\x30-\x7E]{2})\])*
-                                                    ([^\r\n\d]|(?!\d+[\r\n])\d)+)
-                                                    ((?![\r\n]\s*\[[\x30-\x7E]{2}\]).)*?
-                                                    struct\s+(?<name>[^\s{]+)\s*\{(?<size>[^\}]+)\}\s*\{(?<content>[^}]+)\}", 
-                    RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.IgnorePatternWhitespace);
-                foreach (Match m in matches)
-                {
-                    // Parsing message meta-info
-                    var msg = new StandardMessage();
-                    msg.Title = m.Groups["title"].Value;
-                    foreach (Capture capture in m.Groups["code"].Captures)
-                    {
-                        msg.Codes.Add(capture.Value);
-                    }
-                    msg.Name = m.Groups["name"].Value;
-                    int size;
-                    if (int.TryParse(m.Groups["size"].Value, out size))
-                    {
-                        msg.Size = size;
-                    }
+                var metaInfo = MetaInfoGenerator.FromUserManual(text);
 
-                    // Parsing variables
-                    var content = m.Groups["content"].Value;
-                    msg.Variables.AddRange(parseContent(content));
-                    // Checksum or crc16?
-                    if (msg.Variables.Count > 0)
-                    {
-                        var lastVar = msg.Variables.Last();
-                        if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum")
-                        {
-                            msg.Validation = ValidationTypes.Checksum;
-                        }
-                        if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum formatted as hexadecimal")
-                        {
-                            msg.Validation = ValidationTypes.ChecksumAsHexAscii;
-                        }
-                        if (lastVar.Name == "crc16" && lastVar.Comment.Contains("16-bit CRC"))
-                        {
-                            msg.Validation = ValidationTypes.Crc16;
-                        }
-                    }
-
-                    messages.Add(msg);
-                }
-                // retrieving custom types
-                var customTypes = new List<CustomType>();
-                matches = Regex.Matches(text, @"^struct\s+(?<name>[^\s{]+)?\s*(\{(?<size>[^\}]+)\})?\s*\{(?<content>[^}]+)\}",
-                    RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.IgnorePatternWhitespace);
-                foreach (Match m in matches)
-                {
-                    var ct = new CustomType();
-                    ct.Name = m.Groups["name"].Value;
-                    int size;
-                    if (int.TryParse(m.Groups["size"].Value, out size))
-                    {
-                        ct.Size = size;
-                    }
-                    var content = m.Groups["content"].Value;
-                    ct.Variables.AddRange(parseContent(content));
-                    customTypes.Add(ct);
-                }
-                // correcting CustomType names for duplicates (with updating usages)
-                var customTypesByName = customTypes.Where(t => !messages.Any(m => m.Name == t.Name)).GroupBy(t => t.Name).ToList();
-                var varsWithCustomTypes = messages.SelectMany(m => m.Variables).
-                    Where(v => !Enum.GetNames(typeof(GreisType)).Contains(v.Type)).GroupBy(v => v.Type).ToList();
-                foreach (var usagesGroup in varsWithCustomTypes)
-                {
-                    var usages = usagesGroup.ToList();
-                    var typeName = usagesGroup.Key;
-                    var definitions = customTypesByName.FirstOrDefault(g => g.Key == typeName);
-                    if (definitions == null)
-                    {
-                        continue;
-                    }
-                    if (usages.Count > 1 && usages.Count == definitions.Count())
-                    {
-                        var defList = definitions.ToList();
-                        for (int i = 0; i < usages.Count; i++)
-                        {
-                            usages[i].Type = typeName + i;
-                            defList[i].Name = typeName + i;
-                        }
-                    }
-                }
-
-                var knownSize = messages.Where(m => m.Size != StandardMessage.DynamicSize).ToList();
-                var unknownSize = messages.Where(m => m.Size == StandardMessage.DynamicSize).ToList();
+                var knownSize = metaInfo.StandardMessages.Where(m => m.Size != (int) SizeSpecialValues.Dynamic).ToList();
+                var unknownSize = metaInfo.StandardMessages.Where(m => m.Size == (int) SizeSpecialValues.Dynamic).ToList();
                 // serializing
-                var serializer = new XmlSerializer(typeof (List<StandardMessage>));
-                using (var outFile = File.Create(textBoxOutputPath.Text))
-                {
-                    serializer.Serialize(outFile, messages);
-                }
+                metaInfo.ToFile(textBoxOutputPath.Text);
                 // end
                 MessageBox.Show("Parsing successfully complete!");
             }
@@ -268,115 +65,6 @@ namespace GreisDocParser
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private static List<Variable> parseContent(string content)
-        {
-            var finalVariables = new List<Variable>();
-            var lines = content.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
-
-            List<Variable> lastAddedVariables = null; // For comments-only lines
-            foreach (var line in lines.Where(s => Regex.IsMatch(s, "(;|//)")))
-            {
-                // extract comments and code
-                var lm = Regex.Match(line, @"^[\s!]*((?<code>((?!;?\s*//).)*?);)?\s*(//\s*(?<comment>.*)\s*)?$",
-                                     RegexOptions.IgnoreCase |
-                                     RegexOptions.Singleline |
-                                     RegexOptions.ExplicitCapture |
-                                     RegexOptions.IgnorePatternWhitespace);
-                if (!lm.Success)
-                {
-                    throw new Exception(string.Format("Invalid content string '{0}' (lm).", line));
-                }
-                var code = lm.Groups["code"].Value;
-                var comment = lm.Groups["comment"].Value;
-                if (string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(comment))
-                {
-                    if (lastAddedVariables != null)
-                    {
-                        foreach (var lastAddedVariable in lastAddedVariables)
-                        {
-                            if (string.IsNullOrWhiteSpace(lastAddedVariable.Comment))
-                            {
-                                lastAddedVariable.Comment = comment;
-                            }
-                            else
-                            {
-                                lastAddedVariable.Comment = lastAddedVariable.Comment + Environment.NewLine +
-                                                            comment;
-                            }
-                        }
-                    }
-                    continue;
-                }
-                // Parsing code
-                // variable pattern does not covers all cases. For example empty SIZE property in multidimension arrays causes a bug.
-                const string variablePattern =
-                    @"(?<name>[a-z][a-z0-9]*)
-                                                         (?<sizePresented>\[(?<size>[^\]]*)\])*
-                                                         (\s*=\s*([""\u201c\u201d](?<value>[^""\u201c\u201d]+)[""\u201c\u201d]|(?<value>[^\s,]+)))?";
-                var cm = Regex.Match(code,
-                                     string.Format(@"^(?<type>[a-z][a-z0-9]*)\s+(?<var>{0})(\s*,\s*(?<var>{0}))*$",
-                                                   variablePattern),
-                                     RegexOptions.IgnoreCase |
-                                     RegexOptions.Singleline |
-                                     RegexOptions.ExplicitCapture |
-                                     RegexOptions.IgnorePatternWhitespace);
-                if (!cm.Success)
-                {
-                    throw new Exception(string.Format("Invalid content string '{0}' (cm).", line));
-                }
-                var variables = new List<Variable>();
-                var vartype = cm.Groups["type"].Value;
-                foreach (Capture capture in cm.Groups["var"].Captures)
-                {
-                    // Parsing variables names
-                    var varname = capture.Value;
-                    var vm = Regex.Match(varname, string.Format(@"^{0}$", variablePattern),
-                                         RegexOptions.IgnoreCase |
-                                         RegexOptions.Singleline |
-                                         RegexOptions.ExplicitCapture |
-                                         RegexOptions.IgnorePatternWhitespace);
-                    if (!vm.Success)
-                    {
-                        throw new Exception(string.Format("Invalid content string '{0}' (vm).", line));
-                    }
-                    var variable = new Variable();
-                    variable.Type = vartype;
-                    variable.Name = vm.Groups["name"].Value;
-                    variable.RequiredValue = vm.Groups["value"].Value;
-                    variable.Comment = comment;
-
-                    var dimensionsCount = vm.Groups["sizePresented"].Captures.Count;
-                    if (dimensionsCount > 0)
-                    {
-                        for (int i = 0; i < dimensionsCount; i++)
-                        {
-                            var sizeStr = vm.Groups["size"].Captures[i].Value;
-                            var sizePresented = !string.IsNullOrEmpty(vm.Groups["sizePresented"].Captures[i].Value);
-                            int varsize;
-                            if (!sizePresented)
-                            {
-                                varsize = 1;
-                            }
-                            else if (!int.TryParse(sizeStr, out varsize))
-                            {
-                                varsize = Variable.DynamicSize;
-                            }
-                            variable.Dimensions.Add(varsize);
-                        }
-                    }
-                    else
-                    {
-                        variable.Dimensions.Add(1);
-                    }
-
-                    variables.Add(variable);
-                }
-                lastAddedVariables = variables;
-                finalVariables.AddRange(variables);
-            }
-            return finalVariables;
         }
 
         private void buttonInputPathBrowse_Click(object sender, EventArgs e)

@@ -1,0 +1,2596 @@
+<?xml version="1.0"?>
+<MetaInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StandardMessages>
+    <StandardMessage Name="FileId" Size="85" Title="[JP] File Identifier">
+      <Variables>
+        <Variable Type="a1" Name="id" Dimensions="5" RequiredValue="">
+          <Comment>File type identifier</Comment>
+        </Variable>
+        <Variable Type="a1" Name="description" Dimensions="80" RequiredValue="">
+          <Comment>Human-readable stream description</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>JP</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="MsgFmt" Size="9" Title="[MF] Messages Format">
+      <Variables>
+        <Variable Type="a1" Name="id" Dimensions="2" RequiredValue="JP">
+          <Comment>JP identifier</Comment>
+        </Variable>
+        <Variable Type="a1" Name="majorVer" Dimensions="2" RequiredValue="">
+          <Comment>Format major version as decimal (e.g., '01')</Comment>
+        </Variable>
+        <Variable Type="a1" Name="minorVer" Dimensions="2" RequiredValue="">
+          <Comment>Format minor version as decimal</Comment>
+        </Variable>
+        <Variable Type="a1" Name="order" Dimensions="1" RequiredValue="">
+          <Comment>Bytes order
+'0' — LSB first;
+'1' — MSB first</Comment>
+        </Variable>
+        <Variable Type="a1" Name="cs" Dimensions="2" RequiredValue="">
+          <Comment>Checksum formatted as hexadecimal</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>MF</Code>
+      </Codes>
+      <Validation>ChecksumAsHexAscii</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvTime" Size="5" Title="[~~](RT) Receiver Time">
+      <Variables>
+        <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
+          <Comment>Tr modulo 1 day (86400000 ms) [ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>~~</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="EpochTime" Size="5" Title="[::](ET) Epoch Time">
+      <Variables>
+        <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
+          <Comment>Tr modulo 1 day (86400000 ms) [ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>::</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvDate" Size="6" Title="[RD] Receiver Date">
+      <Variables>
+        <Variable Type="u2" Name="year" Dimensions="1" RequiredValue="">
+          <Comment>Current year [1…65534][]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="month" Dimensions="1" RequiredValue="">
+          <Comment>Current month [1…12] []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="day" Dimensions="1" RequiredValue="">
+          <Comment>Current day [1…31] []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="base" Dimensions="1" RequiredValue="">
+          <Comment>Receiver reference time [enumerated]
+0 — GPS
+1 — UTC_USNO
+2 — GLONASS
+3 — UTC_SU
+4…254 — Reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>RD</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvTimeOffset" Size="17" Title="[TO] Reference Time to Receiver Time Offset">
+      <Variables>
+        <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>Trr - Tr [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed (Trr - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>TO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvTimeOffsetDot" Size="9" Title="[DO] Derivative of Receiver Time Offset">
+      <Variables>
+        <Variable Type="f4" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>Derivative of (Trr - Tr) [s/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed derivative of (Trr - Tr) [s/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>DO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvTimeAccuracy" Size="5" Title="[BP] Rough Accuracy of Time Approximation">
+      <Variables>
+        <Variable Type="f4" Name="acc" Dimensions="1" RequiredValue="">
+          <Comment>Accuracy [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>BP</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GPSTime" Size="7" Title="[GT] GPS Time">
+      <Variables>
+        <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
+          <Comment>Time of week [ms]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>GPS week number (modulo 1024) []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>GT</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvGPSTimeOffset" Size="17" Title="[GO] GPS to Receiver Time Offset">
+      <Variables>
+        <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>(Tg - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed (Tg - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>GO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GLOTime" Size="7" Title="[NT] GLONASS Time">
+      <Variables>
+        <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
+          <Comment>time of day [ms]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="dn" Dimensions="1" RequiredValue="">
+          <Comment>GLONASS day number (modulo 4 years
+starting from 1996) []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NT</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvGLOTimeOffset" Size="17" Title="[NO] GLONASS to Receiver Time Offset">
+      <Variables>
+        <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>(Tn - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed (Tn - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvGALTimeOffset" Size="17" Title="[EO] GALILEO to Receiver Time Offset">
+      <Variables>
+        <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>(Te - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed (Te - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvWAASTimeOffset" Size="17" Title="[WO] WAAS to Receiver Time Offset">
+      <Variables>
+        <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>(Tw - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="sval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothed (Tw - Tr) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>WO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GpsUtcParam" Size="24" Title="[UO] GPS UTC Time Parameters">
+      <Variables>
+        <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
+          <Comment>GPS UTC time offset parameters</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>UO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="WaasUtcParam" Size="32" Title="[WU] WAAS UTC Time Parameters">
+      <Variables>
+        <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
+          <Comment>WAAS to UTC time offset parameters</Comment>
+        </Variable>
+        <Variable Type="i1" Name="utcsi" Dimensions="1" RequiredValue="">
+          <Comment>UTC Standard Identifier[]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
+          <Comment>Reference time of week [s]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>Reference week number []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Flags, reserved (always 0)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>WU</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GalUtcGpsParam" Size="40" Title="[EU] GALILEO UTC and GPS Time Parameters">
+      <Variables>
+        <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
+          <Comment>GALILEO to UTC time offset parameters
+GALILEO to GPS time offset parameters</Comment>
+        </Variable>
+        <Variable Type="f4" Name="a0g" Dimensions="1" RequiredValue="">
+          <Comment>Constant term of time offset [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="a1g" Dimensions="1" RequiredValue="">
+          <Comment>Rate of time offset [s/s]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="t0g" Dimensions="1" RequiredValue="">
+          <Comment>Reference time of week</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn0g" Dimensions="1" RequiredValue="">
+          <Comment>Reference week number</Comment>
+        </Variable>
+        <Variable Type="u2" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Flags of data availability [bitfield]
+0 - GGTO availability
+1…15 - reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EU</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GloUtcGpsParam" Size="25" Title="[NU] GLONASS UTC and GPS Time Parameters">
+      <Variables>
+        <Variable Type="f8" Name="tauSys" Dimensions="1" RequiredValue="">
+          <Comment>Time correction to GLONASS time scale (vs. UTC(SU))
+tauSys = Tutc(su) - Tglo [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tauGps" Dimensions="1" RequiredValue="">
+          <Comment>tauGps = Tgps - Tglo [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="B1" Dimensions="1" RequiredValue="">
+          <Comment>Coefficient for calculation of UT1</Comment>
+        </Variable>
+        <Variable Type="f4" Name="B2" Dimensions="1" RequiredValue="">
+          <Comment>Coefficient for calculation of UT1</Comment>
+        </Variable>
+        <Variable Type="u1" Name="KP" Dimensions="1" RequiredValue="">
+          <Comment>Leap second information</Comment>
+        </Variable>
+        <Variable Type="u1" Name="N4" Dimensions="1" RequiredValue="">
+          <Comment>Number of 4-year cycle [1…31]</Comment>
+        </Variable>
+        <Variable Type="i2" Name="Dn" Dimensions="1" RequiredValue="">
+          <Comment>Day number within 4-year period []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NU</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SolutionTime" Size="6" Title="[ST] Solution Time-Tag">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>Solution time. Tr modulo 1 day (86400000 ms)[ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ST</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Pos" Size="30" Title="[PO] Cartesian Position">
+      <Variables>
+        <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="sigma" Dimensions="1" RequiredValue="">
+          <Comment>Position SEP6 [m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Vel" Size="18" Title="[VE] Cartesian Velocity">
+      <Variables>
+        <Variable Type="f4" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocity vector [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocity vector [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocity vector [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="sigma" Dimensions="1" RequiredValue="">
+          <Comment>Velocity SEP [m/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>VE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PosVel" Size="46" Title="[PV] Cartesian Position and Velocity">
+      <Variables>
+        <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="pSigma" Dimensions="1" RequiredValue="">
+          <Comment>Position SEP [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vx" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocities [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vy" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocities [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vz" Dimensions="1" RequiredValue="">
+          <Comment>Cartesian velocities [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vSigma" Dimensions="1" RequiredValue="">
+          <Comment>Velocity SEP [m/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PV</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GeoPos" Size="30" Title="[PG] Geodetic Position">
+      <Variables>
+        <Variable Type="f8" Name="lat" Dimensions="1" RequiredValue="">
+          <Comment>Latitude [rad]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="lon" Dimensions="1" RequiredValue="">
+          <Comment>Longitude [rad]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="alt" Dimensions="1" RequiredValue="">
+          <Comment>Ellipsoidal height [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="pSigma" Dimensions="1" RequiredValue="">
+          <Comment>Position SEP [m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PG</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GeoVel" Size="18" Title="[VG] Geodetic Velocity">
+      <Variables>
+        <Variable Type="f4" Name="lat" Dimensions="1" RequiredValue="">
+          <Comment>Northing velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="lon" Dimensions="1" RequiredValue="">
+          <Comment>Easting velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="alt" Dimensions="1" RequiredValue="">
+          <Comment>Height velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="pSigma" Dimensions="1" RequiredValue="">
+          <Comment>Velocity SEP [m/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>VG</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Rms" Size="18" Title="[SG] Position and Velocity RMS Errors">
+      <Variables>
+        <Variable Type="f4" Name="hpos" Dimensions="1" RequiredValue="">
+          <Comment>Horizontal position RMS error[m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vpos" Dimensions="1" RequiredValue="">
+          <Comment>Vertical position RMS error [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="hvel" Dimensions="1" RequiredValue="">
+          <Comment>Horizontal velocity RMS error [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vvel" Dimensions="1" RequiredValue="">
+          <Comment>Vertical velocity RMS error [m/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SG</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Dops" Size="14" Title="[DP] Dilution of Precision (DOP)">
+      <Variables>
+        <Variable Type="f4" Name="hdop" Dimensions="1" RequiredValue="">
+          <Comment>Horizontal dilution of precision (HDOP)[]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vdop" Dimensions="1" RequiredValue="">
+          <Comment>Vertical dilution of precision (VDOP) []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tdop" Dimensions="1" RequiredValue="">
+          <Comment>Time dilution of precision (TDOP) []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>DP</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PosCov" Size="42" Title="[SP] Position Covariance Matrix">
+      <Variables>
+        <Variable Type="f4" Name="xx" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yy" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="zz" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tt" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xy" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xz" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xt" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yz" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yt" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="zt" Dimensions="1" RequiredValue="">
+          <Comment>[m^2]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SP</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="VelCov" Size="42" Title="[SV] Velocity Covariance Matrix">
+      <Variables>
+        <Variable Type="f4" Name="xx" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yy" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="zz" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tt" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xy" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xz" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="xt" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yz" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="yt" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="zt" Dimensions="1" RequiredValue="">
+          <Comment>[(m/s)^2]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SV</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="BaseLine" Size="34" Title="[BL] Base Line">
+      <Variables>
+        <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>Calculated baseline vector coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>Calculated baseline vector coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>Calculated baseline vector coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="sigma" Dimensions="1" RequiredValue="">
+          <Comment>Baseline Spherical Error Probable (SEP) [m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="i4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>receiver time of the baseline estimate [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>BL</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PosStat" Size="9" Title="[PS] Position Statistics">
+      <Variables>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gpsLocked" Dimensions="1" RequiredValue="">
+          <Comment>Number of GPS SVs locked</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gloLocked" Dimensions="1" RequiredValue="">
+          <Comment>Number of GLONASS SVs locked</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gpsAvail" Dimensions="1" RequiredValue="">
+          <Comment>Number of GPS SVs available for positioning</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gloAvail" Dimensions="1" RequiredValue="">
+          <Comment>Number of GLONASS SVs available for positioning</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gpsUsed" Dimensions="1" RequiredValue="">
+          <Comment>Number of GPS SVs used in positioning</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gloUsed" Dimensions="1" RequiredValue="">
+          <Comment>Number of GLONASS SVs used in positioning</Comment>
+        </Variable>
+        <Variable Type="u1" Name="fixProg" Dimensions="1" RequiredValue="">
+          <Comment>Ambiguity fixing progress indicator
+controllable by RTK engine [%]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PS</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PosCompTime" Size="5" Title="[PT] Time of Continuous Position Computation">
+      <Variables>
+        <Variable Type="u4" Name="pt" Dimensions="1" RequiredValue="">
+          <Comment>Continuous position computation time [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PT</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SatIndex" Size="-1" Title="[SI] Satellite Indices">
+      <Variables>
+        <Variable Type="u1" Name="usi" Dimensions="-1" RequiredValue="">
+          <Comment>USI array []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SI</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="AntName" Size="-1" Title="[AN] Antenna Names">
+      <Variables>
+        <Variable Type="a1" Name="name" Dimensions="-1" RequiredValue="">
+          <Comment>Antenna names[a…z]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>AN</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SatNumbers" Size="-1" Title="[NN] GLONASS Satellite System Numbers">
+      <Variables>
+        <Variable Type="u1" Name="osn" Dimensions="-1" RequiredValue="">
+          <Comment>GLONASS SV orbit slot number []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NN</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SatElevation" Size="-1" Title="[EL] Satellite Elevations">
+      <Variables>
+        <Variable Type="i1" Name="elev" Dimensions="-1" RequiredValue="">
+          <Comment>Elevation angle [degrees] [-90…90)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EL</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SatAzimuth" Size="-1" Title="[AZ] Satellite Azimuths">
+      <Variables>
+        <Variable Type="u1" Name="azim" Dimensions="-1" RequiredValue="">
+          <Comment>Azimuth angle [degrees*2] [0…180)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>AZ</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PR" Size="-1" Title="[RC], [R1], [R2], [R3], [R5]: Pseudoranges">
+      <Variables>
+        <Variable Type="f8" Name="pr" Dimensions="-1" RequiredValue="">
+          <Comment>Pseudorange, [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>RC</Code>
+        <Code>R1</Code>
+        <Code>R2</Code>
+        <Code>R3</Code>
+        <Code>R5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SPR" Size="-1" Title="[rc], [r1], [r2], [r3], [r5]: Short Pseudoranges">
+      <Variables>
+        <Variable Type="i4" Name="spr" Dimensions="-1" RequiredValue="">
+          <Comment>(PR[s] - Asys) * 1011</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rc</Code>
+        <Code>r1</Code>
+        <Code>r2</Code>
+        <Code>r3</Code>
+        <Code>r5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RPR" Size="-1" Title="[1R], [2R], [3R], [5R]: Relative Pseudoranges">
+      <Variables>
+        <Variable Type="f4" Name="rpr" Dimensions="-1" RequiredValue="">
+          <Comment>PR - CA/L1 PR, [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>1R</Code>
+        <Code>2R</Code>
+        <Code>3R</Code>
+        <Code>5R</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SRPR" Size="-1" Title="[1r], [2r], [3r], [5r]: Short Relative Pseudoranges">
+      <Variables>
+        <Variable Type="i2" Name="srpr" Dimensions="-1" RequiredValue="">
+          <Comment>(PR[s] - CA/L1 PR[s] - 2*10-7) * 1011</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>1r</Code>
+        <Code>2r</Code>
+        <Code>3r</Code>
+        <Code>5r</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SC" Size="-1" Title="[CC], [C1], [C2], [C3], [C5]: Smoothing Corrections">
+      <Variables>
+        <Variable Type="Smooth" Name="smooth" Dimensions="-1" RequiredValue="">
+          <Comment>PR smoothing</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CC</Code>
+        <Code>C1</Code>
+        <Code>C2</Code>
+        <Code>C3</Code>
+        <Code>C5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SS" Size="-1" Title="[cc], [c1], [c2], [c3], [c5]: Short Smoothing Corrections">
+      <Variables>
+        <Variable Type="i2" Name="smooth" Dimensions="-1" RequiredValue="">
+          <Comment>Smoothing correction [s*10-11]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>cc</Code>
+        <Code>c1</Code>
+        <Code>c2</Code>
+        <Code>c3</Code>
+        <Code>c5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="CP" Size="-1" Title="[PC], [P1], [P2], [P3], [P5]: Carrier Phases">
+      <Variables>
+        <Variable Type="f8" Name="cp" Dimensions="-1" RequiredValue="">
+          <Comment>CP, [cycles]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PC</Code>
+        <Code>P1</Code>
+        <Code>P2</Code>
+        <Code>P3</Code>
+        <Code>P5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SCP" Size="-1" Title="[pc], [p1], [p2], [p3], [p5]: Short Carrier Phases">
+      <Variables>
+        <Variable Type="u4" Name="scp" Dimensions="-1" RequiredValue="">
+          <Comment>CP, [cycles/1024]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>pc</Code>
+        <Code>p1</Code>
+        <Code>p2</Code>
+        <Code>p3</Code>
+        <Code>p5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RCP_RC" Size="-1" Title="[CP], [1P], [2P], [3P], [5P]: Short Relative Carrier Phases">
+      <Variables>
+        <Variable Type="f4" Name="rcp" Dimensions="-1" RequiredValue="">
+          <Comment>cp / FLn - prRC [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CP</Code>
+        <Code>1P</Code>
+        <Code>2P</Code>
+        <Code>3P</Code>
+        <Code>5P</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RCP_rc" Size="-1" Title="[cp], [1p], [2p], [3p], [5p]: Short Relative Carrier Phases">
+      <Variables>
+        <Variable Type="i4" Name="rcp" Dimensions="-1" RequiredValue="">
+          <Comment>cp / FLn - pr_rc, [s*2-40]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>cp</Code>
+        <Code>1p</Code>
+        <Code>2p</Code>
+        <Code>3p</Code>
+        <Code>5p</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="DP" Size="-1" Title="[DC], [D1], [D2], [D3], [D5]: Doppler">
+      <Variables>
+        <Variable Type="i4" Name="dp" Dimensions="-1" RequiredValue="">
+          <Comment>DP [Hz*10-4]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>DC</Code>
+        <Code>D1</Code>
+        <Code>D2</Code>
+        <Code>D3</Code>
+        <Code>D5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="SRDP" Size="-1" Title="[1d], [2d], [3d], [5d]: Short Relative Doppler">
+      <Variables>
+        <Variable Type="i2" Name="srdp" Dimensions="-1" RequiredValue="">
+          <Comment>(dp - dpCA1)[Hz*10-4]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>1d</Code>
+        <Code>2d</Code>
+        <Code>3d</Code>
+        <Code>5d</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="CNR" Size="-1" Title="[EC], [E1], [E2], [E3], [E5]: Carrier to Noise Ratio">
+      <Variables>
+        <Variable Type="u1" Name="cnr" Dimensions="-1" RequiredValue="">
+          <Comment>C/N0 [dB*Hz]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EC</Code>
+        <Code>E1</Code>
+        <Code>E2</Code>
+        <Code>E3</Code>
+        <Code>E5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="CNR_4" Size="-1" Title="[CE], [1E], [2E], [3E], [5E]: Carrier to Noise Ratio x ">
+      <Variables>
+        <Variable Type="u1" Name="cnrX4" Dimensions="-1" RequiredValue="">
+          <Comment>C/N0 [0.25*dB*Hz]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CE</Code>
+        <Code>1E</Code>
+        <Code>2E</Code>
+        <Code>3E</Code>
+        <Code>5E</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Flags" Size="-1" Title="[FC], [F1], [F2], [F3], [F5]: Signal Lock Loop Flags">
+      <Variables>
+        <Variable Type="u2" Name="flags" Dimensions="-1" RequiredValue="">
+          <Comment>Lock Loop Flags [bitfield]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>FC</Code>
+        <Code>F1</Code>
+        <Code>F2</Code>
+        <Code>F3</Code>
+        <Code>F5</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="TrackingTimeCA" Size="-1" Title="[TC] CA/L1 Continuous Tracking Time">
+      <Variables>
+        <Variable Type="u2" Name="tt" Dimensions="-1" RequiredValue="">
+          <Comment>tracking time [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>TC</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="NavStatus" Size="-1" Title="[SS] Satellite Navigation Status">
+      <Variables>
+        <Variable Type="u1" Name="ns" Dimensions="-1" RequiredValue="">
+          <Comment>Navigation Status</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SS</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="IonoDelay" Size="-1" Title="[ID] Ionospheric Delays">
+      <Variables>
+        <Variable Type="f4" Name="delay" Dimensions="-1" RequiredValue="">
+          <Comment>Ionospheric delay [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ID</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GPSAlm" Size="47" Title="[GA] GPS Almanac">
+      <Variables>
+        <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
+          <Comment>SV PRN number within the range [1…37]</Comment>
+        </Variable>
+        <Variable Type="i2" Name="wna" Dimensions="1" RequiredValue="">
+          <Comment>Almanac reference week []</Comment>
+        </Variable>
+        <Variable Type="i4" Name="toa" Dimensions="1" RequiredValue="">
+          <Comment>Almanac reference time of week [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="healthA" Dimensions="1" RequiredValue="">
+          <Comment>Health summary (from almanac), [bitfield]
+0…4 - code for health of SV signal components
+5…7 - navigation data health indicators</Comment>
+        </Variable>
+        <Variable Type="u1" Name="healthS" Dimensions="1" RequiredValue="">
+          <Comment>Satellite health (page 25 of subframe 5) []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="config" Dimensions="1" RequiredValue="">
+          <Comment>Satellite configuration (page 25 of subframe 4)
+[bitfield]:
+0…2 - satellite configuration
+3 - anti-spoofing flag
+4…7 - reserved
+======= Clock data =======</Comment>
+        </Variable>
+        <Variable Type="f4" Name="af1" Dimensions="1" RequiredValue="">
+          <Comment>Polynomial coefficient [s/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="af0" Dimensions="1" RequiredValue="">
+          <Comment>Polynomial coefficient [s]
+===== Ephemeris data =====
+--- Keplerian orbital parameters ---</Comment>
+        </Variable>
+        <Variable Type="f4" Name="rootA" Dimensions="1" RequiredValue="">
+          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="ecc" Dimensions="1" RequiredValue="">
+          <Comment>Eccentricity []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="m0" Dimensions="1" RequiredValue="">
+          <Comment>Mean Anomaly at reference time [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="omega0" Dimensions="1" RequiredValue="">
+          <Comment>Longitude of ascending node of orbit plane
+at the start of week ‘wna’ [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="argPer" Dimensions="1" RequiredValue="">
+          <Comment>Argument of perigee [semi-circles]
+--- Corrections to orbital parameters ---</Comment>
+        </Variable>
+        <Variable Type="f4" Name="deli" Dimensions="1" RequiredValue="">
+          <Comment>Correction to inclination angle [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="omegaDot" Dimensions="1" RequiredValue="">
+          <Comment>Rate of right ascension [semi-circle/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>GA</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GALAlm" Size="49" Title="[EA] GALILEO Almanac">
+      <Variables>
+        <Variable Type="GPSAlm" Name="gps" Dimensions="1" RequiredValue="">
+          <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
+GALILEO-Specific data</Comment>
+        </Variable>
+        <Variable Type="i2" Name="iod" Dimensions="1" RequiredValue="">
+          <Comment>Issue of almanac data []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EA</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GLOAlmanac" Size="46" Title="[NA] GLONASS Almanac">
+      <Variables>
+        <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
+          <Comment>Satellite orbit slot number within [1…24] []</Comment>
+        </Variable>
+        <Variable Type="i1" Name="frqNum" Dimensions="1" RequiredValue="">
+          <Comment>Satellite frequency channel number [-7…24] []</Comment>
+        </Variable>
+        <Variable Type="i2" Name="dna" Dimensions="1" RequiredValue="">
+          <Comment>Day number within 4-year period starting
+with the leap year []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tlam" Dimensions="1" RequiredValue="">
+          <Comment>Time of the first ascending node passage
+on day ‘dna’ [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Satellite flags [bitfield]:
+0 - health: 1 - healthy SV, as specified
+by ‘Cn’, 0 - unhealthy
+1 - SVs type: 0 - GLONASS, 1 - GLONASS-M
+2…7 - reserved
+======= Clock data =======</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tauN" Dimensions="1" RequiredValue="">
+          <Comment>Coarse time correction to SV clock
+with respect to GLONASS system time [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="tauSys" Dimensions="1" RequiredValue="">
+          <Comment>Correction to GLONASS system time with respect
+to UTC(SU) [s]
+===== Ephemeris data =====</Comment>
+        </Variable>
+        <Variable Type="f4" Name="ecc" Dimensions="1" RequiredValue="">
+          <Comment>Eccentricity at reference time ‘tlam’ []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="lambda" Dimensions="1" RequiredValue="">
+          <Comment>Longitude of ascending node
+at reference time ‘tlam’ [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="argPer" Dimensions="1" RequiredValue="">
+          <Comment>Argument of perigee
+at reference time ‘tlam’ [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="delT" Dimensions="1" RequiredValue="">
+          <Comment>Correction to mean Draconic period
+at reference time ‘tlam’ [s/period]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="delTdt" Dimensions="1" RequiredValue="">
+          <Comment>Rate of change of Draconic period [s/period^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="deli" Dimensions="1" RequiredValue="">
+          <Comment>Correction to inclination
+at reference time ‘tlam’[semi-circles]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NA</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="WAASAlmanac" Size="51" Title="[WA] WAAS Almanac">
+      <Variables>
+        <Variable Type="u1" Name="waasPrn" Dimensions="1" RequiredValue="">
+          <Comment>WAAS SV PRN number within [120…138]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gpsPrn" Dimensions="1" RequiredValue="">
+          <Comment>GPS SV PRN associated with WAAS SV</Comment>
+        </Variable>
+        <Variable Type="u1" Name="id" Dimensions="1" RequiredValue="">
+          <Comment>Data ID</Comment>
+        </Variable>
+        <Variable Type="u1" Name="healthS" Dimensions="1" RequiredValue="">
+          <Comment>Satellite health [bitfield]:
+0 - 0–Ranging on, 1–off
+1 - 0–Corrections on, 1-off
+2 - 0–Broadcast Integrity on, 1-off
+3 - reserved
+4…7 - are set to zero</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
+          <Comment>Time of the day [s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="xg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="yg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="zg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vxg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vyg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vzg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
+          <Comment>time of GPS week almanac was received at</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>GPS week this almanac was received at</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>WA</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GPSEphemeris" Size="123" Title="[GE] GPS Ephemeris">
+      <Variables>
+        <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
+          <Comment>SV PRN number within the range [1…37]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
+          <Comment>Time of week [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Flags (see GPS ICD for details)[bitfield]:
+0 - curve fit interval
+1 - data flag for L2 P-code
+2,3 - code on L2 channel
+4 - anti-spoof (A-S) flag (from HOW)
+5 - ‘Alert’ flag (from HOW)
+6 - ephemeris was retrieved from non-volatile memory
+7 - reserved
+===== Clock data (Subframe 1) =====</Comment>
+        </Variable>
+        <Variable Type="i2" Name="iodc" Dimensions="1" RequiredValue="">
+          <Comment>Issue of data, clock []</Comment>
+        </Variable>
+        <Variable Type="i4" Name="toc" Dimensions="1" RequiredValue="">
+          <Comment>Clock data reference time [s]</Comment>
+        </Variable>
+        <Variable Type="i1" Name="ura" Dimensions="1" RequiredValue="">
+          <Comment>User range accuracy []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="healthS" Dimensions="1" RequiredValue="">
+          <Comment>Satellite health []</Comment>
+        </Variable>
+        <Variable Type="i2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>Week number []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tgd" Dimensions="1" RequiredValue="">
+          <Comment>Estimated group delay differential [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="af2" Dimensions="1" RequiredValue="">
+          <Comment>Polynomial coefficient [s/(s^2)]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="af1" Dimensions="1" RequiredValue="">
+          <Comment>Polynomial coefficient [s/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="af0" Dimensions="1" RequiredValue="">
+          <Comment>Polynomial coefficient [s]
+===== Ephemeris data (Subframes 2 and 3) =====</Comment>
+        </Variable>
+        <Variable Type="i4" Name="toe" Dimensions="1" RequiredValue="">
+          <Comment>Ephemeris reference time [s]</Comment>
+        </Variable>
+        <Variable Type="i2" Name="iode" Dimensions="1" RequiredValue="">
+          <Comment>Issue of data, ephemeris []
+--- Keplerian orbital parameters ---</Comment>
+        </Variable>
+        <Variable Type="f8" Name="rootA" Dimensions="1" RequiredValue="">
+          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="ecc" Dimensions="1" RequiredValue="">
+          <Comment>Eccentricity []</Comment>
+        </Variable>
+        <Variable Type="f8" Name="m0" Dimensions="1" RequiredValue="">
+          <Comment>Mean Anomaly at reference time (wn,toe)
+[semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="omega0" Dimensions="1" RequiredValue="">
+          <Comment>Longitude of ascending node of orbit plane at the
+start of week ‘wn’ [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="inc0" Dimensions="1" RequiredValue="">
+          <Comment>Inclination angle at reference time [semi-circles]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="argPer" Dimensions="1" RequiredValue="">
+          <Comment>Argument of perigee [semi-circles]
+--- Corrections to orbital parameters ---</Comment>
+        </Variable>
+        <Variable Type="f4" Name="deln" Dimensions="1" RequiredValue="">
+          <Comment>Mean motion difference from computed value
+[semi-circle/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="omegaDot" Dimensions="1" RequiredValue="">
+          <Comment>Rate of right ascension [semi-circle/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="incDot" Dimensions="1" RequiredValue="">
+          <Comment>Rate of inclination angle [semi-circle/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="crc" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="crs" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="cuc" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="cus" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="cic" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the cosine harmonic correction term
+to the angle of inclination [rad]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="cis" Dimensions="1" RequiredValue="">
+          <Comment>Amplitude of the sine harmonic correction term
+to the angle of inclination [rad]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>GE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GLOEphemeris" Size="88" Title="[NE] GLONASS Ephemeris">
+      <Variables>
+        <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
+          <Comment>Satellite orbit slot number [1…24] []</Comment>
+        </Variable>
+        <Variable Type="i1" Name="frqNum" Dimensions="1" RequiredValue="">
+          <Comment>Satellite frequency channel number [-7…24] []</Comment>
+        </Variable>
+        <Variable Type="i2" Name="dne" Dimensions="1" RequiredValue="">
+          <Comment>Day number within 4-year period []</Comment>
+        </Variable>
+        <Variable Type="i4" Name="tk" Dimensions="1" RequiredValue="">
+          <Comment>Frame start time within current day [s]</Comment>
+        </Variable>
+        <Variable Type="i4" Name="tb" Dimensions="1" RequiredValue="">
+          <Comment>Ephemeris reference time (for day ‘dne’) [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="health" Dimensions="1" RequiredValue="">
+          <Comment>Satellite health [bitfield]
+0 - MSB taken from Bn word which indicates
+satellite health:
+1 - satellite is unhealthy
+0 - satellite is healthy
+1 - If set, this flag indicates that params
+‘tau’ and ‘gamma’ may be wrong
+(Note that receiver performs several
+‘internal’ data consistency checks allowing
+detection of problem broadcast parameters)
+2 - If set, this flag indicates that initial
+conditions ‘r[3]’ and ‘v[3]’ may be wrong
+3 - SV health (Cn word) status from almanac:
+0 - satellite is unhealthy
+1 - satellite is healthy
+4 - If set, this flag indicates that SV health
+status from almanac is available
+5…7 - reserved
+===== Ephemeris data ======</Comment>
+        </Variable>
+        <Variable Type="u1" Name="age" Dimensions="1" RequiredValue="">
+          <Comment>Age of operational information (En) [days]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Flags (for details, see GLONASS ICD) [bitfield]:
+0…1 - p1 word
+2 - p2 word
+3 - p3 word
+4…5 - 2 LSB taken from Bn word
+6 - ephemeris was retrieved from NV-memory
+7 - SV is GLONASS-M or newer</Comment>
+        </Variable>
+        <Variable Type="f8" Name="r" Dimensions="3" RequiredValue="">
+          <Comment>Satellite PE-90 coordinates [km]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="v" Dimensions="3" RequiredValue="">
+          <Comment>Satellite PE-90 velocities [km/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="w" Dimensions="3" RequiredValue="">
+          <Comment>Satellite PE-90 accelerations due to Luni-Solar
+gravitational perturbations [km/s^2]
+===== Clock data ======</Comment>
+        </Variable>
+        <Variable Type="f8" Name="tauSys" Dimensions="1" RequiredValue="">
+          <Comment>Time correction to GLONASS time scale (vs. UTC(SU))
+tauSys = TUTC(SU) - TGLN [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="tau" Dimensions="1" RequiredValue="">
+          <Comment>Correction to satellite clock (vs. GLONASS time)
+tau = TGLN - TSV [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="gamma" Dimensions="1" RequiredValue="">
+          <Comment>Rate of satellite clock offset [s/s]
+===== GLONASS-M data ======</Comment>
+        </Variable>
+        <Variable Type="f4" Name="fDelTauN" Dimensions="1" RequiredValue="">
+          <Comment>Delta Tau N - delay between L1 and L2 [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="nFt" Dimensions="1" RequiredValue="">
+          <Comment>Ft (User Range Accuracy), see GLONASS ICD for values</Comment>
+        </Variable>
+        <Variable Type="u1" Name="nN4" Dimensions="1" RequiredValue="">
+          <Comment>Number of 4-year cycle [1…31]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="flags2" Dimensions="1" RequiredValue="">
+          <Comment>Flags (for details, see GLONASS ICD) [bitfield]:
+0 - GLONASS-M ln (third string)
+1…2 - GLONASS-M P
+3 - GLONASS-M P4
+4…5 - GLONASS-M M
+6 - GLONASS-M ln (fifth string)
+7…15 - reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>NE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="WAASEhemeris" Size="39" Title="[WE] WAAS Ephemeris">
+      <Variables>
+        <Variable Type="u1" Name="waasPrn" Dimensions="1" RequiredValue="">
+          <Comment>WAAS SV PRN number within [120…138]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="gpsPrn" Dimensions="1" RequiredValue="">
+          <Comment>GPS SV PRN associated with WAAS SV</Comment>
+        </Variable>
+        <Variable Type="u1" Name="iod" Dimensions="1" RequiredValue="">
+          <Comment>Issue of data</Comment>
+        </Variable>
+        <Variable Type="u1" Name="acc" Dimensions="1" RequiredValue="">
+          <Comment>WAAS SV accuracy9</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
+          <Comment>Reference time (seconds of the day)[s]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="xg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="yg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="zg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vxg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vyg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vzg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF velocity [m/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vvxg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF acceleration [m/s^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vvyg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF acceleration [m/s^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="vvzg" Dimensions="1" RequiredValue="">
+          <Comment>ECEF acceleration [m/s^2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="agf0" Dimensions="1" RequiredValue="">
+          <Comment>WAAS SV clock offset factor ‘ao’ [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="agf1" Dimensions="1" RequiredValue="">
+          <Comment>WAAS SV clock offset factor ‘a1’ [s/s]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
+          <Comment>Time of GPS week this ephemeris was
+received at</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>GPS week this ephemeris was received at</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>WE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris">
+      <Variables>
+        <Variable Type="GPSEphemeris" Name="gps" Dimensions="1" RequiredValue="">
+          <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
+GALILEO-specific data</Comment>
+        </Variable>
+        <Variable Type="f4" Name="bgdE1E5a" Dimensions="1" RequiredValue="">
+          <Comment>broacast group delay E1 - E5A [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="bgdE1E5b" Dimensions="1" RequiredValue="">
+          <Comment>broacast group delay E1 - E5B [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="ai0" Dimensions="1" RequiredValue="">
+          <Comment>Effective ionisation level 1-st order parameter []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="ai1" Dimensions="1" RequiredValue="">
+          <Comment>Effective ionisation level 2-nd order parameter []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="ai2" Dimensions="1" RequiredValue="">
+          <Comment>Effective ionisation level 3-rd order parameter []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="sfi" Dimensions="1" RequiredValue="">
+          <Comment>Ionospheric disturbance flags [bitfield]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="navType" Dimensions="1" RequiredValue="">
+          <Comment>Type of navigation data:
+0 - GALILEO E1B(INAV)
+3 - GIOVE E1B</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EN</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GpsNavData" Size="-1" Title="[GD] GPS Raw Navigation Data">
+      <Variables>
+        <Variable Type="u1" Name="recSize" Dimensions="1" RequiredValue="">
+          <Comment>Size of satellite data record (currently 42)</Comment>
+        </Variable>
+        <Variable Type="SvData0" Name="dat" Dimensions="-1" RequiredValue="">
+          <Comment>Satellite data. “N” can be derived from the
+following expression:
+N=([Message Length] - 2) / recSize)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>GD</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GloNavData" Size="-1" Title="[LD] GLONASS Raw Navigation Data">
+      <Variables>
+        <Variable Type="u1" Name="recSize" Dimensions="1" RequiredValue="">
+          <Comment>Size of satellite data record (currently 18)</Comment>
+        </Variable>
+        <Variable Type="SvData1" Name="dat" Dimensions="-1" RequiredValue="">
+          <Comment>Satellite data. “N” can be derived from the
+following expression:
+N=([Message Length] - 2) / recSize)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>LD</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="WAASRawMessage" Size="40" Title="[WD] WAAS Raw Navigation Data">
+      <Variables>
+        <Variable Type="u1" Name="prn" Dimensions="1" RequiredValue="">
+          <Comment>SV PRN number within the range [120…138]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>Time of receiving of message [s]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="reserv" Dimensions="1" RequiredValue="">
+          <Comment>Reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="data" Dimensions="32" RequiredValue="">
+          <Comment>Navigation data block</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>WD</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GALRawMessage" Size="-1" Title="[ED] GALILEO Raw Navigation Data">
+      <Variables>
+        <Variable Type="u1" Name="prn" Dimensions="1" RequiredValue="">
+          <Comment>SV PRN number within the range [1…30]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>Time of receiving of message [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="type" Dimensions="1" RequiredValue="">
+          <Comment>Type of data:
+0 - GALILEO E1B(INAV)
+3 - GIOVE E1B</Comment>
+        </Variable>
+        <Variable Type="u1" Name="len" Dimensions="1" RequiredValue="">
+          <Comment>Length of the navigation data block ‘data’</Comment>
+        </Variable>
+        <Variable Type="u1" Name="data" Dimensions="-1" RequiredValue="">
+          <Comment>Navigation data block</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ED</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="GloPhaseDelay" Size="-1" Title="[gC], [g1], [g2], [g3]: GLONASS Phase Delays">
+      <Variables>
+        <Variable Type="i1" Name="fcn" Dimensions="-1" RequiredValue="">
+          <Comment>GLONASS FCN[-7…6]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="phase" Dimensions="-1" RequiredValue="">
+          <Comment>Phase Delay, [cycles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="range" Dimensions="-1" RequiredValue="">
+          <Comment>Range (reserved for future use)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>gC</Code>
+        <Code>g1</Code>
+        <Code>g2</Code>
+        <Code>g3</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RotationMatrix" Size="37" Title="[MR] Rotation Matrix">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>receiver time [ms]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q00" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q01" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q02" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q12" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="rms" Dimensions="3" RequiredValue="">
+          <Comment>estimated accuracy for three baseline vectors [m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="3" RequiredValue="">
+          <Comment>solution type10 for three baseline vectors</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flag" Dimensions="1" RequiredValue="">
+          <Comment>0 – components of matrix Q are invalid, 1 - valid</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>MR</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RotationMatrixAndVectors" Size="73" Title="[mr] Rotation Matrix and Vectors">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>receiver time [ms]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q00" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q01" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q02" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="q12" Dimensions="1" RequiredValue="">
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable Type="f4" Name="rms" Dimensions="3" RequiredValue="">
+          <Comment>estimated accuracy for three baseline vectors [m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="3" RequiredValue="">
+          <Comment>solution type10 for three baseline vectors</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flag" Dimensions="1" RequiredValue="">
+          <Comment>0 – components of matrix Q are invalid, 1 - valid</Comment>
+        </Variable>
+        <Variable Type="f4" Name="bl0" Dimensions="3" RequiredValue="">
+          <Comment>baseline vector M-S0 in the current epoch[m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="bl1" Dimensions="3" RequiredValue="">
+          <Comment>baseline vector M-S1 in the current epoch[m]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="bl2" Dimensions="3" RequiredValue="">
+          <Comment>baseline vector M-S2 in the current epoch[m]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>mr</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RotationAngles" Size="30" Title="[AR] Rotation Angles">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>receiver time [ms]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="pitch" Dimensions="1" RequiredValue="">
+          <Comment>pitch angle [deg]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="roll" Dimensions="1" RequiredValue="">
+          <Comment>roll angle [deg]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="heading" Dimensions="1" RequiredValue="">
+          <Comment>heading angle [deg]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="pitchRms" Dimensions="1" RequiredValue="">
+          <Comment>pitch angle RMS [deg]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="rollRms" Dimensions="1" RequiredValue="">
+          <Comment>roll angle RMS [deg]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="headingRms" Dimensions="1" RequiredValue="">
+          <Comment>heading angle RMS [deg]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>flags [bitfield]:
+0: 0 - no data available
+1 - data are valid
+7…1: reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>AR</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="AngularVelocity" Size="22" Title="[AV] Angular Velocities">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>receiver time [ms]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>X component of angular velocity [rad/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>Y component of angular velocity [rad/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>Z component of angular velocity [rad/s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="rms" Dimensions="1" RequiredValue="">
+          <Comment>Angular velocity RMS [rad/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>flags [bitfield]:
+0: 0 - no data available
+1 - data are valid
+7…1: reserved</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>AV</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="InertialMeasurements" Size="25" Title="[IM] Inertial Measurements">
+      <Variables>
+        <Variable Type="f4" Name="accelerations" Dimensions="3" RequiredValue="">
+          <Comment>ax,ay,az [m/sec]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="angularVelocities" Dimensions="3" RequiredValue="">
+          <Comment>wx,wy,wz [rad/sec]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment />
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>IM</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="ExtEvent" Size="10" Title="[XA], [XB] External Event">
+      <Variables>
+        <Variable Type="i4" Name="ms" Dimensions="1" RequiredValue="">
+          <Comment>ms part of event time tag</Comment>
+        </Variable>
+        <Variable Type="i4" Name="ns" Dimensions="1" RequiredValue="">
+          <Comment>ns part of event time tag</Comment>
+        </Variable>
+        <Variable Type="u1" Name="timeScale" Dimensions="1" RequiredValue="">
+          <Comment>time scale</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>XA</Code>
+        <Code>XB</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PPSOffset" Size="5" Title="[ZA], [ZB] PPS Offset">
+      <Variables>
+        <Variable Type="f4" Name="offs" Dimensions="1" RequiredValue="">
+          <Comment>PPS offset in nanoseconds</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ZA</Code>
+        <Code>ZB</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvTimeOffsAtPPS" Size="10" Title="[YA], [YB] Time Offset at PPS Generation Time">
+      <Variables>
+        <Variable Type="f8" Name="offs" Dimensions="1" RequiredValue="">
+          <Comment>[Tpps-Tr] offset[s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="timeScale" Dimensions="1" RequiredValue="">
+          <Comment>time scale</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>YA</Code>
+        <Code>YB</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RefEpoch" Size="10" Title="[rE] Reference Epoch">
+      <Variables>
+        <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
+          <Comment>Sample number [dimensionless]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="scale" Dimensions="1" RequiredValue="">
+          <Comment>Time scale ID, leap second status and
+week/day part of epoch representation [bitfield]
+15…13: time scale ID:
+0 – GPS, 1 – GLONASS, 2 – UTC;
+12…11: leap second status:
+0 – no leap second epoch;
+1 – positive leap second;
+2 – negative leap second;
+3 – leap second status is unknown;
+this flag shows whether a leap second
+occurred at the current epoch;
+10…0: week/day representation:
+(a) if time scale ID is GPS:
+week number [0…1023],
+1024 indicates unknown week number;
+(b) if time scale ID is GLONASS:
+day number within 4-year period [1…1461],
+0 indicates unknown day number
+(c) if time scale ID is UTC:
+day number within the year [1…366],
+0 indicates unknown day number;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="reftime" Dimensions="1" RequiredValue="">
+          <Comment>Milliseconds part of epoch representation [ms]:
+(a) if time scale ID is GPS:
+milliseconds of GPS week;
+(b) if time scale ID is GLONASS:
+milliseconds of GLONASS day;
+(c) if time scale ID is UTC,
+milliseconds of UTC day;</Comment>
+        </Variable>
+        <Variable Type="u2" Name="crc16" Dimensions="1" RequiredValue="">
+          <Comment>16-bit CRC</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rE</Code>
+      </Codes>
+      <Validation>Crc16</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RawMeas" Size="-1" Title="[rM] Raw Measurements">
+      <Variables>
+        <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
+          <Comment>Sample number []</Comment>
+        </Variable>
+        <Variable Type="u2" Name="scale" Dimensions="1" RequiredValue="">
+          <Comment>See [rE] for description</Comment>
+        </Variable>
+        <Variable Type="u4" Name="reftime" Dimensions="1" RequiredValue="">
+          <Comment>See [rE] for description</Comment>
+        </Variable>
+        <Variable Type="i2" Name="clock" Dimensions="1" RequiredValue="">
+          <Comment>Clock offset:
+15…2: Clock offset
+-213 /+(213-1) [125 nanoseconds]:
+1…0: Clock offset ID:
+0 – clock offset is unavailable
+1 – [GPS - Receiver time]
+2 – [GLONASS - Receiver time]
+3 - reserved</Comment>
+        </Variable>
+        <Variable Type="u2" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Flags [bitfield]:
+15…13: message version [0…7]
+12…8: total number of “svd” records (N)
+7…5: this value plus 6 makes the length
+of the structure “Header” in bytes
+4…0: this value plus 10 (for “version” 0 and 1),
+or 6 (for “version” [2…7]) makes the length
+of the structure “SlotRec” in bytes</Comment>
+        </Variable>
+        <Variable Type="SvData2" Name="svd" Dimensions="-1" RequiredValue="">
+          <Comment>SVs data (see below)</Comment>
+        </Variable>
+        <Variable Type="u2" Name="crc16" Dimensions="1" RequiredValue="">
+          <Comment>16-bit CRC</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rM</Code>
+      </Codes>
+      <Validation>Crc16</Validation>
+    </StandardMessage>
+    <StandardMessage Name="PosVelVector" Size="42" Title="[rV] Receiver’s Position and Velocity">
+      <Variables>
+        <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
+          <Comment>Sample number []</Comment>
+        </Variable>
+        <Variable Type="u2" Name="delta" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+15…5: Difference between the raw measurement time
+(available from either [rM] or [rE] message)
+and the position time tag [-1024…1023], [5 ms]
+4…0: reserved</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word1" Dimensions="1" RequiredValue="">
+          <Comment>32 MSB of Position X-component;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word2" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…24: 8 LSB of Position ECEF X-component [10-4 m]
+or Latitude [10-11 radians]
+or Grid (Local) X-component [10-4 m];
+23: 1 - indicates that Position is valid
+22…21: 0 – Position is given in ECEF system
+1 – Position is given in geodetic coordinates
+(latitude, longitude, height above
+ellipsoid)
+2 – Position is given in grid (or local)
+coordinates
+3 – reserved
+20…16: Number of GPS SVs used in computation;
+15: 1 - indicates that Velocity is valid
+14…13: reserved
+12…8: Number of GLONASS SVs used in computation;
+7…4: Position computation mode
+(see Table 4-3 on page 306);
+3…0: Velocity computation mode
+(see Table 4-3 on page 306);</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word3" Dimensions="1" RequiredValue="">
+          <Comment>31…0: 32 MSB of Position Y-component;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word4" Dimensions="1" RequiredValue="">
+          <Comment>31…24: 8 LSB of Position ECEF Y-component [10-4 m]
+or Longitude [10-11 radians]
+or Grid (Local) Y-component [10-4 m];
+23…15: PDOP * 10 [];
+14…0: RMS velocity error [0.001 meters];</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word5" Dimensions="1" RequiredValue="">
+          <Comment>32 MSB of 40-bit ECEF position Z-component;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word6" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…24: 8 LSB of 40-bit position ECEF Z-component
+or Height above ellipsoid [10-4 m];
+23…20: reserved;
+19…0: RMS Position error [0.001 m];</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word7" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…4: velocity X-component [10-4 m/s]
+or East component (if types 1 and 2 are
+selected in bits 22…21 of the ‘word2’ field);
+3…2: reserved;
+1…0: 2 MSB of GREIS datum number (see note below);</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word8" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…4: velocity Y-component [10-4 m/s]
+or North component (if types 1 and 2 are
+selected in bits 22…21 of the ‘word2’ field);
+3…0: bits 7…4 of datum number;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word9" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…4: velocity Z-component [10-4 m/s]
+or North component (if types 1 and 2 are
+selected in bits 22…21 of the ‘word2’ field);
+3…0: 4 LSB of GREIS datum number;</Comment>
+        </Variable>
+        <Variable Type="u2" Name="crc16" Dimensions="1" RequiredValue="">
+          <Comment>16-bit CRC;</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rV</Code>
+      </Codes>
+      <Validation>Crc16</Validation>
+    </StandardMessage>
+    <StandardMessage Name="ClockOffsets" Size="-1" Title="[rT] Receiver Clock Offsets">
+      <Variables>
+        <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
+          <Comment>Sample number []</Comment>
+        </Variable>
+        <Variable Type="u2" Name="reserved" Dimensions="1" RequiredValue="">
+          <Comment>Reserved for future extensions</Comment>
+        </Variable>
+        <Variable Type="u1" Name="recSize" Dimensions="1" RequiredValue="">
+          <Comment>Size of data block, in bytes, that corresponds to
+the given satellite system (8 bytes currently);</Comment>
+        </Variable>
+        <Variable Type="ClkOffs" Name="Offs" Dimensions="-1" RequiredValue="">
+          <Comment>Clock offsets (see below).
+‘N’ can be derived from the following expression:
+N = (len - 7) / recSize, where ‘len’ is message body
+length taken from message header</Comment>
+        </Variable>
+        <Variable Type="u2" Name="crc16" Dimensions="1" RequiredValue="">
+          <Comment>16-bit CRC</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rT</Code>
+      </Codes>
+      <Validation>Crc16</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RE" Size="-1" Title="[RE] Reply">
+      <Variables>
+        <Variable Type="a1" Name="reply" Dimensions="-1" RequiredValue="">
+          <Comment>Reply</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>RE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="ER" Size="-1" Title="[ER] Error">
+      <Variables>
+        <Variable Type="a1" Name="error" Dimensions="-1" RequiredValue="">
+          <Comment>Error description</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ER</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="IonoParams" Size="39" Title="[IO] Ionospheric Parameters">
+      <Variables>
+        <Variable Type="u4" Name="tot" Dimensions="1" RequiredValue="">
+          <Comment>Time of week [s]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wn" Dimensions="1" RequiredValue="">
+          <Comment>Week number (taken from the first subframe)
+The coefficients of a cubic equation representing
+the amplitude of the vertical delay</Comment>
+        </Variable>
+        <Variable Type="f4" Name="alpha0" Dimensions="1" RequiredValue="">
+          <Comment>[s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="alpha1" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="alpha2" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="alpha3" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles3]
+The coefficients of a cubic equation representing
+the period of the model</Comment>
+        </Variable>
+        <Variable Type="f4" Name="beta0" Dimensions="1" RequiredValue="">
+          <Comment>[s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="beta1" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="beta2" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles2]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="beta3" Dimensions="1" RequiredValue="">
+          <Comment>[s/semicircles3]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>IO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Event" Size="-1" Title="[==](EV) Event">
+      <Variables>
+        <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
+          <Comment>Receiver time of event occurrence modulo day, [ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="type" Dimensions="1" RequiredValue="">
+          <Comment>Event type (see below), []</Comment>
+        </Variable>
+        <Variable Type="u1" Name="data" Dimensions="-1" RequiredValue="">
+          <Comment>Event contents</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>==</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Latency" Size="2" Title="[LT] Message Output Latency">
+      <Variables>
+        <Variable Type="u1" Name="lt" Dimensions="1" RequiredValue="">
+          <Comment>output latency [ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>LT</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Wrapper" Size="-1" Title="[&gt;&gt;] Wrapper">
+      <Variables>
+        <Variable Type="u1" Name="id" Dimensions="1" RequiredValue="">
+          <Comment>Source identifier</Comment>
+        </Variable>
+        <Variable Type="u1" Name="data" Dimensions="-1" RequiredValue="">
+          <Comment>Data from the source</Comment>
+        </Variable>
+        <Variable Type="a1" Name="cs" Dimensions="2" RequiredValue="">
+          <Comment>Checksum formatted as hexadecimal</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>&gt;&gt;</Code>
+      </Codes>
+      <Validation>ChecksumAsHexAscii</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Params" Size="-1" Title="[PM] Parameters">
+      <Variables>
+        <Variable Type="a1" Name="params" Dimensions="-1" RequiredValue="">
+          <Comment>Parameters description</Comment>
+        </Variable>
+        <Variable Type="a1" Name="delim" Dimensions="2" RequiredValue=",@">
+          <Comment>Checksum delimiter</Comment>
+        </Variable>
+        <Variable Type="a1" Name="cs" Dimensions="2" RequiredValue="">
+          <Comment>Checksum formatted as hexadecimal</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>PM</Code>
+      </Codes>
+      <Validation>ChecksumAsHexAscii</Validation>
+    </StandardMessage>
+    <StandardMessage Name="LoggingHistory" Size="-1" Title="[LH] Logging History">
+      <Variables>
+        <Variable Type="u1" Name="svsCount" Dimensions="1" RequiredValue="">
+          <Comment>Number of SVs</Comment>
+        </Variable>
+        <Variable Type="u1" Name="targetStream" Dimensions="1" RequiredValue="">
+          <Comment>Stream ID</Comment>
+        </Variable>
+        <Variable Type="u2" Name="issue" Dimensions="1" RequiredValue="">
+          <Comment>Issue of the history</Comment>
+        </Variable>
+        <Variable Type="u2" Name="bitsCount" Dimensions="1" RequiredValue="">
+          <Comment>Number of bits</Comment>
+        </Variable>
+        <Variable Type="u4" Name="lastBitTime" Dimensions="1" RequiredValue="">
+          <Comment>Time since the last history shift [ms]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="uids" Dimensions="-1" RequiredValue="">
+          <Comment>SVs UIDs</Comment>
+        </Variable>
+        <Variable Type="u1" Name="pad" Dimensions="-1" RequiredValue="">
+          <Comment>Padding</Comment>
+        </Variable>
+        <Variable Type="u4" Name="hist" Dimensions="-1 -1" RequiredValue="">
+          <Comment>History bits</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>LH</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="BaseInfo" Size="28" Title="[BI] Base Station Information">
+      <Variables>
+        <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="y" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="f8" Name="z" Dimensions="1" RequiredValue="">
+          <Comment>ECEF coordinates [m]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="id" Dimensions="1" RequiredValue="">
+          <Comment>Reference station ID</Comment>
+        </Variable>
+        <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>BI</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Security" Size="6" Title="[SE] Security">
+      <Variables>
+        <Variable Type="u1" Name="data" Dimensions="5" RequiredValue="">
+          <Comment>Opaque data</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SE</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="Security" Size="8" Title="[SM] Security for [rM]">
+      <Variables>
+        <Variable Type="u1" Name="data" Dimensions="6" RequiredValue="">
+          <Comment>Opaque data</Comment>
+        </Variable>
+        <Variable Type="u2" Name="crc16" Dimensions="1" RequiredValue="">
+          <Comment>16-bit CRC</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>SM</Code>
+      </Codes>
+      <Validation>Crc16</Validation>
+    </StandardMessage>
+    <StandardMessage Name="TrackingTime" Size="5" Title="[TT] CA/L1 Overall Continuous Tracking Time">
+      <Variables>
+        <Variable Type="u4" Name="tt" Dimensions="1" RequiredValue="">
+          <Comment>tracking time [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>TT</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="RcvOscOffs" Size="5" Title="[OO] Oscillator Offset">
+      <Variables>
+        <Variable Type="f4" Name="val" Dimensions="1" RequiredValue="">
+          <Comment>Oscillator offset [s/s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>OO</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+    <StandardMessage Name="EpochEnd" Size="1" Title="[||](EE) Epoch End">
+      <Variables>
+        <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>||</Code>
+      </Codes>
+      <Validation>Checksum</Validation>
+    </StandardMessage>
+  </StandardMessages>
+  <CustomTypes>
+    <CustomType Name="UtcOffs" Size="23">
+      <Variables>
+        <Variable Type="f8" Name="a0" Dimensions="1" RequiredValue="">
+          <Comment>Constant term of polynomial [s]</Comment>
+        </Variable>
+        <Variable Type="f4" Name="a1" Dimensions="1" RequiredValue="">
+          <Comment>First order term of polynomial [s/s]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="tot" Dimensions="1" RequiredValue="">
+          <Comment>Reference time of week [s]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wnt" Dimensions="1" RequiredValue="">
+          <Comment>Reference week number []</Comment>
+        </Variable>
+        <Variable Type="i1" Name="dtls" Dimensions="1" RequiredValue="">
+          <Comment>Delta time due to leap seconds [s]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="dn" Dimensions="1" RequiredValue="">
+          <Comment>'Future' reference day number [1…7] []</Comment>
+        </Variable>
+        <Variable Type="u2" Name="wnlsf" Dimensions="1" RequiredValue="">
+          <Comment>'Future' reference week number []</Comment>
+        </Variable>
+        <Variable Type="i1" Name="dtlsf" Dimensions="1" RequiredValue="">
+          <Comment>'Future' delta time due to leap seconds [s]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="Smooth" Size="6">
+      <Variables>
+        <Variable Type="f4" Name="value" Dimensions="1" RequiredValue="">
+          <Comment>Smoothing correction [s]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="interval" Dimensions="1" RequiredValue="">
+          <Comment>Smoothing interval [s]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="SvData0" Size="-1">
+      <Variables>
+        <Variable Type="i1" Name="prn" Dimensions="1" RequiredValue="">
+          <Comment>Pseudo-Range Number (PRN)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cnt" Dimensions="1" RequiredValue="">
+          <Comment>Counter which is updated upon receiving a
+new sub-frame for given satellite.</Comment>
+        </Variable>
+        <Variable Type="u4" Name="data" Dimensions="10" RequiredValue="">
+          <Comment>GPS sub-frame contents. Every 4-bytes word
+contains 30 LSB of the GPS navigation data.</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="SvData1" Size="-1">
+      <Variables>
+        <Variable Type="i1" Name="fcn1" Dimensions="1" RequiredValue="">
+          <Comment>Frequency Channel Number plus 1(FCN+1)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="cnt" Dimensions="1" RequiredValue="">
+          <Comment>Counter which is updated upon receiving a
+string of a GLONASS sub-frame for given FCN.</Comment>
+        </Variable>
+        <Variable Type="u4" Name="data" Dimensions="4" RequiredValue="">
+          <Comment>GLONASS string contents. Every 4-bytes word contains
+25 LSB of the string of GLONASS sub-frame.</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="SvData2" Size="-1">
+      <Variables>
+        <Variable Type="Header" Name="header" Dimensions="1" RequiredValue="">
+          <Comment>Header (see below)</Comment>
+        </Variable>
+        <Variable Type="SlotRec" Name="slot" Dimensions="-1" RequiredValue="">
+          <Comment>Slot records (see below)</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="Header" Size="6">
+      <Variables>
+        <Variable Type="u4" Name="refrange" Dimensions="1" RequiredValue="">
+          <Comment>Reference pseudo-range [0.02 meters]</Comment>
+        </Variable>
+        <Variable Type="u1" Name="usi" Dimensions="1" RequiredValue="">
+          <Comment>USI (see [SI] message)</Comment>
+        </Variable>
+        <Variable Type="u1" Name="num" Dimensions="1" RequiredValue="">
+          <Comment>Number of slot records (M) [bitfield]:
+7…3: reserved
+2…0: number of slot records minus one (M)</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="SlotRec" Size="-1">
+      <Variables>
+        <Variable Type="i2" Name="svstOrDelrange" Dimensions="1" RequiredValue="">
+          <Comment>SV status [bitfield], or
+Delta pseudo-range [0.02 meters].
+SV status [bitfield]:
+15…11: GLONASS slot number (for GPS SV the field
+is undefined), [0…24], 0 - unknown
+10…6: Channel number [0…31], 31 - unavailable
+5…0: SV navigation status
+Delta pseudo-range [0.02 meters]:
+[full pseudo-range for given slot]-[refrange]</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word1" Dimensions="1" RequiredValue="">
+          <Comment>Packed data 1 [bitfield]:
+31…12: [carrier phase] - [refrange]
+[-219…(219-1)] [0.0005 meters]
+11…9: slot ID:
+0 - C/A L1; 1 - P1; 2 - P2; 3 - C/A L2;
+4 - L5; 5,6,7 - reserved
+8: reserved
+7: signal lock loop flags are available
+6: lock time is available
+5…0: Signal-to-noise ratio [dB*Hz]</Comment>
+        </Variable>
+        <Variable Type="u2" Name="flags" Dimensions="1" RequiredValue="">
+          <Comment>Signal lock loop flags (see [FC] message)</Comment>
+        </Variable>
+        <Variable Type="u2" Name="lock" Dimensions="1" RequiredValue="">
+          <Comment>Packed data 2 [bitfield]:
+15…12: fractional part of Signal-to-noise
+ratio [0.1 dB*Hz]
+11…10: reserved
+9…0: lock time [0.1 second]. Tracking time since
+last loss of lock. Varies between 0 and
+102.3 seconds. “Gets stuck” at 102.3s after
+the actual tracking time exceeds this value
+(until another loss of lock occurs).</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word2" Dimensions="1" RequiredValue="">
+          <Comment>Packed data 3. Only present for “version” 0 [bitfield]:
+31…7: Doppler [-224…(224-1)], [0.001 Hz]
+6…0: reserved</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="ClkOffs" Size="-1">
+      <Variables>
+        <Variable Type="u4" Name="word1" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31: reserved;
+30: if set, improved timing mode is turned on;
+29…0: clock offset [10-4 meters], bit combination
+0x20000000 means the clock offset is
+unavailable or exceeds ±536870911;</Comment>
+        </Variable>
+        <Variable Type="u4" Name="word2" Dimensions="1" RequiredValue="">
+          <Comment>[bitfield]:
+31…29: reserved;
+28…26: navigation system (0 - GPS, 1 - GLN);
+25…0: derivative of clock offset [10-4 m/s],
+bit combination 0x2000000 means that clock
+offset is unavailable or exceeds ±33554431;</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+  </CustomTypes>
+</MetaInfo>

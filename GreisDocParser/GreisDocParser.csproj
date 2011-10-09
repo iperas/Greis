@@ -46,14 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomType.cs" />
+    <Compile Include="GreisTypes.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MetaInfo.cs" />
+    <Compile Include="MetaInfoGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SizeSpecialValues.cs" />
+    <Compile Include="StandardMessage.cs" />
+    <Compile Include="ValidationTypes.cs" />
+    <Compile Include="Variable.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
