@@ -18,20 +18,20 @@ namespace GreisDocParser
 
             textBoxInputPath.Text = Path.Combine(Environment.CurrentDirectory, "input.txt");
             textBoxInputPath.Text = @"D:\Documents\svn_ifz_ipg\Projects\trunk\src\JpsParser\1.txt";
-            textBoxOutputPath.Text = Path.Combine(Environment.CurrentDirectory, "meta-data.xml");
+            textBoxOutputDir.Text = Environment.CurrentDirectory;
             radioButtonFile_CheckedChanged(this, EventArgs.Empty);
         }
 
-        private void buttonOutputPathBrowse_Click(object sender, EventArgs e)
+        private void buttonOutputDirBrowse_Click(object sender, EventArgs e)
         {
-            saveFileDialogXml.InitialDirectory = Directory.Exists(textBoxOutputPath.Text)
-                                                     ? textBoxOutputPath.Text
+            theFolderBrowserDialog.SelectedPath = Directory.Exists(textBoxOutputDir.Text)
+                                                     ? textBoxOutputDir.Text
                                                      : null;
-            if (saveFileDialogXml.ShowDialog() != DialogResult.OK)
+            if (theFolderBrowserDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
-            textBoxOutputPath.Text = saveFileDialogXml.FileName;
+            textBoxOutputDir.Text = theFolderBrowserDialog.SelectedPath;
         }
 
         private void buttonParse_Click(object sender, EventArgs e)
@@ -54,10 +54,10 @@ namespace GreisDocParser
 
                 var metaInfo = MetaInfoGenerator.FromUserManual(text);
 
-                var knownSize = metaInfo.StandardMessages.Where(m => m.Size != (int) SizeSpecialValues.Dynamic).ToList();
-                var unknownSize = metaInfo.StandardMessages.Where(m => m.Size == (int) SizeSpecialValues.Dynamic).ToList();
+                //var knownSize = metaInfo.StandardMessages.Where(m => m.Size != (int) SizeSpecialValues.Dynamic).ToList();
+                //var unknownSize = metaInfo.StandardMessages.Where(m => m.Size == (int) SizeSpecialValues.Dynamic).ToList();
                 // serializing
-                metaInfo.ToFile(textBoxOutputPath.Text);
+                metaInfo.ToFile(Path.Combine(textBoxOutputDir.Text, "meta-info.xml"));
                 // end
                 MessageBox.Show("Parsing successfully complete!");
             }

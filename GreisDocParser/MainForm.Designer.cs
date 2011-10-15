@@ -28,49 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonOutputPathBrowse = new System.Windows.Forms.Button();
-            this.textBoxOutputPath = new System.Windows.Forms.TextBox();
+            this.buttonOutputDirBrowse = new System.Windows.Forms.Button();
+            this.textBoxOutputDir = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxInputText = new System.Windows.Forms.TextBox();
             this.buttonParse = new System.Windows.Forms.Button();
             this.saveFileDialogXml = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonFile = new System.Windows.Forms.RadioButton();
             this.radioButtonText = new System.Windows.Forms.RadioButton();
-            this.buttonInputPathBrowse = new System.Windows.Forms.Button();
+            this.radioButtonFile = new System.Windows.Forms.RadioButton();
             this.textBoxInputPath = new System.Windows.Forms.TextBox();
+            this.buttonInputPathBrowse = new System.Windows.Forms.Button();
             this.openFileDialogAny = new System.Windows.Forms.OpenFileDialog();
+            this.theFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonOutputPathBrowse
+            // buttonOutputDirBrowse
             // 
-            this.buttonOutputPathBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOutputPathBrowse.Location = new System.Drawing.Point(378, 27);
-            this.buttonOutputPathBrowse.Name = "buttonOutputPathBrowse";
-            this.buttonOutputPathBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonOutputPathBrowse.TabIndex = 0;
-            this.buttonOutputPathBrowse.Text = "Browse...";
-            this.buttonOutputPathBrowse.UseVisualStyleBackColor = true;
-            this.buttonOutputPathBrowse.Click += new System.EventHandler(this.buttonOutputPathBrowse_Click);
+            this.buttonOutputDirBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOutputDirBrowse.Location = new System.Drawing.Point(378, 27);
+            this.buttonOutputDirBrowse.Name = "buttonOutputDirBrowse";
+            this.buttonOutputDirBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonOutputDirBrowse.TabIndex = 0;
+            this.buttonOutputDirBrowse.Text = "Browse...";
+            this.buttonOutputDirBrowse.UseVisualStyleBackColor = true;
+            this.buttonOutputDirBrowse.Click += new System.EventHandler(this.buttonOutputDirBrowse_Click);
             // 
-            // textBoxOutputPath
+            // textBoxOutputDir
             // 
-            this.textBoxOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutputPath.Location = new System.Drawing.Point(12, 29);
-            this.textBoxOutputPath.Name = "textBoxOutputPath";
-            this.textBoxOutputPath.Size = new System.Drawing.Size(360, 20);
-            this.textBoxOutputPath.TabIndex = 1;
+            this.textBoxOutputDir.Location = new System.Drawing.Point(12, 29);
+            this.textBoxOutputDir.Name = "textBoxOutputDir";
+            this.textBoxOutputDir.Size = new System.Drawing.Size(360, 20);
+            this.textBoxOutputDir.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Output XML file:";
+            this.label1.Text = "Output directory:";
             // 
             // textBoxInputText
             // 
@@ -114,6 +115,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input";
             // 
+            // radioButtonText
+            // 
+            this.radioButtonText.AutoSize = true;
+            this.radioButtonText.Location = new System.Drawing.Point(7, 42);
+            this.radioButtonText.Name = "radioButtonText";
+            this.radioButtonText.Size = new System.Drawing.Size(70, 17);
+            this.radioButtonText.TabIndex = 4;
+            this.radioButtonText.Text = "Raw text:";
+            this.radioButtonText.UseVisualStyleBackColor = true;
+            // 
             // radioButtonFile
             // 
             this.radioButtonFile.AutoSize = true;
@@ -127,15 +138,14 @@
             this.radioButtonFile.UseVisualStyleBackColor = true;
             this.radioButtonFile.CheckedChanged += new System.EventHandler(this.radioButtonFile_CheckedChanged);
             // 
-            // radioButtonText
+            // textBoxInputPath
             // 
-            this.radioButtonText.AutoSize = true;
-            this.radioButtonText.Location = new System.Drawing.Point(7, 42);
-            this.radioButtonText.Name = "radioButtonText";
-            this.radioButtonText.Size = new System.Drawing.Size(70, 17);
-            this.radioButtonText.TabIndex = 4;
-            this.radioButtonText.Text = "Raw text:";
-            this.radioButtonText.UseVisualStyleBackColor = true;
+            this.textBoxInputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInputPath.Location = new System.Drawing.Point(57, 19);
+            this.textBoxInputPath.Name = "textBoxInputPath";
+            this.textBoxInputPath.Size = new System.Drawing.Size(297, 20);
+            this.textBoxInputPath.TabIndex = 1;
             // 
             // buttonInputPathBrowse
             // 
@@ -147,15 +157,6 @@
             this.buttonInputPathBrowse.Text = "Browse...";
             this.buttonInputPathBrowse.UseVisualStyleBackColor = true;
             this.buttonInputPathBrowse.Click += new System.EventHandler(this.buttonInputPathBrowse_Click);
-            // 
-            // textBoxInputPath
-            // 
-            this.textBoxInputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxInputPath.Location = new System.Drawing.Point(57, 19);
-            this.textBoxInputPath.Name = "textBoxInputPath";
-            this.textBoxInputPath.Size = new System.Drawing.Size(297, 20);
-            this.textBoxInputPath.TabIndex = 1;
             // 
             // openFileDialogAny
             // 
@@ -169,8 +170,8 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonParse);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxOutputPath);
-            this.Controls.Add(this.buttonOutputPathBrowse);
+            this.Controls.Add(this.textBoxOutputDir);
+            this.Controls.Add(this.buttonOutputDirBrowse);
             this.Name = "MainForm";
             this.Text = "Greis Reference Parser";
             this.groupBox1.ResumeLayout(false);
@@ -182,8 +183,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button buttonOutputPathBrowse;
-        private System.Windows.Forms.TextBox textBoxOutputPath;
+        private System.Windows.Forms.Button buttonOutputDirBrowse;
+        private System.Windows.Forms.TextBox textBoxOutputDir;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxInputText;
         private System.Windows.Forms.Button buttonParse;
@@ -194,6 +195,7 @@
         private System.Windows.Forms.TextBox textBoxInputPath;
         private System.Windows.Forms.Button buttonInputPathBrowse;
         private System.Windows.Forms.OpenFileDialog openFileDialogAny;
+        private System.Windows.Forms.FolderBrowserDialog theFolderBrowserDialog;
     }
 }
 
