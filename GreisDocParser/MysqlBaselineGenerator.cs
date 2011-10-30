@@ -178,19 +178,31 @@ namespace GreisDocParser
                                                                                         Select(s => string.Format("('{0}')", s))));
             // customTypesMeta
             var metaValues = new List<string>();
+            var customTypeVariablesMetaValues = new List<string>();
+            long customTypeId = 1;
             foreach (var ct in _metaInfo.CustomTypes)
             {
-                var ctMetaInsert = string.Format("('{0}', {1}, '{2}')", ct.Name, ct.Size, tableName(ct));
+                foreach (var v in ct.Variables)
+                {
+                    var customTypeVariablesMetaInsert = string.Format("('{0}', '{1}', {2}, '{3}', {4})", v.Name, v.Type, v.Dimensions.Count, v.RequiredValue, customTypeId);
+                    customTypeVariablesMetaValues.Add(customTypeVariablesMetaInsert);
+                }
+                var ctMetaInsert = string.Format("({3}, '{0}', {1}, '{2}')", ct.Name, ct.Size, tableName(ct), customTypeId);
                 metaValues.Add(ctMetaInsert);
+                customTypeId++;
             }
             var ctMetaFillup = string.Format("-- Наполнение мета-информации о пользовательских типах\r\n" +
-                                             "INSERT INTO `customTypesMeta` (`name`, `size`, `tableName`) \r\n" +
+                                             "INSERT INTO `customTypesMeta` (`id`, `name`, `size`, `tableName`) \r\n" +
                                              "    VALUES {0};\r\n\r\n", string.Join(", \r\n           ", metaValues));
+            var customTypeVariablesMetaFillup =
+                string.Format("INSERT INTO `customTypeVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idCustomTypesMeta`) \r\n" +
+                              "    VALUES {0};\r\n\r\n",
+                              string.Join(", \r\n           ", customTypeVariablesMetaValues));
 
             // messagesMeta
             metaValues = new List<string>();
             var messageCodesValues = new List<string>();
-            var variablesMetaValues = new List<string>();
+            var messageVariablesMetaValues = new List<string>();
             long messageId = 1;
             foreach (var message in _metaInfo.StandardMessages)
             {
@@ -198,6 +210,11 @@ namespace GreisDocParser
                 {
                     var messageCodesInsert = string.Format("('{0}', {1})", code, messageId);
                     messageCodesValues.Add(messageCodesInsert);
+                }
+                foreach (var v in message.Variables)
+                {
+                    var messageVariablesMetaInsert = string.Format("('{0}', '{1}', {2}, '{3}', {4})", v.Name, v.Type, v.Dimensions.Count, v.RequiredValue, messageId);
+                    messageVariablesMetaValues.Add(messageVariablesMetaInsert);
                 }
                 var messageMetaInsert = string.Format("({0}, '{1}', '{2}', {3}, {4}, {5}, {6}, '{7}')", messageId,
                                                       message.Name, message.Title, message.Size,
@@ -212,12 +229,14 @@ namespace GreisDocParser
             var messageCodesFillup = string.Format("INSERT INTO `messageCodes` (`code`, `idMessagesMeta`) \r\n" +
                                                    "    VALUES {0};\r\n\r\n",
                                                    string.Join(", \r\n           ", messageCodesValues));
-            var variablesMetaValues = string.Format("INSERT INTO `messageCodes` (`code`, `idMessagesMeta`) \r\n" +
-                                                   "    VALUES {0};\r\n\r\n",
-                                                   string.Join(", \r\n           ", messageCodesValues));
-            
+            var messageVariablesMetaFillup =
+                string.Format("INSERT INTO `messageVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idMessagesMeta`) \r\n" +
+                              "    VALUES {0};\r\n\r\n",
+                              string.Join(", \r\n           ", messageVariablesMetaValues));
+
             var fillup = sizeSpecialValuesFillup + messageValidationsFillup + messageKindsFillup +
-                         messagetypesFillup + ctMetaFillup + messagesMetaFillup + messageCodesFillup;
+                         messagetypesFillup + ctMetaFillup + messagesMetaFillup + messageCodesFillup +
+                         messageVariablesMetaFillup + customTypeVariablesMetaFillup;
             return fillup;
         }
 

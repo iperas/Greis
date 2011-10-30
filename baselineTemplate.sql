@@ -91,11 +91,11 @@ CREATE TABLE `customTypeVariablesMeta` (
          `type` VARCHAR(100) NOT NULL,
          `dimensions` TINYINT NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
-         `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
+         `idCustomTypesMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_variablesMeta_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_variablesMeta_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
-            REFERENCES `messagesMeta` (`id`)
+         INDEX `idx_fk_customTypeVariablesMeta_idCustomTypesMeta` (`idCustomTypesMeta`),
+         CONSTRAINT `fk_customTypeVariablesMeta_idCustomTypesMeta` FOREIGN KEY (`idCustomTypesMeta`) 
+            REFERENCES `customTypesMeta` (`id`)
        );
 
 -- мета-информация о полях сообщений
@@ -107,8 +107,8 @@ CREATE TABLE `messageVariablesMeta` (
          `requiredValue` VARCHAR(100) NOT NULL,
          `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_variablesMeta_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_variablesMeta_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
+         INDEX `idx_fk_messageVariablesMeta_idMessagesMeta` (`idMessagesMeta`),
+         CONSTRAINT `fk_messageVariablesMeta_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
             REFERENCES `messagesMeta` (`id`)
        );
 
@@ -118,7 +118,6 @@ CREATE TABLE `messageCodes` (
          code CHAR(2) NOT NULL,
          `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         UNIQUE (`code`), 
          INDEX `idx_fk_messageCodes_idMessagesMeta` (`idMessagesMeta`),
          CONSTRAINT `fk_messageCodes_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
             REFERENCES `messagesMeta` (`id`)
