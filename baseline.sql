@@ -1,5 +1,5 @@
 ﻿-- USE `world`;
-USE DATABASE `world`;
+USE `world`;
 SET GLOBAL sql_mode='STRICT_ALL_TABLES';
 
 DROP TABLE IF EXISTS `exampleMessage`;
@@ -17,17 +17,24 @@ CREATE TABLE `epochs` (
          INDEX `idx_unixtime` (`unixtime`)
        );
 
+-- классификатор способов валидации сообщений
+CREATE TABLE `messageValidationsClassifier` (
+         id SERIAL,
+         validationName VARCHAR(100) NOT NULL,
+         PRIMARY KEY (`id`)
+       );
+
 -- классификатор сообщений по происхождению (StandardMessage, StandardTextMessage, ...)
 CREATE TABLE `messageKindsClassifier` (
          id SERIAL,
-         messageKind VARCHAR(100) NOT NULL,
+         messageKindName VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор сообщений по типу (General Purpose Messages, Almanacs and Ephemeris, ...)
 CREATE TABLE `messageTypesClassifier` (
          id SERIAL,
-         messageType VARCHAR(100) NOT NULL,
+         messageTypeName VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
@@ -36,16 +43,30 @@ CREATE TABLE `messagesMeta` (
          id SERIAL,
          name VARCHAR(100),
          title VARCHAR(100),
+         size INT,
+         idValidation BIGINT UNSIGNED NOT NULL,
          idKind BIGINT UNSIGNED NOT NULL,
          idType BIGINT UNSIGNED NOT NULL,
          tableName VARCHAR(100),
          PRIMARY KEY (`id`),
+         INDEX `idx_fk_messageValidationsClassifier` (`idValidation`),
+         CONSTRAINT `fk_messageValidationsClassifier` FOREIGN KEY (`idValidation`) 
+            REFERENCES `messageValidationsClassifier` (`id`),
          INDEX `idx_fk_messageKindsClassifier` (`idKind`),
          CONSTRAINT `fk_messageKindsClassifier` FOREIGN KEY (`idKind`) 
             REFERENCES `messageKindsClassifier` (`id`),
          INDEX `idx_fk_messageTypesClassifier` (`idType`),
          CONSTRAINT `fk_messageTypesClassifier` FOREIGN KEY (`idType`) 
             REFERENCES `messageTypesClassifier` (`id`)
+       );
+
+-- мета-информация для custom-типов
+CREATE TABLE `customTypesMeta` (
+         id SERIAL,
+         name VARCHAR(100),
+         size INT,
+         tableName VARCHAR(100),
+         PRIMARY KEY (`id`)
        );
 
 -- @{TABLE-CREATION-HERE}@
@@ -75,19 +96,14 @@ CREATE TABLE `messagesMeta` (
 
 -- SHOW ENGINE INNODB STATUS; 
 
-INSERT INTO `messagesmeta` (`name`, `title`, `idKind`, `idType`, `tableName`)
-    VALUES
-(
-{name: VARCHAR},
-{title: VARCHAR},
-{idKind: BIGINT UNSIGNED},
-{idType: BIGINT UNSIGNED},
-{tableName: VARCHAR}
-);
-
+-- Наполнение классификатора messageKindsClassifier
+INSERT INTO `messageValidationsClassifier` (validationName) 
+    VALUES ('Checksum'), 
+           ('ChecksumAsHexAscii'), 
+           ('Crc16');
 
 -- Наполнение классификатора messageKindsClassifier
-INSERT INTO `messageKindsClassifier` (messageKind) 
+INSERT INTO `messageKindsClassifier` (messageKindName) 
     VALUES ('NonStandardTextMessage'), 
            ('StandardTextMessage'), 
            ('GreisStandardMessage'), 
@@ -95,7 +111,7 @@ INSERT INTO `messageKindsClassifier` (messageKind)
            ('UnknownStandardMessage');
 
 -- Наполнение классификатора messageKindsClassifier
-INSERT INTO `messageTypesClassifier` (messageType) 
+INSERT INTO `messageTypesClassifier` (messageTypeName) 
     VALUES ('Unknown'), 
            ('AlmanacsAndEphemeris');
 

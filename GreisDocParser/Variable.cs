@@ -22,17 +22,14 @@ namespace GreisDocParser
         [XmlAttribute]
         public string RequiredValue { get; set; }
         public string Comment { get; set; }
+        [XmlIgnore]
+        public bool IsScalar { get { return Dimensions.Count == 1 && Dimensions[0] == 1; } }
 
         public override string ToString()
         {
-            string dimStr;
-            if (Dimensions.Count == 1 && Dimensions[0] == 1)
-            {
-                dimStr = "";
-            } else
-            {
-                dimStr = string.Concat(Dimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValues.Dynamic ? "" : v.ToString(), "]")));
-            }
+            string dimStr = IsScalar 
+                ? "" 
+                : string.Concat(Dimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValues.Dynamic ? "" : v.ToString(), "]")));
             return string.Format(@"{0} {1}{2}", Type, Name, dimStr);
         }
     }

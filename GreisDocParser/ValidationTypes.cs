@@ -2,7 +2,7 @@ namespace GreisDocParser
 {
     public enum ValidationTypes
     {
-        Checksum,
+        Checksum = 1,
         ChecksumAsHexAscii,
         Crc16
     }
