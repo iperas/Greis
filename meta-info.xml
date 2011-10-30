@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <MetaInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <StandardMessages>
-    <StandardMessage Name="FileId" Size="85" Title="[JP] File Identifier">
+    <StandardMessage Name="FileId" Size="85" Title="[JP] File Identifier" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="id" Dimensions="5" RequiredValue="">
           <Comment>File type identifier</Comment>
@@ -13,10 +13,8 @@
       <Codes>
         <Code>JP</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="MsgFmt" Size="9" Title="[MF] Messages Format">
+    <StandardMessage Name="MsgFmt" Size="9" Title="[MF] Messages Format" Validation="ChecksumAsHexAscii" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="id" Dimensions="2" RequiredValue="JP">
           <Comment>JP identifier</Comment>
@@ -39,10 +37,8 @@
       <Codes>
         <Code>MF</Code>
       </Codes>
-      <Validation>ChecksumAsHexAscii</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvTime" Size="5" Title="[~~](RT) Receiver Time">
+    <StandardMessage Name="RcvTime" Size="5" Title="[~~](RT) Receiver Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
           <Comment>Tr modulo 1 day (86400000 ms) [ms]</Comment>
@@ -54,10 +50,8 @@
       <Codes>
         <Code>~~</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="EpochTime" Size="5" Title="[::](ET) Epoch Time">
+    <StandardMessage Name="EpochTime" Size="5" Title="[::](ET) Epoch Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
           <Comment>Tr modulo 1 day (86400000 ms) [ms]</Comment>
@@ -69,10 +63,8 @@
       <Codes>
         <Code>::</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvDate" Size="6" Title="[RD] Receiver Date">
+    <StandardMessage Name="RcvDate" Size="6" Title="[RD] Receiver Date" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="year" Dimensions="1" RequiredValue="">
           <Comment>Current year [1…65534][]</Comment>
@@ -98,10 +90,8 @@
       <Codes>
         <Code>RD</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvTimeOffset" Size="17" Title="[TO] Reference Time to Receiver Time Offset">
+    <StandardMessage Name="RcvTimeOffset" Size="17" Title="[TO] Reference Time to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
           <Comment>Trr - Tr [s]</Comment>
@@ -116,10 +106,8 @@
       <Codes>
         <Code>TO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvTimeOffsetDot" Size="9" Title="[DO] Derivative of Receiver Time Offset">
+    <StandardMessage Name="RcvTimeOffsetDot" Size="9" Title="[DO] Derivative of Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="val" Dimensions="1" RequiredValue="">
           <Comment>Derivative of (Trr - Tr) [s/s]</Comment>
@@ -134,10 +122,8 @@
       <Codes>
         <Code>DO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvTimeAccuracy" Size="5" Title="[BP] Rough Accuracy of Time Approximation">
+    <StandardMessage Name="RcvTimeAccuracy" Size="5" Title="[BP] Rough Accuracy of Time Approximation" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="acc" Dimensions="1" RequiredValue="">
           <Comment>Accuracy [s]</Comment>
@@ -149,10 +135,8 @@
       <Codes>
         <Code>BP</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GPSTime" Size="7" Title="[GT] GPS Time">
+    <StandardMessage Name="GPSTime" Size="7" Title="[GT] GPS Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tow" Dimensions="1" RequiredValue="">
           <Comment>Time of week [ms]</Comment>
@@ -167,10 +151,8 @@
       <Codes>
         <Code>GT</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvGPSTimeOffset" Size="17" Title="[GO] GPS to Receiver Time Offset">
+    <StandardMessage Name="RcvGPSTimeOffset" Size="17" Title="[GO] GPS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
           <Comment>(Tg - Tr) [s]</Comment>
@@ -185,10 +167,8 @@
       <Codes>
         <Code>GO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GLOTime" Size="7" Title="[NT] GLONASS Time">
+    <StandardMessage Name="GLOTime" Size="7" Title="[NT] GLONASS Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tod" Dimensions="1" RequiredValue="">
           <Comment>time of day [ms]</Comment>
@@ -204,10 +184,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>NT</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvGLOTimeOffset" Size="17" Title="[NO] GLONASS to Receiver Time Offset">
+    <StandardMessage Name="RcvGLOTimeOffset" Size="17" Title="[NO] GLONASS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
           <Comment>(Tn - Tr) [s]</Comment>
@@ -222,10 +200,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>NO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvGALTimeOffset" Size="17" Title="[EO] GALILEO to Receiver Time Offset">
+    <StandardMessage Name="RcvGALTimeOffset" Size="17" Title="[EO] GALILEO to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
           <Comment>(Te - Tr) [s]</Comment>
@@ -240,10 +216,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>EO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvWAASTimeOffset" Size="17" Title="[WO] WAAS to Receiver Time Offset">
+    <StandardMessage Name="RcvWAASTimeOffset" Size="17" Title="[WO] WAAS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="val" Dimensions="1" RequiredValue="">
           <Comment>(Tw - Tr) [s]</Comment>
@@ -258,10 +232,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>WO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GpsUtcParam" Size="24" Title="[UO] GPS UTC Time Parameters">
+    <StandardMessage Name="GpsUtcParam" Size="24" Title="[UO] GPS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
           <Comment>GPS UTC time offset parameters</Comment>
@@ -273,10 +245,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>UO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="WaasUtcParam" Size="32" Title="[WU] WAAS UTC Time Parameters">
+    <StandardMessage Name="WaasUtcParam" Size="32" Title="[WU] WAAS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
           <Comment>WAAS to UTC time offset parameters</Comment>
@@ -300,10 +270,8 @@ starting from 1996) []</Comment>
       <Codes>
         <Code>WU</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GalUtcGpsParam" Size="40" Title="[EU] GALILEO UTC and GPS Time Parameters">
+    <StandardMessage Name="GalUtcGpsParam" Size="40" Title="[EU] GALILEO UTC and GPS Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="UtcOffs" Name="utc" Dimensions="1" RequiredValue="">
           <Comment>GALILEO to UTC time offset parameters
@@ -333,10 +301,8 @@ GALILEO to GPS time offset parameters</Comment>
       <Codes>
         <Code>EU</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GloUtcGpsParam" Size="25" Title="[NU] GLONASS UTC and GPS Time Parameters">
+    <StandardMessage Name="GloUtcGpsParam" Size="25" Title="[NU] GLONASS UTC and GPS Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="tauSys" Dimensions="1" RequiredValue="">
           <Comment>Time correction to GLONASS time scale (vs. UTC(SU))
@@ -367,10 +333,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>NU</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SolutionTime" Size="6" Title="[ST] Solution Time-Tag">
+    <StandardMessage Name="SolutionTime" Size="6" Title="[ST] Solution Time-Tag" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>Solution time. Tr modulo 1 day (86400000 ms)[ms]</Comment>
@@ -385,10 +349,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>ST</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Pos" Size="30" Title="[PO] Cartesian Position">
+    <StandardMessage Name="Pos" Size="30" Title="[PO] Cartesian Position" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
           <Comment>Cartesian coordinates [m]</Comment>
@@ -412,10 +374,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>PO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Vel" Size="18" Title="[VE] Cartesian Velocity">
+    <StandardMessage Name="Vel" Size="18" Title="[VE] Cartesian Velocity" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="x" Dimensions="1" RequiredValue="">
           <Comment>Cartesian velocity vector [m/s]</Comment>
@@ -439,10 +399,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>VE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PosVel" Size="46" Title="[PV] Cartesian Position and Velocity">
+    <StandardMessage Name="PosVel" Size="46" Title="[PV] Cartesian Position and Velocity" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
           <Comment>Cartesian coordinates [m]</Comment>
@@ -478,10 +436,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>PV</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GeoPos" Size="30" Title="[PG] Geodetic Position">
+    <StandardMessage Name="GeoPos" Size="30" Title="[PG] Geodetic Position" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="lat" Dimensions="1" RequiredValue="">
           <Comment>Latitude [rad]</Comment>
@@ -505,10 +461,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>PG</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GeoVel" Size="18" Title="[VG] Geodetic Velocity">
+    <StandardMessage Name="GeoVel" Size="18" Title="[VG] Geodetic Velocity" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="lat" Dimensions="1" RequiredValue="">
           <Comment>Northing velocity [m/s]</Comment>
@@ -532,10 +486,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>VG</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Rms" Size="18" Title="[SG] Position and Velocity RMS Errors">
+    <StandardMessage Name="Rms" Size="18" Title="[SG] Position and Velocity RMS Errors" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="hpos" Dimensions="1" RequiredValue="">
           <Comment>Horizontal position RMS error[m]</Comment>
@@ -559,10 +511,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>SG</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Dops" Size="14" Title="[DP] Dilution of Precision (DOP)">
+    <StandardMessage Name="Dops" Size="14" Title="[DP] Dilution of Precision (DOP)" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="hdop" Dimensions="1" RequiredValue="">
           <Comment>Horizontal dilution of precision (HDOP)[]</Comment>
@@ -583,10 +533,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>DP</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PosCov" Size="42" Title="[SP] Position Covariance Matrix">
+    <StandardMessage Name="PosCov" Size="42" Title="[SP] Position Covariance Matrix" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="xx" Dimensions="1" RequiredValue="">
           <Comment>[m^2]</Comment>
@@ -628,10 +576,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>SP</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="VelCov" Size="42" Title="[SV] Velocity Covariance Matrix">
+    <StandardMessage Name="VelCov" Size="42" Title="[SV] Velocity Covariance Matrix" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="xx" Dimensions="1" RequiredValue="">
           <Comment>[(m/s)^2]</Comment>
@@ -673,10 +619,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>SV</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="BaseLine" Size="34" Title="[BL] Base Line">
+    <StandardMessage Name="BaseLine" Size="34" Title="[BL] Base Line" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
           <Comment>Calculated baseline vector coordinates [m]</Comment>
@@ -703,10 +647,8 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
       <Codes>
         <Code>BL</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PosStat" Size="9" Title="[PS] Position Statistics">
+    <StandardMessage Name="PosStat" Size="9" Title="[PS] Position Statistics" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="solType" Dimensions="1" RequiredValue="">
           <Comment>Solution type</Comment>
@@ -740,10 +682,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>PS</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PosCompTime" Size="5" Title="[PT] Time of Continuous Position Computation">
+    <StandardMessage Name="PosCompTime" Size="5" Title="[PT] Time of Continuous Position Computation" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="pt" Dimensions="1" RequiredValue="">
           <Comment>Continuous position computation time [s]</Comment>
@@ -755,10 +695,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>PT</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SatIndex" Size="-2" Title="[SI] Satellite Indices">
+    <StandardMessage Name="SatIndex" Size="-2" Title="[SI] Satellite Indices" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="usi" Dimensions="-1" RequiredValue="">
           <Comment>USI array []</Comment>
@@ -770,10 +708,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>SI</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="AntName" Size="-2" Title="[AN] Antenna Names">
+    <StandardMessage Name="AntName" Size="-2" Title="[AN] Antenna Names" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="name" Dimensions="-1" RequiredValue="">
           <Comment>Antenna names[a…z]</Comment>
@@ -785,10 +721,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>AN</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SatNumbers" Size="-2" Title="[NN] GLONASS Satellite System Numbers">
+    <StandardMessage Name="SatNumbers" Size="-2" Title="[NN] GLONASS Satellite System Numbers" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="osn" Dimensions="-1" RequiredValue="">
           <Comment>GLONASS SV orbit slot number []</Comment>
@@ -800,10 +734,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>NN</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SatElevation" Size="-2" Title="[EL] Satellite Elevations">
+    <StandardMessage Name="SatElevation" Size="-2" Title="[EL] Satellite Elevations" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i1" Name="elev" Dimensions="-1" RequiredValue="">
           <Comment>Elevation angle [degrees] [-90…90)</Comment>
@@ -815,10 +747,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>EL</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SatAzimuth" Size="-2" Title="[AZ] Satellite Azimuths">
+    <StandardMessage Name="SatAzimuth" Size="-2" Title="[AZ] Satellite Azimuths" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="azim" Dimensions="-1" RequiredValue="">
           <Comment>Azimuth angle [degrees*2] [0…180)</Comment>
@@ -830,10 +760,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>AZ</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PR" Size="-2" Title="[RC], [R1], [R2], [R3], [R5]: Pseudoranges">
+    <StandardMessage Name="PR" Size="-2" Title="[RC], [R1], [R2], [R3], [R5]: Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="pr" Dimensions="-1" RequiredValue="">
           <Comment>Pseudorange, [s]</Comment>
@@ -849,10 +777,8 @@ controllable by RTK engine [%]</Comment>
         <Code>R3</Code>
         <Code>R5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SPR" Size="-2" Title="[rc], [r1], [r2], [r3], [r5]: Short Pseudoranges">
+    <StandardMessage Name="SPR" Size="-2" Title="[rc], [r1], [r2], [r3], [r5]: Short Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i4" Name="spr" Dimensions="-1" RequiredValue="">
           <Comment>(PR[s] - Asys) * 1011</Comment>
@@ -868,10 +794,8 @@ controllable by RTK engine [%]</Comment>
         <Code>r3</Code>
         <Code>r5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RPR" Size="-2" Title="[1R], [2R], [3R], [5R]: Relative Pseudoranges">
+    <StandardMessage Name="RPR" Size="-2" Title="[1R], [2R], [3R], [5R]: Relative Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="rpr" Dimensions="-1" RequiredValue="">
           <Comment>PR - CA/L1 PR, [s]</Comment>
@@ -886,10 +810,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3R</Code>
         <Code>5R</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SRPR" Size="-2" Title="[1r], [2r], [3r], [5r]: Short Relative Pseudoranges">
+    <StandardMessage Name="SRPR" Size="-2" Title="[1r], [2r], [3r], [5r]: Short Relative Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i2" Name="srpr" Dimensions="-1" RequiredValue="">
           <Comment>(PR[s] - CA/L1 PR[s] - 2*10-7) * 1011</Comment>
@@ -904,10 +826,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3r</Code>
         <Code>5r</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SC" Size="-2" Title="[CC], [C1], [C2], [C3], [C5]: Smoothing Corrections">
+    <StandardMessage Name="SC" Size="-2" Title="[CC], [C1], [C2], [C3], [C5]: Smoothing Corrections" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="Smooth" Name="smooth" Dimensions="-1" RequiredValue="">
           <Comment>PR smoothing</Comment>
@@ -923,10 +843,8 @@ controllable by RTK engine [%]</Comment>
         <Code>C3</Code>
         <Code>C5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SS" Size="-2" Title="[cc], [c1], [c2], [c3], [c5]: Short Smoothing Corrections">
+    <StandardMessage Name="SS" Size="-2" Title="[cc], [c1], [c2], [c3], [c5]: Short Smoothing Corrections" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i2" Name="smooth" Dimensions="-1" RequiredValue="">
           <Comment>Smoothing correction [s*10-11]</Comment>
@@ -942,10 +860,8 @@ controllable by RTK engine [%]</Comment>
         <Code>c3</Code>
         <Code>c5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="CP" Size="-2" Title="[PC], [P1], [P2], [P3], [P5]: Carrier Phases">
+    <StandardMessage Name="CP" Size="-2" Title="[PC], [P1], [P2], [P3], [P5]: Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="cp" Dimensions="-1" RequiredValue="">
           <Comment>CP, [cycles]</Comment>
@@ -961,10 +877,8 @@ controllable by RTK engine [%]</Comment>
         <Code>P3</Code>
         <Code>P5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SCP" Size="-2" Title="[pc], [p1], [p2], [p3], [p5]: Short Carrier Phases">
+    <StandardMessage Name="SCP" Size="-2" Title="[pc], [p1], [p2], [p3], [p5]: Short Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="scp" Dimensions="-1" RequiredValue="">
           <Comment>CP, [cycles/1024]</Comment>
@@ -980,10 +894,8 @@ controllable by RTK engine [%]</Comment>
         <Code>p3</Code>
         <Code>p5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RCP_RC" Size="-2" Title="[CP], [1P], [2P], [3P], [5P]: Short Relative Carrier Phases">
+    <StandardMessage Name="RCP_RC" Size="-2" Title="[CP], [1P], [2P], [3P], [5P]: Short Relative Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="rcp" Dimensions="-1" RequiredValue="">
           <Comment>cp / FLn - prRC [s]</Comment>
@@ -999,10 +911,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3P</Code>
         <Code>5P</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RCP_rc" Size="-2" Title="[cp], [1p], [2p], [3p], [5p]: Short Relative Carrier Phases">
+    <StandardMessage Name="RCP_rc" Size="-2" Title="[cp], [1p], [2p], [3p], [5p]: Short Relative Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i4" Name="rcp" Dimensions="-1" RequiredValue="">
           <Comment>cp / FLn - pr_rc, [s*2-40]</Comment>
@@ -1018,10 +928,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3p</Code>
         <Code>5p</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="DP" Size="-2" Title="[DC], [D1], [D2], [D3], [D5]: Doppler">
+    <StandardMessage Name="DP" Size="-2" Title="[DC], [D1], [D2], [D3], [D5]: Doppler" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i4" Name="dp" Dimensions="-1" RequiredValue="">
           <Comment>DP [Hz*10-4]</Comment>
@@ -1037,10 +945,8 @@ controllable by RTK engine [%]</Comment>
         <Code>D3</Code>
         <Code>D5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="SRDP" Size="-2" Title="[1d], [2d], [3d], [5d]: Short Relative Doppler">
+    <StandardMessage Name="SRDP" Size="-2" Title="[1d], [2d], [3d], [5d]: Short Relative Doppler" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i2" Name="srdp" Dimensions="-1" RequiredValue="">
           <Comment>(dp - dpCA1)[Hz*10-4]</Comment>
@@ -1055,10 +961,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3d</Code>
         <Code>5d</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="CNR" Size="-2" Title="[EC], [E1], [E2], [E3], [E5]: Carrier to Noise Ratio">
+    <StandardMessage Name="CNR" Size="-2" Title="[EC], [E1], [E2], [E3], [E5]: Carrier to Noise Ratio" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="cnr" Dimensions="-1" RequiredValue="">
           <Comment>C/N0 [dB*Hz]</Comment>
@@ -1074,10 +978,8 @@ controllable by RTK engine [%]</Comment>
         <Code>E3</Code>
         <Code>E5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="CNR_4" Size="-2" Title="[CE], [1E], [2E], [3E], [5E]: Carrier to Noise Ratio x ">
+    <StandardMessage Name="CNR_4" Size="-2" Title="[CE], [1E], [2E], [3E], [5E]: Carrier to Noise Ratio x " Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="cnrX4" Dimensions="-1" RequiredValue="">
           <Comment>C/N0 [0.25*dB*Hz]</Comment>
@@ -1093,10 +995,8 @@ controllable by RTK engine [%]</Comment>
         <Code>3E</Code>
         <Code>5E</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Flags" Size="-2" Title="[FC], [F1], [F2], [F3], [F5]: Signal Lock Loop Flags">
+    <StandardMessage Name="Flags" Size="-2" Title="[FC], [F1], [F2], [F3], [F5]: Signal Lock Loop Flags" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="flags" Dimensions="-1" RequiredValue="">
           <Comment>Lock Loop Flags [bitfield]</Comment>
@@ -1112,10 +1012,8 @@ controllable by RTK engine [%]</Comment>
         <Code>F3</Code>
         <Code>F5</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="TrackingTimeCA" Size="-2" Title="[TC] CA/L1 Continuous Tracking Time">
+    <StandardMessage Name="TrackingTimeCA" Size="-2" Title="[TC] CA/L1 Continuous Tracking Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="tt" Dimensions="-1" RequiredValue="">
           <Comment>tracking time [s]</Comment>
@@ -1127,10 +1025,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>TC</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="NavStatus" Size="-2" Title="[SS] Satellite Navigation Status">
+    <StandardMessage Name="NavStatus" Size="-2" Title="[SS] Satellite Navigation Status" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="ns" Dimensions="-1" RequiredValue="">
           <Comment>Navigation Status</Comment>
@@ -1145,10 +1041,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>SS</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="IonoDelay" Size="-2" Title="[ID] Ionospheric Delays">
+    <StandardMessage Name="IonoDelay" Size="-2" Title="[ID] Ionospheric Delays" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="delay" Dimensions="-1" RequiredValue="">
           <Comment>Ionospheric delay [s]</Comment>
@@ -1160,10 +1054,8 @@ controllable by RTK engine [%]</Comment>
       <Codes>
         <Code>ID</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GPSAlm" Size="47" Title="[GA] GPS Almanac">
+    <StandardMessage Name="GPSAlm" Size="47" Title="[GA] GPS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
           <Comment>SV PRN number within the range [1…37]</Comment>
@@ -1228,10 +1120,8 @@ at the start of week ‘wna’ [semi-circles]</Comment>
       <Codes>
         <Code>GA</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GALAlm" Size="49" Title="[EA] GALILEO Almanac">
+    <StandardMessage Name="GALAlm" Size="49" Title="[EA] GALILEO Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="GPSAlm" Name="gps" Dimensions="1" RequiredValue="">
           <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
@@ -1247,10 +1137,8 @@ GALILEO-Specific data</Comment>
       <Codes>
         <Code>EA</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GLOAlmanac" Size="46" Title="[NA] GLONASS Almanac">
+    <StandardMessage Name="GLOAlmanac" Size="46" Title="[NA] GLONASS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
           <Comment>Satellite orbit slot number within [1…24] []</Comment>
@@ -1312,10 +1200,8 @@ at reference time ‘tlam’[semi-circles]</Comment>
       <Codes>
         <Code>NA</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="WAASAlmanac" Size="51" Title="[WA] WAAS Almanac">
+    <StandardMessage Name="WAASAlmanac" Size="51" Title="[WA] WAAS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="waasPrn" Dimensions="1" RequiredValue="">
           <Comment>WAAS SV PRN number within [120…138]</Comment>
@@ -1368,10 +1254,8 @@ at reference time ‘tlam’[semi-circles]</Comment>
       <Codes>
         <Code>WA</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GPSEphemeris" Size="123" Title="[GE] GPS Ephemeris">
+    <StandardMessage Name="GPSEphemeris" Size="123" Title="[GE] GPS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
           <Comment>SV PRN number within the range [1…37]</Comment>
@@ -1487,10 +1371,8 @@ to the angle of inclination [rad]</Comment>
       <Codes>
         <Code>GE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GLOEphemeris" Size="88" Title="[NE] GLONASS Ephemeris">
+    <StandardMessage Name="GLOEphemeris" Size="88" Title="[NE] GLONASS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="sv" Dimensions="1" RequiredValue="">
           <Comment>Satellite orbit slot number [1…24] []</Comment>
@@ -1588,10 +1470,8 @@ tau = TGLN - TSV [s]</Comment>
       <Codes>
         <Code>NE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="WAASEhemeris" Size="39" Title="[WE] WAAS Ephemeris">
+    <StandardMessage Name="WAASEhemeris" Size="39" Title="[WE] WAAS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="u1" Name="waasPrn" Dimensions="1" RequiredValue="">
           <Comment>WAAS SV PRN number within [120…138]</Comment>
@@ -1655,10 +1535,8 @@ received at</Comment>
       <Codes>
         <Code>WE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris">
+    <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable Type="GPSEphemeris" Name="gps" Dimensions="1" RequiredValue="">
           <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
@@ -1694,10 +1572,8 @@ GALILEO-specific data</Comment>
       <Codes>
         <Code>EN</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>AlmanacsAndEphemeris</Type>
     </StandardMessage>
-    <StandardMessage Name="GpsNavData" Size="-2" Title="[GD] GPS Raw Navigation Data">
+    <StandardMessage Name="GpsNavData" Size="-2" Title="[GD] GPS Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="recSize" Dimensions="1" RequiredValue="">
           <Comment>Size of satellite data record (currently 42)</Comment>
@@ -1714,10 +1590,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>GD</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GloNavData" Size="-2" Title="[LD] GLONASS Raw Navigation Data">
+    <StandardMessage Name="GloNavData" Size="-2" Title="[LD] GLONASS Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="recSize" Dimensions="1" RequiredValue="">
           <Comment>Size of satellite data record (currently 18)</Comment>
@@ -1734,10 +1608,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>LD</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="WAASRawMessage" Size="40" Title="[WD] WAAS Raw Navigation Data">
+    <StandardMessage Name="WAASRawMessage" Size="40" Title="[WD] WAAS Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="prn" Dimensions="1" RequiredValue="">
           <Comment>SV PRN number within the range [120…138]</Comment>
@@ -1758,10 +1630,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>WD</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GALRawMessage" Size="-2" Title="[ED] GALILEO Raw Navigation Data">
+    <StandardMessage Name="GALRawMessage" Size="-2" Title="[ED] GALILEO Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="prn" Dimensions="1" RequiredValue="">
           <Comment>SV PRN number within the range [1…30]</Comment>
@@ -1787,10 +1657,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>ED</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="GloPhaseDelay" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Phase Delays">
+    <StandardMessage Name="GloPhaseDelay" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Phase Delays" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i1" Name="fcn" Dimensions="-1" RequiredValue="">
           <Comment>GLONASS FCN[-7…6]</Comment>
@@ -1811,10 +1679,8 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>g2</Code>
         <Code>g3</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RotationMatrix" Size="37" Title="[MR] Rotation Matrix">
+    <StandardMessage Name="RotationMatrix" Size="37" Title="[MR] Rotation Matrix" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>receiver time [ms]</Comment>
@@ -1847,10 +1713,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>MR</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RotationMatrixAndVectors" Size="73" Title="[mr] Rotation Matrix and Vectors">
+    <StandardMessage Name="RotationMatrixAndVectors" Size="73" Title="[mr] Rotation Matrix and Vectors" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>receiver time [ms]</Comment>
@@ -1892,10 +1756,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>mr</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RotationAngles" Size="30" Title="[AR] Rotation Angles">
+    <StandardMessage Name="RotationAngles" Size="30" Title="[AR] Rotation Angles" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>receiver time [ms]</Comment>
@@ -1931,10 +1793,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>AR</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="AngularVelocity" Size="22" Title="[AV] Angular Velocities">
+    <StandardMessage Name="AngularVelocity" Size="22" Title="[AV] Angular Velocities" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>receiver time [ms]</Comment>
@@ -1964,10 +1824,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>AV</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="InertialMeasurements" Size="25" Title="[IM] Inertial Measurements">
+    <StandardMessage Name="InertialMeasurements" Size="25" Title="[IM] Inertial Measurements" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="accelerations" Dimensions="3" RequiredValue="">
           <Comment>ax,ay,az [m/sec]</Comment>
@@ -1982,10 +1840,8 @@ N=([Message Length] - 2) / recSize)</Comment>
       <Codes>
         <Code>IM</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="ExtEvent" Size="10" Title="[XA], [XB] External Event">
+    <StandardMessage Name="ExtEvent" Size="10" Title="[XA], [XB] External Event" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="i4" Name="ms" Dimensions="1" RequiredValue="">
           <Comment>ms part of event time tag</Comment>
@@ -2004,10 +1860,8 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>XA</Code>
         <Code>XB</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PPSOffset" Size="5" Title="[ZA], [ZB] PPS Offset">
+    <StandardMessage Name="PPSOffset" Size="5" Title="[ZA], [ZB] PPS Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="offs" Dimensions="1" RequiredValue="">
           <Comment>PPS offset in nanoseconds</Comment>
@@ -2020,10 +1874,8 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>ZA</Code>
         <Code>ZB</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvTimeOffsAtPPS" Size="10" Title="[YA], [YB] Time Offset at PPS Generation Time">
+    <StandardMessage Name="RcvTimeOffsAtPPS" Size="10" Title="[YA], [YB] Time Offset at PPS Generation Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="offs" Dimensions="1" RequiredValue="">
           <Comment>[Tpps-Tr] offset[s]</Comment>
@@ -2039,10 +1891,8 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>YA</Code>
         <Code>YB</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RefEpoch" Size="10" Title="[rE] Reference Epoch">
+    <StandardMessage Name="RefEpoch" Size="10" Title="[rE] Reference Epoch" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
           <Comment>Sample number [dimensionless]</Comment>
@@ -2086,10 +1936,8 @@ milliseconds of UTC day;</Comment>
       <Codes>
         <Code>rE</Code>
       </Codes>
-      <Validation>Crc16</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RawMeas" Size="-1" Title="[rM] Raw Measurements">
+    <StandardMessage Name="RawMeas" Size="-1" Title="[rM] Raw Measurements" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
           <Comment>Sample number []</Comment>
@@ -2130,10 +1978,8 @@ of the structure “SlotRec” in bytes</Comment>
       <Codes>
         <Code>rM</Code>
       </Codes>
-      <Validation>Crc16</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="PosVelVector" Size="42" Title="[rV] Receiver’s Position and Velocity">
+    <StandardMessage Name="PosVelVector" Size="42" Title="[rV] Receiver’s Position and Velocity" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
           <Comment>Sample number []</Comment>
@@ -2219,10 +2065,8 @@ selected in bits 22…21 of the ‘word2’ field);
       <Codes>
         <Code>rV</Code>
       </Codes>
-      <Validation>Crc16</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="ClockOffsets" Size="-2" Title="[rT] Receiver Clock Offsets">
+    <StandardMessage Name="ClockOffsets" Size="-2" Title="[rT] Receiver Clock Offsets" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable Type="u2" Name="sample" Dimensions="1" RequiredValue="">
           <Comment>Sample number []</Comment>
@@ -2247,10 +2091,8 @@ length taken from message header</Comment>
       <Codes>
         <Code>rT</Code>
       </Codes>
-      <Validation>Crc16</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RE" Size="-2" Title="[RE] Reply">
+    <StandardMessage Name="RE" Size="-2" Title="[RE] Reply" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="reply" Dimensions="-1" RequiredValue="">
           <Comment>Reply</Comment>
@@ -2259,10 +2101,8 @@ length taken from message header</Comment>
       <Codes>
         <Code>RE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="ER" Size="-2" Title="[ER] Error">
+    <StandardMessage Name="ER" Size="-2" Title="[ER] Error" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="error" Dimensions="-1" RequiredValue="">
           <Comment>Error description</Comment>
@@ -2271,10 +2111,8 @@ length taken from message header</Comment>
       <Codes>
         <Code>ER</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="IonoParams" Size="39" Title="[IO] Ionospheric Parameters">
+    <StandardMessage Name="IonoParams" Size="39" Title="[IO] Ionospheric Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tot" Dimensions="1" RequiredValue="">
           <Comment>Time of week [s]</Comment>
@@ -2317,10 +2155,8 @@ the period of the model</Comment>
       <Codes>
         <Code>IO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Event" Size="-2" Title="[==](EV) Event">
+    <StandardMessage Name="Event" Size="-2" Title="[==](EV) Event" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="time" Dimensions="1" RequiredValue="">
           <Comment>Receiver time of event occurrence modulo day, [ms]</Comment>
@@ -2338,10 +2174,8 @@ the period of the model</Comment>
       <Codes>
         <Code>==</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Latency" Size="2" Title="[LT] Message Output Latency">
+    <StandardMessage Name="Latency" Size="2" Title="[LT] Message Output Latency" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="lt" Dimensions="1" RequiredValue="">
           <Comment>output latency [ms]</Comment>
@@ -2353,10 +2187,8 @@ the period of the model</Comment>
       <Codes>
         <Code>LT</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Wrapper" Size="-2" Title="[&gt;&gt;] Wrapper">
+    <StandardMessage Name="Wrapper" Size="-2" Title="[&gt;&gt;] Wrapper" Validation="ChecksumAsHexAscii" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="id" Dimensions="1" RequiredValue="">
           <Comment>Source identifier</Comment>
@@ -2371,10 +2203,8 @@ the period of the model</Comment>
       <Codes>
         <Code>&gt;&gt;</Code>
       </Codes>
-      <Validation>ChecksumAsHexAscii</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Params" Size="-2" Title="[PM] Parameters">
+    <StandardMessage Name="Params" Size="-2" Title="[PM] Parameters" Validation="ChecksumAsHexAscii" Type="Unknown">
       <Variables>
         <Variable Type="a1" Name="params" Dimensions="-1" RequiredValue="">
           <Comment>Parameters description</Comment>
@@ -2389,10 +2219,8 @@ the period of the model</Comment>
       <Codes>
         <Code>PM</Code>
       </Codes>
-      <Validation>ChecksumAsHexAscii</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="LoggingHistory" Size="-1" Title="[LH] Logging History">
+    <StandardMessage Name="LoggingHistory" Size="-1" Title="[LH] Logging History" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="svsCount" Dimensions="1" RequiredValue="">
           <Comment>Number of SVs</Comment>
@@ -2422,10 +2250,8 @@ the period of the model</Comment>
       <Codes>
         <Code>LH</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="BaseInfo" Size="28" Title="[BI] Base Station Information">
+    <StandardMessage Name="BaseInfo" Size="28" Title="[BI] Base Station Information" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f8" Name="x" Dimensions="1" RequiredValue="">
           <Comment>ECEF coordinates [m]</Comment>
@@ -2449,10 +2275,8 @@ the period of the model</Comment>
       <Codes>
         <Code>BI</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Security" Size="6" Title="[SE] Security">
+    <StandardMessage Name="Security" Size="6" Title="[SE] Security" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="data" Dimensions="5" RequiredValue="">
           <Comment>Opaque data</Comment>
@@ -2464,10 +2288,8 @@ the period of the model</Comment>
       <Codes>
         <Code>SE</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="Security" Size="8" Title="[SM] Security for [rM]">
+    <StandardMessage Name="Security" Size="8" Title="[SM] Security for [rM]" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="data" Dimensions="6" RequiredValue="">
           <Comment>Opaque data</Comment>
@@ -2479,10 +2301,8 @@ the period of the model</Comment>
       <Codes>
         <Code>SM</Code>
       </Codes>
-      <Validation>Crc16</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="TrackingTime" Size="5" Title="[TT] CA/L1 Overall Continuous Tracking Time">
+    <StandardMessage Name="TrackingTime" Size="5" Title="[TT] CA/L1 Overall Continuous Tracking Time" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u4" Name="tt" Dimensions="1" RequiredValue="">
           <Comment>tracking time [s]</Comment>
@@ -2494,10 +2314,8 @@ the period of the model</Comment>
       <Codes>
         <Code>TT</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="RcvOscOffs" Size="5" Title="[OO] Oscillator Offset">
+    <StandardMessage Name="RcvOscOffs" Size="5" Title="[OO] Oscillator Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="f4" Name="val" Dimensions="1" RequiredValue="">
           <Comment>Oscillator offset [s/s]</Comment>
@@ -2509,10 +2327,8 @@ the period of the model</Comment>
       <Codes>
         <Code>OO</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
-    <StandardMessage Name="EpochEnd" Size="1" Title="[||](EE) Epoch End">
+    <StandardMessage Name="EpochEnd" Size="1" Title="[||](EE) Epoch End" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable Type="u1" Name="cs" Dimensions="1" RequiredValue="">
           <Comment>Checksum</Comment>
@@ -2521,8 +2337,6 @@ the period of the model</Comment>
       <Codes>
         <Code>||</Code>
       </Codes>
-      <Validation>Checksum</Validation>
-      <Type>Other</Type>
     </StandardMessage>
   </StandardMessages>
   <CustomTypes>

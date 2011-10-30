@@ -17,12 +17,26 @@ namespace GreisDocParser
         public List<StandardMessage> StandardMessages { get; set; }
         public List<CustomType> CustomTypes { get; set; }
 
-        public void ToFile(string filename)
+        public void ToXmlFile(string filename)
         {
             using (var outFile = File.Create(filename))
             {
                 _serializer.Serialize(outFile, this);
             }
+        }
+
+        public static MetaInfo FromXmlFile(string filename)
+        {
+            using (var inFile = File.OpenRead(filename))
+            {
+                var metaInfo = (MetaInfo) _serializer.Deserialize(inFile);
+                return metaInfo;
+            }
+        }
+
+        public void ToSqlScript(string filename)
+        {
+            
         }
     }
 }

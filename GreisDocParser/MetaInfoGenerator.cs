@@ -5,12 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace GreisDocParser
 {
-    public enum MessageTypes
-    {
-        AlmanacsAndEphemeris,
-        Other
-    }
-
     public class MetaInfoGenerator
     {
         private static readonly List<string> _messagesWithFillBehavior = new List<string>() { "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", "ID", "GD", "LD", "ED", "rT", "RE", "ER", "==", ">>", "PM" };
@@ -127,7 +121,7 @@ namespace GreisDocParser
             {
                 return MessageTypes.AlmanacsAndEphemeris;
             }
-            return MessageTypes.Other;
+            return MessageTypes.Unknown;
         }
 
         private static int parseSize(string codeOrStructName, string sizeStr)
