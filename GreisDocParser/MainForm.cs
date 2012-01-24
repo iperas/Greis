@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -57,8 +58,8 @@ namespace GreisDocParser
 
                 var metaInfo = MetaInfoGenerator.FromUserManual(text);
 
-                //var knownSize = metaInfo.StandardMessages.Where(m => m.Size != (int) SizeSpecialValues.Dynamic).ToList();
-                //var unknownSize = metaInfo.StandardMessages.Where(m => m.Size == (int) SizeSpecialValues.Dynamic).ToList();
+                //var knownSize = metaInfo.StandardMessages.Where(m => m.Size != (int) SizeSpecialValue.Dynamic).ToList();
+                //var unknownSize = metaInfo.StandardMessages.Where(m => m.Size == (int) SizeSpecialValue.Dynamic).ToList();
                 // serializing
                 metaInfo.ToXmlFile(Path.Combine(textBoxOutputDir.Text, "meta-info.xml"));
                 // end
@@ -110,8 +111,20 @@ namespace GreisDocParser
                 // take meta-info
                 var metaInfo = MetaInfo.FromXmlFile(textBoxBaselineInput.Text);
 
+                // take template file path
+                var baselineTemplateFile = ConfigurationManager.AppSettings["baselineTemplateFile"];
+                if (baselineTemplateFile.StartsWith("\\"))
+                {
+                    baselineTemplateFile = baselineTemplateFile.Substring(1);
+                }
+                if (!Path.IsPathRooted(baselineTemplateFile))
+                {
+                    baselineTemplateFile = Path.Combine(Application.StartupPath, baselineTemplateFile);
+                }
+                baselineTemplateFile = Path.GetFullPath(baselineTemplateFile);
+
                 // generate script
-                var baselineGenerator = new MysqlBaselineGenerator(metaInfo, textBoxOutputDir.Text + "\\..\\..\\..\\baselineTemplate.sql", "world");
+                var baselineGenerator = new MysqlBaselineGenerator(metaInfo, baselineTemplateFile, "world");
                 baselineGenerator.GenerateMysqlBaseline(Path.Combine(textBoxOutputDir.Text, "baseline.sql"));
                 // end
                 MessageBox.Show("Complete!");

@@ -1,8 +1,9 @@
 namespace GreisDocParser
 {
-    public enum ValidationTypes
+    public enum ValidationType
     {
-        Checksum = 1,
+        None = 0,
+        Checksum,
         ChecksumAsHexAscii,
         Crc16
     }

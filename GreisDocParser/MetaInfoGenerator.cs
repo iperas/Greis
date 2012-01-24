@@ -53,17 +53,21 @@ namespace GreisDocParser
                 if (msg.Variables.Count > 0)
                 {
                     var lastVar = msg.Variables.Last();
-                    if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum")
-                    {
-                        msg.Validation = ValidationTypes.Checksum;
-                    }
                     if (lastVar.Name == "cs" && lastVar.Comment.Trim() == "Checksum formatted as hexadecimal")
                     {
-                        msg.Validation = ValidationTypes.ChecksumAsHexAscii;
+                        msg.Validation = ValidationType.ChecksumAsHexAscii;
                     }
+                    else
+                    if (lastVar.Name == "cs")
+                    {
+                        msg.Validation = ValidationType.Checksum;
+                    } else
                     if (lastVar.Name == "crc16" && lastVar.Comment.Contains("16-bit CRC"))
                     {
-                        msg.Validation = ValidationTypes.Crc16;
+                        msg.Validation = ValidationType.Crc16;
+                    } else
+                    {
+                        
                     }
                 }
 
@@ -104,7 +108,7 @@ namespace GreisDocParser
                     {
                         usages[i].Type = typeName + i;
                         defList[i].Name = typeName + i;
-                        if (defList[i].Size == (int) SizeSpecialValues.Dynamic)
+                        if (defList[i].Size == (int) SizeSpecialValue.Dynamic)
                         {
                             defList[i].Size = parseSize(defList[i].Name, "");
                         }
@@ -134,13 +138,13 @@ namespace GreisDocParser
             if (_messagesWithFillBehavior.Contains(codeOrStructName) ||
                 _messagesWithUniformFillBehavior.Contains(codeOrStructName))
             {
-                return (int) SizeSpecialValues.Fill;
+                return (int) SizeSpecialValue.Fill;
             }
             if (_structsWithFixedSize.Contains(codeOrStructName))
             {
-                return (int) SizeSpecialValues.Fixed;
+                return (int) SizeSpecialValue.Fixed;
             }
-            return (int) SizeSpecialValues.Dynamic;
+            return (int) SizeSpecialValue.Dynamic;
         }
 
         private static List<Variable> parseContent(string content)
@@ -186,8 +190,8 @@ namespace GreisDocParser
                 // variable pattern does not covers all cases. For example empty SIZE property in multidimension arrays causes a bug.
                 const string variablePattern =
                     @"(?<name>[a-z][a-z0-9]*)
-                                                         (?<sizePresented>\[(?<size>[^\]]*)\])*
-                                                         (\s*=\s*([""\u201c\u201d](?<value>[^""\u201c\u201d]+)[""\u201c\u201d]|(?<value>[^\s,]+)))?";
+                    (?<sizePresented>\[(?<size>[^\]]*)\])*
+                    (\s*=\s*([""\u201c\u201d](?<value>[^""\u201c\u201d]+)[""\u201c\u201d]|(?<value>[^\s,]+)))?";
                 var cm = Regex.Match(code,
                                      String.Format(@"^(?<type>[a-z][a-z0-9]*)\s+(?<var>{0})(\s*,\s*(?<var>{0}))*$",
                                                    variablePattern),
@@ -226,22 +230,22 @@ namespace GreisDocParser
                         for (int i = 0; i < dimensionsCount; i++)
                         {
                             var sizeStr = vm.Groups["size"].Captures[i].Value;
-                            var sizePresented = !String.IsNullOrEmpty(vm.Groups["sizePresented"].Captures[i].Value);
+                            //var sizePresented = !string.IsNullOrEmpty(vm.Groups["sizePresented"].Captures[i].Value);
                             int varsize;
-                            if (!sizePresented)
+                            /*if (!sizePresented)
                             {
                                 varsize = 1;
                             }
-                            else if (!Int32.TryParse(sizeStr, out varsize))
+                            else*/ if (!Int32.TryParse(sizeStr, out varsize))
                             {
-                                varsize = (int) SizeSpecialValues.Dynamic;
+                                varsize = (int) SizeSpecialValue.Dynamic;
                             }
-                            variable.Dimensions.Add(varsize);
+                            variable.SizeOfDimensions.Add(varsize);
                         }
                     }
                     else
                     {
-                        variable.Dimensions.Add(1);
+                        //variable.SizeOfDimensions.Add(1);
                     }
 
                     variables.Add(variable);

@@ -33,15 +33,18 @@ namespace GreisDocParser
         /// <param name="outFilename">Выходной файл.</param>
         public void GenerateMysqlBaseline(string outFilename)
         {
-            init();
-            var encoding = Encoding.UTF8;
-            var baseline = File.ReadAllText(_templateFilename, encoding);
+            createTableNameCache();
 
-            var useDatabase = string.Format("USE `{0}`;", _databaseName);
+            // Generate template content
+            var useDatabase = generateUseDatabase();
             var tableDrop = generateTableDrop();
-            var tableCreation = this.tableCreation();
+            var tableCreation = generateTableCreation();
             var fillup = generateInitialFillup();
 
+            // Apply it and save as new baseline file
+            var encoding = Encoding.UTF8;
+            var baseline = File.ReadAllText(_templateFilename, encoding);
+            
             baseline = baseline.Replace(PlaceholderUseDatabase, useDatabase).
                                 Replace(PlaceholderTableDrop, tableDrop).
                                 Replace(PlaceholderTableCreation, tableCreation).
@@ -50,7 +53,10 @@ namespace GreisDocParser
             File.WriteAllText(outFilename, baseline, encoding);
         }
 
-        private void init()
+        /// <summary>
+        /// Кеширование имен таблиц для кастом типов и сообщений
+        /// </summary>
+        private void createTableNameCache()
         {
             var lookup = _metaInfo.StandardMessages.Concat(_metaInfo.CustomTypes).
                 ToLookup(ct => ct.Name.ToLowerInvariant());
@@ -86,7 +92,14 @@ namespace GreisDocParser
             _tableNameDic = tableNameDic;
         }
 
-        private string tableCreation()
+        #region Template entries content generators
+
+        private string generateUseDatabase()
+        {
+            return string.Format("USE `{0}`;", _databaseName);
+        }
+
+        private string generateTableCreation()
         {
             // customTypes
             var tableCreationSb = new StringBuilder();
@@ -113,7 +126,7 @@ namespace GreisDocParser
                                        "    PRIMARY KEY (`id`), \r\n" +
                                        "    INDEX `idx_fk_{2}_idEpoch` (`idEpoch`), \r\n" +
                                        "    CONSTRAINT `fk_{2}_idEpoch` FOREIGN KEY (`idEpoch`) \r\n" +
-                                       "        REFERENCES `epochs` (`id`));\r\n\r\n";
+                                       "        REFERENCES `epoch` (`id`));\r\n\r\n";
             foreach (var msg in _metaInfo.StandardMessages)
             {
                 var colDefs = new StringBuilder();
@@ -148,74 +161,120 @@ namespace GreisDocParser
 
         private string generateInitialFillup()
         {
-            var sizeSpecialValuesFillup = string.Format("-- Наполнение классификатора sizeSpecialValuesClassifier\r\n" +
-                                                        "INSERT INTO `sizeSpecialValuesClassifier` (`id`, `name`) \r\n" +
-                                                        "    VALUES {0};\r\n\r\n",
-                                                        string.Join(", \r\n           ",
-                                                                    ((int[]) Enum.GetValues(typeof (SizeSpecialValues)))
-                                                                        .Select(i => string.Format("({0}, '{1}')", i,
-                                                                                                   Enum.GetName(
-                                                                                                       typeof (SizeSpecialValues
-                                                                                                           ), i)))));
+            // sizeSpecialValue, messageValidation, messageKind, messagetype
+            var sizeSpecialValueFillup =
+                string.Format("-- Наполнение классификатора sizeSpecialValueClassifier\r\n" +
+                              "INSERT INTO `sizeSpecialValueClassifier` (`id`, `name`) \r\n" +
+                              "    VALUES {0};\r\n\r\n",
+                              string.Join(", \r\n           ", ((int[]) Enum.GetValues(typeof (SizeSpecialValue))).
+                              Select(i => string.Format("({0}, '{1}')", i, Enum.GetName(typeof (SizeSpecialValue), i)))));
 
-            var messageValidationsFillup = string.Format("-- Наполнение классификатора messageValidationsClassifier\r\n" +
-                                                         "INSERT INTO `messageValidationsClassifier` (`name`) \r\n" +
-                                                         "    VALUES {0};\r\n\r\n",
-                                                         string.Join(", \r\n           ",
-                                                                     Enum.GetNames(typeof (ValidationTypes)).
-                                                                         Select(s => string.Format("('{0}')", s))));
+            var messageValidationFillup = 
+                string.Format("-- Наполнение классификатора messageValidationClassifier\r\n" +
+                              "INSERT INTO `messageValidationClassifier` (`id`, `name`) \r\n" +
+                              "    VALUES {0};\r\n\r\n",
+                              string.Join(", \r\n           ", Enum.GetNames(typeof (ValidationType)).
+                              Select((s, i) => string.Format("({0}, '{1}')", i, s))));
 
-            var messageKindsFillup = string.Format("-- Наполнение классификатора messageKindsClassifier\r\n" +
-                                                   "INSERT INTO `messageKindsClassifier` (`name`) \r\n" +
+            var messageKindFillup = string.Format("-- Наполнение классификатора messageKindClassifier\r\n" +
+                                                   "INSERT INTO `messageKindClassifier` (`name`) \r\n" +
                                                    "    VALUES {0};\r\n\r\n",
                                                    string.Join(", \r\n           ", Enum.GetNames(typeof (MessageKinds)).
                                                                                         Select(s => string.Format("('{0}')", s))));
 
-            var messagetypesFillup = string.Format("-- Наполнение классификатора messageTypesClassifier\r\n" +
-                                                   "INSERT INTO `messageTypesClassifier` (`name`) \r\n" +
+            var messageTypeFillup = string.Format("-- Наполнение классификатора messageTypeClassifier\r\n" +
+                                                   "INSERT INTO `messageTypeClassifier` (`name`) \r\n" +
                                                    "    VALUES {0};\r\n\r\n",
                                                    string.Join(", \r\n           ", Enum.GetNames(typeof (MessageTypes)).
                                                                                         Select(s => string.Format("('{0}')", s))));
-            // customTypesMeta
+            // customTypeMeta, customTypeVariableMeta, customTypeVariableSizeForDimension
             var metaValues = new List<string>();
-            var customTypeVariablesMetaValues = new List<string>();
+            var customTypeVariableMetaValues = new List<string>();
+            var customTypeVariableSizeForDimensionInserts = new List<string>();
             long customTypeId = 1;
+            long customTypeVariableId = 1;
             foreach (var ct in _metaInfo.CustomTypes)
             {
+                var customTypeVariableSizeForDimensionValues = new List<string>();
                 foreach (var v in ct.Variables)
                 {
-                    var customTypeVariablesMetaInsert = string.Format("('{0}', '{1}', {2}, '{3}', {4})", v.Name, v.Type, v.Dimensions.Count, v.RequiredValue, customTypeId);
-                    customTypeVariablesMetaValues.Add(customTypeVariablesMetaInsert);
+                    // customTypeVariableMeta
+                    var customTypeVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", 
+                        customTypeVariableId, v.Name, v.Type, v.RequiredValue, customTypeId);
+                    customTypeVariableMetaValues.Add(customTypeVariableMetaInsert);
+
+                    // customTypeVariableSizeForDimension
+                    for (int i = 0; i < v.DimensionsCount; i++)
+                    {
+                        var insert = string.Format("({0}, {1}, {2})", customTypeVariableId, i + 1, v.GetSizeForDimension(i + 1));
+                        customTypeVariableSizeForDimensionValues.Add(insert);
+                    }
+
+                    customTypeVariableId++;
                 }
+                if (customTypeVariableSizeForDimensionValues.Count > 0)
+                {
+                    var customTypeVariableSizeForDimensionInsert =
+                        string.Format("-- Наполнение информации о размерностях для пользовательского типа `{0}`\r\n" +
+                                      "INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) \r\n" +
+                                      "    VALUES {1};\r\n\r\n", ct.Name,
+                                      string.Join(", \r\n           ", customTypeVariableSizeForDimensionValues));
+                    customTypeVariableSizeForDimensionInserts.Add(customTypeVariableSizeForDimensionInsert);
+                    customTypeVariableSizeForDimensionValues.Clear();
+                }
+
                 var ctMetaInsert = string.Format("({3}, '{0}', {1}, '{2}')", ct.Name, ct.Size, tableName(ct), customTypeId);
                 metaValues.Add(ctMetaInsert);
                 customTypeId++;
             }
             var ctMetaFillup = string.Format("-- Наполнение мета-информации о пользовательских типах\r\n" +
-                                             "INSERT INTO `customTypesMeta` (`id`, `name`, `size`, `tableName`) \r\n" +
+                                             "INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`) \r\n" +
                                              "    VALUES {0};\r\n\r\n", string.Join(", \r\n           ", metaValues));
-            var customTypeVariablesMetaFillup =
-                string.Format("INSERT INTO `customTypeVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idCustomTypesMeta`) \r\n" +
+            var customTypeVariableMetaFillup =
+                string.Format("INSERT INTO `customTypeVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idCustomTypeMeta`) \r\n" +
                               "    VALUES {0};\r\n\r\n",
-                              string.Join(", \r\n           ", customTypeVariablesMetaValues));
+                              string.Join(", \r\n           ", customTypeVariableMetaValues));
 
-            // messagesMeta
+            // messageMeta, messageVariableMeta, messageCode
             metaValues = new List<string>();
-            var messageCodesValues = new List<string>();
-            var messageVariablesMetaValues = new List<string>();
+            var messageCodeValues = new List<string>();
+            var messageVariableMetaValues = new List<string>();
+            var messageVariableSizeForDimensionInserts = new List<string>();
             long messageId = 1;
+            long messageVariableId = 1;
             foreach (var message in _metaInfo.StandardMessages)
             {
+                var messageVariableSizeForDimensionValues = new List<string>();
                 foreach (var code in message.Codes)
                 {
-                    var messageCodesInsert = string.Format("('{0}', {1})", code, messageId);
-                    messageCodesValues.Add(messageCodesInsert);
+                    var messageCodeInsert = string.Format("('{0}', {1})", code, messageId);
+                    messageCodeValues.Add(messageCodeInsert);
                 }
                 foreach (var v in message.Variables)
                 {
-                    var messageVariablesMetaInsert = string.Format("('{0}', '{1}', {2}, '{3}', {4})", v.Name, v.Type, v.Dimensions.Count, v.RequiredValue, messageId);
-                    messageVariablesMetaValues.Add(messageVariablesMetaInsert);
+                    var messageVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", messageVariableId, v.Name, v.Type, v.RequiredValue, messageId);
+                    messageVariableMetaValues.Add(messageVariableMetaInsert);
+
+                    // customTypeVariableSizeForDimension
+                    for (int i = 0; i < v.DimensionsCount; i++)
+                    {
+                        var insert = string.Format("({0}, {1}, {2})", messageVariableId, i + 1, v.GetSizeForDimension(i + 1));
+                        messageVariableSizeForDimensionValues.Add(insert);
+                    }
+
+                    messageVariableId++;
                 }
+                if (messageVariableSizeForDimensionValues.Count > 0)
+                {
+                    var messageVariableSizeForDimensionInsert =
+                        string.Format("-- Наполнение информации о размерностях для сообщения `{0}`\r\n" +
+                                      "INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) \r\n" +
+                                      "    VALUES {1};\r\n\r\n", message.Name,
+                                      string.Join(", \r\n           ", messageVariableSizeForDimensionValues));
+                    messageVariableSizeForDimensionInserts.Add(messageVariableSizeForDimensionInsert);
+                    messageVariableSizeForDimensionValues.Clear();
+                }
+
                 var messageMetaInsert = string.Format("({0}, '{1}', '{2}', {3}, {4}, {5}, {6}, '{7}')", messageId,
                                                       message.Name, message.Title, message.Size,
                                                       (int) message.Validation, (int) MessageKinds.GreisStandardMessage,
@@ -223,22 +282,26 @@ namespace GreisDocParser
                 metaValues.Add(messageMetaInsert);
                 messageId++;
             }
-            var messagesMetaFillup = string.Format("-- Наполнение мета-информации о сообщениях\r\n" +
-                                                   "INSERT INTO `messagesMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) \r\n" +
+            var messageMetaFillup = string.Format("-- Наполнение мета-информации о сообщениях\r\n" +
+                                                   "INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) \r\n" +
                                                    "    VALUES {0};\r\n\r\n", string.Join(", \r\n           ", metaValues));
-            var messageCodesFillup = string.Format("INSERT INTO `messageCodes` (`code`, `idMessagesMeta`) \r\n" +
+            var messageCodeFillup = string.Format("INSERT INTO `messageCode` (`code`, `idMessageMeta`) \r\n" +
                                                    "    VALUES {0};\r\n\r\n",
-                                                   string.Join(", \r\n           ", messageCodesValues));
-            var messageVariablesMetaFillup =
-                string.Format("INSERT INTO `messageVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idMessagesMeta`) \r\n" +
+                                                   string.Join(", \r\n           ", messageCodeValues));
+            var messageVariableMetaFillup =
+                string.Format("INSERT INTO `messageVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idMessageMeta`) \r\n" +
                               "    VALUES {0};\r\n\r\n",
-                              string.Join(", \r\n           ", messageVariablesMetaValues));
+                              string.Join(", \r\n           ", messageVariableMetaValues));
 
-            var fillup = sizeSpecialValuesFillup + messageValidationsFillup + messageKindsFillup +
-                         messagetypesFillup + ctMetaFillup + messagesMetaFillup + messageCodesFillup +
-                         messageVariablesMetaFillup + customTypeVariablesMetaFillup;
+            // summarizing
+            var fillup = sizeSpecialValueFillup + messageValidationFillup + messageKindFillup +
+                         messageTypeFillup + ctMetaFillup + messageMetaFillup + messageCodeFillup +
+                         messageVariableMetaFillup + customTypeVariableMetaFillup + string.Concat(customTypeVariableSizeForDimensionInserts)
+                         + string.Concat(messageVariableSizeForDimensionInserts);
             return fillup;
         }
+
+        #endregion
 
         private string tableName(CustomType ct)
         {
@@ -281,66 +344,42 @@ namespace GreisDocParser
             greisTypesToSqlTypesMap[GreisTypes.u2.ToString()] = "SMALLINT UNSIGNED";
             greisTypesToSqlTypesMap[GreisTypes.u4.ToString()] = "INT UNSIGNED";
             const string idType = "BIGINT UNSIGNED";
+            const string arrayType = "BLOB";
             const int maxVarcharLength = 1000;
             if (v.IsScalar)
             {
+                // One of standard types
                 if (greisTypesToSqlTypesMap.ContainsKey(v.Type))
                 {
-                    // One of standard types
                     return greisTypesToSqlTypesMap[v.Type];
                 }
                 // custom type, return id type (SERIAL)
                 return idType;
             } else
             {
+                // One of standard types
                 if (greisTypesToSqlTypesMap.ContainsKey(v.Type))
                 {
-                    // One of standard types
+                    // char[] to string
                     if (v.Type == GreisTypes.a1.ToString())
                     {
-                        if (v.Dimensions.Count > 1)
+                        if (v.DimensionsCount > 1)
                         {
-                            throw new NotSupportedException("Only single level dimensions (char str[N]) for char types is supported.");
+                            throw new NotSupportedException("Only 1 level of dimensions (char str[N]) for char types is supported.");
                         }
-                        // char[] to string
                         return string.Format("VARCHAR({0})", maxVarcharLength);
                     }
-                    // semicolumn-separated string array ("2.2;3.6;123.5321") TODO: alternative solution without max array length
-                    return string.Format("VARCHAR({0})", maxVarcharLength * 2);
+                    // any standard type but char with any dimension level
+                    // stores in binary serialized format: [i4 i4 i4 i4] = 16 bytes (LSB)
+                    return arrayType;
                 }
-                if (v.Dimensions.Count > 1)
+                if (v.DimensionsCount > 1)
                 {
-                    throw new NotSupportedException("Only single level dimensions (type name[N]) for custom types is supported.");
+                    throw new NotSupportedException("Only 1 level of dimensions (type name[N]) for custom types is supported.");
                 }
-                // custom type, return id type (SERIAL)
-                return idType;
+                // custom types 1 dim array
+                return arrayType;
             }
-            /*
-             * 
-         CREATE TABLE `exampleMessage` (
-         id SERIAL,
-         idEpoch BIGINT UNSIGNED NOT NULL,
-         -- message data. 1000 - max length for dynamic-length array
-         _a1 CHAR,
-         _uint1 TINYINT UNSIGNED,
-         _int1 TINYINT,
-         _uint2 SMALLINT UNSIGNED,
-         _int2 SMALLINT,
-         _uint4 INT UNSIGNED,
-         _int4 INT,
-         _f4 FLOAT,
-         _f8 DOUBLE,
-         numericArray VARCHAR(1000),
-         fixedLengthStrArray VARCHAR(5),
-         unknownLengthStrArray VARCHAR(1000),
-         
-         PRIMARY KEY (`id`),
-         INDEX `idx_fk_epochs` (`idEpoch`),
-         CONSTRAINT `fk_epochs` FOREIGN KEY (`idEpoch`) 
-            REFERENCES `epochs` (`id`)
-       );
-             */
-            return "INT";
         }
     }
 }

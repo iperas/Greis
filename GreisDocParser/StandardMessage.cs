@@ -11,7 +11,7 @@ namespace GreisDocParser
         {
             Codes = new List<string>();
             Variables = new List<Variable>();
-            Size = (int) SizeSpecialValues.Dynamic;
+            Size = (int) SizeSpecialValue.Dynamic;
             Type = MessageTypes.Unknown;
         }
 
@@ -20,7 +20,7 @@ namespace GreisDocParser
         [XmlArrayItem("Code")]
         public List<string> Codes { get; set; }
         [XmlAttribute]
-        public ValidationTypes Validation { get; set; }
+        public ValidationType Validation { get; set; }
         [XmlAttribute]
         public MessageTypes Type { get; set; }
 

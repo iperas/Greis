@@ -104,19 +104,21 @@ DROP TABLE IF EXISTS `ct_SlotRec`;
 DROP TABLE IF EXISTS `ct_ClkOffs`;
 
 DROP TABLE IF EXISTS `exampleMessage`;
-DROP TABLE IF EXISTS `epochs`;
-DROP TABLE IF EXISTS `customTypeVariablesMeta`;
-DROP TABLE IF EXISTS `messageVariablesMeta`;
-DROP TABLE IF EXISTS `messageCodes`;
-DROP TABLE IF EXISTS `messagesMeta`;
-DROP TABLE IF EXISTS `customTypesMeta`;
-DROP TABLE IF EXISTS `sizeSpecialValuesClassifier`;
-DROP TABLE IF EXISTS `messageValidationsClassifier`;
-DROP TABLE IF EXISTS `messageKindsClassifier`;
-DROP TABLE IF EXISTS `messageTypesClassifier`;
+DROP TABLE IF EXISTS `epoch`;
+DROP TABLE IF EXISTS `customTypeVariableSizeForDimension`;
+DROP TABLE IF EXISTS `messageVariableSizeForDimension`;
+DROP TABLE IF EXISTS `customTypeVariableMeta`;
+DROP TABLE IF EXISTS `messageVariableMeta`;
+DROP TABLE IF EXISTS `messageCode`;
+DROP TABLE IF EXISTS `messageMeta`;
+DROP TABLE IF EXISTS `customTypeMeta`;
+DROP TABLE IF EXISTS `sizeSpecialValueClassifier`;
+DROP TABLE IF EXISTS `messageValidationClassifier`;
+DROP TABLE IF EXISTS `messageKindClassifier`;
+DROP TABLE IF EXISTS `messageTypeClassifier`;
 
 -- группировка сообщений по эпохам
-CREATE TABLE `epochs` (
+CREATE TABLE `epoch` (
          id SERIAL,
          unixtime DOUBLE NOT NULL,
          PRIMARY KEY (`id`),
@@ -124,35 +126,35 @@ CREATE TABLE `epochs` (
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов
-CREATE TABLE `sizeSpecialValuesClassifier` (
+CREATE TABLE `sizeSpecialValueClassifier` (
          id INT NOT NULL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор способов валидации сообщений
-CREATE TABLE `messageValidationsClassifier` (
-         id SERIAL,
+CREATE TABLE `messageValidationClassifier` (
+         id INT NOT NULL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор сообщений по происхождению (StandardMessage, StandardTextMessage, ...)
-CREATE TABLE `messageKindsClassifier` (
+CREATE TABLE `messageKindClassifier` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор сообщений по типу (General Purpose Messages, Almanacs and Ephemeris, ...)
-CREATE TABLE `messageTypesClassifier` (
+CREATE TABLE `messageTypeClassifier` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- мета-информация для custom-типов
-CREATE TABLE `customTypesMeta` (
+CREATE TABLE `customTypeMeta` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          size INT NOT NULL,
@@ -163,65 +165,87 @@ CREATE TABLE `customTypesMeta` (
        );
 
 -- мета-информация для сообщений
-CREATE TABLE `messagesMeta` (
+CREATE TABLE `messageMeta` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          title VARCHAR(100) NOT NULL,
          size INT NOT NULL,
-         idValidation BIGINT UNSIGNED NOT NULL,
+         idValidation INT NOT NULL,
          idKind BIGINT UNSIGNED NOT NULL,
          idType BIGINT UNSIGNED NOT NULL,
          tableName VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`),
          UNIQUE (`tableName`),
-         INDEX `idx_fk_messagesMeta_idValidation` (`idValidation`),
-         CONSTRAINT `fk_messagesMeta_idValidation` FOREIGN KEY (`idValidation`) 
-            REFERENCES `messageValidationsClassifier` (`id`),
-         INDEX `idx_fk_messagesMeta_idKind` (`idKind`),
-         CONSTRAINT `fk_messagesMeta_idKind` FOREIGN KEY (`idKind`) 
-            REFERENCES `messageKindsClassifier` (`id`),
-         INDEX `idx_fk_messagesMeta_idType` (`idType`),
-         CONSTRAINT `fk_messagesMeta_idType` FOREIGN KEY (`idType`) 
-            REFERENCES `messageTypesClassifier` (`id`)
+         INDEX `idx_fk_messageMeta_idValidation` (`idValidation`),
+         CONSTRAINT `fk_messageMeta_idValidation` FOREIGN KEY (`idValidation`) 
+            REFERENCES `messageValidationClassifier` (`id`),
+         INDEX `idx_fk_messageMeta_idKind` (`idKind`),
+         CONSTRAINT `fk_messageMeta_idKind` FOREIGN KEY (`idKind`) 
+            REFERENCES `messageKindClassifier` (`id`),
+         INDEX `idx_fk_messageMeta_idType` (`idType`),
+         CONSTRAINT `fk_messageMeta_idType` FOREIGN KEY (`idType`) 
+            REFERENCES `messageTypeClassifier` (`id`)
        );
 
 -- мета-информация о полях custom-типов
-CREATE TABLE `customTypeVariablesMeta` (
+CREATE TABLE `customTypeVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
          `type` VARCHAR(100) NOT NULL,
-         `dimensions` TINYINT NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
-         `idCustomTypesMeta` BIGINT UNSIGNED NOT NULL,
+         `idCustomTypeMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_customTypeVariablesMeta_idCustomTypesMeta` (`idCustomTypesMeta`),
-         CONSTRAINT `fk_customTypeVariablesMeta_idCustomTypesMeta` FOREIGN KEY (`idCustomTypesMeta`) 
-            REFERENCES `customTypesMeta` (`id`)
+         INDEX `idx_fk_customTypeVariableMeta_idCustomTypeMeta` (`idCustomTypeMeta`),
+         CONSTRAINT `fk_customTypeVariableMeta_idCustomTypeMeta` FOREIGN KEY (`idCustomTypeMeta`) 
+            REFERENCES `customTypeMeta` (`id`)
        );
 
 -- мета-информация о полях сообщений
-CREATE TABLE `messageVariablesMeta` (
+CREATE TABLE `messageVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
          `type` VARCHAR(100) NOT NULL,
-         `dimensions` TINYINT NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
-         `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
+         `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_messageVariablesMeta_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_messageVariablesMeta_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
-            REFERENCES `messagesMeta` (`id`)
+         INDEX `idx_fk_messageVariableMeta_idMessageMeta` (`idMessageMeta`),
+         CONSTRAINT `fk_messageVariableMeta_idMessageMeta` FOREIGN KEY (`idMessageMeta`) 
+            REFERENCES `messageMeta` (`id`)
        );
 
 -- коды сообщений в соответствии с идентификаторами
-CREATE TABLE `messageCodes` (
+CREATE TABLE `messageCode` (
          id SERIAL,
          code CHAR(2) NOT NULL,
-         `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
+         `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_messageCodes_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_messageCodes_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
-            REFERENCES `messagesMeta` (`id`)
+         INDEX `idx_fk_messageCode_idMessageMeta` (`idMessageMeta`),
+         CONSTRAINT `fk_messageCode_idMessageMeta` FOREIGN KEY (`idMessageMeta`) 
+            REFERENCES `messageMeta` (`id`)
+       );
+
+-- размеры для размерностей переменных пользовательских типов
+CREATE TABLE `customTypeVariableSizeForDimension` (
+         id SERIAL,
+         `idVariable` BIGINT UNSIGNED NOT NULL,
+         `dimensionNumber` INT NOT NULL,
+         `size` INT NOT NULL,
+         PRIMARY KEY (`id`),
+         INDEX `idx_fk_customTypeVariableSizeForDimension_idVariable` (`idVariable`),
+         CONSTRAINT `fk_customTypeVariableSizeForDimension_idVariable` FOREIGN KEY (`idVariable`) 
+            REFERENCES `customTypeVariableMeta` (`id`)
+       );
+
+-- размеры для размерностей переменных сообщений
+CREATE TABLE `messageVariableSizeForDimension` (
+         id SERIAL,
+         `idVariable` BIGINT UNSIGNED NOT NULL,
+         `dimensionNumber` INT NOT NULL,
+         `size` INT NOT NULL,
+         PRIMARY KEY (`id`),
+         INDEX `idx_fk_messageVariableSizeForDimension_idVariable` (`idVariable`),
+         CONSTRAINT `fk_messageVariableSizeForDimension_idVariable` FOREIGN KEY (`idVariable`) 
+            REFERENCES `messageVariableMeta` (`id`)
        );
 
 -- custom type 'UtcOffs'
@@ -249,7 +273,7 @@ CREATE TABLE `ct_SvData0` (
     id SERIAL, 
     `prn` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     PRIMARY KEY (`id`));
 
 -- custom type 'SvData1'
@@ -257,14 +281,14 @@ CREATE TABLE `ct_SvData1` (
     id SERIAL, 
     `fcn1` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     PRIMARY KEY (`id`));
 
 -- custom type 'SvData2'
 CREATE TABLE `ct_SvData2` (
     id SERIAL, 
     `header` BIGINT UNSIGNED, 
-    `slot` BIGINT UNSIGNED, 
+    `slot` BLOB, 
     PRIMARY KEY (`id`));
 
 -- custom type 'Header'
@@ -301,7 +325,7 @@ CREATE TABLE `msg_FileId` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_FileId_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_FileId_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'MsgFmt': [MF] Messages Format
 CREATE TABLE `msg_MsgFmt` (
@@ -315,7 +339,7 @@ CREATE TABLE `msg_MsgFmt` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_MsgFmt_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_MsgFmt_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvTime': [~~](RT) Receiver Time
 CREATE TABLE `msg_RcvTime` (
@@ -326,7 +350,7 @@ CREATE TABLE `msg_RcvTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'EpochTime': [::](ET) Epoch Time
 CREATE TABLE `msg_EpochTime` (
@@ -337,7 +361,7 @@ CREATE TABLE `msg_EpochTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_EpochTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_EpochTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvDate': [RD] Receiver Date
 CREATE TABLE `msg_RcvDate` (
@@ -351,7 +375,7 @@ CREATE TABLE `msg_RcvDate` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvDate_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvDate_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvTimeOffset': [TO] Reference Time to Receiver Time Offset
 CREATE TABLE `msg_RcvTimeOffset` (
@@ -363,7 +387,7 @@ CREATE TABLE `msg_RcvTimeOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvTimeOffsetDot': [DO] Derivative of Receiver Time Offset
 CREATE TABLE `msg_RcvTimeOffsetDot` (
@@ -375,7 +399,7 @@ CREATE TABLE `msg_RcvTimeOffsetDot` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffsetDot_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvTimeOffsetDot_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvTimeAccuracy': [BP] Rough Accuracy of Time Approximation
 CREATE TABLE `msg_RcvTimeAccuracy` (
@@ -386,7 +410,7 @@ CREATE TABLE `msg_RcvTimeAccuracy` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeAccuracy_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvTimeAccuracy_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GPSTime': [GT] GPS Time
 CREATE TABLE `msg_GPSTime` (
@@ -398,7 +422,7 @@ CREATE TABLE `msg_GPSTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GPSTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvGPSTimeOffset': [GO] GPS to Receiver Time Offset
 CREATE TABLE `msg_RcvGPSTimeOffset` (
@@ -410,7 +434,7 @@ CREATE TABLE `msg_RcvGPSTimeOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGPSTimeOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvGPSTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GLOTime': [NT] GLONASS Time
 CREATE TABLE `msg_GLOTime` (
@@ -422,7 +446,7 @@ CREATE TABLE `msg_GLOTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GLOTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvGLOTimeOffset': [NO] GLONASS to Receiver Time Offset
 CREATE TABLE `msg_RcvGLOTimeOffset` (
@@ -434,7 +458,7 @@ CREATE TABLE `msg_RcvGLOTimeOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGLOTimeOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvGLOTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvGALTimeOffset': [EO] GALILEO to Receiver Time Offset
 CREATE TABLE `msg_RcvGALTimeOffset` (
@@ -446,7 +470,7 @@ CREATE TABLE `msg_RcvGALTimeOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGALTimeOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvGALTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvWAASTimeOffset': [WO] WAAS to Receiver Time Offset
 CREATE TABLE `msg_RcvWAASTimeOffset` (
@@ -458,7 +482,7 @@ CREATE TABLE `msg_RcvWAASTimeOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvWAASTimeOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvWAASTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GpsUtcParam': [UO] GPS UTC Time Parameters
 CREATE TABLE `msg_GpsUtcParam` (
@@ -469,7 +493,7 @@ CREATE TABLE `msg_GpsUtcParam` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GpsUtcParam_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GpsUtcParam_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'WaasUtcParam': [WU] WAAS UTC Time Parameters
 CREATE TABLE `msg_WaasUtcParam` (
@@ -484,7 +508,7 @@ CREATE TABLE `msg_WaasUtcParam` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WaasUtcParam_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_WaasUtcParam_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GalUtcGpsParam': [EU] GALILEO UTC and GPS Time Parameters
 CREATE TABLE `msg_GalUtcGpsParam` (
@@ -500,7 +524,7 @@ CREATE TABLE `msg_GalUtcGpsParam` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GalUtcGpsParam_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GalUtcGpsParam_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GloUtcGpsParam': [NU] GLONASS UTC and GPS Time Parameters
 CREATE TABLE `msg_GloUtcGpsParam` (
@@ -517,7 +541,7 @@ CREATE TABLE `msg_GloUtcGpsParam` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloUtcGpsParam_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GloUtcGpsParam_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SolutionTime': [ST] Solution Time-Tag
 CREATE TABLE `msg_SolutionTime` (
@@ -529,7 +553,7 @@ CREATE TABLE `msg_SolutionTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SolutionTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SolutionTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Pos': [PO] Cartesian Position
 CREATE TABLE `msg_Pos` (
@@ -544,7 +568,7 @@ CREATE TABLE `msg_Pos` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Pos_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Pos_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Vel': [VE] Cartesian Velocity
 CREATE TABLE `msg_Vel` (
@@ -559,7 +583,7 @@ CREATE TABLE `msg_Vel` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Vel_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Vel_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PosVel': [PV] Cartesian Position and Velocity
 CREATE TABLE `msg_PosVel` (
@@ -578,7 +602,7 @@ CREATE TABLE `msg_PosVel` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosVel_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PosVel_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GeoPos': [PG] Geodetic Position
 CREATE TABLE `msg_GeoPos` (
@@ -593,7 +617,7 @@ CREATE TABLE `msg_GeoPos` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GeoPos_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GeoPos_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GeoVel': [VG] Geodetic Velocity
 CREATE TABLE `msg_GeoVel` (
@@ -608,7 +632,7 @@ CREATE TABLE `msg_GeoVel` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GeoVel_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GeoVel_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Rms': [SG] Position and Velocity RMS Errors
 CREATE TABLE `msg_Rms` (
@@ -623,7 +647,7 @@ CREATE TABLE `msg_Rms` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Rms_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Rms_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Dops': [DP] Dilution of Precision (DOP)
 CREATE TABLE `msg_Dops` (
@@ -637,7 +661,7 @@ CREATE TABLE `msg_Dops` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Dops_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Dops_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PosCov': [SP] Position Covariance Matrix
 CREATE TABLE `msg_PosCov` (
@@ -658,7 +682,7 @@ CREATE TABLE `msg_PosCov` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosCov_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PosCov_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'VelCov': [SV] Velocity Covariance Matrix
 CREATE TABLE `msg_VelCov` (
@@ -679,7 +703,7 @@ CREATE TABLE `msg_VelCov` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_VelCov_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_VelCov_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'BaseLine': [BL] Base Line
 CREATE TABLE `msg_BaseLine` (
@@ -695,7 +719,7 @@ CREATE TABLE `msg_BaseLine` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_BaseLine_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_BaseLine_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PosStat': [PS] Position Statistics
 CREATE TABLE `msg_PosStat` (
@@ -713,7 +737,7 @@ CREATE TABLE `msg_PosStat` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosStat_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PosStat_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PosCompTime': [PT] Time of Continuous Position Computation
 CREATE TABLE `msg_PosCompTime` (
@@ -724,18 +748,18 @@ CREATE TABLE `msg_PosCompTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosCompTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PosCompTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SatIndex': [SI] Satellite Indices
 CREATE TABLE `msg_SatIndex` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `usi` VARCHAR(2000), 
+    `usi` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatIndex_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SatIndex_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'AntName': [AN] Antenna Names
 CREATE TABLE `msg_AntName` (
@@ -746,239 +770,239 @@ CREATE TABLE `msg_AntName` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_AntName_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_AntName_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SatNumbers': [NN] GLONASS Satellite System Numbers
 CREATE TABLE `msg_SatNumbers` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `osn` VARCHAR(2000), 
+    `osn` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatNumbers_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SatNumbers_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SatElevation': [EL] Satellite Elevations
 CREATE TABLE `msg_SatElevation` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `elev` VARCHAR(2000), 
+    `elev` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatElevation_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SatElevation_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SatAzimuth': [AZ] Satellite Azimuths
 CREATE TABLE `msg_SatAzimuth` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `azim` VARCHAR(2000), 
+    `azim` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatAzimuth_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SatAzimuth_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PR': [RC], [R1], [R2], [R3], [R5]: Pseudoranges
 CREATE TABLE `msg_PR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `pr` VARCHAR(2000), 
+    `pr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PR_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PR_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SPR': [rc], [r1], [r2], [r3], [r5]: Short Pseudoranges
 CREATE TABLE `msg_SPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `spr` VARCHAR(2000), 
+    `spr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SPR_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SPR_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RPR': [1R], [2R], [3R], [5R]: Relative Pseudoranges
 CREATE TABLE `msg_RPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `rpr` VARCHAR(2000), 
+    `rpr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RPR_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RPR_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SRPR': [1r], [2r], [3r], [5r]: Short Relative Pseudoranges
 CREATE TABLE `msg_SRPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `srpr` VARCHAR(2000), 
+    `srpr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SRPR_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SRPR_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SC': [CC], [C1], [C2], [C3], [C5]: Smoothing Corrections
 CREATE TABLE `msg_SC` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `smooth` BIGINT UNSIGNED, 
+    `smooth` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SC_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SC_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SS': [cc], [c1], [c2], [c3], [c5]: Short Smoothing Corrections
 CREATE TABLE `msg_SS` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `smooth` VARCHAR(2000), 
+    `smooth` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SS_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SS_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'CP': [PC], [P1], [P2], [P3], [P5]: Carrier Phases
 CREATE TABLE `msg_CP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `cp` VARCHAR(2000), 
+    `cp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CP_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_CP_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SCP': [pc], [p1], [p2], [p3], [p5]: Short Carrier Phases
 CREATE TABLE `msg_SCP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `scp` VARCHAR(2000), 
+    `scp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SCP_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SCP_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RCP_RC': [CP], [1P], [2P], [3P], [5P]: Short Relative Carrier Phases
 CREATE TABLE `msg_RCP_RC0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `rcp` VARCHAR(2000), 
+    `rcp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RCP_RC0_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RCP_RC0_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RCP_rc': [cp], [1p], [2p], [3p], [5p]: Short Relative Carrier Phases
 CREATE TABLE `msg_RCP_rc1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `rcp` VARCHAR(2000), 
+    `rcp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RCP_rc1_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RCP_rc1_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'DP': [DC], [D1], [D2], [D3], [D5]: Doppler
 CREATE TABLE `msg_DP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `dp` VARCHAR(2000), 
+    `dp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_DP_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_DP_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'SRDP': [1d], [2d], [3d], [5d]: Short Relative Doppler
 CREATE TABLE `msg_SRDP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `srdp` VARCHAR(2000), 
+    `srdp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SRDP_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_SRDP_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'CNR': [EC], [E1], [E2], [E3], [E5]: Carrier to Noise Ratio
 CREATE TABLE `msg_CNR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `cnr` VARCHAR(2000), 
+    `cnr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CNR_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_CNR_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'CNR_4': [CE], [1E], [2E], [3E], [5E]: Carrier to Noise Ratio x 
 CREATE TABLE `msg_CNR_4` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `cnrX4` VARCHAR(2000), 
+    `cnrX4` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CNR_4_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_CNR_4_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Flags': [FC], [F1], [F2], [F3], [F5]: Signal Lock Loop Flags
 CREATE TABLE `msg_Flags` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `flags` VARCHAR(2000), 
+    `flags` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Flags_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Flags_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'TrackingTimeCA': [TC] CA/L1 Continuous Tracking Time
 CREATE TABLE `msg_TrackingTimeCA` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `tt` VARCHAR(2000), 
+    `tt` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_TrackingTimeCA_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_TrackingTimeCA_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'NavStatus': [SS] Satellite Navigation Status
 CREATE TABLE `msg_NavStatus` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `ns` VARCHAR(2000), 
+    `ns` BLOB, 
     `solType` TINYINT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_NavStatus_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_NavStatus_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'IonoDelay': [ID] Ionospheric Delays
 CREATE TABLE `msg_IonoDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `delay` VARCHAR(2000), 
+    `delay` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_IonoDelay_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_IonoDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GPSAlm': [GA] GPS Almanac
 CREATE TABLE `msg_GPSAlm` (
@@ -1003,7 +1027,7 @@ CREATE TABLE `msg_GPSAlm` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSAlm_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GPSAlm_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GALAlm': [EA] GALILEO Almanac
 CREATE TABLE `msg_GALAlm` (
@@ -1015,7 +1039,7 @@ CREATE TABLE `msg_GALAlm` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALAlm_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GALAlm_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GLOAlmanac': [NA] GLONASS Almanac
 CREATE TABLE `msg_GLOAlmanac` (
@@ -1038,7 +1062,7 @@ CREATE TABLE `msg_GLOAlmanac` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOAlmanac_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GLOAlmanac_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'WAASAlmanac': [WA] WAAS Almanac
 CREATE TABLE `msg_WAASAlmanac` (
@@ -1061,7 +1085,7 @@ CREATE TABLE `msg_WAASAlmanac` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASAlmanac_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_WAASAlmanac_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GPSEphemeris': [GE] GPS Ephemeris
 CREATE TABLE `msg_GPSEphemeris` (
@@ -1100,7 +1124,7 @@ CREATE TABLE `msg_GPSEphemeris` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSEphemeris_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GPSEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GLOEphemeris': [NE] GLONASS Ephemeris
 CREATE TABLE `msg_GLOEphemeris` (
@@ -1114,9 +1138,9 @@ CREATE TABLE `msg_GLOEphemeris` (
     `health` TINYINT UNSIGNED, 
     `age` TINYINT UNSIGNED, 
     `flags` TINYINT UNSIGNED, 
-    `r` VARCHAR(2000), 
-    `v` VARCHAR(2000), 
-    `w` VARCHAR(2000), 
+    `r` BLOB, 
+    `v` BLOB, 
+    `w` BLOB, 
     `tauSys` DOUBLE, 
     `tau` FLOAT, 
     `gamma` FLOAT, 
@@ -1128,7 +1152,7 @@ CREATE TABLE `msg_GLOEphemeris` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOEphemeris_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GLOEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'WAASEhemeris': [WE] WAAS Ephemeris
 CREATE TABLE `msg_WAASEhemeris` (
@@ -1156,7 +1180,7 @@ CREATE TABLE `msg_WAASEhemeris` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASEhemeris_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_WAASEhemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GALEphemeris': [EN] GALILEO Ephemeris
 CREATE TABLE `msg_GALEphemeris` (
@@ -1174,31 +1198,31 @@ CREATE TABLE `msg_GALEphemeris` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALEphemeris_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GALEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GpsNavData': [GD] GPS Raw Navigation Data
 CREATE TABLE `msg_GpsNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `recSize` TINYINT UNSIGNED, 
-    `dat` BIGINT UNSIGNED, 
+    `dat` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GpsNavData_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GpsNavData_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GloNavData': [LD] GLONASS Raw Navigation Data
 CREATE TABLE `msg_GloNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `recSize` TINYINT UNSIGNED, 
-    `dat` BIGINT UNSIGNED, 
+    `dat` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloNavData_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GloNavData_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'WAASRawMessage': [WD] WAAS Raw Navigation Data
 CREATE TABLE `msg_WAASRawMessage` (
@@ -1207,12 +1231,12 @@ CREATE TABLE `msg_WAASRawMessage` (
     `prn` TINYINT UNSIGNED, 
     `time` INT UNSIGNED, 
     `reserv` SMALLINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASRawMessage_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_WAASRawMessage_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GALRawMessage': [ED] GALILEO Raw Navigation Data
 CREATE TABLE `msg_GALRawMessage` (
@@ -1222,25 +1246,25 @@ CREATE TABLE `msg_GALRawMessage` (
     `time` INT UNSIGNED, 
     `type` TINYINT UNSIGNED, 
     `len` TINYINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALRawMessage_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GALRawMessage_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'GloPhaseDelay': [gC], [g1], [g2], [g3]: GLONASS Phase Delays
 CREATE TABLE `msg_GloPhaseDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `fcn` VARCHAR(2000), 
-    `phase` VARCHAR(2000), 
-    `range` VARCHAR(2000), 
+    `fcn` BLOB, 
+    `phase` BLOB, 
+    `range` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloPhaseDelay_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_GloPhaseDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RotationMatrix': [MR] Rotation Matrix
 CREATE TABLE `msg_RotationMatrix` (
@@ -1251,14 +1275,14 @@ CREATE TABLE `msg_RotationMatrix` (
     `q01` FLOAT, 
     `q02` FLOAT, 
     `q12` FLOAT, 
-    `rms` VARCHAR(2000), 
-    `solType` VARCHAR(2000), 
+    `rms` BLOB, 
+    `solType` BLOB, 
     `flag` TINYINT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationMatrix_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RotationMatrix_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RotationMatrixAndVectors': [mr] Rotation Matrix and Vectors
 CREATE TABLE `msg_RotationMatrixAndVectors` (
@@ -1269,17 +1293,17 @@ CREATE TABLE `msg_RotationMatrixAndVectors` (
     `q01` FLOAT, 
     `q02` FLOAT, 
     `q12` FLOAT, 
-    `rms` VARCHAR(2000), 
-    `solType` VARCHAR(2000), 
+    `rms` BLOB, 
+    `solType` BLOB, 
     `flag` TINYINT UNSIGNED, 
-    `bl0` VARCHAR(2000), 
-    `bl1` VARCHAR(2000), 
-    `bl2` VARCHAR(2000), 
+    `bl0` BLOB, 
+    `bl1` BLOB, 
+    `bl2` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationMatrixAndVectors_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RotationMatrixAndVectors_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RotationAngles': [AR] Rotation Angles
 CREATE TABLE `msg_RotationAngles` (
@@ -1297,7 +1321,7 @@ CREATE TABLE `msg_RotationAngles` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationAngles_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RotationAngles_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'AngularVelocity': [AV] Angular Velocities
 CREATE TABLE `msg_AngularVelocity` (
@@ -1313,19 +1337,19 @@ CREATE TABLE `msg_AngularVelocity` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_AngularVelocity_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_AngularVelocity_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'InertialMeasurements': [IM] Inertial Measurements
 CREATE TABLE `msg_InertialMeasurements` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `accelerations` VARCHAR(2000), 
-    `angularVelocities` VARCHAR(2000), 
+    `accelerations` BLOB, 
+    `angularVelocities` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_InertialMeasurements_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_InertialMeasurements_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'ExtEvent': [XA], [XB] External Event
 CREATE TABLE `msg_ExtEvent` (
@@ -1338,7 +1362,7 @@ CREATE TABLE `msg_ExtEvent` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ExtEvent_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_ExtEvent_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PPSOffset': [ZA], [ZB] PPS Offset
 CREATE TABLE `msg_PPSOffset` (
@@ -1349,7 +1373,7 @@ CREATE TABLE `msg_PPSOffset` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PPSOffset_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PPSOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvTimeOffsAtPPS': [YA], [YB] Time Offset at PPS Generation Time
 CREATE TABLE `msg_RcvTimeOffsAtPPS` (
@@ -1361,7 +1385,7 @@ CREATE TABLE `msg_RcvTimeOffsAtPPS` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffsAtPPS_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvTimeOffsAtPPS_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RefEpoch': [rE] Reference Epoch
 CREATE TABLE `msg_RefEpoch` (
@@ -1374,7 +1398,7 @@ CREATE TABLE `msg_RefEpoch` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RefEpoch_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RefEpoch_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RawMeas': [rM] Raw Measurements
 CREATE TABLE `msg_RawMeas` (
@@ -1385,12 +1409,12 @@ CREATE TABLE `msg_RawMeas` (
     `reftime` INT UNSIGNED, 
     `clock` SMALLINT, 
     `flags` SMALLINT UNSIGNED, 
-    `svd` BIGINT UNSIGNED, 
+    `svd` BLOB, 
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RawMeas_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RawMeas_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'PosVelVector': [rV] Receiver’s Position and Velocity
 CREATE TABLE `msg_PosVelVector` (
@@ -1411,7 +1435,7 @@ CREATE TABLE `msg_PosVelVector` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosVelVector_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_PosVelVector_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'ClockOffsets': [rT] Receiver Clock Offsets
 CREATE TABLE `msg_ClockOffsets` (
@@ -1420,12 +1444,12 @@ CREATE TABLE `msg_ClockOffsets` (
     `sample` SMALLINT UNSIGNED, 
     `reserved` SMALLINT UNSIGNED, 
     `recSize` TINYINT UNSIGNED, 
-    `Offs` BIGINT UNSIGNED, 
+    `Offs` BLOB, 
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ClockOffsets_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_ClockOffsets_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RE': [RE] Reply
 CREATE TABLE `msg_RE` (
@@ -1435,7 +1459,7 @@ CREATE TABLE `msg_RE` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RE_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RE_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'ER': [ER] Error
 CREATE TABLE `msg_ER` (
@@ -1445,7 +1469,7 @@ CREATE TABLE `msg_ER` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ER_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_ER_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'IonoParams': [IO] Ionospheric Parameters
 CREATE TABLE `msg_IonoParams` (
@@ -1465,7 +1489,7 @@ CREATE TABLE `msg_IonoParams` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_IonoParams_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_IonoParams_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Event': [==](EV) Event
 CREATE TABLE `msg_Event` (
@@ -1473,12 +1497,12 @@ CREATE TABLE `msg_Event` (
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `time` INT UNSIGNED, 
     `type` TINYINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Event_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Event_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Latency': [LT] Message Output Latency
 CREATE TABLE `msg_Latency` (
@@ -1489,19 +1513,19 @@ CREATE TABLE `msg_Latency` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Latency_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Latency_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Wrapper': [>>] Wrapper
 CREATE TABLE `msg_Wrapper` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `id_sugar` TINYINT UNSIGNED, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `cs` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Wrapper_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Wrapper_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Params': [PM] Parameters
 CREATE TABLE `msg_Params` (
@@ -1513,7 +1537,7 @@ CREATE TABLE `msg_Params` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Params_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Params_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'LoggingHistory': [LH] Logging History
 CREATE TABLE `msg_LoggingHistory` (
@@ -1524,13 +1548,13 @@ CREATE TABLE `msg_LoggingHistory` (
     `issue` SMALLINT UNSIGNED, 
     `bitsCount` SMALLINT UNSIGNED, 
     `lastBitTime` INT UNSIGNED, 
-    `uids` VARCHAR(2000), 
-    `pad` VARCHAR(2000), 
-    `hist` VARCHAR(2000), 
+    `uids` BLOB, 
+    `pad` BLOB, 
+    `hist` BLOB, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_LoggingHistory_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_LoggingHistory_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'BaseInfo': [BI] Base Station Information
 CREATE TABLE `msg_BaseInfo` (
@@ -1545,29 +1569,29 @@ CREATE TABLE `msg_BaseInfo` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_BaseInfo_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_BaseInfo_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Security': [SE] Security
 CREATE TABLE `msg_Security0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Security0_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Security0_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'Security': [SM] Security for [rM]
 CREATE TABLE `msg_Security1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
-    `data` VARCHAR(2000), 
+    `data` BLOB, 
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Security1_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_Security1_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'TrackingTime': [TT] CA/L1 Overall Continuous Tracking Time
 CREATE TABLE `msg_TrackingTime` (
@@ -1578,7 +1602,7 @@ CREATE TABLE `msg_TrackingTime` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_TrackingTime_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_TrackingTime_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'RcvOscOffs': [OO] Oscillator Offset
 CREATE TABLE `msg_RcvOscOffs` (
@@ -1589,7 +1613,7 @@ CREATE TABLE `msg_RcvOscOffs` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvOscOffs_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_RcvOscOffs_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 -- message 'EpochEnd': [||](EE) Epoch End
 CREATE TABLE `msg_EpochEnd` (
@@ -1599,37 +1623,38 @@ CREATE TABLE `msg_EpochEnd` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_EpochEnd_idEpoch` (`idEpoch`), 
     CONSTRAINT `fk_msg_EpochEnd_idEpoch` FOREIGN KEY (`idEpoch`) 
-        REFERENCES `epochs` (`id`));
+        REFERENCES `epoch` (`id`));
 
 
 
--- Наполнение классификатора sizeSpecialValuesClassifier
-INSERT INTO `sizeSpecialValuesClassifier` (`id`, `name`) 
+-- Наполнение классификатора sizeSpecialValueClassifier
+INSERT INTO `sizeSpecialValueClassifier` (`id`, `name`) 
     VALUES (-3, 'Fixed'), 
            (-2, 'Fill'), 
            (-1, 'Dynamic');
 
--- Наполнение классификатора messageValidationsClassifier
-INSERT INTO `messageValidationsClassifier` (`name`) 
-    VALUES ('Checksum'), 
-           ('ChecksumAsHexAscii'), 
-           ('Crc16');
+-- Наполнение классификатора messageValidationClassifier
+INSERT INTO `messageValidationClassifier` (`id`, `name`) 
+    VALUES (0, 'None'), 
+           (1, 'Checksum'), 
+           (2, 'ChecksumAsHexAscii'), 
+           (3, 'Crc16');
 
--- Наполнение классификатора messageKindsClassifier
-INSERT INTO `messageKindsClassifier` (`name`) 
+-- Наполнение классификатора messageKindClassifier
+INSERT INTO `messageKindClassifier` (`name`) 
     VALUES ('NonStandardTextMessage'), 
            ('StandardTextMessage'), 
            ('GreisStandardMessage'), 
            ('ForeignStandardMessage'), 
            ('UnknownStandardMessage');
 
--- Наполнение классификатора messageTypesClassifier
-INSERT INTO `messageTypesClassifier` (`name`) 
+-- Наполнение классификатора messageTypeClassifier
+INSERT INTO `messageTypeClassifier` (`name`) 
     VALUES ('Unknown'), 
            ('AlmanacsAndEphemeris');
 
 -- Наполнение мета-информации о пользовательских типах
-INSERT INTO `customTypesMeta` (`id`, `name`, `size`, `tableName`) 
+INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`) 
     VALUES (1, 'UtcOffs', 23, 'ct_UtcOffs'), 
            (2, 'Smooth', 6, 'ct_Smooth'), 
            (3, 'SvData0', -3, 'ct_SvData0'), 
@@ -1640,8 +1665,8 @@ INSERT INTO `customTypesMeta` (`id`, `name`, `size`, `tableName`)
            (8, 'ClkOffs', -3, 'ct_ClkOffs');
 
 -- Наполнение мета-информации о сообщениях
-INSERT INTO `messagesMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) 
-    VALUES (1, 'FileId', '[JP] File Identifier', 85, 1, 3, 1, 'msg_FileId'), 
+INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) 
+    VALUES (1, 'FileId', '[JP] File Identifier', 85, 0, 3, 1, 'msg_FileId'), 
            (2, 'MsgFmt', '[MF] Messages Format', 9, 2, 3, 1, 'msg_MsgFmt'), 
            (3, 'RcvTime', '[~~](RT) Receiver Time', 5, 1, 3, 1, 'msg_RcvTime'), 
            (4, 'EpochTime', '[::](ET) Epoch Time', 5, 1, 3, 1, 'msg_EpochTime'), 
@@ -1720,14 +1745,14 @@ INSERT INTO `messagesMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKi
            (77, 'RawMeas', '[rM] Raw Measurements', -1, 3, 3, 1, 'msg_RawMeas'), 
            (78, 'PosVelVector', '[rV] Receiver’s Position and Velocity', 42, 3, 3, 1, 'msg_PosVelVector'), 
            (79, 'ClockOffsets', '[rT] Receiver Clock Offsets', -2, 3, 3, 1, 'msg_ClockOffsets'), 
-           (80, 'RE', '[RE] Reply', -2, 1, 3, 1, 'msg_RE'), 
-           (81, 'ER', '[ER] Error', -2, 1, 3, 1, 'msg_ER'), 
+           (80, 'RE', '[RE] Reply', -2, 0, 3, 1, 'msg_RE'), 
+           (81, 'ER', '[ER] Error', -2, 0, 3, 1, 'msg_ER'), 
            (82, 'IonoParams', '[IO] Ionospheric Parameters', 39, 1, 3, 1, 'msg_IonoParams'), 
            (83, 'Event', '[==](EV) Event', -2, 1, 3, 1, 'msg_Event'), 
            (84, 'Latency', '[LT] Message Output Latency', 2, 1, 3, 1, 'msg_Latency'), 
            (85, 'Wrapper', '[>>] Wrapper', -2, 2, 3, 1, 'msg_Wrapper'), 
            (86, 'Params', '[PM] Parameters', -2, 2, 3, 1, 'msg_Params'), 
-           (87, 'LoggingHistory', '[LH] Logging History', -1, 1, 3, 1, 'msg_LoggingHistory'), 
+           (87, 'LoggingHistory', '[LH] Logging History', -1, 0, 3, 1, 'msg_LoggingHistory'), 
            (88, 'BaseInfo', '[BI] Base Station Information', 28, 1, 3, 1, 'msg_BaseInfo'), 
            (89, 'Security', '[SE] Security', 6, 1, 3, 1, 'msg_Security0'), 
            (90, 'Security', '[SM] Security for [rM]', 8, 3, 3, 1, 'msg_Security1'), 
@@ -1735,7 +1760,7 @@ INSERT INTO `messagesMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKi
            (92, 'RcvOscOffs', '[OO] Oscillator Offset', 5, 1, 3, 1, 'msg_RcvOscOffs'), 
            (93, 'EpochEnd', '[||](EE) Epoch End', 1, 1, 3, 1, 'msg_EpochEnd');
 
-INSERT INTO `messageCodes` (`code`, `idMessagesMeta`) 
+INSERT INTO `messageCode` (`code`, `idMessageMeta`) 
     VALUES ('JP', 1), 
            ('MF', 2), 
            ('~~', 3), 
@@ -1893,509 +1918,717 @@ INSERT INTO `messageCodes` (`code`, `idMessagesMeta`)
            ('OO', 92), 
            ('||', 93);
 
-INSERT INTO `messageVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idMessagesMeta`) 
-    VALUES ('id', 'a1', 1, '', 1), 
-           ('description', 'a1', 1, '', 1), 
-           ('id', 'a1', 1, 'JP', 2), 
-           ('majorVer', 'a1', 1, '', 2), 
-           ('minorVer', 'a1', 1, '', 2), 
-           ('order', 'a1', 1, '', 2), 
-           ('cs', 'a1', 1, '', 2), 
-           ('tod', 'u4', 1, '', 3), 
-           ('cs', 'u1', 1, '', 3), 
-           ('tod', 'u4', 1, '', 4), 
-           ('cs', 'u1', 1, '', 4), 
-           ('year', 'u2', 1, '', 5), 
-           ('month', 'u1', 1, '', 5), 
-           ('day', 'u1', 1, '', 5), 
-           ('base', 'u1', 1, '', 5), 
-           ('cs', 'u1', 1, '', 5), 
-           ('val', 'f8', 1, '', 6), 
-           ('sval', 'f8', 1, '', 6), 
-           ('cs', 'u1', 1, '', 6), 
-           ('val', 'f4', 1, '', 7), 
-           ('sval', 'f4', 1, '', 7), 
-           ('cs', 'u1', 1, '', 7), 
-           ('acc', 'f4', 1, '', 8), 
-           ('cs', 'u1', 1, '', 8), 
-           ('tow', 'u4', 1, '', 9), 
-           ('wn', 'u2', 1, '', 9), 
-           ('cs', 'u1', 1, '', 9), 
-           ('val', 'f8', 1, '', 10), 
-           ('sval', 'f8', 1, '', 10), 
-           ('cs', 'u1', 1, '', 10), 
-           ('tod', 'u4', 1, '', 11), 
-           ('dn', 'u2', 1, '', 11), 
-           ('cs', 'u1', 1, '', 11), 
-           ('val', 'f8', 1, '', 12), 
-           ('sval', 'f8', 1, '', 12), 
-           ('cs', 'u1', 1, '', 12), 
-           ('val', 'f8', 1, '', 13), 
-           ('sval', 'f8', 1, '', 13), 
-           ('cs', 'u1', 1, '', 13), 
-           ('val', 'f8', 1, '', 14), 
-           ('sval', 'f8', 1, '', 14), 
-           ('cs', 'u1', 1, '', 14), 
-           ('utc', 'UtcOffs', 1, '', 15), 
-           ('cs', 'u1', 1, '', 15), 
-           ('utc', 'UtcOffs', 1, '', 16), 
-           ('utcsi', 'i1', 1, '', 16), 
-           ('tow', 'u4', 1, '', 16), 
-           ('wn', 'u2', 1, '', 16), 
-           ('flags', 'u1', 1, '', 16), 
-           ('cs', 'u1', 1, '', 16), 
-           ('utc', 'UtcOffs', 1, '', 17), 
-           ('a0g', 'f4', 1, '', 17), 
-           ('a1g', 'f4', 1, '', 17), 
-           ('t0g', 'u4', 1, '', 17), 
-           ('wn0g', 'u2', 1, '', 17), 
-           ('flags', 'u2', 1, '', 17), 
-           ('cs', 'u1', 1, '', 17), 
-           ('tauSys', 'f8', 1, '', 18), 
-           ('tauGps', 'f4', 1, '', 18), 
-           ('B1', 'f4', 1, '', 18), 
-           ('B2', 'f4', 1, '', 18), 
-           ('KP', 'u1', 1, '', 18), 
-           ('N4', 'u1', 1, '', 18), 
-           ('Dn', 'i2', 1, '', 18), 
-           ('cs', 'u1', 1, '', 18), 
-           ('time', 'u4', 1, '', 19), 
-           ('solType', 'u1', 1, '', 19), 
-           ('cs', 'u1', 1, '', 19), 
-           ('x', 'f8', 1, '', 20), 
-           ('y', 'f8', 1, '', 20), 
-           ('z', 'f8', 1, '', 20), 
-           ('sigma', 'f4', 1, '', 20), 
-           ('solType', 'u1', 1, '', 20), 
-           ('cs', 'u1', 1, '', 20), 
-           ('x', 'f4', 1, '', 21), 
-           ('y', 'f4', 1, '', 21), 
-           ('z', 'f4', 1, '', 21), 
-           ('sigma', 'f4', 1, '', 21), 
-           ('solType', 'u1', 1, '', 21), 
-           ('cs', 'u1', 1, '', 21), 
-           ('x', 'f8', 1, '', 22), 
-           ('y', 'f8', 1, '', 22), 
-           ('z', 'f8', 1, '', 22), 
-           ('pSigma', 'f4', 1, '', 22), 
-           ('vx', 'f4', 1, '', 22), 
-           ('vy', 'f4', 1, '', 22), 
-           ('vz', 'f4', 1, '', 22), 
-           ('vSigma', 'f4', 1, '', 22), 
-           ('solType', 'u1', 1, '', 22), 
-           ('cs', 'u1', 1, '', 22), 
-           ('lat', 'f8', 1, '', 23), 
-           ('lon', 'f8', 1, '', 23), 
-           ('alt', 'f8', 1, '', 23), 
-           ('pSigma', 'f4', 1, '', 23), 
-           ('solType', 'u1', 1, '', 23), 
-           ('cs', 'u1', 1, '', 23), 
-           ('lat', 'f4', 1, '', 24), 
-           ('lon', 'f4', 1, '', 24), 
-           ('alt', 'f4', 1, '', 24), 
-           ('pSigma', 'f4', 1, '', 24), 
-           ('solType', 'u1', 1, '', 24), 
-           ('cs', 'u1', 1, '', 24), 
-           ('hpos', 'f4', 1, '', 25), 
-           ('vpos', 'f4', 1, '', 25), 
-           ('hvel', 'f4', 1, '', 25), 
-           ('vvel', 'f4', 1, '', 25), 
-           ('solType', 'u1', 1, '', 25), 
-           ('cs', 'u1', 1, '', 25), 
-           ('hdop', 'f4', 1, '', 26), 
-           ('vdop', 'f4', 1, '', 26), 
-           ('tdop', 'f4', 1, '', 26), 
-           ('solType', 'u1', 1, '', 26), 
-           ('cs', 'u1', 1, '', 26), 
-           ('xx', 'f4', 1, '', 27), 
-           ('yy', 'f4', 1, '', 27), 
-           ('zz', 'f4', 1, '', 27), 
-           ('tt', 'f4', 1, '', 27), 
-           ('xy', 'f4', 1, '', 27), 
-           ('xz', 'f4', 1, '', 27), 
-           ('xt', 'f4', 1, '', 27), 
-           ('yz', 'f4', 1, '', 27), 
-           ('yt', 'f4', 1, '', 27), 
-           ('zt', 'f4', 1, '', 27), 
-           ('solType', 'u1', 1, '', 27), 
-           ('cs', 'u1', 1, '', 27), 
-           ('xx', 'f4', 1, '', 28), 
-           ('yy', 'f4', 1, '', 28), 
-           ('zz', 'f4', 1, '', 28), 
-           ('tt', 'f4', 1, '', 28), 
-           ('xy', 'f4', 1, '', 28), 
-           ('xz', 'f4', 1, '', 28), 
-           ('xt', 'f4', 1, '', 28), 
-           ('yz', 'f4', 1, '', 28), 
-           ('yt', 'f4', 1, '', 28), 
-           ('zt', 'f4', 1, '', 28), 
-           ('solType', 'u1', 1, '', 28), 
-           ('cs', 'u1', 1, '', 28), 
-           ('x', 'f8', 1, '', 29), 
-           ('y', 'f8', 1, '', 29), 
-           ('z', 'f8', 1, '', 29), 
-           ('sigma', 'f4', 1, '', 29), 
-           ('solType', 'u1', 1, '', 29), 
-           ('time', 'i4', 1, '', 29), 
-           ('cs', 'u1', 1, '', 29), 
-           ('solType', 'u1', 1, '', 30), 
-           ('gpsLocked', 'u1', 1, '', 30), 
-           ('gloLocked', 'u1', 1, '', 30), 
-           ('gpsAvail', 'u1', 1, '', 30), 
-           ('gloAvail', 'u1', 1, '', 30), 
-           ('gpsUsed', 'u1', 1, '', 30), 
-           ('gloUsed', 'u1', 1, '', 30), 
-           ('fixProg', 'u1', 1, '', 30), 
-           ('cs', 'u1', 1, '', 30), 
-           ('pt', 'u4', 1, '', 31), 
-           ('cs', 'u1', 1, '', 31), 
-           ('usi', 'u1', 1, '', 32), 
-           ('cs', 'u1', 1, '', 32), 
-           ('name', 'a1', 1, '', 33), 
-           ('cs', 'u1', 1, '', 33), 
-           ('osn', 'u1', 1, '', 34), 
-           ('cs', 'u1', 1, '', 34), 
-           ('elev', 'i1', 1, '', 35), 
-           ('cs', 'u1', 1, '', 35), 
-           ('azim', 'u1', 1, '', 36), 
-           ('cs', 'u1', 1, '', 36), 
-           ('pr', 'f8', 1, '', 37), 
-           ('cs', 'u1', 1, '', 37), 
-           ('spr', 'i4', 1, '', 38), 
-           ('cs', 'u1', 1, '', 38), 
-           ('rpr', 'f4', 1, '', 39), 
-           ('cs', 'u1', 1, '', 39), 
-           ('srpr', 'i2', 1, '', 40), 
-           ('cs', 'u1', 1, '', 40), 
-           ('smooth', 'Smooth', 1, '', 41), 
-           ('cs', 'u1', 1, '', 41), 
-           ('smooth', 'i2', 1, '', 42), 
-           ('cs', 'u1', 1, '', 42), 
-           ('cp', 'f8', 1, '', 43), 
-           ('cs', 'u1', 1, '', 43), 
-           ('scp', 'u4', 1, '', 44), 
-           ('cs', 'u1', 1, '', 44), 
-           ('rcp', 'f4', 1, '', 45), 
-           ('cs', 'u1', 1, '', 45), 
-           ('rcp', 'i4', 1, '', 46), 
-           ('cs', 'u1', 1, '', 46), 
-           ('dp', 'i4', 1, '', 47), 
-           ('cs', 'u1', 1, '', 47), 
-           ('srdp', 'i2', 1, '', 48), 
-           ('cs', 'u1', 1, '', 48), 
-           ('cnr', 'u1', 1, '', 49), 
-           ('cs', 'u1', 1, '', 49), 
-           ('cnrX4', 'u1', 1, '', 50), 
-           ('cs', 'u1', 1, '', 50), 
-           ('flags', 'u2', 1, '', 51), 
-           ('cs', 'u1', 1, '', 51), 
-           ('tt', 'u2', 1, '', 52), 
-           ('cs', 'u1', 1, '', 52), 
-           ('ns', 'u1', 1, '', 53), 
-           ('solType', 'u1', 1, '', 53), 
-           ('cs', 'u1', 1, '', 53), 
-           ('delay', 'f4', 1, '', 54), 
-           ('cs', 'u1', 1, '', 54), 
-           ('sv', 'u1', 1, '', 55), 
-           ('wna', 'i2', 1, '', 55), 
-           ('toa', 'i4', 1, '', 55), 
-           ('healthA', 'u1', 1, '', 55), 
-           ('healthS', 'u1', 1, '', 55), 
-           ('config', 'u1', 1, '', 55), 
-           ('af1', 'f4', 1, '', 55), 
-           ('af0', 'f4', 1, '', 55), 
-           ('rootA', 'f4', 1, '', 55), 
-           ('ecc', 'f4', 1, '', 55), 
-           ('m0', 'f4', 1, '', 55), 
-           ('omega0', 'f4', 1, '', 55), 
-           ('argPer', 'f4', 1, '', 55), 
-           ('deli', 'f4', 1, '', 55), 
-           ('omegaDot', 'f4', 1, '', 55), 
-           ('cs', 'u1', 1, '', 55), 
-           ('gps', 'GPSAlm', 1, '', 56), 
-           ('iod', 'i2', 1, '', 56), 
-           ('cs', 'u1', 1, '', 56), 
-           ('sv', 'u1', 1, '', 57), 
-           ('frqNum', 'i1', 1, '', 57), 
-           ('dna', 'i2', 1, '', 57), 
-           ('tlam', 'f4', 1, '', 57), 
-           ('flags', 'u1', 1, '', 57), 
-           ('tauN', 'f4', 1, '', 57), 
-           ('tauSys', 'f8', 1, '', 57), 
-           ('ecc', 'f4', 1, '', 57), 
-           ('lambda', 'f4', 1, '', 57), 
-           ('argPer', 'f4', 1, '', 57), 
-           ('delT', 'f4', 1, '', 57), 
-           ('delTdt', 'f4', 1, '', 57), 
-           ('deli', 'f4', 1, '', 57), 
-           ('cs', 'u1', 1, '', 57), 
-           ('waasPrn', 'u1', 1, '', 58), 
-           ('gpsPrn', 'u1', 1, '', 58), 
-           ('id', 'u1', 1, '', 58), 
-           ('healthS', 'u1', 1, '', 58), 
-           ('tod', 'u4', 1, '', 58), 
-           ('xg', 'f8', 1, '', 58), 
-           ('yg', 'f8', 1, '', 58), 
-           ('zg', 'f8', 1, '', 58), 
-           ('vxg', 'f4', 1, '', 58), 
-           ('vyg', 'f4', 1, '', 58), 
-           ('vzg', 'f4', 1, '', 58), 
-           ('tow', 'u4', 1, '', 58), 
-           ('wn', 'u2', 1, '', 58), 
-           ('cs', 'u1', 1, '', 58), 
-           ('sv', 'u1', 1, '', 59), 
-           ('tow', 'u4', 1, '', 59), 
-           ('flags', 'u1', 1, '', 59), 
-           ('iodc', 'i2', 1, '', 59), 
-           ('toc', 'i4', 1, '', 59), 
-           ('ura', 'i1', 1, '', 59), 
-           ('healthS', 'u1', 1, '', 59), 
-           ('wn', 'i2', 1, '', 59), 
-           ('tgd', 'f4', 1, '', 59), 
-           ('af2', 'f4', 1, '', 59), 
-           ('af1', 'f4', 1, '', 59), 
-           ('af0', 'f4', 1, '', 59), 
-           ('toe', 'i4', 1, '', 59), 
-           ('iode', 'i2', 1, '', 59), 
-           ('rootA', 'f8', 1, '', 59), 
-           ('ecc', 'f8', 1, '', 59), 
-           ('m0', 'f8', 1, '', 59), 
-           ('omega0', 'f8', 1, '', 59), 
-           ('inc0', 'f8', 1, '', 59), 
-           ('argPer', 'f8', 1, '', 59), 
-           ('deln', 'f4', 1, '', 59), 
-           ('omegaDot', 'f4', 1, '', 59), 
-           ('incDot', 'f4', 1, '', 59), 
-           ('crc', 'f4', 1, '', 59), 
-           ('crs', 'f4', 1, '', 59), 
-           ('cuc', 'f4', 1, '', 59), 
-           ('cus', 'f4', 1, '', 59), 
-           ('cic', 'f4', 1, '', 59), 
-           ('cis', 'f4', 1, '', 59), 
-           ('cs', 'u1', 1, '', 59), 
-           ('sv', 'u1', 1, '', 60), 
-           ('frqNum', 'i1', 1, '', 60), 
-           ('dne', 'i2', 1, '', 60), 
-           ('tk', 'i4', 1, '', 60), 
-           ('tb', 'i4', 1, '', 60), 
-           ('health', 'u1', 1, '', 60), 
-           ('age', 'u1', 1, '', 60), 
-           ('flags', 'u1', 1, '', 60), 
-           ('r', 'f8', 1, '', 60), 
-           ('v', 'f4', 1, '', 60), 
-           ('w', 'f4', 1, '', 60), 
-           ('tauSys', 'f8', 1, '', 60), 
-           ('tau', 'f4', 1, '', 60), 
-           ('gamma', 'f4', 1, '', 60), 
-           ('fDelTauN', 'f4', 1, '', 60), 
-           ('nFt', 'u1', 1, '', 60), 
-           ('nN4', 'u1', 1, '', 60), 
-           ('flags2', 'u2', 1, '', 60), 
-           ('cs', 'u1', 1, '', 60), 
-           ('waasPrn', 'u1', 1, '', 61), 
-           ('gpsPrn', 'u1', 1, '', 61), 
-           ('iod', 'u1', 1, '', 61), 
-           ('acc', 'u1', 1, '', 61), 
-           ('tod', 'u4', 1, '', 61), 
-           ('xg', 'f8', 1, '', 61), 
-           ('yg', 'f8', 1, '', 61), 
-           ('zg', 'f8', 1, '', 61), 
-           ('vxg', 'f4', 1, '', 61), 
-           ('vyg', 'f4', 1, '', 61), 
-           ('vzg', 'f4', 1, '', 61), 
-           ('vvxg', 'f4', 1, '', 61), 
-           ('vvyg', 'f4', 1, '', 61), 
-           ('vvzg', 'f4', 1, '', 61), 
-           ('agf0', 'f4', 1, '', 61), 
-           ('agf1', 'f4', 1, '', 61), 
-           ('tow', 'u4', 1, '', 61), 
-           ('wn', 'u2', 1, '', 61), 
-           ('cs', 'u1', 1, '', 61), 
-           ('gps', 'GPSEphemeris', 1, '', 62), 
-           ('bgdE1E5a', 'f4', 1, '', 62), 
-           ('bgdE1E5b', 'f4', 1, '', 62), 
-           ('ai0', 'f4', 1, '', 62), 
-           ('ai1', 'f4', 1, '', 62), 
-           ('ai2', 'f4', 1, '', 62), 
-           ('sfi', 'u1', 1, '', 62), 
-           ('navType', 'u1', 1, '', 62), 
-           ('cs', 'u1', 1, '', 62), 
-           ('recSize', 'u1', 1, '', 63), 
-           ('dat', 'SvData0', 1, '', 63), 
-           ('cs', 'u1', 1, '', 63), 
-           ('recSize', 'u1', 1, '', 64), 
-           ('dat', 'SvData1', 1, '', 64), 
-           ('cs', 'u1', 1, '', 64), 
-           ('prn', 'u1', 1, '', 65), 
-           ('time', 'u4', 1, '', 65), 
-           ('reserv', 'u2', 1, '', 65), 
-           ('data', 'u1', 1, '', 65), 
-           ('cs', 'u1', 1, '', 65), 
-           ('prn', 'u1', 1, '', 66), 
-           ('time', 'u4', 1, '', 66), 
-           ('type', 'u1', 1, '', 66), 
-           ('len', 'u1', 1, '', 66), 
-           ('data', 'u1', 1, '', 66), 
-           ('cs', 'u1', 1, '', 66), 
-           ('fcn', 'i1', 1, '', 67), 
-           ('phase', 'f4', 1, '', 67), 
-           ('range', 'f4', 1, '', 67), 
-           ('cs', 'u1', 1, '', 67), 
-           ('time', 'u4', 1, '', 68), 
-           ('q00', 'f4', 1, '', 68), 
-           ('q01', 'f4', 1, '', 68), 
-           ('q02', 'f4', 1, '', 68), 
-           ('q12', 'f4', 1, '', 68), 
-           ('rms', 'f4', 1, '', 68), 
-           ('solType', 'u1', 1, '', 68), 
-           ('flag', 'u1', 1, '', 68), 
-           ('cs', 'u1', 1, '', 68), 
-           ('time', 'u4', 1, '', 69), 
-           ('q00', 'f4', 1, '', 69), 
-           ('q01', 'f4', 1, '', 69), 
-           ('q02', 'f4', 1, '', 69), 
-           ('q12', 'f4', 1, '', 69), 
-           ('rms', 'f4', 1, '', 69), 
-           ('solType', 'u1', 1, '', 69), 
-           ('flag', 'u1', 1, '', 69), 
-           ('bl0', 'f4', 1, '', 69), 
-           ('bl1', 'f4', 1, '', 69), 
-           ('bl2', 'f4', 1, '', 69), 
-           ('cs', 'u1', 1, '', 69), 
-           ('time', 'u4', 1, '', 70), 
-           ('pitch', 'f4', 1, '', 70), 
-           ('roll', 'f4', 1, '', 70), 
-           ('heading', 'f4', 1, '', 70), 
-           ('pitchRms', 'f4', 1, '', 70), 
-           ('rollRms', 'f4', 1, '', 70), 
-           ('headingRms', 'f4', 1, '', 70), 
-           ('flags', 'u1', 1, '', 70), 
-           ('cs', 'u1', 1, '', 70), 
-           ('time', 'u4', 1, '', 71), 
-           ('x', 'f4', 1, '', 71), 
-           ('y', 'f4', 1, '', 71), 
-           ('z', 'f4', 1, '', 71), 
-           ('rms', 'f4', 1, '', 71), 
-           ('flags', 'u1', 1, '', 71), 
-           ('cs', 'u1', 1, '', 71), 
-           ('accelerations', 'f4', 1, '', 72), 
-           ('angularVelocities', 'f4', 1, '', 72), 
-           ('cs', 'u1', 1, '', 72), 
-           ('ms', 'i4', 1, '', 73), 
-           ('ns', 'i4', 1, '', 73), 
-           ('timeScale', 'u1', 1, '', 73), 
-           ('cs', 'u1', 1, '', 73), 
-           ('offs', 'f4', 1, '', 74), 
-           ('cs', 'u1', 1, '', 74), 
-           ('offs', 'f8', 1, '', 75), 
-           ('timeScale', 'u1', 1, '', 75), 
-           ('cs', 'u1', 1, '', 75), 
-           ('sample', 'u2', 1, '', 76), 
-           ('scale', 'u2', 1, '', 76), 
-           ('reftime', 'u4', 1, '', 76), 
-           ('crc16', 'u2', 1, '', 76), 
-           ('sample', 'u2', 1, '', 77), 
-           ('scale', 'u2', 1, '', 77), 
-           ('reftime', 'u4', 1, '', 77), 
-           ('clock', 'i2', 1, '', 77), 
-           ('flags', 'u2', 1, '', 77), 
-           ('svd', 'SvData2', 1, '', 77), 
-           ('crc16', 'u2', 1, '', 77), 
-           ('sample', 'u2', 1, '', 78), 
-           ('delta', 'u2', 1, '', 78), 
-           ('word1', 'u4', 1, '', 78), 
-           ('word2', 'u4', 1, '', 78), 
-           ('word3', 'u4', 1, '', 78), 
-           ('word4', 'u4', 1, '', 78), 
-           ('word5', 'u4', 1, '', 78), 
-           ('word6', 'u4', 1, '', 78), 
-           ('word7', 'u4', 1, '', 78), 
-           ('word8', 'u4', 1, '', 78), 
-           ('word9', 'u4', 1, '', 78), 
-           ('crc16', 'u2', 1, '', 78), 
-           ('sample', 'u2', 1, '', 79), 
-           ('reserved', 'u2', 1, '', 79), 
-           ('recSize', 'u1', 1, '', 79), 
-           ('Offs', 'ClkOffs', 1, '', 79), 
-           ('crc16', 'u2', 1, '', 79), 
-           ('reply', 'a1', 1, '', 80), 
-           ('error', 'a1', 1, '', 81), 
-           ('tot', 'u4', 1, '', 82), 
-           ('wn', 'u2', 1, '', 82), 
-           ('alpha0', 'f4', 1, '', 82), 
-           ('alpha1', 'f4', 1, '', 82), 
-           ('alpha2', 'f4', 1, '', 82), 
-           ('alpha3', 'f4', 1, '', 82), 
-           ('beta0', 'f4', 1, '', 82), 
-           ('beta1', 'f4', 1, '', 82), 
-           ('beta2', 'f4', 1, '', 82), 
-           ('beta3', 'f4', 1, '', 82), 
-           ('cs', 'u1', 1, '', 82), 
-           ('time', 'u4', 1, '', 83), 
-           ('type', 'u1', 1, '', 83), 
-           ('data', 'u1', 1, '', 83), 
-           ('cs', 'u1', 1, '', 83), 
-           ('lt', 'u1', 1, '', 84), 
-           ('cs', 'u1', 1, '', 84), 
-           ('id', 'u1', 1, '', 85), 
-           ('data', 'u1', 1, '', 85), 
-           ('cs', 'a1', 1, '', 85), 
-           ('params', 'a1', 1, '', 86), 
-           ('delim', 'a1', 1, ',@', 86), 
-           ('cs', 'a1', 1, '', 86), 
-           ('svsCount', 'u1', 1, '', 87), 
-           ('targetStream', 'u1', 1, '', 87), 
-           ('issue', 'u2', 1, '', 87), 
-           ('bitsCount', 'u2', 1, '', 87), 
-           ('lastBitTime', 'u4', 1, '', 87), 
-           ('uids', 'u1', 1, '', 87), 
-           ('pad', 'u1', 1, '', 87), 
-           ('hist', 'u4', 2, '', 87), 
-           ('x', 'f8', 1, '', 88), 
-           ('y', 'f8', 1, '', 88), 
-           ('z', 'f8', 1, '', 88), 
-           ('id', 'u2', 1, '', 88), 
-           ('solType', 'u1', 1, '', 88), 
-           ('cs', 'u1', 1, '', 88), 
-           ('data', 'u1', 1, '', 89), 
-           ('cs', 'u1', 1, '', 89), 
-           ('data', 'u1', 1, '', 90), 
-           ('crc16', 'u2', 1, '', 90), 
-           ('tt', 'u4', 1, '', 91), 
-           ('cs', 'u1', 1, '', 91), 
-           ('val', 'f4', 1, '', 92), 
-           ('cs', 'u1', 1, '', 92), 
-           ('cs', 'u1', 1, '', 93);
+INSERT INTO `messageVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idMessageMeta`) 
+    VALUES (1, 'id', 'a1', '', 1), 
+           (2, 'description', 'a1', '', 1), 
+           (3, 'id', 'a1', 'JP', 2), 
+           (4, 'majorVer', 'a1', '', 2), 
+           (5, 'minorVer', 'a1', '', 2), 
+           (6, 'order', 'a1', '', 2), 
+           (7, 'cs', 'a1', '', 2), 
+           (8, 'tod', 'u4', '', 3), 
+           (9, 'cs', 'u1', '', 3), 
+           (10, 'tod', 'u4', '', 4), 
+           (11, 'cs', 'u1', '', 4), 
+           (12, 'year', 'u2', '', 5), 
+           (13, 'month', 'u1', '', 5), 
+           (14, 'day', 'u1', '', 5), 
+           (15, 'base', 'u1', '', 5), 
+           (16, 'cs', 'u1', '', 5), 
+           (17, 'val', 'f8', '', 6), 
+           (18, 'sval', 'f8', '', 6), 
+           (19, 'cs', 'u1', '', 6), 
+           (20, 'val', 'f4', '', 7), 
+           (21, 'sval', 'f4', '', 7), 
+           (22, 'cs', 'u1', '', 7), 
+           (23, 'acc', 'f4', '', 8), 
+           (24, 'cs', 'u1', '', 8), 
+           (25, 'tow', 'u4', '', 9), 
+           (26, 'wn', 'u2', '', 9), 
+           (27, 'cs', 'u1', '', 9), 
+           (28, 'val', 'f8', '', 10), 
+           (29, 'sval', 'f8', '', 10), 
+           (30, 'cs', 'u1', '', 10), 
+           (31, 'tod', 'u4', '', 11), 
+           (32, 'dn', 'u2', '', 11), 
+           (33, 'cs', 'u1', '', 11), 
+           (34, 'val', 'f8', '', 12), 
+           (35, 'sval', 'f8', '', 12), 
+           (36, 'cs', 'u1', '', 12), 
+           (37, 'val', 'f8', '', 13), 
+           (38, 'sval', 'f8', '', 13), 
+           (39, 'cs', 'u1', '', 13), 
+           (40, 'val', 'f8', '', 14), 
+           (41, 'sval', 'f8', '', 14), 
+           (42, 'cs', 'u1', '', 14), 
+           (43, 'utc', 'UtcOffs', '', 15), 
+           (44, 'cs', 'u1', '', 15), 
+           (45, 'utc', 'UtcOffs', '', 16), 
+           (46, 'utcsi', 'i1', '', 16), 
+           (47, 'tow', 'u4', '', 16), 
+           (48, 'wn', 'u2', '', 16), 
+           (49, 'flags', 'u1', '', 16), 
+           (50, 'cs', 'u1', '', 16), 
+           (51, 'utc', 'UtcOffs', '', 17), 
+           (52, 'a0g', 'f4', '', 17), 
+           (53, 'a1g', 'f4', '', 17), 
+           (54, 't0g', 'u4', '', 17), 
+           (55, 'wn0g', 'u2', '', 17), 
+           (56, 'flags', 'u2', '', 17), 
+           (57, 'cs', 'u1', '', 17), 
+           (58, 'tauSys', 'f8', '', 18), 
+           (59, 'tauGps', 'f4', '', 18), 
+           (60, 'B1', 'f4', '', 18), 
+           (61, 'B2', 'f4', '', 18), 
+           (62, 'KP', 'u1', '', 18), 
+           (63, 'N4', 'u1', '', 18), 
+           (64, 'Dn', 'i2', '', 18), 
+           (65, 'cs', 'u1', '', 18), 
+           (66, 'time', 'u4', '', 19), 
+           (67, 'solType', 'u1', '', 19), 
+           (68, 'cs', 'u1', '', 19), 
+           (69, 'x', 'f8', '', 20), 
+           (70, 'y', 'f8', '', 20), 
+           (71, 'z', 'f8', '', 20), 
+           (72, 'sigma', 'f4', '', 20), 
+           (73, 'solType', 'u1', '', 20), 
+           (74, 'cs', 'u1', '', 20), 
+           (75, 'x', 'f4', '', 21), 
+           (76, 'y', 'f4', '', 21), 
+           (77, 'z', 'f4', '', 21), 
+           (78, 'sigma', 'f4', '', 21), 
+           (79, 'solType', 'u1', '', 21), 
+           (80, 'cs', 'u1', '', 21), 
+           (81, 'x', 'f8', '', 22), 
+           (82, 'y', 'f8', '', 22), 
+           (83, 'z', 'f8', '', 22), 
+           (84, 'pSigma', 'f4', '', 22), 
+           (85, 'vx', 'f4', '', 22), 
+           (86, 'vy', 'f4', '', 22), 
+           (87, 'vz', 'f4', '', 22), 
+           (88, 'vSigma', 'f4', '', 22), 
+           (89, 'solType', 'u1', '', 22), 
+           (90, 'cs', 'u1', '', 22), 
+           (91, 'lat', 'f8', '', 23), 
+           (92, 'lon', 'f8', '', 23), 
+           (93, 'alt', 'f8', '', 23), 
+           (94, 'pSigma', 'f4', '', 23), 
+           (95, 'solType', 'u1', '', 23), 
+           (96, 'cs', 'u1', '', 23), 
+           (97, 'lat', 'f4', '', 24), 
+           (98, 'lon', 'f4', '', 24), 
+           (99, 'alt', 'f4', '', 24), 
+           (100, 'pSigma', 'f4', '', 24), 
+           (101, 'solType', 'u1', '', 24), 
+           (102, 'cs', 'u1', '', 24), 
+           (103, 'hpos', 'f4', '', 25), 
+           (104, 'vpos', 'f4', '', 25), 
+           (105, 'hvel', 'f4', '', 25), 
+           (106, 'vvel', 'f4', '', 25), 
+           (107, 'solType', 'u1', '', 25), 
+           (108, 'cs', 'u1', '', 25), 
+           (109, 'hdop', 'f4', '', 26), 
+           (110, 'vdop', 'f4', '', 26), 
+           (111, 'tdop', 'f4', '', 26), 
+           (112, 'solType', 'u1', '', 26), 
+           (113, 'cs', 'u1', '', 26), 
+           (114, 'xx', 'f4', '', 27), 
+           (115, 'yy', 'f4', '', 27), 
+           (116, 'zz', 'f4', '', 27), 
+           (117, 'tt', 'f4', '', 27), 
+           (118, 'xy', 'f4', '', 27), 
+           (119, 'xz', 'f4', '', 27), 
+           (120, 'xt', 'f4', '', 27), 
+           (121, 'yz', 'f4', '', 27), 
+           (122, 'yt', 'f4', '', 27), 
+           (123, 'zt', 'f4', '', 27), 
+           (124, 'solType', 'u1', '', 27), 
+           (125, 'cs', 'u1', '', 27), 
+           (126, 'xx', 'f4', '', 28), 
+           (127, 'yy', 'f4', '', 28), 
+           (128, 'zz', 'f4', '', 28), 
+           (129, 'tt', 'f4', '', 28), 
+           (130, 'xy', 'f4', '', 28), 
+           (131, 'xz', 'f4', '', 28), 
+           (132, 'xt', 'f4', '', 28), 
+           (133, 'yz', 'f4', '', 28), 
+           (134, 'yt', 'f4', '', 28), 
+           (135, 'zt', 'f4', '', 28), 
+           (136, 'solType', 'u1', '', 28), 
+           (137, 'cs', 'u1', '', 28), 
+           (138, 'x', 'f8', '', 29), 
+           (139, 'y', 'f8', '', 29), 
+           (140, 'z', 'f8', '', 29), 
+           (141, 'sigma', 'f4', '', 29), 
+           (142, 'solType', 'u1', '', 29), 
+           (143, 'time', 'i4', '', 29), 
+           (144, 'cs', 'u1', '', 29), 
+           (145, 'solType', 'u1', '', 30), 
+           (146, 'gpsLocked', 'u1', '', 30), 
+           (147, 'gloLocked', 'u1', '', 30), 
+           (148, 'gpsAvail', 'u1', '', 30), 
+           (149, 'gloAvail', 'u1', '', 30), 
+           (150, 'gpsUsed', 'u1', '', 30), 
+           (151, 'gloUsed', 'u1', '', 30), 
+           (152, 'fixProg', 'u1', '', 30), 
+           (153, 'cs', 'u1', '', 30), 
+           (154, 'pt', 'u4', '', 31), 
+           (155, 'cs', 'u1', '', 31), 
+           (156, 'usi', 'u1', '', 32), 
+           (157, 'cs', 'u1', '', 32), 
+           (158, 'name', 'a1', '', 33), 
+           (159, 'cs', 'u1', '', 33), 
+           (160, 'osn', 'u1', '', 34), 
+           (161, 'cs', 'u1', '', 34), 
+           (162, 'elev', 'i1', '', 35), 
+           (163, 'cs', 'u1', '', 35), 
+           (164, 'azim', 'u1', '', 36), 
+           (165, 'cs', 'u1', '', 36), 
+           (166, 'pr', 'f8', '', 37), 
+           (167, 'cs', 'u1', '', 37), 
+           (168, 'spr', 'i4', '', 38), 
+           (169, 'cs', 'u1', '', 38), 
+           (170, 'rpr', 'f4', '', 39), 
+           (171, 'cs', 'u1', '', 39), 
+           (172, 'srpr', 'i2', '', 40), 
+           (173, 'cs', 'u1', '', 40), 
+           (174, 'smooth', 'Smooth', '', 41), 
+           (175, 'cs', 'u1', '', 41), 
+           (176, 'smooth', 'i2', '', 42), 
+           (177, 'cs', 'u1', '', 42), 
+           (178, 'cp', 'f8', '', 43), 
+           (179, 'cs', 'u1', '', 43), 
+           (180, 'scp', 'u4', '', 44), 
+           (181, 'cs', 'u1', '', 44), 
+           (182, 'rcp', 'f4', '', 45), 
+           (183, 'cs', 'u1', '', 45), 
+           (184, 'rcp', 'i4', '', 46), 
+           (185, 'cs', 'u1', '', 46), 
+           (186, 'dp', 'i4', '', 47), 
+           (187, 'cs', 'u1', '', 47), 
+           (188, 'srdp', 'i2', '', 48), 
+           (189, 'cs', 'u1', '', 48), 
+           (190, 'cnr', 'u1', '', 49), 
+           (191, 'cs', 'u1', '', 49), 
+           (192, 'cnrX4', 'u1', '', 50), 
+           (193, 'cs', 'u1', '', 50), 
+           (194, 'flags', 'u2', '', 51), 
+           (195, 'cs', 'u1', '', 51), 
+           (196, 'tt', 'u2', '', 52), 
+           (197, 'cs', 'u1', '', 52), 
+           (198, 'ns', 'u1', '', 53), 
+           (199, 'solType', 'u1', '', 53), 
+           (200, 'cs', 'u1', '', 53), 
+           (201, 'delay', 'f4', '', 54), 
+           (202, 'cs', 'u1', '', 54), 
+           (203, 'sv', 'u1', '', 55), 
+           (204, 'wna', 'i2', '', 55), 
+           (205, 'toa', 'i4', '', 55), 
+           (206, 'healthA', 'u1', '', 55), 
+           (207, 'healthS', 'u1', '', 55), 
+           (208, 'config', 'u1', '', 55), 
+           (209, 'af1', 'f4', '', 55), 
+           (210, 'af0', 'f4', '', 55), 
+           (211, 'rootA', 'f4', '', 55), 
+           (212, 'ecc', 'f4', '', 55), 
+           (213, 'm0', 'f4', '', 55), 
+           (214, 'omega0', 'f4', '', 55), 
+           (215, 'argPer', 'f4', '', 55), 
+           (216, 'deli', 'f4', '', 55), 
+           (217, 'omegaDot', 'f4', '', 55), 
+           (218, 'cs', 'u1', '', 55), 
+           (219, 'gps', 'GPSAlm', '', 56), 
+           (220, 'iod', 'i2', '', 56), 
+           (221, 'cs', 'u1', '', 56), 
+           (222, 'sv', 'u1', '', 57), 
+           (223, 'frqNum', 'i1', '', 57), 
+           (224, 'dna', 'i2', '', 57), 
+           (225, 'tlam', 'f4', '', 57), 
+           (226, 'flags', 'u1', '', 57), 
+           (227, 'tauN', 'f4', '', 57), 
+           (228, 'tauSys', 'f8', '', 57), 
+           (229, 'ecc', 'f4', '', 57), 
+           (230, 'lambda', 'f4', '', 57), 
+           (231, 'argPer', 'f4', '', 57), 
+           (232, 'delT', 'f4', '', 57), 
+           (233, 'delTdt', 'f4', '', 57), 
+           (234, 'deli', 'f4', '', 57), 
+           (235, 'cs', 'u1', '', 57), 
+           (236, 'waasPrn', 'u1', '', 58), 
+           (237, 'gpsPrn', 'u1', '', 58), 
+           (238, 'id', 'u1', '', 58), 
+           (239, 'healthS', 'u1', '', 58), 
+           (240, 'tod', 'u4', '', 58), 
+           (241, 'xg', 'f8', '', 58), 
+           (242, 'yg', 'f8', '', 58), 
+           (243, 'zg', 'f8', '', 58), 
+           (244, 'vxg', 'f4', '', 58), 
+           (245, 'vyg', 'f4', '', 58), 
+           (246, 'vzg', 'f4', '', 58), 
+           (247, 'tow', 'u4', '', 58), 
+           (248, 'wn', 'u2', '', 58), 
+           (249, 'cs', 'u1', '', 58), 
+           (250, 'sv', 'u1', '', 59), 
+           (251, 'tow', 'u4', '', 59), 
+           (252, 'flags', 'u1', '', 59), 
+           (253, 'iodc', 'i2', '', 59), 
+           (254, 'toc', 'i4', '', 59), 
+           (255, 'ura', 'i1', '', 59), 
+           (256, 'healthS', 'u1', '', 59), 
+           (257, 'wn', 'i2', '', 59), 
+           (258, 'tgd', 'f4', '', 59), 
+           (259, 'af2', 'f4', '', 59), 
+           (260, 'af1', 'f4', '', 59), 
+           (261, 'af0', 'f4', '', 59), 
+           (262, 'toe', 'i4', '', 59), 
+           (263, 'iode', 'i2', '', 59), 
+           (264, 'rootA', 'f8', '', 59), 
+           (265, 'ecc', 'f8', '', 59), 
+           (266, 'm0', 'f8', '', 59), 
+           (267, 'omega0', 'f8', '', 59), 
+           (268, 'inc0', 'f8', '', 59), 
+           (269, 'argPer', 'f8', '', 59), 
+           (270, 'deln', 'f4', '', 59), 
+           (271, 'omegaDot', 'f4', '', 59), 
+           (272, 'incDot', 'f4', '', 59), 
+           (273, 'crc', 'f4', '', 59), 
+           (274, 'crs', 'f4', '', 59), 
+           (275, 'cuc', 'f4', '', 59), 
+           (276, 'cus', 'f4', '', 59), 
+           (277, 'cic', 'f4', '', 59), 
+           (278, 'cis', 'f4', '', 59), 
+           (279, 'cs', 'u1', '', 59), 
+           (280, 'sv', 'u1', '', 60), 
+           (281, 'frqNum', 'i1', '', 60), 
+           (282, 'dne', 'i2', '', 60), 
+           (283, 'tk', 'i4', '', 60), 
+           (284, 'tb', 'i4', '', 60), 
+           (285, 'health', 'u1', '', 60), 
+           (286, 'age', 'u1', '', 60), 
+           (287, 'flags', 'u1', '', 60), 
+           (288, 'r', 'f8', '', 60), 
+           (289, 'v', 'f4', '', 60), 
+           (290, 'w', 'f4', '', 60), 
+           (291, 'tauSys', 'f8', '', 60), 
+           (292, 'tau', 'f4', '', 60), 
+           (293, 'gamma', 'f4', '', 60), 
+           (294, 'fDelTauN', 'f4', '', 60), 
+           (295, 'nFt', 'u1', '', 60), 
+           (296, 'nN4', 'u1', '', 60), 
+           (297, 'flags2', 'u2', '', 60), 
+           (298, 'cs', 'u1', '', 60), 
+           (299, 'waasPrn', 'u1', '', 61), 
+           (300, 'gpsPrn', 'u1', '', 61), 
+           (301, 'iod', 'u1', '', 61), 
+           (302, 'acc', 'u1', '', 61), 
+           (303, 'tod', 'u4', '', 61), 
+           (304, 'xg', 'f8', '', 61), 
+           (305, 'yg', 'f8', '', 61), 
+           (306, 'zg', 'f8', '', 61), 
+           (307, 'vxg', 'f4', '', 61), 
+           (308, 'vyg', 'f4', '', 61), 
+           (309, 'vzg', 'f4', '', 61), 
+           (310, 'vvxg', 'f4', '', 61), 
+           (311, 'vvyg', 'f4', '', 61), 
+           (312, 'vvzg', 'f4', '', 61), 
+           (313, 'agf0', 'f4', '', 61), 
+           (314, 'agf1', 'f4', '', 61), 
+           (315, 'tow', 'u4', '', 61), 
+           (316, 'wn', 'u2', '', 61), 
+           (317, 'cs', 'u1', '', 61), 
+           (318, 'gps', 'GPSEphemeris', '', 62), 
+           (319, 'bgdE1E5a', 'f4', '', 62), 
+           (320, 'bgdE1E5b', 'f4', '', 62), 
+           (321, 'ai0', 'f4', '', 62), 
+           (322, 'ai1', 'f4', '', 62), 
+           (323, 'ai2', 'f4', '', 62), 
+           (324, 'sfi', 'u1', '', 62), 
+           (325, 'navType', 'u1', '', 62), 
+           (326, 'cs', 'u1', '', 62), 
+           (327, 'recSize', 'u1', '', 63), 
+           (328, 'dat', 'SvData0', '', 63), 
+           (329, 'cs', 'u1', '', 63), 
+           (330, 'recSize', 'u1', '', 64), 
+           (331, 'dat', 'SvData1', '', 64), 
+           (332, 'cs', 'u1', '', 64), 
+           (333, 'prn', 'u1', '', 65), 
+           (334, 'time', 'u4', '', 65), 
+           (335, 'reserv', 'u2', '', 65), 
+           (336, 'data', 'u1', '', 65), 
+           (337, 'cs', 'u1', '', 65), 
+           (338, 'prn', 'u1', '', 66), 
+           (339, 'time', 'u4', '', 66), 
+           (340, 'type', 'u1', '', 66), 
+           (341, 'len', 'u1', '', 66), 
+           (342, 'data', 'u1', '', 66), 
+           (343, 'cs', 'u1', '', 66), 
+           (344, 'fcn', 'i1', '', 67), 
+           (345, 'phase', 'f4', '', 67), 
+           (346, 'range', 'f4', '', 67), 
+           (347, 'cs', 'u1', '', 67), 
+           (348, 'time', 'u4', '', 68), 
+           (349, 'q00', 'f4', '', 68), 
+           (350, 'q01', 'f4', '', 68), 
+           (351, 'q02', 'f4', '', 68), 
+           (352, 'q12', 'f4', '', 68), 
+           (353, 'rms', 'f4', '', 68), 
+           (354, 'solType', 'u1', '', 68), 
+           (355, 'flag', 'u1', '', 68), 
+           (356, 'cs', 'u1', '', 68), 
+           (357, 'time', 'u4', '', 69), 
+           (358, 'q00', 'f4', '', 69), 
+           (359, 'q01', 'f4', '', 69), 
+           (360, 'q02', 'f4', '', 69), 
+           (361, 'q12', 'f4', '', 69), 
+           (362, 'rms', 'f4', '', 69), 
+           (363, 'solType', 'u1', '', 69), 
+           (364, 'flag', 'u1', '', 69), 
+           (365, 'bl0', 'f4', '', 69), 
+           (366, 'bl1', 'f4', '', 69), 
+           (367, 'bl2', 'f4', '', 69), 
+           (368, 'cs', 'u1', '', 69), 
+           (369, 'time', 'u4', '', 70), 
+           (370, 'pitch', 'f4', '', 70), 
+           (371, 'roll', 'f4', '', 70), 
+           (372, 'heading', 'f4', '', 70), 
+           (373, 'pitchRms', 'f4', '', 70), 
+           (374, 'rollRms', 'f4', '', 70), 
+           (375, 'headingRms', 'f4', '', 70), 
+           (376, 'flags', 'u1', '', 70), 
+           (377, 'cs', 'u1', '', 70), 
+           (378, 'time', 'u4', '', 71), 
+           (379, 'x', 'f4', '', 71), 
+           (380, 'y', 'f4', '', 71), 
+           (381, 'z', 'f4', '', 71), 
+           (382, 'rms', 'f4', '', 71), 
+           (383, 'flags', 'u1', '', 71), 
+           (384, 'cs', 'u1', '', 71), 
+           (385, 'accelerations', 'f4', '', 72), 
+           (386, 'angularVelocities', 'f4', '', 72), 
+           (387, 'cs', 'u1', '', 72), 
+           (388, 'ms', 'i4', '', 73), 
+           (389, 'ns', 'i4', '', 73), 
+           (390, 'timeScale', 'u1', '', 73), 
+           (391, 'cs', 'u1', '', 73), 
+           (392, 'offs', 'f4', '', 74), 
+           (393, 'cs', 'u1', '', 74), 
+           (394, 'offs', 'f8', '', 75), 
+           (395, 'timeScale', 'u1', '', 75), 
+           (396, 'cs', 'u1', '', 75), 
+           (397, 'sample', 'u2', '', 76), 
+           (398, 'scale', 'u2', '', 76), 
+           (399, 'reftime', 'u4', '', 76), 
+           (400, 'crc16', 'u2', '', 76), 
+           (401, 'sample', 'u2', '', 77), 
+           (402, 'scale', 'u2', '', 77), 
+           (403, 'reftime', 'u4', '', 77), 
+           (404, 'clock', 'i2', '', 77), 
+           (405, 'flags', 'u2', '', 77), 
+           (406, 'svd', 'SvData2', '', 77), 
+           (407, 'crc16', 'u2', '', 77), 
+           (408, 'sample', 'u2', '', 78), 
+           (409, 'delta', 'u2', '', 78), 
+           (410, 'word1', 'u4', '', 78), 
+           (411, 'word2', 'u4', '', 78), 
+           (412, 'word3', 'u4', '', 78), 
+           (413, 'word4', 'u4', '', 78), 
+           (414, 'word5', 'u4', '', 78), 
+           (415, 'word6', 'u4', '', 78), 
+           (416, 'word7', 'u4', '', 78), 
+           (417, 'word8', 'u4', '', 78), 
+           (418, 'word9', 'u4', '', 78), 
+           (419, 'crc16', 'u2', '', 78), 
+           (420, 'sample', 'u2', '', 79), 
+           (421, 'reserved', 'u2', '', 79), 
+           (422, 'recSize', 'u1', '', 79), 
+           (423, 'Offs', 'ClkOffs', '', 79), 
+           (424, 'crc16', 'u2', '', 79), 
+           (425, 'reply', 'a1', '', 80), 
+           (426, 'error', 'a1', '', 81), 
+           (427, 'tot', 'u4', '', 82), 
+           (428, 'wn', 'u2', '', 82), 
+           (429, 'alpha0', 'f4', '', 82), 
+           (430, 'alpha1', 'f4', '', 82), 
+           (431, 'alpha2', 'f4', '', 82), 
+           (432, 'alpha3', 'f4', '', 82), 
+           (433, 'beta0', 'f4', '', 82), 
+           (434, 'beta1', 'f4', '', 82), 
+           (435, 'beta2', 'f4', '', 82), 
+           (436, 'beta3', 'f4', '', 82), 
+           (437, 'cs', 'u1', '', 82), 
+           (438, 'time', 'u4', '', 83), 
+           (439, 'type', 'u1', '', 83), 
+           (440, 'data', 'u1', '', 83), 
+           (441, 'cs', 'u1', '', 83), 
+           (442, 'lt', 'u1', '', 84), 
+           (443, 'cs', 'u1', '', 84), 
+           (444, 'id', 'u1', '', 85), 
+           (445, 'data', 'u1', '', 85), 
+           (446, 'cs', 'a1', '', 85), 
+           (447, 'params', 'a1', '', 86), 
+           (448, 'delim', 'a1', ',@', 86), 
+           (449, 'cs', 'a1', '', 86), 
+           (450, 'svsCount', 'u1', '', 87), 
+           (451, 'targetStream', 'u1', '', 87), 
+           (452, 'issue', 'u2', '', 87), 
+           (453, 'bitsCount', 'u2', '', 87), 
+           (454, 'lastBitTime', 'u4', '', 87), 
+           (455, 'uids', 'u1', '', 87), 
+           (456, 'pad', 'u1', '', 87), 
+           (457, 'hist', 'u4', '', 87), 
+           (458, 'x', 'f8', '', 88), 
+           (459, 'y', 'f8', '', 88), 
+           (460, 'z', 'f8', '', 88), 
+           (461, 'id', 'u2', '', 88), 
+           (462, 'solType', 'u1', '', 88), 
+           (463, 'cs', 'u1', '', 88), 
+           (464, 'data', 'u1', '', 89), 
+           (465, 'cs', 'u1', '', 89), 
+           (466, 'data', 'u1', '', 90), 
+           (467, 'crc16', 'u2', '', 90), 
+           (468, 'tt', 'u4', '', 91), 
+           (469, 'cs', 'u1', '', 91), 
+           (470, 'val', 'f4', '', 92), 
+           (471, 'cs', 'u1', '', 92), 
+           (472, 'cs', 'u1', '', 93);
 
-INSERT INTO `customTypeVariablesMeta` (`name`, `type`, `dimensions`, `requiredValue`, `idCustomTypesMeta`) 
-    VALUES ('a0', 'f8', 1, '', 1), 
-           ('a1', 'f4', 1, '', 1), 
-           ('tot', 'u4', 1, '', 1), 
-           ('wnt', 'u2', 1, '', 1), 
-           ('dtls', 'i1', 1, '', 1), 
-           ('dn', 'u1', 1, '', 1), 
-           ('wnlsf', 'u2', 1, '', 1), 
-           ('dtlsf', 'i1', 1, '', 1), 
-           ('value', 'f4', 1, '', 2), 
-           ('interval', 'u2', 1, '', 2), 
-           ('prn', 'i1', 1, '', 3), 
-           ('cnt', 'u1', 1, '', 3), 
-           ('data', 'u4', 1, '', 3), 
-           ('fcn1', 'i1', 1, '', 4), 
-           ('cnt', 'u1', 1, '', 4), 
-           ('data', 'u4', 1, '', 4), 
-           ('header', 'Header', 1, '', 5), 
-           ('slot', 'SlotRec', 1, '', 5), 
-           ('refrange', 'u4', 1, '', 6), 
-           ('usi', 'u1', 1, '', 6), 
-           ('num', 'u1', 1, '', 6), 
-           ('svstOrDelrange', 'i2', 1, '', 7), 
-           ('word1', 'u4', 1, '', 7), 
-           ('flags', 'u2', 1, '', 7), 
-           ('lock', 'u2', 1, '', 7), 
-           ('word2', 'u4', 1, '', 7), 
-           ('word1', 'u4', 1, '', 8), 
-           ('word2', 'u4', 1, '', 8);
+INSERT INTO `customTypeVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idCustomTypeMeta`) 
+    VALUES (1, 'a0', 'f8', '', 1), 
+           (2, 'a1', 'f4', '', 1), 
+           (3, 'tot', 'u4', '', 1), 
+           (4, 'wnt', 'u2', '', 1), 
+           (5, 'dtls', 'i1', '', 1), 
+           (6, 'dn', 'u1', '', 1), 
+           (7, 'wnlsf', 'u2', '', 1), 
+           (8, 'dtlsf', 'i1', '', 1), 
+           (9, 'value', 'f4', '', 2), 
+           (10, 'interval', 'u2', '', 2), 
+           (11, 'prn', 'i1', '', 3), 
+           (12, 'cnt', 'u1', '', 3), 
+           (13, 'data', 'u4', '', 3), 
+           (14, 'fcn1', 'i1', '', 4), 
+           (15, 'cnt', 'u1', '', 4), 
+           (16, 'data', 'u4', '', 4), 
+           (17, 'header', 'Header', '', 5), 
+           (18, 'slot', 'SlotRec', '', 5), 
+           (19, 'refrange', 'u4', '', 6), 
+           (20, 'usi', 'u1', '', 6), 
+           (21, 'num', 'u1', '', 6), 
+           (22, 'svstOrDelrange', 'i2', '', 7), 
+           (23, 'word1', 'u4', '', 7), 
+           (24, 'flags', 'u2', '', 7), 
+           (25, 'lock', 'u2', '', 7), 
+           (26, 'word2', 'u4', '', 7), 
+           (27, 'word1', 'u4', '', 8), 
+           (28, 'word2', 'u4', '', 8);
+
+-- Наполнение информации о размерностях для пользовательского типа `SvData0`
+INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (13, 1, 10);
+
+-- Наполнение информации о размерностях для пользовательского типа `SvData1`
+INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (16, 1, 4);
+
+-- Наполнение информации о размерностях для пользовательского типа `SvData2`
+INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (18, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `FileId`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (1, 1, 5), 
+           (2, 1, 80);
+
+-- Наполнение информации о размерностях для сообщения `MsgFmt`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (3, 1, 2), 
+           (4, 1, 2), 
+           (5, 1, 2), 
+           (7, 1, 2);
+
+-- Наполнение информации о размерностях для сообщения `SatIndex`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (156, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `AntName`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (158, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SatNumbers`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (160, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SatElevation`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (162, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SatAzimuth`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (164, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `PR`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (166, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SPR`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (168, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `RPR`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (170, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SRPR`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (172, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SC`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (174, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SS`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (176, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `CP`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (178, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SCP`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (180, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `RCP_RC`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (182, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `RCP_rc`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (184, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `DP`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (186, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `SRDP`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (188, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `CNR`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (190, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `CNR_4`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (192, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `Flags`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (194, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `TrackingTimeCA`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (196, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `NavStatus`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (198, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `IonoDelay`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (201, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `GLOEphemeris`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (288, 1, 3), 
+           (289, 1, 3), 
+           (290, 1, 3);
+
+-- Наполнение информации о размерностях для сообщения `GpsNavData`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (328, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `GloNavData`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (331, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `WAASRawMessage`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (336, 1, 32);
+
+-- Наполнение информации о размерностях для сообщения `GALRawMessage`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (342, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `GloPhaseDelay`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (344, 1, -1), 
+           (345, 1, -1), 
+           (346, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `RotationMatrix`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (353, 1, 3), 
+           (354, 1, 3);
+
+-- Наполнение информации о размерностях для сообщения `RotationMatrixAndVectors`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (362, 1, 3), 
+           (363, 1, 3), 
+           (365, 1, 3), 
+           (366, 1, 3), 
+           (367, 1, 3);
+
+-- Наполнение информации о размерностях для сообщения `InertialMeasurements`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (385, 1, 3), 
+           (386, 1, 3);
+
+-- Наполнение информации о размерностях для сообщения `RawMeas`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (406, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `ClockOffsets`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (423, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `RE`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (425, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `ER`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (426, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `Event`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (440, 1, -1);
+
+-- Наполнение информации о размерностях для сообщения `Wrapper`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (445, 1, -1), 
+           (446, 1, 2);
+
+-- Наполнение информации о размерностях для сообщения `Params`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (447, 1, -1), 
+           (448, 1, 2), 
+           (449, 1, 2);
+
+-- Наполнение информации о размерностях для сообщения `LoggingHistory`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (455, 1, -1), 
+           (456, 1, -1), 
+           (457, 1, -1), 
+           (457, 2, -1);
+
+-- Наполнение информации о размерностях для сообщения `Security`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (464, 1, 5);
+
+-- Наполнение информации о размерностях для сообщения `Security`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (466, 1, 6);
 
 
 

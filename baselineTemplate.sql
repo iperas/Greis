@@ -3,19 +3,21 @@ SET GLOBAL sql_mode='STRICT_ALL_TABLES';
 
 -- @{TABLE-DROP-HERE}@
 DROP TABLE IF EXISTS `exampleMessage`;
-DROP TABLE IF EXISTS `epochs`;
-DROP TABLE IF EXISTS `customTypeVariablesMeta`;
-DROP TABLE IF EXISTS `messageVariablesMeta`;
-DROP TABLE IF EXISTS `messageCodes`;
-DROP TABLE IF EXISTS `messagesMeta`;
-DROP TABLE IF EXISTS `customTypesMeta`;
-DROP TABLE IF EXISTS `sizeSpecialValuesClassifier`;
-DROP TABLE IF EXISTS `messageValidationsClassifier`;
-DROP TABLE IF EXISTS `messageKindsClassifier`;
-DROP TABLE IF EXISTS `messageTypesClassifier`;
+DROP TABLE IF EXISTS `epoch`;
+DROP TABLE IF EXISTS `customTypeVariableSizeForDimension`;
+DROP TABLE IF EXISTS `messageVariableSizeForDimension`;
+DROP TABLE IF EXISTS `customTypeVariableMeta`;
+DROP TABLE IF EXISTS `messageVariableMeta`;
+DROP TABLE IF EXISTS `messageCode`;
+DROP TABLE IF EXISTS `messageMeta`;
+DROP TABLE IF EXISTS `customTypeMeta`;
+DROP TABLE IF EXISTS `sizeSpecialValueClassifier`;
+DROP TABLE IF EXISTS `messageValidationClassifier`;
+DROP TABLE IF EXISTS `messageKindClassifier`;
+DROP TABLE IF EXISTS `messageTypeClassifier`;
 
 -- группировка сообщений по эпохам
-CREATE TABLE `epochs` (
+CREATE TABLE `epoch` (
          id SERIAL,
          unixtime DOUBLE NOT NULL,
          PRIMARY KEY (`id`),
@@ -23,35 +25,35 @@ CREATE TABLE `epochs` (
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов
-CREATE TABLE `sizeSpecialValuesClassifier` (
+CREATE TABLE `sizeSpecialValueClassifier` (
          id INT NOT NULL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор способов валидации сообщений
-CREATE TABLE `messageValidationsClassifier` (
-         id SERIAL,
+CREATE TABLE `messageValidationClassifier` (
+         id INT NOT NULL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор сообщений по происхождению (StandardMessage, StandardTextMessage, ...)
-CREATE TABLE `messageKindsClassifier` (
+CREATE TABLE `messageKindClassifier` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- классификатор сообщений по типу (General Purpose Messages, Almanacs and Ephemeris, ...)
-CREATE TABLE `messageTypesClassifier` (
+CREATE TABLE `messageTypeClassifier` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`)
        );
 
 -- мета-информация для custom-типов
-CREATE TABLE `customTypesMeta` (
+CREATE TABLE `customTypeMeta` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          size INT NOT NULL,
@@ -62,65 +64,87 @@ CREATE TABLE `customTypesMeta` (
        );
 
 -- мета-информация для сообщений
-CREATE TABLE `messagesMeta` (
+CREATE TABLE `messageMeta` (
          id SERIAL,
          name VARCHAR(100) NOT NULL,
          title VARCHAR(100) NOT NULL,
          size INT NOT NULL,
-         idValidation BIGINT UNSIGNED NOT NULL,
+         idValidation INT NOT NULL,
          idKind BIGINT UNSIGNED NOT NULL,
          idType BIGINT UNSIGNED NOT NULL,
          tableName VARCHAR(100) NOT NULL,
          PRIMARY KEY (`id`),
          UNIQUE (`tableName`),
-         INDEX `idx_fk_messagesMeta_idValidation` (`idValidation`),
-         CONSTRAINT `fk_messagesMeta_idValidation` FOREIGN KEY (`idValidation`) 
-            REFERENCES `messageValidationsClassifier` (`id`),
-         INDEX `idx_fk_messagesMeta_idKind` (`idKind`),
-         CONSTRAINT `fk_messagesMeta_idKind` FOREIGN KEY (`idKind`) 
-            REFERENCES `messageKindsClassifier` (`id`),
-         INDEX `idx_fk_messagesMeta_idType` (`idType`),
-         CONSTRAINT `fk_messagesMeta_idType` FOREIGN KEY (`idType`) 
-            REFERENCES `messageTypesClassifier` (`id`)
+         INDEX `idx_fk_messageMeta_idValidation` (`idValidation`),
+         CONSTRAINT `fk_messageMeta_idValidation` FOREIGN KEY (`idValidation`) 
+            REFERENCES `messageValidationClassifier` (`id`),
+         INDEX `idx_fk_messageMeta_idKind` (`idKind`),
+         CONSTRAINT `fk_messageMeta_idKind` FOREIGN KEY (`idKind`) 
+            REFERENCES `messageKindClassifier` (`id`),
+         INDEX `idx_fk_messageMeta_idType` (`idType`),
+         CONSTRAINT `fk_messageMeta_idType` FOREIGN KEY (`idType`) 
+            REFERENCES `messageTypeClassifier` (`id`)
        );
 
 -- мета-информация о полях custom-типов
-CREATE TABLE `customTypeVariablesMeta` (
+CREATE TABLE `customTypeVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
          `type` VARCHAR(100) NOT NULL,
-         `dimensions` TINYINT NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
-         `idCustomTypesMeta` BIGINT UNSIGNED NOT NULL,
+         `idCustomTypeMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_customTypeVariablesMeta_idCustomTypesMeta` (`idCustomTypesMeta`),
-         CONSTRAINT `fk_customTypeVariablesMeta_idCustomTypesMeta` FOREIGN KEY (`idCustomTypesMeta`) 
-            REFERENCES `customTypesMeta` (`id`)
+         INDEX `idx_fk_customTypeVariableMeta_idCustomTypeMeta` (`idCustomTypeMeta`),
+         CONSTRAINT `fk_customTypeVariableMeta_idCustomTypeMeta` FOREIGN KEY (`idCustomTypeMeta`) 
+            REFERENCES `customTypeMeta` (`id`)
        );
 
 -- мета-информация о полях сообщений
-CREATE TABLE `messageVariablesMeta` (
+CREATE TABLE `messageVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
          `type` VARCHAR(100) NOT NULL,
-         `dimensions` TINYINT NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
-         `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
+         `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_messageVariablesMeta_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_messageVariablesMeta_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
-            REFERENCES `messagesMeta` (`id`)
+         INDEX `idx_fk_messageVariableMeta_idMessageMeta` (`idMessageMeta`),
+         CONSTRAINT `fk_messageVariableMeta_idMessageMeta` FOREIGN KEY (`idMessageMeta`) 
+            REFERENCES `messageMeta` (`id`)
        );
 
 -- коды сообщений в соответствии с идентификаторами
-CREATE TABLE `messageCodes` (
+CREATE TABLE `messageCode` (
          id SERIAL,
          code CHAR(2) NOT NULL,
-         `idMessagesMeta` BIGINT UNSIGNED NOT NULL,
+         `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_fk_messageCodes_idMessagesMeta` (`idMessagesMeta`),
-         CONSTRAINT `fk_messageCodes_idMessagesMeta` FOREIGN KEY (`idMessagesMeta`) 
-            REFERENCES `messagesMeta` (`id`)
+         INDEX `idx_fk_messageCode_idMessageMeta` (`idMessageMeta`),
+         CONSTRAINT `fk_messageCode_idMessageMeta` FOREIGN KEY (`idMessageMeta`) 
+            REFERENCES `messageMeta` (`id`)
+       );
+
+-- размеры для размерностей переменных пользовательских типов
+CREATE TABLE `customTypeVariableSizeForDimension` (
+         id SERIAL,
+         `idVariable` BIGINT UNSIGNED NOT NULL,
+         `dimensionNumber` INT NOT NULL,
+         `size` INT NOT NULL,
+         PRIMARY KEY (`id`),
+         INDEX `idx_fk_customTypeVariableSizeForDimension_idVariable` (`idVariable`),
+         CONSTRAINT `fk_customTypeVariableSizeForDimension_idVariable` FOREIGN KEY (`idVariable`) 
+            REFERENCES `customTypeVariableMeta` (`id`)
+       );
+
+-- размеры для размерностей переменных сообщений
+CREATE TABLE `messageVariableSizeForDimension` (
+         id SERIAL,
+         `idVariable` BIGINT UNSIGNED NOT NULL,
+         `dimensionNumber` INT NOT NULL,
+         `size` INT NOT NULL,
+         PRIMARY KEY (`id`),
+         INDEX `idx_fk_messageVariableSizeForDimension_idVariable` (`idVariable`),
+         CONSTRAINT `fk_messageVariableSizeForDimension_idVariable` FOREIGN KEY (`idVariable`) 
+            REFERENCES `messageVariableMeta` (`id`)
        );
 
 -- @{TABLE-CREATION-HERE}@
