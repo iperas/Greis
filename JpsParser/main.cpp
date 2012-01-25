@@ -20,8 +20,11 @@ using namespace Greis;
 #include "Util/Logger.h"
 #include "Util/Path.h"
 #include "Util/BitConverter.h"
+#include "Domain/MetaInfo.h"
 
 using namespace Util;
+using namespace Domain;
+using namespace Database;
 
 int main(int argc, char *argv[])
 {
@@ -41,7 +44,6 @@ int main(int argc, char *argv[])
 
         // static init
         sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
-        StdMessage_t::parseXml();
         sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
         QStringList args = a.arguments();
 
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
         QString filename = args[1];
 
 #ifdef _DEBUG
-        {
+        /*{
             string log1;
             StdMessageStream stream(filename);
             Message_t::Pointer_t msg;
@@ -64,21 +66,23 @@ int main(int argc, char *argv[])
             std::ofstream fileLog("jpsTrace.txt");
             fileLog.write(log1.c_str(), log1.size());
             fileLog.close();
-        }
+        }*/
 #endif
 
-        // Открытие и парсинг
+        // Загрузка мета-информации
+        Connection connection = Connection::FromSettings("Db");
+        connection.Connect();
+        MetaInfo::Pointer_t metaInfo = MetaInfo::FromDatabase(&connection);
+        // Открытие JPS-файла и парсинг
         JpsFile_t::Pointer_t jpsFile(new JpsFile_t(filename));
-        // Запись в базу
-        /*Connection connection = Connection::FromSettings("Db");
-        DatabaseWriter writer;
+        /*DatabaseWriter writer;
         writer.Connect(connection, "source1");
         writer.AddData(jpsFile);*/
 
 #ifdef _DEBUG
-        std::ofstream jps2("jps2.jps");
+        /*std::ofstream jps2("jps2.jps");
         jpsFile->toBinaryStream(jps2);
-        jps2.close();
+        jps2.close();*/
 #endif
 
         //sLog.addInfo(QString("Обработка успешно завершена."));

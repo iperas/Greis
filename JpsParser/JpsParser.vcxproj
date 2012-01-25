@@ -63,7 +63,8 @@
       <AdditionalDependencies>log4cxx.lib;QtXmld4.lib;QtSqld4.lib;QtCored4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y $(ProjectDir)logger.config.xml $(TargetDir)logger.config.xml</Command>
+      <Command>copy /Y $(SolutionDir)logger.config.xml $(TargetDir)logger.config.xml
+copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,18 +92,21 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Domain\MetaInfo.cpp" />
     <ClCompile Include="GreisMessage.cpp" />
     <ClCompile Include="JpsFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Util\IniSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\Database\Connection.h" />
-    <ClInclude Include="Common\Database\DatabaseHelper.h" />
-    <ClInclude Include="Common\Database\DataInserter.h" />
-    <ClInclude Include="Common\Exceptions\DatabaseException.h" />
-    <ClInclude Include="Common\Exceptions\DataStructureException.h" />
     <ClInclude Include="DatabaseWriter.h" />
+    <ClInclude Include="Database\Connection.h" />
+    <ClInclude Include="Database\DatabaseException.h" />
+    <ClInclude Include="Database\DatabaseHelper.h" />
+    <ClInclude Include="Database\DataInserter.h" />
+    <ClInclude Include="Database\DataStructureException.h" />
+    <ClInclude Include="Domain\MetaInfo.h" />
+    <ClInclude Include="Domain\MetaInfoReader.h" />
     <ClInclude Include="GreisChecksum.h" />
     <ClInclude Include="GreisException.h" />
     <ClInclude Include="GreisMessage.h" />
@@ -120,11 +124,6 @@
     <ClInclude Include="Util\IniSettings.h" />
     <ClInclude Include="Util\SharedPtr.h" />
     <ClInclude Include="Util\Singleton.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="logger.config.xml">
-      <DeploymentContent>false</DeploymentContent>
-    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

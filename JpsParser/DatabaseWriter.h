@@ -4,15 +4,16 @@
 #include <QtCore/QtCore>
 #include <QtSql/QtSql>
 #include <memory>
-#include "Common/Exceptions/DatabaseException.h"
-#include "Common/Database/DatabaseHelper.h"
+#include "Database/DatabaseException.h"
+#include "Database/DatabaseHelper.h"
 #include "Util/IniSettings.h"
 #include "Util/Logger.h"
-#include "Common/Database/DataInserter.h"
-#include "Common/Database/Connection.h"
+#include "Database/DataInserter.h"
+#include "Database/Connection.h"
 #include "JpsFile.h"
 
 using Greis::JpsFile_t;
+using namespace Database;
 
 class DatabaseWriter
 {
