@@ -5,8 +5,10 @@
 #include "GreisMessage.h"
 #include "GreisMessageStream.h"
 #include <list>
+#include "Domain/MySqlSink.h"
 
 using std::list;
+using namespace Domain;
 
 namespace Greis
 {
@@ -45,6 +47,23 @@ namespace Greis
                 }
             }
             out.flush();
+        }
+
+        void toMySqlSink(MySqlSink::Pointer_t sink)
+        {
+            foreach(Message_t::Pointer_t msg, header())
+            {
+                StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                sink->AddMessage(stdMsg);
+            }
+            foreach(Epoch_t epoch, body())
+            {
+                foreach(Message_t::Pointer_t msg, epoch)
+                {
+                    StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    sink->AddMessage(stdMsg);
+                }
+            }
         }
     private:
         void parse(QString aFilename)

@@ -401,7 +401,8 @@ namespace Greis
     public:
         static StdMessage_t::Pointer_t Create(char* p_message, int p_length)
         {
-            EMessageType id = idToEnumMap(p_message);
+            return StdMessage_t::Pointer_t(new StdMessage_t(p_message, p_length));
+            /*EMessageType id = idToEnumMap(p_message);
             switch(id)
             {
             case JPStdMessage:
@@ -414,7 +415,7 @@ namespace Greis
                 return StdMessage_t::Pointer_t(new StdMessage_t(p_message, p_length));
             default:
                 throw Exception("Invalid EMessageType value.");
-            }
+            }*/
         }
     private:
         static EMessageType idToEnumMap(char* p_id)

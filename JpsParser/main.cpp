@@ -21,6 +21,7 @@ using namespace Greis;
 #include "Util/Path.h"
 #include "Util/BitConverter.h"
 #include "Domain/MetaInfo.h"
+#include "Domain/MySqlSink.h"
 
 using namespace Util;
 using namespace Domain;
@@ -84,6 +85,8 @@ int main(int argc, char *argv[])
         jpsFile->toBinaryStream(jps2);
         jps2.close();*/
 #endif
+        MySqlSink::Pointer_t sink(new MySqlSink(metaInfo, &connection));
+        jpsFile->toMySqlSink(sink);
 
         //sLog.addInfo(QString("Обработка успешно завершена."));
         system("PAUSE");

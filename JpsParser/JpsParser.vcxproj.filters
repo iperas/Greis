@@ -111,5 +111,8 @@
     <ClInclude Include="Domain\MetaInfoReader.h">
       <Filter>Domain</Filter>
     </ClInclude>
+    <ClInclude Include="Domain\MySqlSink.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

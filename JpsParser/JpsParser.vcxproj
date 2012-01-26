@@ -107,6 +107,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     <ClInclude Include="Database\DataStructureException.h" />
     <ClInclude Include="Domain\MetaInfo.h" />
     <ClInclude Include="Domain\MetaInfoReader.h" />
+    <ClInclude Include="Domain\MySqlSink.h" />
     <ClInclude Include="GreisChecksum.h" />
     <ClInclude Include="GreisException.h" />
     <ClInclude Include="GreisMessage.h" />
