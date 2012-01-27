@@ -1,5 +1,8 @@
 namespace GreisDocParser
 {
+    /// <summary>
+    /// Для переменных возможен только вариант Dynamic (когда массив динамический, с неизвестной длиной).
+    /// </summary>
     public enum SizeSpecialValue
     {
         Dynamic = -1,   // Size is computing according unknown special logic

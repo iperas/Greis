@@ -52,7 +52,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_NO_DEBUG;QT_CORE_LIB;QT_SQL_LIB;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(LOG4CXX)\include;$(BOOST_DIR);.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtSql</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
@@ -114,6 +114,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     <ClInclude Include="GreisMessageStream.h" />
     <ClInclude Include="GreisTypes.h" />
     <ClInclude Include="JpsFile.h" />
+    <ClInclude Include="Tests\BitConverter.Tests.h" />
     <ClInclude Include="Util\BitConverter.h" />
     <ClInclude Include="Util\Exception.h" />
     <ClInclude Include="Util\File.h" />
@@ -121,6 +122,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     <ClInclude Include="Util\InvalidOperationException.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\Macro.h" />
+    <ClInclude Include="Util\NotSupportedException.h" />
     <ClInclude Include="Util\Path.h" />
     <ClInclude Include="Util\IniSettings.h" />
     <ClInclude Include="Util\SharedPtr.h" />

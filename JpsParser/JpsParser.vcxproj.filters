@@ -19,6 +19,9 @@
     <Filter Include="Domain">
       <UniqueIdentifier>{0805234b-f65f-42a9-bfa7-0cac0ef4fa33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{29354251-b7fb-45f3-a2ee-b49cddce6f97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -113,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="Domain\MySqlSink.h">
       <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\BitConverter.Tests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\NotSupportedException.h">
+      <Filter>ProjectBase\Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

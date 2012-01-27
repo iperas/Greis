@@ -9,6 +9,27 @@ using namespace Database;
 
 namespace Domain
 {
+    struct ValidationClassifier
+    {
+        enum EValidationClassifier
+        {
+            None = 0,
+            Checksum = 1,
+            ChecksumAsHexAscii = 2,
+            Crc16 = 3
+        };
+    };
+
+    struct SizeSpecialValueClassifier
+    {
+        enum ESizeSpecialValueClassifier
+        {
+            Dynamic = -1,
+            Fill = -2,
+            Fixed = -3,
+        };
+    };
+
     class ClassifierItem
     {
     public:
@@ -56,6 +77,21 @@ namespace Domain
         int GetSizeForDimension(int dimensionNumber)
         {
             return _sizesForDimensions.at(dimensionNumber - 1);
+        }
+
+        bool IsScalar()
+        {
+            return GetDimensionsCount() == 0;
+        }
+
+        bool IsLinearArray()
+        {
+            return GetDimensionsCount() == 1;
+        }
+
+        QString GetColumnName()
+        {
+            return Name.toLower() == "id" ? Name + "_sugar" : Name;
         }
     };
 

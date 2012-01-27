@@ -17,15 +17,21 @@ namespace Util
 
     public:
 
-        BitConverter(EByteOrder byteOrder)
+        BitConverter(EByteOrder byteOrder = LeastSignificantByte)
         {
             _byteOrder = byteOrder;
+        }
+
+        inline unsigned short GetUChar(const char* data)
+        {
+            unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
+            return *ucdata;
         }
 
         inline unsigned short GetUShort(const char* data)
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
-            unsigned short val = (unsigned short)((*ucdata << 8) + (*(ucdata+1)));
+            unsigned short val = (unsigned short)((((unsigned short)*ucdata) << 8) + (*(ucdata+1)));
             if (_byteOrder == LeastSignificantByte)
             {
                 endianSwap(val);
@@ -33,15 +39,79 @@ namespace Util
             return val;
         }
 
-        inline unsigned short GetUInt(const char* data)
+        inline unsigned int GetUInt(const char* data)
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
-            unsigned int val = (unsigned int)((*ucdata << 24) + (*(ucdata+1) << 16) + (*(ucdata+2) << 8) + (*(ucdata+3)));
+            unsigned int val = (unsigned int)(
+                                (((unsigned int)*ucdata) << 24) + 
+                                (((unsigned int)*(ucdata+1)) << 16) + 
+                                (((unsigned int)*(ucdata+2)) << 8) + 
+                                (*(ucdata+3)));
             if (_byteOrder == LeastSignificantByte)
             {
                 endianSwap(val);
             }
             return val;
+        }
+
+        /*inline unsigned long GetULong(const char* data)
+        {
+            unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
+            unsigned long val = (unsigned long)(
+                (((unsigned long)*(ucdata  )) << 56) + 
+                (((unsigned long)*(ucdata+1)) << 48) + 
+                (((unsigned long)*(ucdata+2)) << 40) + 
+                (((unsigned long)*(ucdata+3)) << 32) + 
+                (((unsigned long)*(ucdata+4)) << 24) + 
+                (((unsigned long)*(ucdata+5)) << 16) + 
+                (((unsigned long)*(ucdata+6)) << 8) + 
+                                (*(ucdata+7)));
+            if (_byteOrder == LeastSignificantByte)
+            {
+                endianSwap(val);
+            }
+            return val;
+        }*/
+
+        inline char GetChar(const char* data)
+        {
+            return *data;
+        }
+
+        inline short GetShort(const char* data)
+        {
+            unsigned short uval = GetUShort(data);
+            int val = *(reinterpret_cast<short*>(&uval));
+            return val;
+        }
+
+        inline int GetInt(const char* data)
+        {
+            unsigned int uval = GetUInt(data);
+            int val = *(reinterpret_cast<int*>(&uval));
+            return val;
+        }
+
+        inline float GetFloat(const char* data)
+        {
+            unsigned int uiVal = GetUInt(data);
+            float fVal = *(reinterpret_cast<float*>(&uiVal));
+            return fVal;
+        }
+
+        inline double GetDouble(const char* data)
+        {
+            unsigned int uiVal1 = GetUInt(data);
+            unsigned int uiVal2 = GetUInt(data + 4);
+            unsigned long long ulVal;
+            if (_byteOrder == LeastSignificantByte)
+            {
+                ulVal = uiVal1 + ((unsigned long long)uiVal2 << 32);
+            } else {
+                ulVal = uiVal2 + ((unsigned long long)uiVal1 << 32);
+            }
+            double dVal = *(reinterpret_cast<double*>(&ulVal));
+            return dVal;
         }
 
     private:

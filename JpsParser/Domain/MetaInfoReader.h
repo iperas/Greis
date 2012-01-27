@@ -61,15 +61,15 @@ namespace Domain
 
         QMap<int, QList<VariableMeta::Pointer_t> > loadCustomTypeVariables()
         {
-            return loadVariables("customTypeVariableMeta", "idCustomTypeMeta");
+            return loadVariables("customTypeVariableMeta", "customTypeVariableSizeForDimension", "idCustomTypeMeta");
         }
 
         QMap<int, QList<VariableMeta::Pointer_t> > loadMessageVariables()
         {
-            return loadVariables("messageVariableMeta", "idMessageMeta");
+            return loadVariables("messageVariableMeta", "messageVariableSizeForDimension", "idMessageMeta");
         }
 
-        QMap<int, QList<VariableMeta::Pointer_t> > loadVariables(const QString& tableName, const QString& idParentColumnName)
+        QMap<int, QList<VariableMeta::Pointer_t> > loadVariables(const QString& tableName, const QString& sizeForDimensionTableName, const QString& idParentColumnName)
         {
             QMap<int, QList<VariableMeta::Pointer_t> > variablesMap;
             auto sqlQuery = _dbHelper->ExecuteQuery(QString("SELECT id, name, type, requiredValue, %1 FROM %2 ORDER BY id").arg(idParentColumnName).arg(tableName));
@@ -83,7 +83,7 @@ namespace Domain
 
                 QList<int> sizeForDimensions;
                 auto sqlSubQuery = _dbHelper->ExecuteQuery(QString(
-                    "SELECT size FROM customTypeVariableSizeForDimension WHERE idVariable = %1 ORDER BY dimensionNumber").arg(id));
+                    "SELECT size FROM %1 WHERE idVariable = %2 ORDER BY dimensionNumber").arg(sizeForDimensionTableName).arg(id));
                 while (sqlSubQuery.next())
                 {
                     sizeForDimensions.append(sqlSubQuery.value(0).toInt());

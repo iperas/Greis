@@ -131,6 +131,41 @@ namespace Greis
             return true;
         }
 
+        bool validateChecksum8ascii() const
+        {
+            // expected
+            if (bodySize() <= 2)
+                throw Exception("Body too small.");
+            bool bOk;
+            Types::u1 expected = QString::fromAscii(body() + bodySize() - 2, 2).toUInt(&bOk, 16);
+            if (!bOk)
+                return false;
+            // actual
+            Types::u1 actual = ChecksumChecker::cs8(&_message[0], _headSize + bodySize() - 2);
+            /*Types::u1 actual = ChecksumChecker::cs8(_id.c_str(), 2);
+            actual = ChecksumChecker::cs8(_bodyLenStr.c_str(), 3, actual);
+            if (bodySize() > 2)
+                actual = ChecksumChecker::cs8(body(), bodySize() - 2, actual);*/
+            // check
+            return expected == actual;
+        }
+
+        bool validateChecksum8bin() const
+        {
+            // expected
+            if (bodySize() <= 1)
+                throw Exception("Body too small.");
+            Types::u1 expected = ((Types::u1*)body())[bodySize() - 1];
+            // actual
+            Types::u1 actual = ChecksumChecker::cs8(&_message[0], _headSize + bodySize() - 1);
+            /*Types::u1 actual = ChecksumChecker::cs8(_id.c_str(), 2);
+            actual = ChecksumChecker::cs8(_bodyLenStr.c_str(), 3, actual);
+            if (bodySize() > 2)
+                actual = ChecksumChecker::cs8(body(), bodySize() - 1, actual);*/
+            // check
+            return expected == actual;
+        }
+
         inline string id() const { return string(&_message[0], 2); }
         inline static int headSize() { return _headSize; }
         inline int bodySize() const { return _message.size() - _headSize; }
@@ -176,41 +211,6 @@ namespace Greis
                 }
             }
             return ret;
-        }
-
-        bool validateChecksum8ascii() const
-        {
-            // expected
-            if (bodySize() <= 2)
-                throw Exception("Body too small.");
-            bool bOk;
-            Types::u1 expected = QString::fromAscii(body() + bodySize() - 2, 2).toUInt(&bOk, 16);
-            if (!bOk)
-                return false;
-            // actual
-            Types::u1 actual = ChecksumChecker::cs8(&_message[0], _headSize + bodySize() - 2);
-            /*Types::u1 actual = ChecksumChecker::cs8(_id.c_str(), 2);
-            actual = ChecksumChecker::cs8(_bodyLenStr.c_str(), 3, actual);
-            if (bodySize() > 2)
-                actual = ChecksumChecker::cs8(body(), bodySize() - 2, actual);*/
-            // check
-            return expected == actual;
-        }
-
-        bool validateChecksum8bin() const
-        {
-            // expected
-            if (bodySize() <= 1)
-                throw Exception("Body too small.");
-            Types::u1 expected = ((Types::u1*)body())[bodySize() - 1];
-            // actual
-            Types::u1 actual = ChecksumChecker::cs8(&_message[0], _headSize + bodySize() - 1);
-            /*Types::u1 actual = ChecksumChecker::cs8(_id.c_str(), 2);
-            actual = ChecksumChecker::cs8(_bodyLenStr.c_str(), 3, actual);
-            if (bodySize() > 2)
-                actual = ChecksumChecker::cs8(body(), bodySize() - 1, actual);*/
-            // check
-            return expected == actual;
         }
 
     private:
