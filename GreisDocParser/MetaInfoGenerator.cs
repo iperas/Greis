@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,12 @@ namespace GreisDocParser
 {
     public class MetaInfoGenerator
     {
-        private static readonly List<string> _messagesWithFillBehavior = new List<string>() { "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", "ID", "GD", "LD", "ED", "rT", "RE", "ER", "==", ">>", "PM" };
+        private static readonly List<string> _messagesWithFillBehavior = new List<string>()
+                                                                             {
+                                                                                 "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", 
+                                                                                 "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", 
+                                                                                 "ID", "GD", "LD", "ED", "rT", "RE", "ER", "==", ">>", "PM"
+                                                                             };
 
         private static readonly List<string> _almanacsAndEphemerisMessages = new List<string>() { "GA", "EA", "NA", "WA", "GE", "NE", "WE", "EN" };
 
@@ -15,7 +21,7 @@ namespace GreisDocParser
         // rM - page 340, smartass rules (dynamic customTypes SvData2 & SlotRec also here)
         // LH - page 346, smartass rules
 
-        private static readonly List<string> _structsWithFixedSize = new List<string>() { "SvData0", "SvData1", "ClkOffs" };
+        //private static readonly List<string> _structsWithFixedSize = new List<string>() { "SvData0", "SvData1", "ClkOffs" };
 
         public static MetaInfo FromUserManual(string rawText)
         {
@@ -91,7 +97,7 @@ namespace GreisDocParser
             customTypes = customTypes.Where(t => !metaInfo.StandardMessages.Any(m => m.Name == t.Name)).ToList();
             var customTypesByName = customTypes.GroupBy(t => t.Name).ToList();
             var varsWithCustomTypes = metaInfo.StandardMessages.SelectMany(m => m.Variables).
-                Where(v => !Enum.GetNames(typeof(GreisTypes)).Contains(v.Type)).GroupBy(v => v.Type).ToList();
+                Where(v => !Enum.GetNames(typeof(GreisTypes)).Contains(v.GreisType)).GroupBy(v => v.GreisType).ToList();
             foreach (var usagesGroup in varsWithCustomTypes)
             {
                 var usages = usagesGroup.ToList();
@@ -106,9 +112,9 @@ namespace GreisDocParser
                     var defList = definitions.ToList();
                     for (int i = 0; i < usages.Count; i++)
                     {
-                        usages[i].Type = typeName + i;
+                        usages[i].GreisType = typeName + i;
                         defList[i].Name = typeName + i;
-                        if (defList[i].Size == (int) SizeSpecialValue.Dynamic)
+                        if (defList[i].Size == (int) SizeSpecialValue.Fill)
                         {
                             defList[i].Size = parseSize(defList[i].Name, "");
                         }
@@ -116,7 +122,46 @@ namespace GreisDocParser
                 }
             }
             metaInfo.CustomTypes = customTypes.Where(t => !String.IsNullOrEmpty(t.Name)).ToList();
+
+            resolveFixedSizeFields(metaInfo);
+
             return metaInfo;
+        }
+
+        private static void resolveFixedSizeFields(MetaInfo metaInfo)
+        {
+            var types = metaInfo.CustomTypes.Concat(metaInfo.StandardMessages).ToList();
+
+            // size cache
+            Dictionary<string, int> nameToSizeCache = new Dictionary<string, int>();
+            foreach (var simpleType in Enum.GetNames(typeof (GreisTypes)))
+            {
+                nameToSizeCache[simpleType] = int.Parse(simpleType[1].ToString(CultureInfo.InvariantCulture));
+            }
+            foreach (var ct in types.Where(ct => ct.Size >= 0))
+            {
+                nameToSizeCache[ct.Name] = ct.Size;
+            }
+
+            int resolvingPointsCount = int.MaxValue;
+            int resolvingPointsCountPrevIter = int.MaxValue - 1;
+            while (resolvingPointsCountPrevIter != resolvingPointsCount && resolvingPointsCount > 0)
+            {
+                resolvingPointsCountPrevIter = resolvingPointsCount;
+
+                var resolvingPoints = types.Where(ct => ct.Size < 0 && 
+                    ct.Variables.All(v => nameToSizeCache.ContainsKey(v.GreisType) && v.SizeOfDimensions.All(s => s >= 0))).ToList();
+
+                resolvingPointsCount = resolvingPoints.Count;
+
+                foreach (var customType in resolvingPoints)
+                {
+                    int size = customType.Variables.Sum(v => nameToSizeCache[v.GreisType] * 
+                        (v.IsScalar ? 1 : v.SizeOfDimensions.Aggregate(1, (s1, s2) => s1 * s2)));
+                    customType.Size = size;
+                    nameToSizeCache[customType.Name] = size;
+                }
+            }
         }
 
         private static MessageTypes getMessageType(string code)
@@ -139,10 +184,6 @@ namespace GreisDocParser
                 _messagesWithUniformFillBehavior.Contains(codeOrStructName))
             {
                 return (int) SizeSpecialValue.Fill;
-            }
-            if (_structsWithFixedSize.Contains(codeOrStructName))
-            {
-                return (int) SizeSpecialValue.Fixed;
             }
             return (int) SizeSpecialValue.Dynamic;
         }
@@ -219,7 +260,7 @@ namespace GreisDocParser
                         throw new Exception(String.Format("Invalid content string '{0}' (vm).", line));
                     }
                     var variable = new Variable();
-                    variable.Type = vartype;
+                    variable.GreisType = vartype;
                     variable.Name = vm.Groups["name"].Value;
                     variable.RequiredValue = vm.Groups["value"].Value;
                     variable.Comment = comment;
@@ -238,7 +279,7 @@ namespace GreisDocParser
                             }
                             else*/ if (!Int32.TryParse(sizeStr, out varsize))
                             {
-                                varsize = (int) SizeSpecialValue.Dynamic;
+                                varsize = (int) SizeSpecialValue.Fill;
                             }
                             variable.SizeOfDimensions.Add(varsize);
                         }

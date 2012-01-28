@@ -14,7 +14,7 @@ namespace GreisDocParser
         }
 
         [XmlAttribute]
-        public string Type { get; set; }
+        public string GreisType { get; set; }
         [XmlAttribute]
         public string Name { get; set; }
 
@@ -70,8 +70,8 @@ namespace GreisDocParser
         {
             string dimStr = IsScalar 
                 ? "" 
-                : string.Concat(SizeOfDimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValue.Dynamic ? "" : v.ToString(), "]")));
-            return string.Format(@"{0} {1}{2}", Type, Name, dimStr);
+                : string.Concat(SizeOfDimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValue.Fill ? "" : v.ToString(), "]")));
+            return string.Format(@"{0} {1}{2}", GreisType, Name, dimStr);
         }
     }
 }

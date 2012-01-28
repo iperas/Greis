@@ -103,6 +103,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     <ClInclude Include="Database\Connection.h" />
     <ClInclude Include="Database\DatabaseException.h" />
     <ClInclude Include="Database\DatabaseHelper.h" />
+    <ClInclude Include="Database\DataBatchInserter.h" />
     <ClInclude Include="Database\DataInserter.h" />
     <ClInclude Include="Database\DataStructureException.h" />
     <ClInclude Include="Domain\MetaInfo.h" />
@@ -122,6 +123,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
     <ClInclude Include="Util\InvalidOperationException.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\Macro.h" />
+    <ClInclude Include="Util\NotImplementedException.h" />
     <ClInclude Include="Util\NotSupportedException.h" />
     <ClInclude Include="Util\Path.h" />
     <ClInclude Include="Util\IniSettings.h" />

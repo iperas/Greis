@@ -123,5 +123,11 @@
     <ClInclude Include="Util\NotSupportedException.h">
       <Filter>ProjectBase\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Util\NotImplementedException.h">
+      <Filter>ProjectBase\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\DataBatchInserter.h">
+      <Filter>ProjectBase\Database</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

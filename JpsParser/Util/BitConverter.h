@@ -22,7 +22,7 @@ namespace Util
             _byteOrder = byteOrder;
         }
 
-        inline unsigned short GetUChar(const char* data)
+        inline unsigned char GetUChar(const char* data)
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
             return *ucdata;

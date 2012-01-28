@@ -112,7 +112,7 @@ namespace GreisDocParser
                 var colDefs = new StringBuilder();
                 foreach (var v in ct.Variables)
                 {
-                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), columnType(v));
+                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), sqlType(v));
                 }
 
                 var query = string.Format(queryCtFmt, ct.Name, tableName(ct), colDefs);
@@ -132,7 +132,7 @@ namespace GreisDocParser
                 var colDefs = new StringBuilder();
                 foreach (var v in msg.Variables)
                 {
-                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), columnType(v));
+                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), sqlType(v));
                 }
 
                 var query = string.Format(queryMsgFmt, msg.Name, msg.Title.Replace("\r", "").Replace('\n', ' '),
@@ -199,8 +199,8 @@ namespace GreisDocParser
                 foreach (var v in ct.Variables)
                 {
                     // customTypeVariableMeta
-                    var customTypeVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", 
-                        customTypeVariableId, v.Name, v.Type, v.RequiredValue, customTypeId);
+                    var customTypeVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})",
+                        customTypeVariableId, v.Name, v.GreisType, v.RequiredValue, customTypeId);
                     customTypeVariableMetaValues.Add(customTypeVariableMetaInsert);
 
                     // customTypeVariableSizeForDimension
@@ -231,7 +231,7 @@ namespace GreisDocParser
                                              "INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`) \r\n" +
                                              "    VALUES {0};\r\n\r\n", string.Join(", \r\n           ", metaValues));
             var customTypeVariableMetaFillup =
-                string.Format("INSERT INTO `customTypeVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idCustomTypeMeta`) \r\n" +
+                string.Format("INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idCustomTypeMeta`) \r\n" +
                               "    VALUES {0};\r\n\r\n",
                               string.Join(", \r\n           ", customTypeVariableMetaValues));
 
@@ -252,7 +252,7 @@ namespace GreisDocParser
                 }
                 foreach (var v in message.Variables)
                 {
-                    var messageVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", messageVariableId, v.Name, v.Type, v.RequiredValue, messageId);
+                    var messageVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", messageVariableId, v.Name, v.GreisType, v.RequiredValue, messageId);
                     messageVariableMetaValues.Add(messageVariableMetaInsert);
 
                     // customTypeVariableSizeForDimension
@@ -289,7 +289,7 @@ namespace GreisDocParser
                                                    "    VALUES {0};\r\n\r\n",
                                                    string.Join(", \r\n           ", messageCodeValues));
             var messageVariableMetaFillup =
-                string.Format("INSERT INTO `messageVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idMessageMeta`) \r\n" +
+                string.Format("INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idMessageMeta`) \r\n" +
                               "    VALUES {0};\r\n\r\n",
                               string.Join(", \r\n           ", messageVariableMetaValues));
 
@@ -331,7 +331,7 @@ namespace GreisDocParser
             return colName;
         }
 
-        private string columnType(Variable v)
+        private static string sqlType(Variable v)
         {
             var greisTypesToSqlTypesMap = new Dictionary<string, string>();
             greisTypesToSqlTypesMap[GreisTypes.a1.ToString()] = "CHAR";
@@ -349,19 +349,19 @@ namespace GreisDocParser
             if (v.IsScalar)
             {
                 // One of standard types
-                if (greisTypesToSqlTypesMap.ContainsKey(v.Type))
+                if (greisTypesToSqlTypesMap.ContainsKey(v.GreisType))
                 {
-                    return greisTypesToSqlTypesMap[v.Type];
+                    return greisTypesToSqlTypesMap[v.GreisType];
                 }
                 // custom type, return id type (SERIAL)
                 return idType;
             } else
             {
                 // One of standard types
-                if (greisTypesToSqlTypesMap.ContainsKey(v.Type))
+                if (greisTypesToSqlTypesMap.ContainsKey(v.GreisType))
                 {
                     // char[] to string
-                    if (v.Type == GreisTypes.a1.ToString())
+                    if (v.GreisType == GreisTypes.a1.ToString())
                     {
                         if (v.DimensionsCount > 1)
                         {

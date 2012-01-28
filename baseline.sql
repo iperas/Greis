@@ -191,7 +191,7 @@ CREATE TABLE `messageMeta` (
 CREATE TABLE `customTypeVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
-         `type` VARCHAR(100) NOT NULL,
+         `greisType` VARCHAR(100) NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
          `idCustomTypeMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
@@ -204,7 +204,7 @@ CREATE TABLE `customTypeVariableMeta` (
 CREATE TABLE `messageVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
-         `type` VARCHAR(100) NOT NULL,
+         `greisType` VARCHAR(100) NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
          `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
@@ -1629,8 +1629,7 @@ CREATE TABLE `msg_EpochEnd` (
 
 -- Наполнение классификатора sizeSpecialValueClassifier
 INSERT INTO `sizeSpecialValueClassifier` (`id`, `name`) 
-    VALUES (-3, 'Fixed'), 
-           (-2, 'Fill'), 
+    VALUES (-2, 'Fill'), 
            (-1, 'Dynamic');
 
 -- Наполнение классификатора messageValidationClassifier
@@ -1657,12 +1656,12 @@ INSERT INTO `messageTypeClassifier` (`name`)
 INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`) 
     VALUES (1, 'UtcOffs', 23, 'ct_UtcOffs'), 
            (2, 'Smooth', 6, 'ct_Smooth'), 
-           (3, 'SvData0', -3, 'ct_SvData0'), 
-           (4, 'SvData1', -3, 'ct_SvData1'), 
+           (3, 'SvData0', 6, 'ct_SvData0'), 
+           (4, 'SvData1', 6, 'ct_SvData1'), 
            (5, 'SvData2', -1, 'ct_SvData2'), 
            (6, 'Header', 6, 'ct_Header'), 
-           (7, 'SlotRec', -1, 'ct_SlotRec'), 
-           (8, 'ClkOffs', -3, 'ct_ClkOffs');
+           (7, 'SlotRec', 14, 'ct_SlotRec'), 
+           (8, 'ClkOffs', 8, 'ct_ClkOffs');
 
 -- Наполнение мета-информации о сообщениях
 INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) 
@@ -1918,7 +1917,7 @@ INSERT INTO `messageCode` (`code`, `idMessageMeta`)
            ('OO', 92), 
            ('||', 93);
 
-INSERT INTO `messageVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idMessageMeta`) 
+INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idMessageMeta`) 
     VALUES (1, 'id', 'a1', '', 1), 
            (2, 'description', 'a1', '', 1), 
            (3, 'id', 'a1', 'JP', 2), 
@@ -2392,7 +2391,7 @@ INSERT INTO `messageVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idMes
            (471, 'cs', 'u1', '', 92), 
            (472, 'cs', 'u1', '', 93);
 
-INSERT INTO `customTypeVariableMeta` (`id`, `name`, `type`, `requiredValue`, `idCustomTypeMeta`) 
+INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idCustomTypeMeta`) 
     VALUES (1, 'a0', 'f8', '', 1), 
            (2, 'a1', 'f4', '', 1), 
            (3, 'tot', 'u4', '', 1), 
@@ -2432,7 +2431,7 @@ INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber
 
 -- Наполнение информации о размерностях для пользовательского типа `SvData2`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (18, 1, -1);
+    VALUES (18, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `FileId`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -2448,95 +2447,95 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 
 -- Наполнение информации о размерностях для сообщения `SatIndex`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (156, 1, -1);
+    VALUES (156, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `AntName`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (158, 1, -1);
+    VALUES (158, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SatNumbers`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (160, 1, -1);
+    VALUES (160, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SatElevation`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (162, 1, -1);
+    VALUES (162, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SatAzimuth`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (164, 1, -1);
+    VALUES (164, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `PR`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (166, 1, -1);
+    VALUES (166, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SPR`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (168, 1, -1);
+    VALUES (168, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RPR`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (170, 1, -1);
+    VALUES (170, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SRPR`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (172, 1, -1);
+    VALUES (172, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SC`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (174, 1, -1);
+    VALUES (174, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SS`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (176, 1, -1);
+    VALUES (176, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `CP`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (178, 1, -1);
+    VALUES (178, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SCP`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (180, 1, -1);
+    VALUES (180, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RCP_RC`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (182, 1, -1);
+    VALUES (182, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RCP_rc`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (184, 1, -1);
+    VALUES (184, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `DP`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (186, 1, -1);
+    VALUES (186, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SRDP`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (188, 1, -1);
+    VALUES (188, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `CNR`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (190, 1, -1);
+    VALUES (190, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `CNR_4`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (192, 1, -1);
+    VALUES (192, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Flags`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (194, 1, -1);
+    VALUES (194, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `TrackingTimeCA`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (196, 1, -1);
+    VALUES (196, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `NavStatus`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (198, 1, -1);
+    VALUES (198, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `IonoDelay`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (201, 1, -1);
+    VALUES (201, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GLOEphemeris`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -2546,11 +2545,11 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 
 -- Наполнение информации о размерностях для сообщения `GpsNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (328, 1, -1);
+    VALUES (328, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GloNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (331, 1, -1);
+    VALUES (331, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `WAASRawMessage`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -2558,13 +2557,13 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 
 -- Наполнение информации о размерностях для сообщения `GALRawMessage`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (342, 1, -1);
+    VALUES (342, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GloPhaseDelay`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (344, 1, -1), 
-           (345, 1, -1), 
-           (346, 1, -1);
+    VALUES (344, 1, -2), 
+           (345, 1, -2), 
+           (346, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RotationMatrix`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -2586,41 +2585,41 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 
 -- Наполнение информации о размерностях для сообщения `RawMeas`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (406, 1, -1);
+    VALUES (406, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ClockOffsets`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (423, 1, -1);
+    VALUES (423, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RE`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (425, 1, -1);
+    VALUES (425, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ER`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (426, 1, -1);
+    VALUES (426, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Event`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (440, 1, -1);
+    VALUES (440, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Wrapper`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (445, 1, -1), 
+    VALUES (445, 1, -2), 
            (446, 1, 2);
 
 -- Наполнение информации о размерностях для сообщения `Params`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (447, 1, -1), 
+    VALUES (447, 1, -2), 
            (448, 1, 2), 
            (449, 1, 2);
 
 -- Наполнение информации о размерностях для сообщения `LoggingHistory`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (455, 1, -1), 
-           (456, 1, -1), 
-           (457, 1, -1), 
-           (457, 2, -1);
+    VALUES (455, 1, -2), 
+           (456, 1, -2), 
+           (457, 1, -2), 
+           (457, 2, -2);
 
 -- Наполнение информации о размерностях для сообщения `Security`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 

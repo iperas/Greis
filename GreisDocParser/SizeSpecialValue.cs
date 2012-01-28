@@ -1,12 +1,16 @@
 namespace GreisDocParser
 {
     /// <summary>
-    /// Для переменных возможен только вариант Dynamic (когда массив динамический, с неизвестной длиной).
+    /// Для переменных:
+    /// Возможен только вариант Fill (когда поле - динамический массив (с неизвестной длиной)).
+    /// 
+    /// Для структур и сообщений:
+    /// Fill = Поля с динамической длиной заполняются равномерно по формуле fieldCount = (struct_size - static_fields_size) / (the_other_fields_size)
+    /// Dynamic = Размеры полей требуется вычислять используя специальные алгоритмы.
     /// </summary>
     public enum SizeSpecialValue
     {
         Dynamic = -1,   // Size is computing according unknown special logic
         Fill = -2,      // Size is computing by formula: (struct size) - (other fields size)
-        Fixed = -3,      // Size is fixed but not specified directly
     }
 }

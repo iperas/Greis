@@ -72,7 +72,7 @@ namespace Domain
         QMap<int, QList<VariableMeta::Pointer_t> > loadVariables(const QString& tableName, const QString& sizeForDimensionTableName, const QString& idParentColumnName)
         {
             QMap<int, QList<VariableMeta::Pointer_t> > variablesMap;
-            auto sqlQuery = _dbHelper->ExecuteQuery(QString("SELECT id, name, type, requiredValue, %1 FROM %2 ORDER BY id").arg(idParentColumnName).arg(tableName));
+            auto sqlQuery = _dbHelper->ExecuteQuery(QString("SELECT id, name, greisType, requiredValue, %1 FROM %2 ORDER BY id").arg(idParentColumnName).arg(tableName));
             while (sqlQuery.next())
             {
                 auto id = sqlQuery.value(0).toInt();

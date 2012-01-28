@@ -10,7 +10,7 @@ namespace GreisDocParser
         public CustomType()
         {
             Variables = new List<Variable>();
-            Size = (int) SizeSpecialValue.Dynamic;
+            Size = (int)SizeSpecialValue.Dynamic;
         }
 
         [XmlAttribute]
@@ -21,7 +21,7 @@ namespace GreisDocParser
 
         public override string ToString()
         {
-            return string.Format(@"{0} {{{1}}}", Name, Size == -1 ? "?" : Size.ToString());
+            return string.Format(@"{0} {{{1}}}", Name, Size == (int)SizeSpecialValue.Dynamic ? "?" : Size.ToString());
         }
     }
 }

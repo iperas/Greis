@@ -90,7 +90,7 @@ CREATE TABLE `messageMeta` (
 CREATE TABLE `customTypeVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
-         `type` VARCHAR(100) NOT NULL,
+         `greisType` VARCHAR(100) NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
          `idCustomTypeMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
@@ -103,7 +103,7 @@ CREATE TABLE `customTypeVariableMeta` (
 CREATE TABLE `messageVariableMeta` (
          id SERIAL,
          `name` VARCHAR(100) NOT NULL,
-         `type` VARCHAR(100) NOT NULL,
+         `greisType` VARCHAR(100) NOT NULL,
          `requiredValue` VARCHAR(100) NOT NULL,
          `idMessageMeta` BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
@@ -148,6 +148,9 @@ CREATE TABLE `messageVariableSizeForDimension` (
        );
 
 -- @{TABLE-CREATION-HERE}@
+
+-- нулевая эпоха-заглушка
+INSERT INTO `epoch` (`unixtime`) VALUES (0);
 
 -- @{INITIAL-FILLUP-HERE}@
 

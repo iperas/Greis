@@ -26,7 +26,6 @@ namespace Domain
         {
             Dynamic = -1,
             Fill = -2,
-            Fixed = -3,
         };
     };
 
@@ -95,15 +94,25 @@ namespace Domain
         }
     };
 
-    class MessageMeta
+    class CustomTypeMeta
+    {
+    public:
+        SHARED_PTR_T(CustomTypeMeta);
+
+        int Id;
+        QString Name;
+        int Size;
+
+        QList<VariableMeta::Pointer_t> Variables;
+        QString TableName;
+    };
+
+    class MessageMeta : public CustomTypeMeta
     {
     public:
         SHARED_PTR_T(MessageMeta);
 
-        int Id;
-        QString Name;
         QString Title;
-        int Size;
         
         // Каким способом можно валидировать данное сообщение
         MessageValidation::Pointer_t Validation;
@@ -113,23 +122,6 @@ namespace Domain
         MessageType::Pointer_t Type;
 
         QList<MessageCode::Pointer_t> Codes;
-        QList<VariableMeta::Pointer_t> Variables;
-
-        QString TableName;
-    };
-
-    class CustomTypeMeta
-    {
-    public:
-        SHARED_PTR_T(CustomTypeMeta);
-
-        int Id;
-        QString Name;
-        int Size;
-        
-        QList<VariableMeta::Pointer_t> Variables;
-
-        QString TableName;
     };
 
     class MetaInfo

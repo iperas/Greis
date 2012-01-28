@@ -16,6 +16,7 @@ namespace Database
         int _rowsAdded;
         Connection* _connection;
         DatabaseHelper* _dbHelper;
+        QList<QVariant> _boundValues;
     public:
         // insertTemplate: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES "
         // connection: pointer to connection class
@@ -26,6 +27,12 @@ namespace Database
             _connection = connection;
             _dbHelper = _connection->DbHelper();
             _rowsAdded = 0;
+            _boundValues.clear();
+        }
+
+        void AddBindValue(const QVariant& parameterValue)
+        {
+            _boundValues.append(parameterValue);
         }
 
         // rowValueInBrackets: "(<value for col1>[, <value for col #>])"
@@ -53,10 +60,21 @@ namespace Database
         {
             if (_rowsAdded > 0)
             {
-                _dbHelper->ExecuteQuery(ResultQuery());
+                QString queryStr = ResultQuery();
+                QSqlQuery query = _dbHelper->ExecuteQuery("");
+                query.prepare(queryStr);
+                DatabaseHelper::ThrowIfError(query);
+                foreach (QVariant boundValue, _boundValues)
+                {
+                    query.addBindValue(boundValue);
+                }
+                query.exec();
+                DatabaseHelper::ThrowIfError(query);
+
                 _resultInsertQuery = _insertTemplate;
                 sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
                 _rowsAdded = 0;
+                _boundValues.clear();
             }
         }
 

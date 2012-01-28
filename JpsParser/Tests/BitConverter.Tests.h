@@ -17,7 +17,7 @@ namespace Tests
             unsigned int b = 1234567891;
             short c = -12345;
             int d = -321123321;
-            float e = 12345.67891;
+            float e = 12345.67891f;
             double f = 1234512345.67891234;
 
             auto resa = bc.GetUShort((const char*) &a);

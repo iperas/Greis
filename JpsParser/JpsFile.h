@@ -54,14 +54,14 @@ namespace Greis
             foreach(Message_t::Pointer_t msg, header())
             {
                 StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
-                sink->AddMessage(stdMsg);
+                sink->AddMessage(stdMsg, false);
             }
             foreach(Epoch_t epoch, body())
             {
                 foreach(Message_t::Pointer_t msg, epoch)
                 {
                     StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
-                    sink->AddMessage(stdMsg);
+                    sink->AddMessage(stdMsg, false);
                 }
             }
         }

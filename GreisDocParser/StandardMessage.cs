@@ -10,8 +10,6 @@ namespace GreisDocParser
         public StandardMessage()
         {
             Codes = new List<string>();
-            Variables = new List<Variable>();
-            Size = (int) SizeSpecialValue.Dynamic;
             Type = MessageTypes.Unknown;
         }
 
