@@ -16,6 +16,7 @@ namespace Database
     class DataBatchInserter
     {
         QString _insertQuery;
+        QString _tableName;
         int _rowsAdded;
         int _batchSize;
         Connection* _connection;
@@ -26,7 +27,7 @@ namespace Database
 
         // insertQuery: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES (?, ?, ?)"
         // connection: pointer to connection class
-        DataBatchInserter(const QString& insertQuery, int boundColumnsCount, Connection* connection, int batchSize = 1000)
+        DataBatchInserter(const QString& insertQuery, int boundColumnsCount, Connection* connection, int batchSize = 1000, const QString& tableName = "")
         {
             _insertQuery = insertQuery;
             _connection = connection;
@@ -34,6 +35,7 @@ namespace Database
             _rowsAdded = 0;
             _batchSize = batchSize;
             _boundValues.resize(boundColumnsCount);
+            _tableName = tableName;
         }
 
         ~DataBatchInserter()
@@ -74,7 +76,12 @@ namespace Database
                 query.execBatch();
                 DatabaseHelper::ThrowIfError(query);
 
-                sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
+                if (_tableName.isEmpty() || _tableName.isNull())
+                {
+                    sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
+                } else {
+                    sLogger.Info(QString("Добавлено %1 записей в `%2`...").arg(_rowsAdded).arg(_tableName));
+                }
                 _rowsAdded = 0;
                 int size = _boundValues.size();
                 _boundValues.clear();

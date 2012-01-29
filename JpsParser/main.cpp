@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
 #endif
         MySqlSink::Pointer_t sink(new MySqlSink(metaInfo, &connection));
         jpsFile->toMySqlSink(sink);
+        sink->Flush();
 
         //sLog.addInfo(QString("Обработка успешно завершена."));
         system("PAUSE");

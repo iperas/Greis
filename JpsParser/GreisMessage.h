@@ -134,8 +134,12 @@ namespace Greis
         bool validateChecksum8ascii() const
         {
             // expected
-            if (bodySize() <= 2)
+            if (bodySize() < 2)
                 throw Exception("Body too small.");
+            if (bodySize() == 2)
+            {
+                return true;
+            }
             bool bOk;
             Types::u1 expected = QString::fromAscii(body() + bodySize() - 2, 2).toUInt(&bOk, 16);
             if (!bOk)
@@ -153,8 +157,12 @@ namespace Greis
         bool validateChecksum8bin() const
         {
             // expected
-            if (bodySize() <= 1)
+            if (bodySize() < 1)
                 throw Exception("Body too small.");
+            if (bodySize() == 1)
+            {
+                return true;
+            }
             Types::u1 expected = ((Types::u1*)body())[bodySize() - 1];
             // actual
             Types::u1 actual = ChecksumChecker::cs8(&_message[0], _headSize + bodySize() - 1);

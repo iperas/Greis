@@ -41,6 +41,7 @@ namespace Domain
         QMap<MessageMeta*, DataBatchInserter::Pointer_t> _insertersMap;
 
         QMap<QString, MessageMeta::Pointer_t> _codeToMsgMap;
+        QMap<QString, CustomTypeMeta::Pointer_t> _nameToCustomTypeMap;
     public:
         SHARED_PTR_T(MySqlSink);
 
@@ -57,6 +58,16 @@ namespace Domain
                     _codeToMsgMap[code->Code] = msg;
                 }
             }
+
+            foreach (CustomTypeMeta::Pointer_t ct, _metaInfo->CustomTypesMeta)
+            {
+                _nameToCustomTypeMap[ct->Name] = ct;
+            }
+        }
+
+        ~MySqlSink()
+        {
+            Flush();
         }
 
         void AddMessage(StdMessage_t::Pointer_t msg, bool ignoreInvalidMessages = true)
@@ -81,7 +92,7 @@ namespace Domain
             // Сделано приближение что не бывает смешанных динамических\статических массивов
             // и что динамические многомерные массивы равнозначны одномерным
             // fieldCount = (struct_size - static_fields_size) / (the_other_fields_size)
-            int fillFieldsCount;
+            int fillFieldsCount = -1;
             int fillFieldsTypeSize = 0;
             QMap<QString, int> simpleTypesSize;
             simpleTypesSize["a1"] = 1;
@@ -201,151 +212,151 @@ namespace Domain
                             rowValues.append((int) i1);
                         } else 
                         {
-                            int fieldsCount;
-                            switch (varMeta->GetSizeForDimension(1))
-                            {
-                            case SizeSpecialValueClassifier::Dynamic:
-                            case SizeSpecialValueClassifier::Fill:
-                                fieldsCount = fillFieldsCount;
-                                break;
-                            default:
-                                fieldsCount = varMeta->GetSizeForDimension(1);
-                                for (int i = 1; i < varMeta->GetDimensionsCount(); ++i)
-                                {
-                                    fieldsCount *= varMeta->GetSizeForDimension(i + 1);
-                                }
-                                break;
-                            }
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
-                        /*QString varStr;
-                        while (fieldsCount-- > 0)
-                        {
-                            char a1 = bitConverter.GetChar(msgPtr++);
-                            varStr.append(QChar::fromAscii(a1));
-                        }
-                        rowValues.append(varStr);*/
-                        /*if (varMeta->IsScalar())
-                        {
-                            char i1 = bitConverter.GetChar(msgPtr);
-                            msgPtr += 1;
-                            rowValues.append((int) i1);
-                        } else {
-
-                            switch (varMeta->GetSizeForDimension(1))
-                            {
-                            case SizeSpecialValueClassifier::Dynamic:
-                                // TODO
-                                throw NotImplementedException();
-                                break;
-                            default:
-                                QString varStr;
-                                auto strLen = varMeta->GetSizeForDimension(1);
-                                while (strLen-- > 0)
-                                {
-                                    char a1 = bitConverter.GetChar(msgPtr++);
-                                    varStr.append(QChar::fromAscii(a1));
-                                }
-                                rowValues.append(varStr);
-                                break;
-                            }
-                        }*/
                     } else if (varType == "i2")
                     {
+                        int typeSize = 2;
                         if (varMeta->IsScalar())
                         {
                             short i2 = bitConverter.GetShort(msgPtr);
-                            msgPtr += 2;
+                            msgPtr += typeSize;
                             rowValues.append((int) i2);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else if (varType == "i4")
                     {
+                        int typeSize = 4;
                         if (varMeta->IsScalar())
                         {
                             int i4 = bitConverter.GetInt(msgPtr);
-                            msgPtr += 4;
+                            msgPtr += typeSize;
                             rowValues.append(i4);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else if (varType == "u1")
                     {
+                        int typeSize = 1;
                         if (varMeta->IsScalar())
                         {
                             unsigned char u1 = bitConverter.GetUChar(msgPtr);
-                            msgPtr += 1;
+                            msgPtr += typeSize;
                             rowValues.append((unsigned int) u1);
                         } else {
-                            QByteArray ba("asdzz", 5);
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
                             rowValues.append(ba);
-                            // TODO
-                            //throw NotImplementedException();
                         }
                     } else if (varType == "u2")
                     {
+                        int typeSize = 2;
                         if (varMeta->IsScalar())
                         {
                             unsigned short u2 = bitConverter.GetUShort(msgPtr);
-                            msgPtr += 2;
+                            msgPtr += typeSize;
                             rowValues.append((unsigned int) u2);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else if (varType == "u4")
                     {
+                        int typeSize = 4;
                         if (varMeta->IsScalar())
                         {
                             unsigned int u4 = bitConverter.GetUInt(msgPtr);
-                            msgPtr += 4;
+                            msgPtr += typeSize;
                             rowValues.append(u4);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else if (varType == "f4")
                     {
+                        int typeSize = 4;
                         if (varMeta->IsScalar())
                         {
                             float f4 = bitConverter.GetFloat(msgPtr);
-                            msgPtr += 4;
+                            msgPtr += typeSize;
                             rowValues.append((double) f4);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else if (varType == "f8")
                     {
+                        int typeSize = 8;
                         if (varMeta->IsScalar())
                         {
                             double f8 = bitConverter.GetDouble(msgPtr);
-                            msgPtr += 8;
+                            msgPtr += typeSize;
                             rowValues.append(f8);
                         } else {
-                            // TODO
-                            throw NotImplementedException();
+                            QByteArray ba = getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            rowValues.append(ba);
                         }
                     } else {
-                        // Custom type
-                        throw NotImplementedException();
+                        auto ct = _nameToCustomTypeMap[varType];
+                        if (!ct.get())
+                        {
+                            return;
+                        }
+                        int typeSize = ct->Size;
+                        BOOST_ASSERT(typeSize >= 0);
+                        // TODO
+                        if (varMeta->IsScalar())
+                        {
+                            msgPtr += typeSize;
+                            rowValues.append(QVariant(QVariant::UInt));
+                        } else {
+                            getArrayValue(varMeta, msgPtr, fillFieldsCount, typeSize);
+                            QByteArray ba;
+                            rowValues.append(ba);
+                        }
                     }
                 }
                 inserter->AddRow(rowValues);
-                inserter->Flush();
             }   
             catch (NotImplementedException& e)
             {
                 
             }
-
-            //BitConverter bitConverter;
-            //SimpleGreisTypesReader reader(&bitConverter);
-
         }
 
+        void Flush()
+        {
+            foreach (DataBatchInserter::Pointer_t inserter, _insertersMap)
+            {
+                inserter->Flush();
+            }
+        }
+
+        QByteArray getArrayValue( VariableMeta::Pointer_t varMeta, const char* msgPtr, int fillFieldsCount, int typeSize ) 
+        {
+            int fieldsCount;
+            switch (varMeta->GetSizeForDimension(1))
+            {
+            case SizeSpecialValueClassifier::Dynamic:
+            case SizeSpecialValueClassifier::Fill:
+                BOOST_ASSERT(fillFieldsCount >= 0);
+                fieldsCount = fillFieldsCount;
+                break;
+            default:
+                fieldsCount = varMeta->GetSizeForDimension(1);
+                for (int i = 1; i < varMeta->GetDimensionsCount(); ++i)
+                {
+                    fieldsCount *= varMeta->GetSizeForDimension(i + 1);
+                }
+                break;
+            }
+            QByteArray ba(msgPtr, fieldsCount * typeSize);
+            msgPtr += fieldsCount * typeSize;
+            return ba;
+        }
     private:
         DataBatchInserter::Pointer_t getInserter(MessageMeta* msgMeta)
         {
@@ -371,7 +382,7 @@ namespace Domain
                 insertCommand.append(", ?");
             }
             insertCommand.append(")");
-            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, variablesCount + 1, _connection));
+            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, variablesCount + 1, _connection, 1000, msgMeta->TableName));
             _insertersMap[msgMeta] = inserter;
             return inserter;
         }
