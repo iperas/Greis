@@ -55,11 +55,11 @@ DROP TABLE IF EXISTS `msg_Flags`;
 DROP TABLE IF EXISTS `msg_TrackingTimeCA`;
 DROP TABLE IF EXISTS `msg_NavStatus`;
 DROP TABLE IF EXISTS `msg_IonoDelay`;
-DROP TABLE IF EXISTS `msg_GPSAlm`;
+DROP TABLE IF EXISTS `msg_GPSAlm0`;
 DROP TABLE IF EXISTS `msg_GALAlm`;
 DROP TABLE IF EXISTS `msg_GLOAlmanac`;
 DROP TABLE IF EXISTS `msg_WAASAlmanac`;
-DROP TABLE IF EXISTS `msg_GPSEphemeris`;
+DROP TABLE IF EXISTS `msg_GPSEphemeris0`;
 DROP TABLE IF EXISTS `msg_GLOEphemeris`;
 DROP TABLE IF EXISTS `msg_WAASEhemeris`;
 DROP TABLE IF EXISTS `msg_GALEphemeris`;
@@ -102,6 +102,8 @@ DROP TABLE IF EXISTS `ct_SvData2`;
 DROP TABLE IF EXISTS `ct_Header`;
 DROP TABLE IF EXISTS `ct_SlotRec`;
 DROP TABLE IF EXISTS `ct_ClkOffs`;
+DROP TABLE IF EXISTS `ct_GPSAlm1`;
+DROP TABLE IF EXISTS `ct_GPSEphemeris1`;
 
 DROP TABLE IF EXISTS `exampleMessage`;
 DROP TABLE IF EXISTS `epoch`;
@@ -314,6 +316,60 @@ CREATE TABLE `ct_ClkOffs` (
     id SERIAL, 
     `word1` INT UNSIGNED, 
     `word2` INT UNSIGNED, 
+    PRIMARY KEY (`id`));
+
+-- custom type 'GPSAlm1'
+CREATE TABLE `ct_GPSAlm1` (
+    id SERIAL, 
+    `sv` TINYINT UNSIGNED, 
+    `wna` SMALLINT, 
+    `toa` INT, 
+    `healthA` TINYINT UNSIGNED, 
+    `healthS` TINYINT UNSIGNED, 
+    `config` TINYINT UNSIGNED, 
+    `af1` FLOAT, 
+    `af0` FLOAT, 
+    `rootA` FLOAT, 
+    `ecc` FLOAT, 
+    `m0` FLOAT, 
+    `omega0` FLOAT, 
+    `argPer` FLOAT, 
+    `deli` FLOAT, 
+    `omegaDot` FLOAT, 
+    PRIMARY KEY (`id`));
+
+-- custom type 'GPSEphemeris1'
+CREATE TABLE `ct_GPSEphemeris1` (
+    id SERIAL, 
+    `sv` TINYINT UNSIGNED, 
+    `tow` INT UNSIGNED, 
+    `flags` TINYINT UNSIGNED, 
+    `iodc` SMALLINT, 
+    `toc` INT, 
+    `ura` TINYINT, 
+    `healthS` TINYINT UNSIGNED, 
+    `wn` SMALLINT, 
+    `tgd` FLOAT, 
+    `af2` FLOAT, 
+    `af1` FLOAT, 
+    `af0` FLOAT, 
+    `toe` INT, 
+    `iode` SMALLINT, 
+    `rootA` DOUBLE, 
+    `ecc` DOUBLE, 
+    `m0` DOUBLE, 
+    `omega0` DOUBLE, 
+    `inc0` DOUBLE, 
+    `argPer` DOUBLE, 
+    `deln` FLOAT, 
+    `omegaDot` FLOAT, 
+    `incDot` FLOAT, 
+    `crc` FLOAT, 
+    `crs` FLOAT, 
+    `cuc` FLOAT, 
+    `cus` FLOAT, 
+    `cic` FLOAT, 
+    `cis` FLOAT, 
     PRIMARY KEY (`id`));
 
 -- message 'FileId': [JP] File Identifier
@@ -1004,8 +1060,8 @@ CREATE TABLE `msg_IonoDelay` (
     CONSTRAINT `fk_msg_IonoDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`));
 
--- message 'GPSAlm': [GA] GPS Almanac
-CREATE TABLE `msg_GPSAlm` (
+-- message 'GPSAlm0': [GA] GPS Almanac
+CREATE TABLE `msg_GPSAlm0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1025,8 +1081,8 @@ CREATE TABLE `msg_GPSAlm` (
     `omegaDot` FLOAT, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
-    INDEX `idx_fk_msg_GPSAlm_idEpoch` (`idEpoch`), 
-    CONSTRAINT `fk_msg_GPSAlm_idEpoch` FOREIGN KEY (`idEpoch`) 
+    INDEX `idx_fk_msg_GPSAlm0_idEpoch` (`idEpoch`), 
+    CONSTRAINT `fk_msg_GPSAlm0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`));
 
 -- message 'GALAlm': [EA] GALILEO Almanac
@@ -1087,8 +1143,8 @@ CREATE TABLE `msg_WAASAlmanac` (
     CONSTRAINT `fk_msg_WAASAlmanac_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`));
 
--- message 'GPSEphemeris': [GE] GPS Ephemeris
-CREATE TABLE `msg_GPSEphemeris` (
+-- message 'GPSEphemeris0': [GE] GPS Ephemeris
+CREATE TABLE `msg_GPSEphemeris0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1122,8 +1178,8 @@ CREATE TABLE `msg_GPSEphemeris` (
     `cis` FLOAT, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
-    INDEX `idx_fk_msg_GPSEphemeris_idEpoch` (`idEpoch`), 
-    CONSTRAINT `fk_msg_GPSEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
+    INDEX `idx_fk_msg_GPSEphemeris0_idEpoch` (`idEpoch`), 
+    CONSTRAINT `fk_msg_GPSEphemeris0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`));
 
 -- message 'GLOEphemeris': [NE] GLONASS Ephemeris
@@ -1627,6 +1683,9 @@ CREATE TABLE `msg_EpochEnd` (
 
 
 
+-- нулевая эпоха-заглушка
+INSERT INTO `epoch` (`unixtime`) VALUES (0);
+
 -- Наполнение классификатора sizeSpecialValueClassifier
 INSERT INTO `sizeSpecialValueClassifier` (`id`, `name`) 
     VALUES (-2, 'Fill'), 
@@ -1656,12 +1715,14 @@ INSERT INTO `messageTypeClassifier` (`name`)
 INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`) 
     VALUES (1, 'UtcOffs', 23, 'ct_UtcOffs'), 
            (2, 'Smooth', 6, 'ct_Smooth'), 
-           (3, 'SvData0', 6, 'ct_SvData0'), 
-           (4, 'SvData1', 6, 'ct_SvData1'), 
+           (3, 'SvData0', 42, 'ct_SvData0'), 
+           (4, 'SvData1', 18, 'ct_SvData1'), 
            (5, 'SvData2', -1, 'ct_SvData2'), 
            (6, 'Header', 6, 'ct_Header'), 
            (7, 'SlotRec', 14, 'ct_SlotRec'), 
-           (8, 'ClkOffs', 8, 'ct_ClkOffs');
+           (8, 'ClkOffs', 8, 'ct_ClkOffs'), 
+           (9, 'GPSAlm1', 47, 'ct_GPSAlm1'), 
+           (10, 'GPSEphemeris1', 123, 'ct_GPSEphemeris1');
 
 -- Наполнение мета-информации о сообщениях
 INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) 
@@ -1719,13 +1780,13 @@ INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKin
            (52, 'TrackingTimeCA', '[TC] CA/L1 Continuous Tracking Time', -2, 1, 3, 1, 'msg_TrackingTimeCA'), 
            (53, 'NavStatus', '[SS] Satellite Navigation Status', -2, 1, 3, 1, 'msg_NavStatus'), 
            (54, 'IonoDelay', '[ID] Ionospheric Delays', -2, 1, 3, 1, 'msg_IonoDelay'), 
-           (55, 'GPSAlm', '[GA] GPS Almanac', 47, 1, 3, 2, 'msg_GPSAlm'), 
+           (55, 'GPSAlm0', '[GA] GPS Almanac', 47, 1, 3, 2, 'msg_GPSAlm0'), 
            (56, 'GALAlm', '[EA] GALILEO Almanac', 49, 1, 3, 2, 'msg_GALAlm'), 
            (57, 'GLOAlmanac', '[NA] GLONASS Almanac', 46, 1, 3, 2, 'msg_GLOAlmanac'), 
            (58, 'WAASAlmanac', '[WA] WAAS Almanac', 51, 1, 3, 2, 'msg_WAASAlmanac'), 
-           (59, 'GPSEphemeris', '[GE] GPS Ephemeris', 123, 1, 3, 2, 'msg_GPSEphemeris'), 
+           (59, 'GPSEphemeris0', '[GE] GPS Ephemeris', 123, 1, 3, 2, 'msg_GPSEphemeris0'), 
            (60, 'GLOEphemeris', '[NE] GLONASS Ephemeris', 88, 1, 3, 2, 'msg_GLOEphemeris'), 
-           (61, 'WAASEhemeris', '[WE] WAAS Ephemeris', 39, 1, 3, 2, 'msg_WAASEhemeris'), 
+           (61, 'WAASEhemeris', '[WE] WAAS Ephemeris', 71, 1, 3, 2, 'msg_WAASEhemeris'), 
            (62, 'GALEphemeris', '[EN] GALILEO Ephemeris', 145, 1, 3, 2, 'msg_GALEphemeris'), 
            (63, 'GpsNavData', '[GD] GPS Raw Navigation Data', -2, 1, 3, 1, 'msg_GpsNavData'), 
            (64, 'GloNavData', '[LD] GLONASS Raw Navigation Data', -2, 1, 3, 1, 'msg_GloNavData'), 
@@ -2136,7 +2197,7 @@ INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `
            (216, 'deli', 'f4', '', 55), 
            (217, 'omegaDot', 'f4', '', 55), 
            (218, 'cs', 'u1', '', 55), 
-           (219, 'gps', 'GPSAlm', '', 56), 
+           (219, 'gps', 'GPSAlm1', '', 56), 
            (220, 'iod', 'i2', '', 56), 
            (221, 'cs', 'u1', '', 56), 
            (222, 'sv', 'u1', '', 57), 
@@ -2235,7 +2296,7 @@ INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `
            (315, 'tow', 'u4', '', 61), 
            (316, 'wn', 'u2', '', 61), 
            (317, 'cs', 'u1', '', 61), 
-           (318, 'gps', 'GPSEphemeris', '', 62), 
+           (318, 'gps', 'GPSEphemeris1', '', 62), 
            (319, 'bgdE1E5a', 'f4', '', 62), 
            (320, 'bgdE1E5b', 'f4', '', 62), 
            (321, 'ai0', 'f4', '', 62), 
@@ -2419,7 +2480,51 @@ INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`
            (25, 'lock', 'u2', '', 7), 
            (26, 'word2', 'u4', '', 7), 
            (27, 'word1', 'u4', '', 8), 
-           (28, 'word2', 'u4', '', 8);
+           (28, 'word2', 'u4', '', 8), 
+           (29, 'sv', 'u1', '', 9), 
+           (30, 'wna', 'i2', '', 9), 
+           (31, 'toa', 'i4', '', 9), 
+           (32, 'healthA', 'u1', '', 9), 
+           (33, 'healthS', 'u1', '', 9), 
+           (34, 'config', 'u1', '', 9), 
+           (35, 'af1', 'f4', '', 9), 
+           (36, 'af0', 'f4', '', 9), 
+           (37, 'rootA', 'f4', '', 9), 
+           (38, 'ecc', 'f4', '', 9), 
+           (39, 'm0', 'f4', '', 9), 
+           (40, 'omega0', 'f4', '', 9), 
+           (41, 'argPer', 'f4', '', 9), 
+           (42, 'deli', 'f4', '', 9), 
+           (43, 'omegaDot', 'f4', '', 9), 
+           (44, 'sv', 'u1', '', 10), 
+           (45, 'tow', 'u4', '', 10), 
+           (46, 'flags', 'u1', '', 10), 
+           (47, 'iodc', 'i2', '', 10), 
+           (48, 'toc', 'i4', '', 10), 
+           (49, 'ura', 'i1', '', 10), 
+           (50, 'healthS', 'u1', '', 10), 
+           (51, 'wn', 'i2', '', 10), 
+           (52, 'tgd', 'f4', '', 10), 
+           (53, 'af2', 'f4', '', 10), 
+           (54, 'af1', 'f4', '', 10), 
+           (55, 'af0', 'f4', '', 10), 
+           (56, 'toe', 'i4', '', 10), 
+           (57, 'iode', 'i2', '', 10), 
+           (58, 'rootA', 'f8', '', 10), 
+           (59, 'ecc', 'f8', '', 10), 
+           (60, 'm0', 'f8', '', 10), 
+           (61, 'omega0', 'f8', '', 10), 
+           (62, 'inc0', 'f8', '', 10), 
+           (63, 'argPer', 'f8', '', 10), 
+           (64, 'deln', 'f4', '', 10), 
+           (65, 'omegaDot', 'f4', '', 10), 
+           (66, 'incDot', 'f4', '', 10), 
+           (67, 'crc', 'f4', '', 10), 
+           (68, 'crs', 'f4', '', 10), 
+           (69, 'cuc', 'f4', '', 10), 
+           (70, 'cus', 'f4', '', 10), 
+           (71, 'cic', 'f4', '', 10), 
+           (72, 'cis', 'f4', '', 10);
 
 -- Наполнение информации о размерностях для пользовательского типа `SvData0`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 

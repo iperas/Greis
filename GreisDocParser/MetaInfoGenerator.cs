@@ -124,8 +124,47 @@ namespace GreisDocParser
             metaInfo.CustomTypes = customTypes.Where(t => !String.IsNullOrEmpty(t.Name)).ToList();
 
             resolveFixedSizeFields(metaInfo);
+            addGpsAlmsAndEphemerisTypes(metaInfo);
+            fixDocumentationBugs(metaInfo);
 
             return metaInfo;
+        }
+
+        private static void fixDocumentationBugs(MetaInfo metaInfo)
+        {
+            var waasEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "WAASEhemeris");
+
+            waasEphemeris.Size = 71;
+        }
+
+        private static void addGpsAlmsAndEphemerisTypes(MetaInfo metaInfo)
+        {
+            var gpsAlm = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "GPSAlm");
+            var gpsEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "GPSEphemeris");
+            var galAlm = (CustomType)metaInfo.StandardMessages.First(m => m.Name == "GALAlm");
+            var galEphemeris = (CustomType)metaInfo.StandardMessages.First(m => m.Name == "GALEphemeris");
+
+            var ctGpsAlm = new CustomType
+                               {
+                                   Name = gpsAlm.Name,
+                                   Size = gpsAlm.Size,
+                                   Variables = gpsAlm.Variables.Where(v => v.Name != "cs").ToList()
+                               };
+            var ctGpsEphemeris = new CustomType
+                                     {
+                                         Name = gpsEphemeris.Name,
+                                         Size = gpsEphemeris.Size,
+                                         Variables = gpsEphemeris.Variables.Where(v => v.Name != "cs").ToList()
+                                     };
+            metaInfo.CustomTypes.Add(ctGpsAlm);
+            metaInfo.CustomTypes.Add(ctGpsEphemeris);
+
+            gpsAlm.Name += "0";
+            gpsEphemeris.Name += "0";
+            ctGpsAlm.Name += "1";
+            ctGpsEphemeris.Name += "1";
+            galAlm.Variables.First(v => v.GreisType == "GPSAlm").GreisType += "1";
+            galEphemeris.Variables.First(v => v.GreisType == "GPSEphemeris").GreisType += "1";
         }
 
         private static void resolveFixedSizeFields(MetaInfo metaInfo)

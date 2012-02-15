@@ -12,7 +12,13 @@ using namespace Domain;
 
 namespace Greis
 {
-    typedef vector<Message_t::Pointer_t> Epoch_t;
+    typedef vector<Message_t::Pointer_t> Messages_t;
+
+    class Epoch_t
+    {
+    public:
+        Messages_t Messages;
+    };
 
     class JpsFile_t
     {
@@ -25,7 +31,7 @@ namespace Greis
             parse(aFilename);
         }
 
-        inline const Epoch_t& header() const { return _header; }
+        inline const Messages_t& header() const { return _header; }
         inline const list<Epoch_t>& body() const { return _body; }
         inline QString filename() const { return _filename; }
 
@@ -39,7 +45,7 @@ namespace Greis
             }
             foreach(Epoch_t epoch, body())
             {
-                foreach(Message_t::Pointer_t msg, epoch)
+                foreach(Message_t::Pointer_t msg, epoch.Messages)
                 {
                     StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                     out.write(stdMsg->message(), stdMsg->fullSize());
@@ -51,14 +57,15 @@ namespace Greis
 
         void toMySqlSink(MySqlSink::Pointer_t sink)
         {
-            foreach(Message_t::Pointer_t msg, header())
+            /*foreach(Message_t::Pointer_t msg, header())
             {
                 StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                 sink->AddMessage(stdMsg, false);
-            }
+            }*/
             foreach(Epoch_t epoch, body())
             {
-                foreach(Message_t::Pointer_t msg, epoch)
+                sink->AddEpoch();
+                foreach(Message_t::Pointer_t msg, epoch.Messages)
                 {
                     StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                     sink->AddMessage(stdMsg, false);
@@ -68,6 +75,8 @@ namespace Greis
     private:
         void parse(QString aFilename)
         {
+            const string messageCodeRT("~~");
+            const string messageCodeRD("RD");
             _filename = aFilename;
             _header.clear();
             _body.clear();
@@ -75,54 +84,68 @@ namespace Greis
             Message_t::Pointer_t msg;
 
             // before ~~(RT)
-            while((msg = stream.Next(true)).get() && msg->type() != RTStdMessage)
+            while((msg = stream.Next(true)).get())
             {
+                if (msg->type() == UnknownStdMessage)
+                {
+                    auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    if (stdMsg->id() == messageCodeRT)
+                    {
+                        // epoch begins
+                        // TODO: убрать магические коды, возможно учитывать RD-сообщение
+                        break;
+                    }
+                }
                 _header.push_back(msg);
             }
             // epoch contains PM ? header : body
-            vector<Message_t::Pointer_t> epoch;
+            Epoch_t epoch;
             if (msg.get())
             {
-                epoch.push_back(msg);
+                epoch.Messages.push_back(msg);
             }
             // main parsing loop
             bool headerParsed = false;
             while((msg = stream.Next(true)).get())
             {
-                if (msg->type() == RTStdMessage)
+                if (msg->type() == UnknownStdMessage)
                 {
-                    // push
-                    bool isHeader = false;
-                    if (!headerParsed)
+                    auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    if (stdMsg->id() == messageCodeRT)
                     {
-                        foreach(Message_t::Pointer_t em, epoch)
+                        // push in previous epoch
+                        bool isHeader = false;
+                        /*if (!headerParsed) // Commented: Есть предположение, что параметры приемника должны идти наряду с обычными сообщениями.
                         {
-                            if (em->type() == UnknownStdMessage && boost::shared_dynamic_cast<StdMessage_t>(em)->id() == "PM")
+                            foreach(Message_t::Pointer_t em, epoch.Messages)
                             {
-                                isHeader = true;
+                                if (em->type() == UnknownStdMessage && boost::shared_dynamic_cast<StdMessage_t>(em)->id() == "PM")
+                                {
+                                    isHeader = true;
+                                }
                             }
+                            headerParsed = true;
+                        }*/
+                        if (isHeader)
+                        {
+                            std::copy(epoch.Messages.begin(), epoch.Messages.end(), std::back_inserter(_header));
+                        } else {
+                            _body.push_back(epoch);
                         }
-                        headerParsed = true;
+                        epoch.Messages.clear();
                     }
-                    if (isHeader)
-                    {
-                        std::copy(epoch.begin(), epoch.end(), std::back_inserter(_header));
-                    } else {
-                        _body.push_back(epoch);
-                    }
-                    epoch.clear();
                 }
-                epoch.push_back(msg);
+                epoch.Messages.push_back(msg);
             }
             // last Epoch
-            if (epoch.size() > 0)
+            if (epoch.Messages.size() > 0)
             {
                 _body.push_back(epoch);
             }
             //sLog.addInfo(QString("В файле '%1' выделено %2 эпох.").arg(aFilename).arg(_body.size()));
         }
 
-        Epoch_t _header;
+        Messages_t _header;
         list<Epoch_t> _body;
         QString _filename;
     };

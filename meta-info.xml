@@ -1315,7 +1315,7 @@ controllable by RTK engine [%]</Comment>
         <Code>ID</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GPSAlm" Size="47" Title="[GA] GPS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="GPSAlm0" Size="47" Title="[GA] GPS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
@@ -1399,7 +1399,7 @@ at the start of week ‘wna’ [semi-circles]</Comment>
     </StandardMessage>
     <StandardMessage Name="GALAlm" Size="49" Title="[EA] GALILEO Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
-        <Variable GreisType="GPSAlm" Name="gps" RequiredValue="">
+        <Variable GreisType="GPSAlm1" Name="gps" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
 GALILEO-Specific data</Comment>
@@ -1562,7 +1562,7 @@ at reference time ‘tlam’[semi-circles]</Comment>
         <Code>WA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GPSEphemeris" Size="123" Title="[GE] GPS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="GPSEphemeris0" Size="123" Title="[GE] GPS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
@@ -1833,7 +1833,7 @@ tau = TGLN - TSV [s]</Comment>
         <Code>NE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="WAASEhemeris" Size="39" Title="[WE] WAAS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="WAASEhemeris" Size="71" Title="[WE] WAAS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
@@ -1919,7 +1919,7 @@ received at</Comment>
     </StandardMessage>
     <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
-        <Variable GreisType="GPSEphemeris" Name="gps" RequiredValue="">
+        <Variable GreisType="GPSEphemeris1" Name="gps" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
 GALILEO-specific data</Comment>
@@ -3129,6 +3129,221 @@ unavailable or exceeds ±536870911;</Comment>
 25…0: derivative of clock offset [10-4 m/s],
 bit combination 0x2000000 means that clock
 offset is unavailable or exceeds ±33554431;</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="GPSAlm1" Size="47">
+      <Variables>
+        <Variable GreisType="u1" Name="sv" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV PRN number within the range [1…37]</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="wna" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Almanac reference week []</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="toa" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Almanac reference time of week [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="healthA" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Health summary (from almanac), [bitfield]
+0…4 - code for health of SV signal components
+5…7 - navigation data health indicators</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="healthS" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Satellite health (page 25 of subframe 5) []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="config" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Satellite configuration (page 25 of subframe 4)
+[bitfield]:
+0…2 - satellite configuration
+3 - anti-spoofing flag
+4…7 - reserved
+======= Clock data =======</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af1" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s]
+===== Ephemeris data =====
+--- Keplerian orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="rootA" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="ecc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Eccentricity []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="m0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Mean Anomaly at reference time [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="omega0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Longitude of ascending node of orbit plane
+at the start of week ‘wna’ [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="argPer" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Argument of perigee [semi-circles]
+--- Corrections to orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="deli" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Correction to inclination angle [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="omegaDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of right ascension [semi-circle/s]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="GPSEphemeris1" Size="123">
+      <Variables>
+        <Variable GreisType="u1" Name="sv" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV PRN number within the range [1…37]</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="tow" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Time of week [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="flags" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Flags (see GPS ICD for details)[bitfield]:
+0 - curve fit interval
+1 - data flag for L2 P-code
+2,3 - code on L2 channel
+4 - anti-spoof (A-S) flag (from HOW)
+5 - ‘Alert’ flag (from HOW)
+6 - ephemeris was retrieved from non-volatile memory
+7 - reserved
+===== Clock data (Subframe 1) =====</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="iodc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Issue of data, clock []</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="toc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Clock data reference time [s]</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="ura" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>User range accuracy []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="healthS" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Satellite health []</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="wn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Week number []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="tgd" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Estimated group delay differential [s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af2" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s/(s^2)]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af1" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s]
+===== Ephemeris data (Subframes 2 and 3) =====</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="toe" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Ephemeris reference time [s]</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="iode" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Issue of data, ephemeris []
+--- Keplerian orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="rootA" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="ecc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Eccentricity []</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="m0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Mean Anomaly at reference time (wn,toe)
+[semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="omega0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Longitude of ascending node of orbit plane at the
+start of week ‘wn’ [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="inc0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Inclination angle at reference time [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="argPer" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Argument of perigee [semi-circles]
+--- Corrections to orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="deln" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Mean motion difference from computed value
+[semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="omegaDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of right ascension [semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="incDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of inclination angle [semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="crc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="crs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cuc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cus" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cic" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the angle of inclination [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cis" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the sine harmonic correction term
+to the angle of inclination [rad]</Comment>
         </Variable>
       </Variables>
     </CustomType>

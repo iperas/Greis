@@ -29,7 +29,7 @@ namespace Database
     public:
         // insertQuery: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES (?, ?, ?)"
         // connection: pointer to connection class
-        DataBatchInserter(const QString& insertQuery, int boundColumnsCount, Connection* connection, int batchSize = 1000, const QString& tableName = "")
+        DataBatchInserter(const QString& insertQuery, int boundColumnsCount, Connection* connection, const QString& tableName = "", int batchSize = 1000)
         {
             _insertQuery = insertQuery;
             _connection = connection;

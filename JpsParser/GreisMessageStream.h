@@ -91,7 +91,7 @@ NextLabel: // avoiding stack overflow in recursive call
                     if (id0 < minSM || id0 > maxSM || id1 < minSM || id1 > maxSM)
                     {
                         _file->read(1);
-                        sLogger.Warn(QString("1 byte skipped."));
+                        sLogger.Debug(QString("1 byte skipped."));
                         goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
                     }
                     // message len
@@ -113,7 +113,7 @@ NextLabel: // avoiding stack overflow in recursive call
                     StdMessage_t::Pointer_t msg = StdMessageFactory_t::Create(data.data(), msgLen + StdMsgHeaderLen);
                     if (skipInvalid && !msg->validate())
                     {
-                        sLogger.Warn(QString("Invalid message. ") + QString("Skip this one and look forward."));
+                        sLogger.Debug(QString("Invalid message. ") + QString("Skip this one and look forward."));
                         goto NextLabel;
                     }
                     //sLog.addInfo(msg->toString());
@@ -121,7 +121,7 @@ NextLabel: // avoiding stack overflow in recursive call
                 } else {
                     // Данные еще есть, но это не Greis-сообщение
                     _file->read(1);
-                    sLogger.Warn(QString("Unexpected end of file. ") +
+                    sLogger.Debug(QString("Unexpected end of file. ") +
                         QString("Cannot read whole standard message header, readed: %1, expected: 1. Skip 1 byte and try to find Non-standard Text Message.")
                             .arg(header.size()));
                     goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
