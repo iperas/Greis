@@ -33,6 +33,10 @@ namespace Tests
             assert(resd == d);
             assert(rese == e);
             assert(resf == f);
+
+            char buffer[4];
+            bc.ToByteArray(b, buffer);
+            assert(*((unsigned int*)buffer) == b);
         }
     };
 }

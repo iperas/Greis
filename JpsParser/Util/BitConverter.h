@@ -14,12 +14,25 @@ namespace Util
 
     private:
         EByteOrder _byteOrder;
-
+        EByteOrder _machineByteOrder;
     public:
 
         BitConverter(EByteOrder byteOrder = LeastSignificantByte)
         {
             _byteOrder = byteOrder;
+            
+            char test[4];
+            *((unsigned int*)test) = 0x1;
+            _machineByteOrder = test[0] == 0x1 ? LeastSignificantByte : MostSignificantByte;
+        }
+
+        inline void ToByteArray(unsigned int val, char* dst)
+        {
+            *((unsigned int*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(val);
+            }
         }
 
         inline unsigned char GetUChar(const char* data)

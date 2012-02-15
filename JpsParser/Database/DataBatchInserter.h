@@ -15,6 +15,9 @@ namespace Database
 {
     class DataBatchInserter
     {
+    public:
+        SHARED_PTR_T(DataBatchInserter);
+    private:
         QString _insertQuery;
         QString _tableName;
         int _rowsAdded;
@@ -22,9 +25,8 @@ namespace Database
         Connection* _connection;
         DatabaseHelper* _dbHelper;
         QVector<QVariantList> _boundValues;
+        QList<DataBatchInserter::Pointer_t> _children;
     public:
-        SHARED_PTR_T(DataBatchInserter);
-
         // insertQuery: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES (?, ?, ?)"
         // connection: pointer to connection class
         DataBatchInserter(const QString& insertQuery, int boundColumnsCount, Connection* connection, int batchSize = 1000, const QString& tableName = "")
@@ -42,6 +44,13 @@ namespace Database
         {
             Flush();
         }
+
+        void AddChild(DataBatchInserter::Pointer_t child)
+        {
+            _children.push_back(child);
+        }
+
+        const QList<DataBatchInserter::Pointer_t>& GetChildren() const { return _children; }
 
         void AddRow(const QList<QVariant>& values)
         {
@@ -66,6 +75,10 @@ namespace Database
         {
             if (_rowsAdded > 0)
             {
+                foreach (DataBatchInserter::Pointer_t child, _children)
+                {
+                    child->Flush();
+                }
                 QSqlQuery query = _dbHelper->ExecuteQuery("");
                 query.prepare(_insertQuery);
                 DatabaseHelper::ThrowIfError(query);

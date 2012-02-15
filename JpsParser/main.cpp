@@ -29,6 +29,12 @@ using namespace Database;
 
 int main(int argc, char *argv[])
 {
+#ifdef _DEBUG
+    // ## TESTS ##
+    Tests::BitConverterTests bct;
+    bct.TestLittleEndian();
+#endif
+
     try
     {
         std::setlocale(LC_ALL, "Russian_Russia.1251");
@@ -89,8 +95,10 @@ int main(int argc, char *argv[])
         jpsFile->toMySqlSink(sink);
         sink->Flush();
 
-        //sLog.addInfo(QString("Обработка успешно завершена."));
+        sLogger.Info("Обработка успешно завершена.");
+#ifdef _DEBUG
         system("PAUSE");
+#endif
         return 0;
     }
     catch (Exception& e)
