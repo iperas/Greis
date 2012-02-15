@@ -68,7 +68,7 @@ namespace Domain
 
             _lastEpochId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `epoch`")).toInt();
             _epochInserter = DataBatchInserter::Pointer_t(new DataBatchInserter(
-                "INSERT INTO `epoch` (id, unixtime) VALUES (?, ?)", 2, _connection, "epoch", 50));
+                "INSERT INTO `epoch` (id, dateTime) VALUES (?, ?)", 2, _connection, "epoch", 50));
         }
 
         ~MySqlSink()
@@ -76,11 +76,11 @@ namespace Domain
             Flush();
         }
 
-        void AddEpoch()
+        void AddEpoch(QDateTime dateTime)
         {
             QVariantList data;
             data << ++_lastEpochId;
-            data << 0.0;
+            data << dateTime;
             _epochInserter->AddRow(data);
         }
 

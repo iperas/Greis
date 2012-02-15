@@ -122,9 +122,9 @@ DROP TABLE IF EXISTS `messageTypeClassifier`;
 -- группировка сообщений по эпохам
 CREATE TABLE `epoch` (
          id SERIAL,
-         unixtime DOUBLE NOT NULL,
+         dateTime DATETIME NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_unixtime` (`unixtime`)
+         INDEX `idx_dateTime` (`dateTime`)
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов
@@ -1684,7 +1684,7 @@ CREATE TABLE `msg_EpochEnd` (
 
 
 -- нулевая эпоха-заглушка
-INSERT INTO `epoch` (`unixtime`) VALUES (0);
+-- INSERT INTO `epoch` (`unixtime`) VALUES (NULL);
 
 -- Наполнение классификатора sizeSpecialValueClassifier
 INSERT INTO `sizeSpecialValueClassifier` (`id`, `name`) 

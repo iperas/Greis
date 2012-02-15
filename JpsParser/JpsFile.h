@@ -17,6 +17,7 @@ namespace Greis
     class Epoch_t
     {
     public:
+        QDateTime DateTime;
         Messages_t Messages;
     };
 
@@ -64,7 +65,7 @@ namespace Greis
             }*/
             foreach(Epoch_t epoch, body())
             {
-                sink->AddEpoch();
+                sink->AddEpoch(epoch.DateTime);
                 foreach(Message_t::Pointer_t msg, epoch.Messages)
                 {
                     StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
@@ -83,6 +84,8 @@ namespace Greis
             StdMessageStream stream(aFilename);
             Message_t::Pointer_t msg;
 
+            QDateTime dateTime;
+            dateTime.setTimeSpec(Qt::UTC);
             // before ~~(RT)
             while((msg = stream.Next(true)).get())
             {
@@ -91,9 +94,12 @@ namespace Greis
                     auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                     if (stdMsg->id() == messageCodeRT)
                     {
-                        // epoch begins
-                        // TODO: убрать магические коды, возможно учитывать RD-сообщение
+                        handleRTMessage(stdMsg.get(), dateTime);
                         break;
+                    }
+                    if (stdMsg->id() == messageCodeRD)
+                    {
+                        handleRDMessage(stdMsg.get(), dateTime);
                     }
                 }
                 _header.push_back(msg);
@@ -113,6 +119,8 @@ namespace Greis
                     auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                     if (stdMsg->id() == messageCodeRT)
                     {
+                        epoch.DateTime = dateTime;
+                        handleRTMessage(stdMsg.get(), dateTime);
                         // push in previous epoch
                         bool isHeader = false;
                         /*if (!headerParsed) // Commented: Есть предположение, что параметры приемника должны идти наряду с обычными сообщениями.
@@ -134,6 +142,10 @@ namespace Greis
                         }
                         epoch.Messages.clear();
                     }
+                    if (stdMsg->id() == messageCodeRD)
+                    {
+                        handleRDMessage(stdMsg.get(), dateTime);
+                    }
                 }
                 epoch.Messages.push_back(msg);
             }
@@ -145,9 +157,27 @@ namespace Greis
             //sLog.addInfo(QString("В файле '%1' выделено %2 эпох.").arg(aFilename).arg(_body.size()));
         }
 
+        inline void handleRTMessage( StdMessage_t* stdMsg, QDateTime &dateTime )
+        {
+            auto dataPtr = stdMsg->body();
+            auto timeOfDay = _bitConverter.GetUInt(dataPtr);
+            dateTime.setTime(QTime().addMSecs(timeOfDay));
+        }
+
+        inline void handleRDMessage( StdMessage_t* stdMsg, QDateTime &dateTime ) 
+        {
+            auto dataPtr = stdMsg->body();
+            unsigned short year = _bitConverter.GetUShort(dataPtr);
+            dataPtr += 2;
+            unsigned short month = _bitConverter.GetUChar(dataPtr++);
+            unsigned short day = _bitConverter.GetUChar(dataPtr++);
+            dateTime.setDate(QDate(year, month, day));
+        }
+
         Messages_t _header;
         list<Epoch_t> _body;
         QString _filename;
+        BitConverter _bitConverter;
     };
 }
 
