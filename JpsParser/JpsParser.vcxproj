@@ -63,8 +63,7 @@
       <AdditionalDependencies>log4cxx.lib;QtXmld4.lib;QtSqld4.lib;QtCored4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y $(SolutionDir)logger.config.xml $(TargetDir)logger.config.xml
-copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
+      <Command>copy /Y $(SolutionDir)logger.config.xml $(TargetDir)logger.config.xml</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,7 +87,7 @@ copy /Y $(SolutionDir)config.ini $(TargetDir)config.ini</Command>
       <AdditionalLibraryDirectories>$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y $(ProjectDir)logger.config.xml $(TargetDir)logger.config.xml</Command>
+      <Command>copy /Y $(SolutionDir)logger.config.xml $(TargetDir)logger.config.xml</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
