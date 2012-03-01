@@ -35,6 +35,9 @@ int main(int argc, char *argv[])
     bct.TestLittleEndian();
 #endif
 
+    bool transactionStarted;
+    bool wrapIntoTransaction;
+    Connection connection;
     try
     {
         std::setlocale(LC_ALL, "Russian_Russia.1251");
@@ -61,41 +64,31 @@ int main(int argc, char *argv[])
         }
         QString filename = args[1];
 
-#ifdef _DEBUG
-        /*{
-            string log1;
-            StdMessageStream stream(filename);
-            Message_t::Pointer_t msg;
-            while((msg = stream.Next(true)).get())
-            {
-                log1.append(boost::shared_dynamic_cast<StdMessage_t>(msg)->id() + " ");
-            }
-            std::ofstream fileLog("jpsTrace.txt");
-            fileLog.write(log1.c_str(), log1.size());
-            fileLog.close();
-        }*/
-#endif
-
         // Загрузка мета-информации
-        Connection connection = Connection::FromSettings("Db");
+        wrapIntoTransaction = sIniSettings.value("WrapIntoTransaction", false).toBool();
+        int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();
+        connection = Connection::FromSettings("Db");
         connection.Connect();
         MetaInfo::Pointer_t metaInfo = MetaInfo::FromDatabase(&connection);
         // Открытие JPS-файла и парсинг
+        sLogger.Info(QString("Parsing of '%1'...").arg(filename));
         JpsFile_t::Pointer_t jpsFile(new JpsFile_t(filename));
-        /*DatabaseWriter writer;
-        writer.Connect(connection, "source1");
-        writer.AddData(jpsFile);*/
-
-#ifdef _DEBUG
-        /*std::ofstream jps2("jps2.jps");
-        jpsFile->toBinaryStream(jps2);
-        jps2.close();*/
-#endif
-        MySqlSink::Pointer_t sink(new MySqlSink(metaInfo, &connection));
+        sLogger.Info(QString("Parsing completed."));
+        sLogger.Info(QString("Inserting parsed data into `%1`...").arg(connection.DatabaseName));
+        if (wrapIntoTransaction)
+        {
+            sLogger.Info("Starting a new transaction...");
+            transactionStarted = connection.Database().transaction();
+        }
+        MySqlSink::Pointer_t sink(new MySqlSink(metaInfo, &connection, inserterBatchSize));
         jpsFile->toMySqlSink(sink);
         sink->Flush();
-
-        sLogger.Info("Обработка успешно завершена.");
+        if (wrapIntoTransaction && transactionStarted)
+        {
+            connection.Database().commit();
+            sLogger.Info("The transaction has been committed.");
+        }
+        sLogger.Info(QString("Insertion completed."));
 #ifdef _DEBUG
         system("PAUSE");
 #endif
@@ -103,6 +96,11 @@ int main(int argc, char *argv[])
     }
     catch (Exception& e)
     {
+        if (wrapIntoTransaction && transactionStarted)
+        {
+            connection.Database().rollback();
+            sLogger.Info("The transaction has been rolled back.");
+        }
         sLogger.Error(e.what());
         return 1;
     }

@@ -81,6 +81,7 @@ namespace Greis
             _filename = aFilename;
             _header.clear();
             _body.clear();
+            int epochCounter = 0;
             StdMessageStream stream(aFilename);
             Message_t::Pointer_t msg;
 
@@ -139,6 +140,10 @@ namespace Greis
                             std::copy(epoch.Messages.begin(), epoch.Messages.end(), std::back_inserter(_header));
                         } else {
                             _body.push_back(epoch);
+                            if (++epochCounter % 3000 == 0)
+                            {
+                                sLogger.Info(QString("+3000 epochs found (%1 total)...").arg(epochCounter));
+                            }
                         }
                         epoch.Messages.clear();
                     }

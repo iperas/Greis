@@ -44,14 +44,16 @@ namespace Domain
         QStringList _unknownTypes;
         QMap<QString, MessageMeta::Pointer_t> _codeToMsgMap;
         QMap<QString, CustomTypeMeta::Pointer_t> _nameToCustomTypeMap;
+        int _inserterBatchSize;
     public:
         SHARED_PTR_T(MySqlSink);
 
-        MySqlSink(MetaInfo::Pointer_t metaInfo, Connection* connection)
+        MySqlSink(MetaInfo::Pointer_t metaInfo, Connection* connection, int inserterBatchSize = 10000)
         {
             _metaInfo = metaInfo;
             _connection = connection;
             _dbHelper = _connection->DbHelper();
+            _inserterBatchSize = inserterBatchSize;
 
             foreach (MessageMeta::Pointer_t msg, _metaInfo->MessagesMeta)
             {
@@ -68,7 +70,7 @@ namespace Domain
 
             _lastEpochId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `epoch`")).toInt();
             _epochInserter = DataBatchInserter::Pointer_t(new DataBatchInserter(
-                "INSERT INTO `epoch` (id, dateTime) VALUES (?, ?)", 2, _connection, "epoch", 50));
+                "INSERT INTO `epoch` (id, dateTime) VALUES (?, ?)", 2, _connection, "epoch", _inserterBatchSize));
         }
 
         ~MySqlSink()
@@ -119,6 +121,7 @@ namespace Domain
             }
             catch (NotImplementedException& e)
             {
+                sLogger.Warn(e.what());
             }
         }
 
@@ -291,7 +294,6 @@ namespace Domain
 
         void Flush()
         {
-            _epochInserter->Flush();
             foreach (DataBatchInserter::Pointer_t inserter, _msgInsertersMap)
             {
                 inserter->Flush();
@@ -470,6 +472,7 @@ namespace Domain
 
             // Getting inserters for all fields
             QList<DataBatchInserter::Pointer_t> childInserters;
+            childInserters.append(_epochInserter);
             foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
             {
                 auto ct = _nameToCustomTypeMap[varMeta->Type];
@@ -510,7 +513,7 @@ namespace Domain
                 insertCommand.append(", ?");
             }
             insertCommand.append(")");
-            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, variablesCount + customFields.size(), _connection, msgMeta->TableName));
+            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, variablesCount + customFields.size(), _connection, msgMeta->TableName, _inserterBatchSize));
             foreach (DataBatchInserter::Pointer_t ci, childInserters)
             {
                 inserter->AddChild(ci);

@@ -58,7 +58,7 @@ namespace Database
             {
                 throw InvalidOperationException("Invalid elements count in `AddRow(values)` array.");
             }
-            if (_rowsAdded > _batchSize)
+            if (_rowsAdded >= _batchSize)
             {
                 Flush();
             }
@@ -91,9 +91,9 @@ namespace Database
 
                 if (_tableName.isEmpty() || _tableName.isNull())
                 {
-                    sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
+                    sLogger.Info(QString("%1 records has been added.").arg(_rowsAdded));
                 } else {
-                    sLogger.Info(QString("Добавлено %1 записей в `%2`...").arg(_rowsAdded).arg(_tableName));
+                    sLogger.Info(QString("%1 records has been added into `%2`.").arg(_rowsAdded).arg(_tableName));
                 }
                 _rowsAdded = 0;
                 int size = _boundValues.size();
