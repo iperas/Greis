@@ -22,6 +22,7 @@ using namespace Greis;
 #include "Util/BitConverter.h"
 #include "Domain/MetaInfo.h"
 #include "Domain/MySqlSink.h"
+#include "Domain/MetaInfoReader.h"
 
 using namespace Util;
 using namespace Domain;
@@ -70,6 +71,10 @@ int main(int argc, char *argv[])
         connection = Connection::FromSettings("Db");
         connection.Connect();
         MetaInfo::Pointer_t metaInfo = MetaInfo::FromDatabase(&connection);
+
+        EpochsReader er(metaInfo, &connection);
+        er.Load(QDateTime(QDate(2011, 03, 22), QTime(0, 0, 0), Qt::LocalTime), QDateTime(QDate(2011, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
+        return 0;
         // Открытие JPS-файла и парсинг
         sLogger.Info(QString("Parsing of '%1'...").arg(filename));
         JpsFile_t::Pointer_t jpsFile(new JpsFile_t(filename));

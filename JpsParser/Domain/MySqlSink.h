@@ -18,17 +18,6 @@ using namespace Greis;
 
 namespace Domain
 {
-    class SimpleGreisTypesReader
-    {
-    private:
-        BitConverter* _bitConverter;
-    public:
-        SimpleGreisTypesReader(BitConverter* bitConverter)
-        {
-            _bitConverter = bitConverter;
-        }
-    };
-
     class MySqlSink
     {
     private:
@@ -70,7 +59,7 @@ namespace Domain
 
             _lastEpochId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `epoch`")).toInt();
             _epochInserter = DataBatchInserter::Pointer_t(new DataBatchInserter(
-                "INSERT INTO `epoch` (id, dateTime) VALUES (?, ?)", 2, _connection, "epoch", _inserterBatchSize));
+                "INSERT INTO `epoch` (id, dt) VALUES (?, ?)", 2, _connection, "epoch", _inserterBatchSize));
         }
 
         ~MySqlSink()
@@ -82,7 +71,8 @@ namespace Domain
         {
             QVariantList data;
             data << ++_lastEpochId;
-            data << dateTime;
+            //data << dateTime;
+            data << dateTime.toMSecsSinceEpoch();
             _epochInserter->AddRow(data);
         }
 
@@ -105,11 +95,7 @@ namespace Domain
 
             DataBatchInserter::Pointer_t inserter = getMsgInserter(msgMeta.get());
             
-            int fillFieldsCount = -1;
-            if (msgMeta->Size == SizeSpecialValueClassifier::Fill)
-            {
-                fillFieldsCount = getFilledArrayFieldsSize(msgMeta.get(), msg->bodySize());
-            }
+            int fillFieldsCount = msgMeta->GetFilledArrayFieldsSize(_metaInfo.get(), msg->bodySize());
             
             try
             {
@@ -301,82 +287,7 @@ namespace Domain
         }
 
     private:
-        // —делано приближение что не бывает смешанных динамических\статических массивов
-        // и что динамические многомерные массивы равнозначны одномерным
-        // fieldCount = (struct_size - static_fields_size) / (the_other_fields_size)
-        int getFilledArrayFieldsSize(CustomTypeMeta* msgMeta, int msgBodySize)
-        {
-            static QMap<QString, int> simpleTypesSize;
-            simpleTypesSize["a1"] = 1;
-            simpleTypesSize["u1"] = 1;
-            simpleTypesSize["u2"] = 2;
-            simpleTypesSize["u4"] = 4;
-            simpleTypesSize["i1"] = 1;
-            simpleTypesSize["i2"] = 2;
-            simpleTypesSize["i4"] = 4;
-            simpleTypesSize["f4"] = 4;
-            simpleTypesSize["f8"] = 8;
-            int fillFieldsTypeSize = 0;
-
-            int size = msgBodySize;
-            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
-            {
-                // typeSize computing
-                int typeSize;
-                if (simpleTypesSize.contains(varMeta->Type))
-                {
-                    typeSize = simpleTypesSize[varMeta->Type];
-                } else {
-                    CustomTypeMeta::Pointer_t varType;
-                    foreach (CustomTypeMeta::Pointer_t ct, _metaInfo->CustomTypesMeta)
-                    {
-                        if (ct->Name == varMeta->Type)
-                        {
-                            varType = ct;
-                            break;
-                        }
-                    }
-                    if (!varType.get())
-                    {
-                        throw Exception(QString("Cannot find custom type definition for type `%1`.").arg(varMeta->Type));
-                    }
-                    if (varType->Size < 0)
-                    {
-                        throw Exception(QString("Fields with custom type of dynamic size is too complicated logic."));
-                    }
-                    typeSize = varType->Size;
-                }
-                // check for dynamic array fields
-                int dimCount = varMeta->GetDimensionsCount();
-                bool fillSize = false;
-                for (int i = 0; i < dimCount; ++i)
-                {
-                    if (varMeta->GetSizeForDimension(i + 1) == SizeSpecialValueClassifier::Fill)
-                    {
-                        fillSize = true;
-                    }
-                }
-                if (fillSize)
-                {
-                    fillFieldsTypeSize += typeSize;
-                    continue;
-                }
-                // static fields size computing
-                if (varMeta->IsScalar())
-                {
-                    size -= typeSize;
-                } else {
-                    int itemsCount = varMeta->GetSizeForDimension(1);
-                    for (int i = 1; i < varMeta->GetDimensionsCount(); ++i)
-                    {
-                        itemsCount *= varMeta->GetSizeForDimension(i + 1);
-                    }
-                    size -= typeSize * itemsCount;
-                }
-            }
-            int fillFieldsCount = size / fillFieldsTypeSize;
-            return fillFieldsCount;
-        }
+        
 
         // ‘ормирует данные и отправл€ет на ожидание вставки. ¬озвращает ID нового элемента.
         int handleCustomType(CustomTypeMeta* ct, const char* dataPtr)
@@ -394,6 +305,7 @@ namespace Domain
             {
                 QVariantList rowValues;
                 rowValues << newId;
+                rowValues << _lastEpochId;
                 serializeCustomType(ct, dataPtr, fillFieldsCount, rowValues);
                 inserter->AddRow(rowValues);
             }
@@ -456,7 +368,7 @@ namespace Domain
                 return inserter;
             }
 
-            inserter = createInserter(ctMeta, QStringList() << "id");
+            inserter = createInserter(ctMeta, QStringList() << "id" << "idEpoch");
             _ctInsertersMap[ctMeta] = inserter;
 
             int lastId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `%1`").arg(ctMeta->TableName)).toInt();

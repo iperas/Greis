@@ -4,11 +4,14 @@
 #include <QList>
 #include "Database/Connection.h"
 #include "Util/SharedPtr.h"
+#include "Util/Exception.h"
 
 using namespace Database;
 
 namespace Domain
 {
+    class MetaInfo;
+
     struct ValidationClassifier
     {
         enum EValidationClassifier
@@ -105,6 +108,11 @@ namespace Domain
 
         QList<VariableMeta::Pointer_t> Variables;
         QString TableName;
+
+        // Сделано приближение что не бывает смешанных динамических\статических массивов
+        // и что динамические многомерные массивы равнозначны одномерным
+        // fieldCount = (struct_size - static_fields_size) / (the_other_fields_size)
+        int GetFilledArrayFieldsSize(MetaInfo* metaInfo, int msgBodySize);
     };
 
     class MessageMeta : public CustomTypeMeta

@@ -31,7 +31,52 @@ namespace Util
             *((unsigned int*)dst) = val;
             if (_machineByteOrder != _byteOrder)
             {
-                endianSwap(val);
+                endianSwap(*((unsigned int*)dst));
+            }
+        }
+
+        inline void ToByteArray(unsigned short val, char* dst)
+        {
+            *((unsigned short*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned short*)dst));
+            }
+        }
+
+        inline void ToByteArray(int val, char* dst)
+        {
+            *((int*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned int*)dst));
+            }
+        }
+
+        inline void ToByteArray(short val, char* dst)
+        {
+            *((short*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned short*)dst));
+            }
+        }
+
+        inline void ToByteArray(float val, char* dst)
+        {
+            *((float*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned int*)dst));
+            }
+        }
+
+        inline void ToByteArray(double val, char* dst)
+        {
+            *((double*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned long long*)dst));
             }
         }
 

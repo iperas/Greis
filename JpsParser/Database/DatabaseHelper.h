@@ -19,13 +19,25 @@ namespace Database
         {
             if (query.lastError().isValid())
             {
-                throw DatabaseException(query.lastError().text());
+                auto text = query.lastError().text();
+                throw DatabaseException(text);
             }
+        }
+
+        inline QSqlQuery CreateQuery()
+        {
+            return QSqlQuery(_db);
         }
 
         inline QSqlQuery ExecuteQuery(const QString& queryString)
         {
             return ExecuteQuery(queryString, _db);
+        }
+
+        // Executing query with query string `queryString` and unnamed input bind values `bindValues`.
+        inline QSqlQuery ExecuteQuery(const QString& queryString, const QList<QVariant>& bindValues)
+        {
+            return ExecuteQuery(queryString, bindValues, _db);
         }
 
         static QSqlQuery ExecuteQuery(const QString& queryString, QSqlDatabase db/* = QSqlDatabase()*/)
@@ -35,9 +47,29 @@ namespace Database
             return query;
         }
 
+        // Executing query with database `db`, query string `queryString` and unnamed input bind values `bindValues`.
+        static QSqlQuery ExecuteQuery(const QString& queryString, const QList<QVariant>& bindValues, QSqlDatabase db/* = QSqlDatabase()*/)
+        {
+            QSqlQuery query(db);
+            query.prepare(queryString);
+            ThrowIfError(query);
+            foreach (QVariant val, bindValues)
+            {
+                query.addBindValue(val);
+            }
+            query.exec();
+            ThrowIfError(query);
+            return query;
+        }
+
         inline QSqlQuery ExecuteSingleRowQuery(const QString& queryString)
         {
             return ExecuteSingleRowQuery(queryString, _db);
+        }
+
+        inline QSqlQuery ExecuteSingleRowQuery(const QString& queryString, const QList<QVariant>& bindValues)
+        {
+            return ExecuteSingleRowQuery(queryString, bindValues, _db);
         }
 
         static QSqlQuery ExecuteSingleRowQuery(const QString& queryString, QSqlDatabase db/* = QSqlDatabase()*/)
@@ -45,7 +77,17 @@ namespace Database
             QSqlQuery query = ExecuteQuery(queryString, db);
             if (!query.next())
             {
-                throw DatabaseException(QString("Запрос '%1' вернул 0 записей. Ожидалась 1 запись.").arg(queryString));
+                throw DatabaseException(QString("The query '%1' has returned 0 records. One record was expected.").arg(queryString));
+            }
+            return query;
+        }
+
+        static QSqlQuery ExecuteSingleRowQuery(const QString& queryString, const QList<QVariant>& bindValues, QSqlDatabase db/* = QSqlDatabase()*/)
+        {
+            QSqlQuery query = ExecuteQuery(queryString, bindValues, db);
+            if (!query.next())
+            {
+                throw DatabaseException(QString("The query '%1' has returned 0 records. One record was expected.").arg(queryString));
             }
             return query;
         }
@@ -55,13 +97,29 @@ namespace Database
             return ExecuteSingleValueQuery(queryString, _db);
         }
 
+        inline QVariant ExecuteSingleValueQuery(const QString& queryString, const QList<QVariant>& bindValues)
+        {
+            return ExecuteSingleValueQuery(queryString, bindValues, _db);
+        }
+
         static QVariant ExecuteSingleValueQuery(const QString& queryString, QSqlDatabase db/* = QSqlDatabase()*/)
         {
             QSqlQuery query = ExecuteSingleRowQuery(queryString, db);
             QVariant value = query.value(0);
             if (!value.isValid())
             {
-                throw DatabaseException(QString("Запрос '%1' вернул некорректное значение для index = 0.").arg(queryString));
+                throw DatabaseException(QString("The query '%1' has returned invalid value for index 0.").arg(queryString));
+            }
+            return value;
+        }
+
+        static QVariant ExecuteSingleValueQuery(const QString& queryString, const QList<QVariant>& bindValues, QSqlDatabase db/* = QSqlDatabase()*/)
+        {
+            QSqlQuery query = ExecuteSingleRowQuery(queryString, bindValues, db);
+            QVariant value = query.value(0);
+            if (!value.isValid())
+            {
+                throw DatabaseException(QString("The query '%1' has returned invalid value for index 0.").arg(queryString));
             }
             return value;
         }

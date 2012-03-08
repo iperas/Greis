@@ -134,7 +134,7 @@ namespace Greis
                                 }
                             }
                             headerParsed = true;
-                        }*/
+                            }*/
                         if (isHeader)
                         {
                             std::copy(epoch.Messages.begin(), epoch.Messages.end(), std::back_inserter(_header));

@@ -105,7 +105,8 @@ namespace GreisDocParser
             var tableCreationSb = new StringBuilder();
             const string queryCtFmt = "-- custom type '{0}'\r\n" +
                                       "CREATE TABLE `{1}` (\r\n" +
-                                      "    id SERIAL, \r\n{2}" +
+                                      "    id SERIAL, \r\n" +
+                                      "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n{2}" +
                                       "    PRIMARY KEY (`id`));\r\n\r\n";
             foreach (var ct in _metaInfo.CustomTypes)
             {

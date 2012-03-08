@@ -122,9 +122,10 @@ DROP TABLE IF EXISTS `messageTypeClassifier`;
 -- группировка сообщений по эпохам
 CREATE TABLE `epoch` (
          id SERIAL,
-         dateTime DATETIME NOT NULL,
+         -- dt DATETIME NOT NULL,
+         dt BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_dateTime` (`dateTime`)
+         INDEX `idx_dt` (`dt`)
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов
@@ -253,6 +254,7 @@ CREATE TABLE `messageVariableSizeForDimension` (
 -- custom type 'UtcOffs'
 CREATE TABLE `ct_UtcOffs` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `a0` DOUBLE, 
     `a1` FLOAT, 
     `tot` INT UNSIGNED, 
@@ -266,6 +268,7 @@ CREATE TABLE `ct_UtcOffs` (
 -- custom type 'Smooth'
 CREATE TABLE `ct_Smooth` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `value` FLOAT, 
     `interval` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`));
@@ -273,6 +276,7 @@ CREATE TABLE `ct_Smooth` (
 -- custom type 'SvData0'
 CREATE TABLE `ct_SvData0` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `prn` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
     `data` BLOB, 
@@ -281,6 +285,7 @@ CREATE TABLE `ct_SvData0` (
 -- custom type 'SvData1'
 CREATE TABLE `ct_SvData1` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `fcn1` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
     `data` BLOB, 
@@ -289,6 +294,7 @@ CREATE TABLE `ct_SvData1` (
 -- custom type 'SvData2'
 CREATE TABLE `ct_SvData2` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `header` BIGINT UNSIGNED, 
     `slot` BLOB, 
     PRIMARY KEY (`id`));
@@ -296,6 +302,7 @@ CREATE TABLE `ct_SvData2` (
 -- custom type 'Header'
 CREATE TABLE `ct_Header` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `refrange` INT UNSIGNED, 
     `usi` TINYINT UNSIGNED, 
     `num` TINYINT UNSIGNED, 
@@ -304,6 +311,7 @@ CREATE TABLE `ct_Header` (
 -- custom type 'SlotRec'
 CREATE TABLE `ct_SlotRec` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `svstOrDelrange` SMALLINT, 
     `word1` INT UNSIGNED, 
     `flags` SMALLINT UNSIGNED, 
@@ -314,6 +322,7 @@ CREATE TABLE `ct_SlotRec` (
 -- custom type 'ClkOffs'
 CREATE TABLE `ct_ClkOffs` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `word1` INT UNSIGNED, 
     `word2` INT UNSIGNED, 
     PRIMARY KEY (`id`));
@@ -321,6 +330,7 @@ CREATE TABLE `ct_ClkOffs` (
 -- custom type 'GPSAlm1'
 CREATE TABLE `ct_GPSAlm1` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `sv` TINYINT UNSIGNED, 
     `wna` SMALLINT, 
     `toa` INT, 
@@ -341,6 +351,7 @@ CREATE TABLE `ct_GPSAlm1` (
 -- custom type 'GPSEphemeris1'
 CREATE TABLE `ct_GPSEphemeris1` (
     id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
     `sv` TINYINT UNSIGNED, 
     `tow` INT UNSIGNED, 
     `flags` TINYINT UNSIGNED, 

@@ -19,9 +19,10 @@ DROP TABLE IF EXISTS `messageTypeClassifier`;
 -- группировка сообщений по эпохам
 CREATE TABLE `epoch` (
          id SERIAL,
-         dateTime DATETIME NOT NULL,
+         -- dt DATETIME NOT NULL,
+         dt BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_dateTime` (`dateTime`)
+         INDEX `idx_dt` (`dt`)
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов

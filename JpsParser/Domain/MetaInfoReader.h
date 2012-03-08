@@ -4,6 +4,7 @@
 #include "Database\Connection.h"
 #include "MetaInfo.h"
 #include "Util\SharedPtr.h"
+#include "JpsFile.h"
 
 using namespace Database;
 
@@ -168,6 +169,301 @@ namespace Domain
                 customTypesMeta.append(customTypeMeta);
             }
             return customTypesMeta;
+        }
+    };
+
+    class EpochsRange_t
+    {
+    public:
+        SHARED_PTR_T(EpochsRange_t);
+
+        QList<Epoch_t> Epochs;
+    };
+
+    class MessagesSerializer
+    {
+        MetaInfo::Pointer_t _metaInfo;
+    public:
+        SHARED_PTR_T(MessagesSerializer);
+
+        MessagesSerializer(MetaInfo::Pointer_t metaInfo)
+        {
+            _metaInfo = metaInfo;
+        }
+
+
+    };
+
+    class EpochsReader
+    {
+    private:
+        Connection *_connection;
+        DatabaseHelper* _dbHelper;
+        MetaInfo::Pointer_t _metaInfo;
+        BitConverter _bitConverter;
+        QMap<QString, CustomTypeMeta::Pointer_t> _nameToCustomTypeMap;
+        QMap<int, QMap<int, QByteArray> > _loadedCustomTypes;
+        int _idEpochFrom;
+        int _idEpochTo;
+        QDateTime _dateTimeFrom;
+        QDateTime _dateTimeTo;
+    public:
+        EpochsReader(MetaInfo::Pointer_t metaInfo, Connection *connection)
+        {
+            _metaInfo = metaInfo;
+            _connection = connection;
+            _dbHelper = _connection->DbHelper();
+
+            foreach (CustomTypeMeta::Pointer_t ct, _metaInfo->CustomTypesMeta)
+            {
+                _nameToCustomTypeMap[ct->Name] = ct;
+            }
+        }
+
+        EpochsRange_t::Pointer_t Load(QDateTime dateTimeFrom, QDateTime dateTimeTo)
+        {
+            auto range = SHARED_PTR_NEW(EpochsRange_t);
+            _dateTimeFrom = dateTimeFrom;
+            _dateTimeTo = dateTimeTo;
+
+            // Reading idEpochFrom
+            /*auto queryStr = QString("SELECT `id` FROM `epoch` WHERE `dateTime` >= ? ORDER BY `dateTime` LIMIT 1");
+            _idEpochFrom = _dbHelper->ExecuteSingleValueQuery(queryStr, QList<QVariant>() << dateTimeFrom).toInt();
+
+            // Reading idEpochTo
+            queryStr = QString("SELECT `id` FROM `epoch` WHERE `dateTime` <= ? ORDER BY `dateTime` DESC LIMIT 1");
+            _idEpochTo = _dbHelper->ExecuteSingleValueQuery(queryStr, QList<QVariant>() << dateTimeTo).toInt();*/
+
+            QMap<int, StdMessage_t::Pointer_t> idToCtMap;
+
+            foreach (CustomTypeMeta::Pointer_t ctMeta, _metaInfo->MessagesMeta)
+            {
+                QString queryStr = createSelectString(ctMeta.get());
+                auto query = _dbHelper->ExecuteQuery(queryStr);
+                bool hitme = queryStr.contains(QString("msg_rcp_rc1"), Qt::CaseInsensitive);
+                while (query.next())
+                {
+                    int id = query.value(0).toInt();
+
+                    QVariantList fields;
+                    for (int i = 1; i < query.size(); ++i)
+                    {
+                        fields.append(query.value(i));
+                    }
+                    QByteArray ba;
+
+                    binarizeCustomType(ctMeta.get(), fields, ba);
+
+                    auto msg = StdMessage_t::Pointer_t(new StdMessage_t(ba.data(), ba.size()));
+                    idToCtMap[id] = msg;
+                    idToCtMap[id + 666123] = hitme ? StdMessage_t::Pointer_t() : StdMessage_t::Pointer_t();
+                }
+            }
+
+            // Cache clean up
+            _loadedCustomTypes.clear();
+
+            return range;
+        }
+
+    private:
+        void binarizeCustomType( CustomTypeMeta* msgMeta, const QVariantList& fieldsSequence, QByteArray& sink ) 
+        {
+            QByteArray output;
+            int colIndex = 1;
+            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
+            {
+                auto varType = varMeta->Type;
+                if (varType == "a1")
+                {
+                    auto val = fieldsSequence.at(colIndex).toString().toAscii();
+                    output.append(val);
+                } else if (varType == "i1")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = (char) fieldsSequence.at(colIndex).toInt();
+                        output.append(val);
+                    } else 
+                    {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "i2")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = (short) fieldsSequence.at(colIndex).toInt();
+                        char binVal[2];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 2);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "i4")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = fieldsSequence.at(colIndex).toInt();
+                        char binVal[4];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 4);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "u1")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = (unsigned char) fieldsSequence.at(colIndex).toUInt();
+                        output.append((char*)&val, 1);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "u2")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = (unsigned short) fieldsSequence.at(colIndex).toUInt();
+                        char binVal[2];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 2);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "u4")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = fieldsSequence.at(colIndex).toUInt();
+                        char binVal[4];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 4);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "f4")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = fieldsSequence.at(colIndex).toFloat();
+                        char binVal[4];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 4);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else if (varType == "f8")
+                {
+                    if (varMeta->IsScalar())
+                    {
+                        auto val = fieldsSequence.at(colIndex).toDouble();
+                        char binVal[8];
+                        _bitConverter.ToByteArray(val, binVal);
+                        output.append(binVal, 8);
+                    } else {
+                        auto val = fieldsSequence.at(colIndex).toByteArray();
+                        output.append(val);
+                    }
+                } else {
+                    auto ct = _nameToCustomTypeMap[varType];
+                    if (!ct.get())
+                    {
+                        throw Exception(QString("EpochsReader: unknown type `%1`...").arg(varType));
+                    } else {
+                        int typeSize = ct->Size;
+                        BOOST_ASSERT(typeSize >= 0);
+
+                        QVector<int> ctIds;
+                        if (varMeta->IsScalar())
+                        {
+                            int ctId = fieldsSequence.at(colIndex).toInt();
+                            ctIds.append(ctId);
+                        } else {
+                            auto ba = fieldsSequence.at(colIndex).toByteArray();
+                            const char* baRaw = ba.data();
+                            
+                            for (int baSize = ba.size(), pos = 0; baSize >= 4; baSize -= 4)
+                            {
+                                int ctId = (int) _bitConverter.GetUInt(baRaw+pos);
+                                ctIds.append(ctId);
+                            }
+                        }
+
+                        foreach (int ctId, ctIds)
+                        {
+                            handleCustomType(ct.get(), ctId, output);
+                        }
+                    }
+                }
+                colIndex++;
+            }
+            sink.append(output);
+        }
+
+        void handleCustomType(CustomTypeMeta* ctMeta, int ctId, QByteArray& sink )
+        {
+            decltype(_loadedCustomTypes.constBegin()) it;
+            if ((it = _loadedCustomTypes.find(ctMeta->Id)) != _loadedCustomTypes.constEnd())
+            {
+                decltype(it->constBegin()) it2;
+                if ((it2 = it->find(ctId)) != it->constEnd())
+                {
+                    // custom type found in cache
+                    sink.append(it2.value());
+                }
+            }
+
+            auto queryStr = createSelectString(ctMeta);
+            auto query = _dbHelper->ExecuteQuery(queryStr);
+            while (query.next())
+            {
+                int id = query.value(0).toInt();
+
+                QVariantList fields;
+                for (int i = 1; i < query.size(); ++i)
+                {
+                    fields.append(query.value(i));
+                }
+                QByteArray ba;
+
+                binarizeCustomType(ctMeta, fields, ba);
+
+                _loadedCustomTypes[ctMeta->Id][ctId] = ba;
+                sink.append(ba);
+            }
+        }
+
+        QString createSelectString(CustomTypeMeta* ctMeta)
+        {
+            QStringList columnsNames;
+            foreach (VariableMeta::Pointer_t varMeta, ctMeta->Variables)
+            {
+                columnsNames.append(varMeta->GetColumnName());
+            }
+            auto columnsStr = columnsNames.join("`, `");
+            /*auto queryStr = QString("SELECT `id`, `%1` FROM `%2` WHERE idEpoch >= %3 AND idEpoch <= %4")
+                .arg(columnsStr)
+                .arg(ctMeta->TableName)
+                .arg(_idEpochFrom)
+                .arg(_idEpochTo);
+            auto queryStr = QString("SELECT `id`, `%1` FROM `%2` WHERE `idEpoch` IN (SELECT `id` FROM `epoch` WHERE `dt` BETWEEN TIMESTAMP('%1') AND TIMESTAMP('%2'))")
+                .arg(columnsStr)
+                .arg(ctMeta->TableName)
+                .arg(_dateTimeFrom.toString("yyyy-MM-dd HH:mm:ss"))
+                .arg(_dateTimeTo.toString("yyyy-MM-dd HH:mm:ss"));*/
+            auto queryStr = QString("SELECT `id`, `%1` FROM `%2` WHERE `idEpoch` IN (SELECT `id` FROM `epoch` WHERE `dt` BETWEEN %3 AND %4)")
+                .arg(columnsStr)
+                .arg(ctMeta->TableName)
+                .arg(_dateTimeFrom.toMSecsSinceEpoch())
+                .arg(_dateTimeTo.toMSecsSinceEpoch());
+            return queryStr;
         }
     };
 }
