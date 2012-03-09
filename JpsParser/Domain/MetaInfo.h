@@ -130,6 +130,10 @@ namespace Domain
         MessageType::Pointer_t Type;
 
         QList<MessageCode::Pointer_t> Codes;
+
+        int FindMessageCodeId(const char* code);
+
+        QString FindMessageCodeCode(int id);
     };
 
     class MetaInfo

@@ -106,7 +106,8 @@ namespace GreisDocParser
             const string queryCtFmt = "-- custom type '{0}'\r\n" +
                                       "CREATE TABLE `{1}` (\r\n" +
                                       "    id SERIAL, \r\n" +
-                                      "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n{2}" +
+                                      "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
+                                      "    bodySize INT NOT NULL, \r\n{2}" +
                                       "    PRIMARY KEY (`id`));\r\n\r\n";
             foreach (var ct in _metaInfo.CustomTypes)
             {
@@ -123,11 +124,16 @@ namespace GreisDocParser
             const string queryMsgFmt = "-- message '{0}': {1}\r\n" +
                                        "CREATE TABLE `{2}` (\r\n" +
                                        "    id SERIAL, \r\n" +
-                                       "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n{3}" +
+                                       "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
+                                       "    idMessageCode BIGINT UNSIGNED NOT NULL, \r\n" +
+                                       "    bodySize INT NOT NULL, \r\n{3}" +
                                        "    PRIMARY KEY (`id`), \r\n" +
                                        "    INDEX `idx_fk_{2}_idEpoch` (`idEpoch`), \r\n" +
+                                       "    INDEX `idx_fk_{2}_idMessageCode` (`idMessageCode`), \r\n" +
                                        "    CONSTRAINT `fk_{2}_idEpoch` FOREIGN KEY (`idEpoch`) \r\n" +
-                                       "        REFERENCES `epoch` (`id`));\r\n\r\n";
+                                       "        REFERENCES `epoch` (`id`), \r\n" +
+                                       "    CONSTRAINT `fk_{2}_idMessageCode` FOREIGN KEY (`idMessageCode`) \r\n" +
+                                       "        REFERENCES `messageCode` (`id`));\r\n\r\n";
             foreach (var msg in _metaInfo.StandardMessages)
             {
                 var colDefs = new StringBuilder();

@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     bct.TestLittleEndian();
 #endif
 
-    bool transactionStarted;
+    bool transactionStarted = false;
     bool wrapIntoTransaction;
     Connection connection;
     try
@@ -73,7 +73,22 @@ int main(int argc, char *argv[])
         MetaInfo::Pointer_t metaInfo = MetaInfo::FromDatabase(&connection);
 
         EpochsReader er(metaInfo, &connection);
-        er.Load(QDateTime(QDate(2011, 03, 22), QTime(0, 0, 0), Qt::LocalTime), QDateTime(QDate(2011, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
+        auto range = er.Load(QDateTime(QDate(2011, 03, 22), QTime(0, 0, 0), Qt::LocalTime), QDateTime(QDate(2011, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
+        
+        QFile file(Path::Combine(Path::ApplicationDirPath(), "test_output.jps"));
+        file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        QDataStream out(&file);
+
+        out.writeRawData("JP055RLOGF JPS ALPHA Receiver Log File                                                    \r\nMF009JP010109F", 106);
+        file.flush();
+        foreach (StdMessage_t::Pointer_t msg, range->EpochsByTime)
+        {
+            out.writeRawData("\r\n", 2);
+            out.writeRawData(msg->message(), msg->fullSize());
+            file.flush();
+        }
+        file.close();
+
         return 0;
         // Открытие JPS-файла и парсинг
         sLogger.Info(QString("Parsing of '%1'...").arg(filename));

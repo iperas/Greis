@@ -79,8 +79,8 @@ namespace Domain
         void AddMessage(StdMessage_t::Pointer_t msg, bool ignoreInvalidMessages = true)
         {
             // MessageMeta retrieving
-            auto msgCode = QString::fromAscii(msg->id().c_str(), 2);
-            auto msgMeta = _codeToMsgMap.value(msgCode, MessageMeta::Pointer_t());
+            auto msgCodeStr = QString::fromAscii(msg->id().c_str(), 2);
+            auto msgMeta = _codeToMsgMap.value(msgCodeStr, MessageMeta::Pointer_t());
 
             if (!msgMeta.get())
             {
@@ -97,11 +97,21 @@ namespace Domain
             
             int fillFieldsCount = msgMeta->GetFilledArrayFieldsSize(_metaInfo.get(), msg->bodySize());
             
+            // Message code id finding
+            auto msgCodeId = msgMeta->FindMessageCodeId(msg->message());
+            if (msgCodeId == -1)
+            {
+                // Unknown message
+                return;
+            }
+
             try
             {
                 const char* msgPtr = msg->body();
                 QVariantList rowValues;
                 rowValues.append(_lastEpochId);
+                rowValues.append(msgCodeId);
+                rowValues.append(msg->bodySize());
                 serializeCustomType(msgMeta.get(), msgPtr, fillFieldsCount, rowValues);
                 inserter->AddRow(rowValues);
             }
@@ -296,6 +306,9 @@ namespace Domain
             int newId = _ctAvailableId[ct] + 1;
 
             int fillFieldsCount = -1;
+
+            int typeSize = ct->Size;
+            BOOST_ASSERT(typeSize >= 0);
             /*if (ct->Size == SizeSpecialValueClassifier::Fill)
             {
                 fillFieldsCount = getFilledArrayFieldsSize(ct, msg->bodySize());
@@ -306,6 +319,7 @@ namespace Domain
                 QVariantList rowValues;
                 rowValues << newId;
                 rowValues << _lastEpochId;
+                rowValues << typeSize;
                 serializeCustomType(ct, dataPtr, fillFieldsCount, rowValues);
                 inserter->AddRow(rowValues);
             }
@@ -355,7 +369,7 @@ namespace Domain
                 return inserter;
             }
 
-            inserter = createInserter(msgMeta, QStringList() << "idEpoch");
+            inserter = createInserter(msgMeta, QStringList() << "idEpoch" << "idMessageCode" << "bodySize");
             _msgInsertersMap[msgMeta] = inserter;
             return inserter;
         }
@@ -368,7 +382,7 @@ namespace Domain
                 return inserter;
             }
 
-            inserter = createInserter(ctMeta, QStringList() << "id" << "idEpoch");
+            inserter = createInserter(ctMeta, QStringList() << "id" << "idEpoch" << "bodySize");
             _ctInsertersMap[ctMeta] = inserter;
 
             int lastId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `%1`").arg(ctMeta->TableName)).toInt();
@@ -418,14 +432,14 @@ namespace Domain
             auto columnNamesStr = columnNames.join("`, `");
             insertCommand = insertCommand.arg((columnNamesStr));
 
-            int variablesCount = msgMeta->Variables.count();
+            int fieldsCount = msgMeta->Variables.count() + customFields.count();
             insertCommand.append("(?");
-            for (int i = 0; i < variablesCount; ++i)
+            for (int i = 0; i < fieldsCount - 1; ++i)
             {
                 insertCommand.append(", ?");
             }
             insertCommand.append(")");
-            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, variablesCount + customFields.size(), _connection, msgMeta->TableName, _inserterBatchSize));
+            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, fieldsCount, _connection, msgMeta->TableName, _inserterBatchSize));
             foreach (DataBatchInserter::Pointer_t ci, childInserters)
             {
                 inserter->AddChild(ci);

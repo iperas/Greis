@@ -56,7 +56,8 @@ namespace Database
         {
             if (values.size() != _boundValues.size())
             {
-                throw InvalidOperationException("Invalid elements count in `AddRow(values)` array.");
+                throw InvalidOperationException(QString("Invalid elements count in `AddRow(values)` array. Actual: %1. Expected: %2.").
+                    arg(values.size()).arg(_boundValues.size()));
             }
             if (_rowsAdded >= _batchSize)
             {
@@ -80,6 +81,7 @@ namespace Database
                     child->Flush();
                 }
                 QSqlQuery query = _dbHelper->ExecuteQuery("");
+                sLogger.Debug(_insertQuery);
                 query.prepare(_insertQuery);
                 DatabaseHelper::ThrowIfError(query);
                 foreach (QVariantList boundValue, _boundValues)

@@ -177,21 +177,7 @@ namespace Domain
     public:
         SHARED_PTR_T(EpochsRange_t);
 
-        QList<Epoch_t> Epochs;
-    };
-
-    class MessagesSerializer
-    {
-        MetaInfo::Pointer_t _metaInfo;
-    public:
-        SHARED_PTR_T(MessagesSerializer);
-
-        MessagesSerializer(MetaInfo::Pointer_t metaInfo)
-        {
-            _metaInfo = metaInfo;
-        }
-
-
+        QMultiMap<qulonglong, StdMessage_t::Pointer_t> EpochsByTime;
     };
 
     class EpochsReader
@@ -234,29 +220,44 @@ namespace Domain
             queryStr = QString("SELECT `id` FROM `epoch` WHERE `dateTime` <= ? ORDER BY `dateTime` DESC LIMIT 1");
             _idEpochTo = _dbHelper->ExecuteSingleValueQuery(queryStr, QList<QVariant>() << dateTimeTo).toInt();*/
 
-            QMap<int, StdMessage_t::Pointer_t> idToCtMap;
-
-            foreach (CustomTypeMeta::Pointer_t ctMeta, _metaInfo->MessagesMeta)
+            foreach (MessageMeta::Pointer_t msgMeta, _metaInfo->MessagesMeta)
             {
-                QString queryStr = createSelectString(ctMeta.get());
+                if (msgMeta->Codes.first()->Code == "PM")
+                {
+                    // Skip parameters messages
+                    continue;
+                }
+                QString queryStr = createSelectString(msgMeta.get(), QStringList() << "idMessageCode" << "bodySize");
+                //sLogger.Info(queryStr);
                 auto query = _dbHelper->ExecuteQuery(queryStr);
-                bool hitme = queryStr.contains(QString("msg_rcp_rc1"), Qt::CaseInsensitive);
                 while (query.next())
                 {
                     int id = query.value(0).toInt();
+                    qulonglong dt = query.value(1).toULongLong();
+                    int messageCodeId = query.value(2).toInt();
+                    int bodySize = query.value(3).toInt();
 
                     QVariantList fields;
-                    for (int i = 1; i < query.size(); ++i)
+                    int fieldsCount = msgMeta->Variables.count();
+                    for (int i = 0; i < fieldsCount; ++i)
                     {
-                        fields.append(query.value(i));
+                        fields.append(query.value(i + 4));
                     }
+
+                    auto messageCodeCode = msgMeta->FindMessageCodeCode(messageCodeId);
                     QByteArray ba;
 
-                    binarizeCustomType(ctMeta.get(), fields, ba);
+                    auto bodySizeStr = QString::number(bodySize, 16).rightJustified(3, '0', true);
+
+                    ba.append(messageCodeCode);
+                    ba.append(bodySizeStr.toAscii(), 3);
+
+                    binarizeCustomType(msgMeta.get(), fields, ba);
+
+                    BOOST_ASSERT(ba.size() == bodySize + 5);
 
                     auto msg = StdMessage_t::Pointer_t(new StdMessage_t(ba.data(), ba.size()));
-                    idToCtMap[id] = msg;
-                    idToCtMap[id + 666123] = hitme ? StdMessage_t::Pointer_t() : StdMessage_t::Pointer_t();
+                    range->EpochsByTime.insert(dt, msg);
                 }
             }
 
@@ -270,7 +271,7 @@ namespace Domain
         void binarizeCustomType( CustomTypeMeta* msgMeta, const QVariantList& fieldsSequence, QByteArray& sink ) 
         {
             QByteArray output;
-            int colIndex = 1;
+            int colIndex = 0;
             foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
             {
                 auto varType = varMeta->Type;
@@ -420,16 +421,19 @@ namespace Domain
                 }
             }
 
-            auto queryStr = createSelectString(ctMeta);
+            auto queryStr = createSelectString(ctMeta, QStringList() << "bodySize");
             auto query = _dbHelper->ExecuteQuery(queryStr);
             while (query.next())
             {
                 int id = query.value(0).toInt();
+                qulonglong dt = query.value(1).toULongLong();
+                int bodySize = query.value(2).toInt();
 
                 QVariantList fields;
-                for (int i = 1; i < query.size(); ++i)
+                int fieldsCount = ctMeta->Variables.count();
+                for (int i = 0; i < fieldsCount; ++i)
                 {
-                    fields.append(query.value(i));
+                    fields.append(query.value(i+3));
                 }
                 QByteArray ba;
 
@@ -440,9 +444,10 @@ namespace Domain
             }
         }
 
-        QString createSelectString(CustomTypeMeta* ctMeta)
+        // Returns SQL SELECT string with fields list of following fields: id, [advanced fields], [variables fields]
+        QString createSelectString(CustomTypeMeta* ctMeta, const QStringList& advancedFields = QStringList())
         {
-            QStringList columnsNames;
+            QStringList columnsNames(advancedFields);
             foreach (VariableMeta::Pointer_t varMeta, ctMeta->Variables)
             {
                 columnsNames.append(varMeta->GetColumnName());
@@ -452,13 +457,13 @@ namespace Domain
                 .arg(columnsStr)
                 .arg(ctMeta->TableName)
                 .arg(_idEpochFrom)
-                .arg(_idEpochTo);
+                .arg(_idEpochTo); IN (SELECT `id` FROM `epoch` WHERE `dt` BETWEEN %3 AND %4)
             auto queryStr = QString("SELECT `id`, `%1` FROM `%2` WHERE `idEpoch` IN (SELECT `id` FROM `epoch` WHERE `dt` BETWEEN TIMESTAMP('%1') AND TIMESTAMP('%2'))")
                 .arg(columnsStr)
                 .arg(ctMeta->TableName)
                 .arg(_dateTimeFrom.toString("yyyy-MM-dd HH:mm:ss"))
                 .arg(_dateTimeTo.toString("yyyy-MM-dd HH:mm:ss"));*/
-            auto queryStr = QString("SELECT `id`, `%1` FROM `%2` WHERE `idEpoch` IN (SELECT `id` FROM `epoch` WHERE `dt` BETWEEN %3 AND %4)")
+            auto queryStr = QString("SELECT `%2`.`id`, `epoch`.`dt`, `%1` FROM `%2`, `epoch` WHERE `epoch`.`id` = `%2`.`idEpoch` AND `dt` BETWEEN %3 AND %4")
                 .arg(columnsStr)
                 .arg(ctMeta->TableName)
                 .arg(_dateTimeFrom.toMSecsSinceEpoch())

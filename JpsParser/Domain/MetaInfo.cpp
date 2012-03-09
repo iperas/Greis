@@ -1,5 +1,8 @@
 #include "MetaInfo.h"
 #include "MetaInfoReader.h"
+#include <algorithm>
+
+using std::find_if;
 
 namespace Domain
 {
@@ -85,5 +88,38 @@ namespace Domain
         }
         int fillFieldsCount = size / fillFieldsTypeSize;
         return fillFieldsCount;
+    }
+
+    int MessageMeta::FindMessageCodeId( const char* code )
+    {
+        auto it = find_if(Codes.constBegin(), Codes.constEnd(), 
+            [code] (const MessageCode::Pointer_t& testMsgCode) -> bool
+            {
+                auto testCode = testMsgCode->Code.toAscii();
+                return code[0] == testCode[0] && code[1] == testCode[1];
+            });
+        if (it == Codes.constEnd())
+        {
+            // Unknown code
+            return -1;
+        }
+        auto msgCodeId = (*it)->Id;
+        return msgCodeId;
+    }
+
+    QString MessageMeta::FindMessageCodeCode(int id)
+    {
+        auto it = find_if(Codes.constBegin(), Codes.constEnd(), 
+            [id] (const MessageCode::Pointer_t& testMsgCode) -> bool
+        {
+            return testMsgCode->Id == id;
+        });
+        if (it == Codes.constEnd())
+        {
+            // Unknown code
+            return QString::null;
+        }
+        auto msgCodeCode = (*it)->Code;
+        return msgCodeCode;
     }
 }
