@@ -2,14 +2,13 @@
 #include <iostream>
 #include <clocale>
 #include <locale>
-#include "Util/Exception.h"
-#include "Util/IniSettings.h"
+#include "ProjectBase/Exception.h"
+#include "ProjectBase/IniSettings.h"
 
 #include "GreisMessage.h"
 #include "GreisMessageStream.h"
 #include "JpsFile.h"
-#include "Util/FileException.h"
-#include "DatabaseWriter.h"
+#include "ProjectBase/FileException.h"
 
 #include <fstream>
 #include <algorithm>
@@ -17,16 +16,18 @@
 using namespace std;
 using namespace Greis;
 
-#include "Util/Logger.h"
-#include "Util/Path.h"
-#include "Util/BitConverter.h"
+#include "ProjectBase/Logger.h"
+#include "ProjectBase/Path.h"
+#include "ProjectBase/BitConverter.h"
+#include "ProjectBase/Connection.h"
 #include "Domain/MetaInfo.h"
 #include "Domain/MySqlSink.h"
 #include "Domain/MetaInfoReader.h"
 
-using namespace Util;
+#include "ProjectBase/ProjectBase.h"
+
+using namespace ProjectBase;
 using namespace Domain;
-using namespace Database;
 
 int main(int argc, char *argv[])
 {
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
 
     bool transactionStarted = false;
     bool wrapIntoTransaction;
-    Connection connection;
+    Connection::SharedPtr_t connection;
     try
     {
         std::setlocale(LC_ALL, "Russian_Russia.1251");
@@ -69,10 +70,10 @@ int main(int argc, char *argv[])
         wrapIntoTransaction = sIniSettings.value("WrapIntoTransaction", false).toBool();
         int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();
         connection = Connection::FromSettings("Db");
-        connection.Connect();
-        MetaInfo::Pointer_t metaInfo = MetaInfo::FromDatabase(&connection);
+        connection->Connect();
+        MetaInfo::SharedPtr_t metaInfo = MetaInfo::FromDatabase(connection.get());
 
-        EpochsReader er(metaInfo, &connection);
+        EpochsReader er(metaInfo, connection.get());
         auto range = er.Load(QDateTime(QDate(2011, 03, 22), QTime(0, 0, 0), Qt::LocalTime), QDateTime(QDate(2011, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
         
         QFile file(Path::Combine(Path::ApplicationDirPath(), "test_output.jps"));
@@ -81,7 +82,7 @@ int main(int argc, char *argv[])
 
         out.writeRawData("JP055RLOGF JPS ALPHA Receiver Log File                                                    \r\nMF009JP010109F", 106);
         file.flush();
-        foreach (StdMessage_t::Pointer_t msg, range->EpochsByTime)
+        foreach (StdMessage_t::SharedPtr_t msg, range->EpochsByTime)
         {
             out.writeRawData("\r\n", 2);
             out.writeRawData(msg->message(), msg->fullSize());
@@ -92,20 +93,20 @@ int main(int argc, char *argv[])
         return 0;
         // Открытие JPS-файла и парсинг
         sLogger.Info(QString("Parsing of '%1'...").arg(filename));
-        JpsFile_t::Pointer_t jpsFile(new JpsFile_t(filename));
+        JpsFile_t::SharedPtr_t jpsFile(new JpsFile_t(filename));
         sLogger.Info(QString("Parsing completed."));
-        sLogger.Info(QString("Inserting parsed data into `%1`...").arg(connection.DatabaseName));
+        sLogger.Info(QString("Inserting parsed data into `%1`...").arg(connection->DatabaseName));
         if (wrapIntoTransaction)
         {
             sLogger.Info("Starting a new transaction...");
-            transactionStarted = connection.Database().transaction();
+            transactionStarted = connection->Database().transaction();
         }
-        MySqlSink::Pointer_t sink(new MySqlSink(metaInfo, &connection, inserterBatchSize));
+        MySqlSink::SharedPtr_t sink(new MySqlSink(metaInfo, connection.get(), inserterBatchSize));
         jpsFile->toMySqlSink(sink);
         sink->Flush();
         if (wrapIntoTransaction && transactionStarted)
         {
-            connection.Database().commit();
+            connection->Database().commit();
             sLogger.Info("The transaction has been committed.");
         }
         sLogger.Info(QString("Insertion completed."));
@@ -118,7 +119,7 @@ int main(int argc, char *argv[])
     {
         if (wrapIntoTransaction && transactionStarted)
         {
-            connection.Database().rollback();
+            connection->Database().rollback();
             sLogger.Info("The transaction has been rolled back.");
         }
         sLogger.Error(e.what());

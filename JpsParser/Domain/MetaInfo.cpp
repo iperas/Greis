@@ -6,7 +6,7 @@ using std::find_if;
 
 namespace Domain
 {
-    MetaInfo::Pointer_t MetaInfo::FromDatabase(Connection* connection)
+    MetaInfo::SharedPtr_t MetaInfo::FromDatabase(Connection* connection)
     {
         return MetaInfoReader(connection).Load();
     }
@@ -31,7 +31,7 @@ namespace Domain
         int fillFieldsTypeSize = 0;
 
         int size = msgBodySize;
-        foreach (VariableMeta::Pointer_t varMeta, Variables)
+        foreach (VariableMeta::SharedPtr_t varMeta, Variables)
         {
             // typeSize computing
             int typeSize;
@@ -39,8 +39,8 @@ namespace Domain
             {
                 typeSize = simpleTypesSize[varMeta->Type];
             } else {
-                CustomTypeMeta::Pointer_t varType;
-                foreach (CustomTypeMeta::Pointer_t ct, metaInfo->CustomTypesMeta)
+                CustomTypeMeta::SharedPtr_t varType;
+                foreach (CustomTypeMeta::SharedPtr_t ct, metaInfo->CustomTypesMeta)
                 {
                     if (ct->Name == varMeta->Type)
                     {
@@ -93,7 +93,7 @@ namespace Domain
     int MessageMeta::FindMessageCodeId( const char* code )
     {
         auto it = find_if(Codes.constBegin(), Codes.constEnd(), 
-            [code] (const MessageCode::Pointer_t& testMsgCode) -> bool
+            [code] (const MessageCode::SharedPtr_t& testMsgCode) -> bool
             {
                 auto testCode = testMsgCode->Code.toAscii();
                 return code[0] == testCode[0] && code[1] == testCode[1];
@@ -110,7 +110,7 @@ namespace Domain
     QString MessageMeta::FindMessageCodeCode(int id)
     {
         auto it = find_if(Codes.constBegin(), Codes.constEnd(), 
-            [id] (const MessageCode::Pointer_t& testMsgCode) -> bool
+            [id] (const MessageCode::SharedPtr_t& testMsgCode) -> bool
         {
             return testMsgCode->Id == id;
         });

@@ -1,12 +1,12 @@
 #ifndef MetaInfoReader_h__
 #define MetaInfoReader_h__
 
-#include "Database\Connection.h"
+#include "ProjectBase\Connection.h"
 #include "MetaInfo.h"
-#include "Util\SharedPtr.h"
+#include "ProjectBase\SmartPtr.h"
 #include "JpsFile.h"
 
-using namespace Database;
+using namespace ProjectBase;
 
 namespace Domain
 {
@@ -22,7 +22,7 @@ namespace Domain
             _dbHelper = _connection->DbHelper();
         }
 
-        MetaInfo::Pointer_t Load()
+        MetaInfo::SharedPtr_t Load()
         {
             auto sizeSpecialValueClassifier = loadClassifier("sizeSpecialValueClassifier");
             auto messageTypeClassifier = loadClassifier("messageTypeClassifier");
@@ -35,7 +35,7 @@ namespace Domain
             auto messagesMeta = loadMessagesMeta(messageValidationClassifier, messageKindClassifier, messageTypeClassifier, messageVariables);
             auto customTypesMeta = loadCustomTypesMeta(customTypeVariables);
 
-            auto metaInfo = SHARED_PTR_NEW(MetaInfo);
+            auto metaInfo = std::make_shared<MetaInfo>();
             metaInfo->MessagesMeta = messagesMeta;
             metaInfo->CustomTypesMeta = customTypesMeta;
             metaInfo->SizeSpecialValueClassifier = sizeSpecialValueClassifier;
@@ -44,15 +44,15 @@ namespace Domain
         }
 
     private:
-        QMap<int, ClassifierItem::Pointer_t> loadClassifier(const QString& tableName)
+        QMap<int, ClassifierItem::SharedPtr_t> loadClassifier(const QString& tableName)
         {
-            QMap<int, ClassifierItem::Pointer_t> classifierMap;
+            QMap<int, ClassifierItem::SharedPtr_t> classifierMap;
             auto sqlQuery = _dbHelper->ExecuteQuery(QString("SELECT id, name FROM %1").arg(tableName));
             while (sqlQuery.next())
             {
                 auto id = sqlQuery.value(0).toInt();
                 auto name = sqlQuery.value(1).toString();
-                auto item = SHARED_PTR_NEW(ClassifierItem);
+                auto item = std::make_shared<ClassifierItem>();
                 item->Id = id;
                 item->Name = name;
                 classifierMap[id] = item;
@@ -60,19 +60,19 @@ namespace Domain
             return classifierMap;
         }
 
-        QMap<int, QList<VariableMeta::Pointer_t> > loadCustomTypeVariables()
+        QMap<int, QList<VariableMeta::SharedPtr_t> > loadCustomTypeVariables()
         {
             return loadVariables("customTypeVariableMeta", "customTypeVariableSizeForDimension", "idCustomTypeMeta");
         }
 
-        QMap<int, QList<VariableMeta::Pointer_t> > loadMessageVariables()
+        QMap<int, QList<VariableMeta::SharedPtr_t> > loadMessageVariables()
         {
             return loadVariables("messageVariableMeta", "messageVariableSizeForDimension", "idMessageMeta");
         }
 
-        QMap<int, QList<VariableMeta::Pointer_t> > loadVariables(const QString& tableName, const QString& sizeForDimensionTableName, const QString& idParentColumnName)
+        QMap<int, QList<VariableMeta::SharedPtr_t> > loadVariables(const QString& tableName, const QString& sizeForDimensionTableName, const QString& idParentColumnName)
         {
-            QMap<int, QList<VariableMeta::Pointer_t> > variablesMap;
+            QMap<int, QList<VariableMeta::SharedPtr_t> > variablesMap;
             auto sqlQuery = _dbHelper->ExecuteQuery(QString("SELECT id, name, greisType, requiredValue, %1 FROM %2 ORDER BY id").arg(idParentColumnName).arg(tableName));
             while (sqlQuery.next())
             {
@@ -90,7 +90,7 @@ namespace Domain
                     sizeForDimensions.append(sqlSubQuery.value(0).toInt());
                 }
 
-                auto variable = VariableMeta::Pointer_t(new VariableMeta(sizeForDimensions));
+                auto variable = VariableMeta::SharedPtr_t(new VariableMeta(sizeForDimensions));
                 variable->Id = id;
                 variable->Name = name;
                 variable->Type = type;
@@ -102,12 +102,12 @@ namespace Domain
             return variablesMap;
         }
 
-        QList<MessageMeta::Pointer_t> loadMessagesMeta(const QMap<int, ClassifierItem::Pointer_t>& messageValidationClassifier, 
-            const QMap<int, ClassifierItem::Pointer_t>& messageKindClassifier, 
-            const QMap<int, ClassifierItem::Pointer_t>& messageTypeClassifier, 
-            const QMap<int, QList<VariableMeta::Pointer_t>>& messageVariables)
+        QList<MessageMeta::SharedPtr_t> loadMessagesMeta(const QMap<int, ClassifierItem::SharedPtr_t>& messageValidationClassifier, 
+            const QMap<int, ClassifierItem::SharedPtr_t>& messageKindClassifier, 
+            const QMap<int, ClassifierItem::SharedPtr_t>& messageTypeClassifier, 
+            const QMap<int, QList<VariableMeta::SharedPtr_t>>& messageVariables)
         {
-            QList<MessageMeta::Pointer_t> messagesMeta;
+            QList<MessageMeta::SharedPtr_t> messagesMeta;
             auto sqlQuery = _dbHelper->ExecuteQuery("SELECT id, name, title, size, idValidation, idKind, idType, tableName FROM messageMeta");
             while (sqlQuery.next())
             {
@@ -120,18 +120,18 @@ namespace Domain
                 auto idType = sqlQuery.value(6).toInt();
                 auto tableName = sqlQuery.value(7).toString();
 
-                QList<MessageCode::Pointer_t> codes;
+                QList<MessageCode::SharedPtr_t> codes;
                 auto sqlSubQuery = _dbHelper->ExecuteQuery(QString(
                     "SELECT id, code FROM messageCode WHERE idMessageMeta = %1 ORDER BY id").arg(id));
                 while (sqlSubQuery.next())
                 {
-                    auto code = SHARED_PTR_NEW(MessageCode);
+                    auto code = std::make_shared<MessageCode>();
                     code->Id = sqlSubQuery.value(0).toInt();
                     code->Code = sqlSubQuery.value(1).toString();
                     codes.append(code);
                 }
 
-                auto messageMeta = SHARED_PTR_NEW(MessageMeta);
+                auto messageMeta = std::make_shared<MessageMeta>();
                 messageMeta->Id = id;
                 messageMeta->Name = name;
                 messageMeta->Title = title;
@@ -148,9 +148,9 @@ namespace Domain
             return messagesMeta;
         }
 
-        QList<CustomTypeMeta::Pointer_t> loadCustomTypesMeta(const QMap<int, QList<VariableMeta::Pointer_t>>& customTypeVariables)
+        QList<CustomTypeMeta::SharedPtr_t> loadCustomTypesMeta(const QMap<int, QList<VariableMeta::SharedPtr_t>>& customTypeVariables)
         {
-            QList<CustomTypeMeta::Pointer_t> customTypesMeta;
+            QList<CustomTypeMeta::SharedPtr_t> customTypesMeta;
             auto sqlQuery = _dbHelper->ExecuteQuery("SELECT id, name, size, tableName FROM customTypeMeta");
             while (sqlQuery.next())
             {
@@ -159,7 +159,7 @@ namespace Domain
                 auto size = sqlQuery.value(2).toInt();
                 auto tableName = sqlQuery.value(3).toString();
 
-                auto customTypeMeta = SHARED_PTR_NEW(CustomTypeMeta);
+                auto customTypeMeta = std::make_shared<CustomTypeMeta>();
                 customTypeMeta->Id = id;
                 customTypeMeta->Name = name;
                 customTypeMeta->Size = size;
@@ -175,9 +175,9 @@ namespace Domain
     class EpochsRange_t
     {
     public:
-        SHARED_PTR_T(EpochsRange_t);
+        SMART_PTR_T(EpochsRange_t);
 
-        QMultiMap<qulonglong, StdMessage_t::Pointer_t> EpochsByTime;
+        QMultiMap<qulonglong, StdMessage_t::SharedPtr_t> EpochsByTime;
     };
 
     class EpochsReader
@@ -185,30 +185,30 @@ namespace Domain
     private:
         Connection *_connection;
         DatabaseHelper* _dbHelper;
-        MetaInfo::Pointer_t _metaInfo;
+        MetaInfo::SharedPtr_t _metaInfo;
         BitConverter _bitConverter;
-        QMap<QString, CustomTypeMeta::Pointer_t> _nameToCustomTypeMap;
+        QMap<QString, CustomTypeMeta::SharedPtr_t> _nameToCustomTypeMap;
         QMap<int, QMap<int, QByteArray> > _loadedCustomTypes;
         int _idEpochFrom;
         int _idEpochTo;
         QDateTime _dateTimeFrom;
         QDateTime _dateTimeTo;
     public:
-        EpochsReader(MetaInfo::Pointer_t metaInfo, Connection *connection)
+        EpochsReader(MetaInfo::SharedPtr_t metaInfo, Connection *connection)
         {
             _metaInfo = metaInfo;
             _connection = connection;
             _dbHelper = _connection->DbHelper();
 
-            foreach (CustomTypeMeta::Pointer_t ct, _metaInfo->CustomTypesMeta)
+            foreach (CustomTypeMeta::SharedPtr_t ct, _metaInfo->CustomTypesMeta)
             {
                 _nameToCustomTypeMap[ct->Name] = ct;
             }
         }
 
-        EpochsRange_t::Pointer_t Load(QDateTime dateTimeFrom, QDateTime dateTimeTo)
+        EpochsRange_t::SharedPtr_t Load(QDateTime dateTimeFrom, QDateTime dateTimeTo)
         {
-            auto range = SHARED_PTR_NEW(EpochsRange_t);
+            auto range = std::make_shared<EpochsRange_t>();
             _dateTimeFrom = dateTimeFrom;
             _dateTimeTo = dateTimeTo;
 
@@ -220,7 +220,7 @@ namespace Domain
             queryStr = QString("SELECT `id` FROM `epoch` WHERE `dateTime` <= ? ORDER BY `dateTime` DESC LIMIT 1");
             _idEpochTo = _dbHelper->ExecuteSingleValueQuery(queryStr, QList<QVariant>() << dateTimeTo).toInt();*/
 
-            foreach (MessageMeta::Pointer_t msgMeta, _metaInfo->MessagesMeta)
+            foreach (MessageMeta::SharedPtr_t msgMeta, _metaInfo->MessagesMeta)
             {
                 if (msgMeta->Codes.first()->Code == "PM")
                 {
@@ -256,7 +256,7 @@ namespace Domain
 
                     BOOST_ASSERT(ba.size() == bodySize + 5);
 
-                    auto msg = StdMessage_t::Pointer_t(new StdMessage_t(ba.data(), ba.size()));
+                    auto msg = StdMessage_t::SharedPtr_t(new StdMessage_t(ba.data(), ba.size()));
                     range->EpochsByTime.insert(dt, msg);
                 }
             }
@@ -272,7 +272,7 @@ namespace Domain
         {
             QByteArray output;
             int colIndex = 0;
-            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
             {
                 auto varType = varMeta->Type;
                 if (varType == "a1")
@@ -448,7 +448,7 @@ namespace Domain
         QString createSelectString(CustomTypeMeta* ctMeta, const QStringList& advancedFields = QStringList())
         {
             QStringList columnsNames(advancedFields);
-            foreach (VariableMeta::Pointer_t varMeta, ctMeta->Variables)
+            foreach (VariableMeta::SharedPtr_t varMeta, ctMeta->Variables)
             {
                 columnsNames.append(varMeta->GetColumnName());
             }

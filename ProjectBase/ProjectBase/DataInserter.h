@@ -2,14 +2,15 @@
 #define DataInserter_h__
 
 #include <QtCore/QtCore>
-#include "Util/Exception.h"
-#include "Util/Logger.h"
+#include <boost/utility.hpp>
+#include "Exception.h"
+#include "Logger.h"
 #include "Connection.h"
 #include "DatabaseHelper.h"
 
-namespace Database 
+namespace ProjectBase 
 {
-    class DataInserter
+    class DataInserter : boost::noncopyable
     {
         QString _resultInsertQuery;
         QString _insertTemplate;

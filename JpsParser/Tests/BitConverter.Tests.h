@@ -2,7 +2,7 @@
 #define BitConverter_Tests_h__
 
 #include <cassert>
-#include "Util/BitConverter.h"
+#include "ProjectBase/BitConverter.h"
 
 namespace Tests
 {

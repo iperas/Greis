@@ -2,7 +2,7 @@
 #define GreisException_h__
 
 #include <QtCore/QtCore>
-#include "Util/Exception.h"
+#include "ProjectBase/Exception.h"
 
 namespace Greis
 {

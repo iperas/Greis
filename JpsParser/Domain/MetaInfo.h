@@ -2,11 +2,11 @@
 #define MetaInfo_h__
 
 #include <QList>
-#include "Database/Connection.h"
-#include "Util/SharedPtr.h"
-#include "Util/Exception.h"
+#include "ProjectBase/Connection.h"
+#include "ProjectBase/SmartPtr.h"
+#include "ProjectBase/Exception.h"
 
-using namespace Database;
+using namespace ProjectBase;
 
 namespace Domain
 {
@@ -35,7 +35,7 @@ namespace Domain
     class ClassifierItem
     {
     public:
-        SHARED_PTR_T(ClassifierItem);
+        SMART_PTR_T(ClassifierItem);
 
         int Id;
         QString Name;
@@ -49,7 +49,7 @@ namespace Domain
     class MessageCode
     {
     public:
-        SHARED_PTR_T(MessageCode);
+        SMART_PTR_T(MessageCode);
 
         int Id;
         QString Code;
@@ -59,7 +59,7 @@ namespace Domain
     {
         QList<int> _sizesForDimensions;
     public:
-        SHARED_PTR_T(VariableMeta);
+        SMART_PTR_T(VariableMeta);
 
         VariableMeta(QList<int> sizesForDimensions)
         {
@@ -100,13 +100,13 @@ namespace Domain
     class CustomTypeMeta
     {
     public:
-        SHARED_PTR_T(CustomTypeMeta);
+        SMART_PTR_T(CustomTypeMeta);
 
         int Id;
         QString Name;
         int Size;
 
-        QList<VariableMeta::Pointer_t> Variables;
+        QList<VariableMeta::SharedPtr_t> Variables;
         QString TableName;
 
         // —делано приближение что не бывает смешанных динамических\статических массивов
@@ -118,18 +118,18 @@ namespace Domain
     class MessageMeta : public CustomTypeMeta
     {
     public:
-        SHARED_PTR_T(MessageMeta);
+        SMART_PTR_T(MessageMeta);
 
         QString Title;
         
         //  аким способом можно валидировать данное сообщение
-        MessageValidation::Pointer_t Validation;
+        MessageValidation::SharedPtr_t Validation;
         // NonStandardTextMessage, StandardTextMessage итд
-        MessageKind::Pointer_t Kind;
+        MessageKind::SharedPtr_t Kind;
         // јльманахи, обычные сообщени€
-        MessageType::Pointer_t Type;
+        MessageType::SharedPtr_t Type;
 
-        QList<MessageCode::Pointer_t> Codes;
+        QList<MessageCode::SharedPtr_t> Codes;
 
         int FindMessageCodeId(const char* code);
 
@@ -139,18 +139,18 @@ namespace Domain
     class MetaInfo
     {
     public:
-        SHARED_PTR_T(MetaInfo);
+        SMART_PTR_T(MetaInfo);
 
         MetaInfo()
         {
         }
 
-        QList<MessageMeta::Pointer_t> MessagesMeta;
-        QList<CustomTypeMeta::Pointer_t> CustomTypesMeta;
+        QList<MessageMeta::SharedPtr_t> MessagesMeta;
+        QList<CustomTypeMeta::SharedPtr_t> CustomTypesMeta;
 
-        QMap<int, SizeSpecialValue::Pointer_t> SizeSpecialValueClassifier;
+        QMap<int, SizeSpecialValue::SharedPtr_t> SizeSpecialValueClassifier;
 
-        static MetaInfo::Pointer_t FromDatabase(Connection* connection);
+        static MetaInfo::SharedPtr_t FromDatabase(Connection* connection);
     };
 }
 

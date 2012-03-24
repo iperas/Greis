@@ -1,9 +1,9 @@
 #ifndef GreisMessage_h__
 #define GreisMessage_h__
 
-#include "Util/Macro.h"
-#include "Util/SharedPtr.h"
-#include "Util/InvalidOperationException.h"
+#include "ProjectBase/Macro.h"
+#include "ProjectBase/SmartPtr.h"
+#include "ProjectBase/InvalidOperationException.h"
 #include <cassert>
 #include <string>
 #include <vector>
@@ -14,14 +14,14 @@
 
 #include <boost/format.hpp>
 #include <QtXml/QtXml>
-#include "Util/File.h"
-#include "Util/Logger.h"
+#include "ProjectBase/File.h"
+#include "ProjectBase/Logger.h"
 
 using std::string;
 using std::vector;
 using std::map;
 
-using namespace Util;
+using namespace ProjectBase;
 
 namespace stringBoost = boost::algorithm;
 
@@ -45,7 +45,7 @@ namespace Greis
     private:
         const EMessageType _type;
     public:
-        SHARED_PTR_T(Message_t);
+        SMART_PTR_T(Message_t);
         NULL_PTR_DECL;
 
         Message_t(EMessageType p_type) : _type(p_type)
@@ -61,7 +61,7 @@ namespace Greis
     class NonStdTextMessage_t : public Message_t
     {
     public:
-        SHARED_PTR_T(NonStdTextMessage_t);
+        SMART_PTR_T(NonStdTextMessage_t);
         NULL_PTR_DECL;
 
         // Zero-length non-standard Text Message
@@ -108,7 +108,7 @@ namespace Greis
     class StdMessage_t : public Message_t
     {
     public:
-        SHARED_PTR_T(StdMessage_t);
+        SMART_PTR_T(StdMessage_t);
         NULL_PTR_DECL;
 
         StdMessage_t(char* p_message, int p_length)
@@ -233,7 +233,7 @@ namespace Greis
     class JPStdMessage_t : public StdMessage_t
     {
     public:
-        SHARED_PTR_T(JPStdMessage_t);
+        SMART_PTR_T(JPStdMessage_t);
         NULL_PTR_DECL;
 
         JPStdMessage_t(char* p_message, int p_length) : StdMessage_t(p_message, p_length, JPStdMessage),
@@ -276,7 +276,7 @@ namespace Greis
     class MFStdMessage_t : public StdMessage_t
     {
     public:
-    	SHARED_PTR_T(MFStdMessage_t);
+    	SMART_PTR_T(MFStdMessage_t);
     	NULL_PTR_DECL;
     
     	MFStdMessage_t(char* p_message, int p_length) 
@@ -329,7 +329,7 @@ namespace Greis
     class RTStdMessage_t : public StdMessage_t
     {
     public:
-    	SHARED_PTR_T(RTStdMessage_t);
+    	SMART_PTR_T(RTStdMessage_t);
     	NULL_PTR_DECL;
     
     	RTStdMessage_t(char* p_message, int p_length) 
@@ -378,7 +378,7 @@ namespace Greis
     class <NAME>StdMessage_t : public StdMessage_t
     {
     public:
-        SHARED_PTR_T(<NAME>StdMessage_t);
+        SMART_PTR_T(<NAME>StdMessage_t);
         NULL_PTR_DECL;
 
         <NAME>StdMessage_t(char* p_data, int p_length) : StdMessage_t(<NAME>, p_length, <NAME>StdMessage)
@@ -407,20 +407,20 @@ namespace Greis
     class StdMessageFactory_t
     {
     public:
-        static StdMessage_t::Pointer_t Create(char* p_message, int p_length)
+        static StdMessage_t::SharedPtr_t Create(char* p_message, int p_length)
         {
-            return StdMessage_t::Pointer_t(new StdMessage_t(p_message, p_length));
+            return StdMessage_t::SharedPtr_t(new StdMessage_t(p_message, p_length));
             /*EMessageType id = idToEnumMap(p_message);
             switch(id)
             {
             case JPStdMessage:
-                return JPStdMessage_t::Pointer_t(new JPStdMessage_t(p_message, p_length));
+                return JPStdMessage_t::SharedPtr_t(new JPStdMessage_t(p_message, p_length));
             case MFStdMessage:
-                return MFStdMessage_t::Pointer_t(new MFStdMessage_t(p_message, p_length));
+                return MFStdMessage_t::SharedPtr_t(new MFStdMessage_t(p_message, p_length));
             case RTStdMessage:
-                return RTStdMessage_t::Pointer_t(new RTStdMessage_t(p_message, p_length));
+                return RTStdMessage_t::SharedPtr_t(new RTStdMessage_t(p_message, p_length));
             case UnknownStdMessage:
-                return StdMessage_t::Pointer_t(new StdMessage_t(p_message, p_length));
+                return StdMessage_t::SharedPtr_t(new StdMessage_t(p_message, p_length));
             default:
                 throw Exception("Invalid EMessageType value.");
             }*/

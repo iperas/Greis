@@ -1,8 +1,6 @@
 #ifndef macro_h__
 #define macro_h__
 
-#include <boost/static_assert.hpp>
-
 /* ----------------- Internal macro (do not use it) ------------------- */
 
 /* turn a numeric literal into a hex constant
@@ -38,6 +36,7 @@
 
 /* ----------------- Type size static assertion ------------------- */
 
-#define VALIDATE_TYPE_SIZE(TYPENAME, EXPECTEDSIZE) BOOST_STATIC_ASSERT(sizeof(TYPENAME) == EXPECTEDSIZE)
+#define VALIDATE_TYPE_SIZE(TYPENAME, EXPECTEDSIZE) static_assert(sizeof(TYPENAME) == EXPECTEDSIZE, \
+    "Invalid type size.")
 
 #endif // macro_h__

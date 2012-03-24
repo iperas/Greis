@@ -3,7 +3,7 @@
 
 #include "Exception.h"
 
-namespace Util
+namespace ProjectBase
 {
     class NotImplementedException : public Exception
     {

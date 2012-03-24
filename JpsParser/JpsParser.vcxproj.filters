@@ -1,20 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>{d4880dee-617f-4c72-93d7-442423c2c26d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GREIS">
       <UniqueIdentifier>{46290229-ddc5-4675-815c-183cd232898a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ProjectBase">
-      <UniqueIdentifier>{954f9204-7cca-427c-a68e-42fe18db887a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ProjectBase\Util">
-      <UniqueIdentifier>{fc37742d-e91d-4414-9aab-cc9749ce6667}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ProjectBase\Database">
-      <UniqueIdentifier>{2c5f0b63-f47c-4a7e-bdb9-eb1f4f8c9dcf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Domain">
       <UniqueIdentifier>{0805234b-f65f-42a9-bfa7-0cac0ef4fa33}</UniqueIdentifier>
@@ -30,9 +18,6 @@
     </ClCompile>
     <ClCompile Include="JpsFile.cpp">
       <Filter>GREIS</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\IniSettings.cpp">
-      <Filter>ProjectBase\Util</Filter>
     </ClCompile>
     <ClCompile Include="Domain\MetaInfo.cpp">
       <Filter>Domain</Filter>
@@ -57,59 +42,8 @@
     <ClInclude Include="JpsFile.h">
       <Filter>GREIS</Filter>
     </ClInclude>
-    <ClInclude Include="Util\Logger.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Singleton.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Path.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\SharedPtr.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\File.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Macro.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\BitConverter.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\IniSettings.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseWriter.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\Connection.h">
-      <Filter>ProjectBase\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DatabaseException.h">
-      <Filter>ProjectBase\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DatabaseHelper.h">
-      <Filter>ProjectBase\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DataInserter.h">
-      <Filter>ProjectBase\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DataStructureException.h">
-      <Filter>ProjectBase\Database</Filter>
-    </ClInclude>
     <ClInclude Include="Domain\MetaInfo.h">
       <Filter>Domain</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\InvalidOperationException.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Exception.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\FileException.h">
-      <Filter>ProjectBase\Util</Filter>
     </ClInclude>
     <ClInclude Include="Domain\MetaInfoReader.h">
       <Filter>Domain</Filter>
@@ -119,15 +53,6 @@
     </ClInclude>
     <ClInclude Include="Tests\BitConverter.Tests.h">
       <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\NotSupportedException.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\NotImplementedException.h">
-      <Filter>ProjectBase\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Database\DataBatchInserter.h">
-      <Filter>ProjectBase\Database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

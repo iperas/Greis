@@ -1,18 +1,19 @@
 #ifndef JpsFile_h__
 #define JpsFile_h__
 
-#include "Util/Macro.h"
+#include "ProjectBase/Macro.h"
 #include "GreisMessage.h"
 #include "GreisMessageStream.h"
 #include <list>
 #include "Domain/MySqlSink.h"
 
 using std::list;
+using std::dynamic_pointer_cast;
 using namespace Domain;
 
 namespace Greis
 {
-    typedef vector<Message_t::Pointer_t> Messages_t;
+    typedef vector<Message_t::SharedPtr_t> Messages_t;
 
     class Epoch_t
     {
@@ -24,7 +25,7 @@ namespace Greis
     class JpsFile_t
     {
     public:
-        SHARED_PTR_T(JpsFile_t);
+        SMART_PTR_T(JpsFile_t);
         NULL_PTR_DECL;
 
         JpsFile_t(QString aFilename)
@@ -38,17 +39,17 @@ namespace Greis
 
         void toBinaryStream(std::ostream& out) const
         {
-            foreach(Message_t::Pointer_t msg, header())
+            foreach(Message_t::SharedPtr_t msg, header())
             {
-                StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
                 out.write(stdMsg->message(), stdMsg->fullSize());
                 out.write("\0\n", 2);
             }
             foreach(Epoch_t epoch, body())
             {
-                foreach(Message_t::Pointer_t msg, epoch.Messages)
+                foreach(Message_t::SharedPtr_t msg, epoch.Messages)
                 {
-                    StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
                     out.write(stdMsg->message(), stdMsg->fullSize());
                     out.write("\0\n", 2);
                 }
@@ -56,19 +57,19 @@ namespace Greis
             out.flush();
         }
 
-        void toMySqlSink(MySqlSink::Pointer_t sink)
+        void toMySqlSink(MySqlSink::SharedPtr_t sink)
         {
-            /*foreach(Message_t::Pointer_t msg, header())
+            /*foreach(Message_t::SharedPtr_t msg, header())
             {
-                StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                StdMessage_t::SharedPtr_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
                 sink->AddMessage(stdMsg, false);
             }*/
             foreach(Epoch_t epoch, body())
             {
                 sink->AddEpoch(epoch.DateTime);
-                foreach(Message_t::Pointer_t msg, epoch.Messages)
+                foreach(Message_t::SharedPtr_t msg, epoch.Messages)
                 {
-                    StdMessage_t::Pointer_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
                     sink->AddMessage(stdMsg, false);
                 }
             }
@@ -83,7 +84,7 @@ namespace Greis
             _body.clear();
             int epochCounter = 0;
             StdMessageStream stream(aFilename);
-            Message_t::Pointer_t msg;
+            Message_t::SharedPtr_t msg;
 
             QDateTime dateTime;
             dateTime.setTimeSpec(Qt::UTC);
@@ -92,7 +93,7 @@ namespace Greis
             {
                 if (msg->type() == UnknownStdMessage)
                 {
-                    auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    auto stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
                     if (stdMsg->id() == messageCodeRT)
                     {
                         handleRTMessage(stdMsg.get(), dateTime);
@@ -117,7 +118,7 @@ namespace Greis
             {
                 if (msg->type() == UnknownStdMessage)
                 {
-                    auto stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
+                    auto stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
                     if (stdMsg->id() == messageCodeRT)
                     {
                         epoch.DateTime = dateTime;
@@ -126,7 +127,7 @@ namespace Greis
                         bool isHeader = false;
                         /*if (!headerParsed) // Commented: ≈сть предположение, что параметры приемника должны идти нар€ду с обычными сообщени€ми.
                         {
-                            foreach(Message_t::Pointer_t em, epoch.Messages)
+                            foreach(Message_t::SharedPtr_t em, epoch.Messages)
                             {
                                 if (em->type() == UnknownStdMessage && boost::shared_dynamic_cast<StdMessage_t>(em)->id() == "PM")
                                 {

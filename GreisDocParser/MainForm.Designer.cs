@@ -49,19 +49,19 @@
             this.theTabControl = new System.Windows.Forms.TabControl();
             this.tabPageMetaInfo = new System.Windows.Forms.TabPage();
             this.tabPageXmlBased = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tbxCppEnvOutputSublocation = new System.Windows.Forms.TextBox();
             this.btnGenerateCppEnv = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.tbxCppEnvOutputSublocation = new System.Windows.Forms.TextBox();
             this.groupBoxMetaInfoInput.SuspendLayout();
             this.theTabControl.SuspendLayout();
             this.tabPageMetaInfo.SuspendLayout();
             this.tabPageXmlBased.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOutputDirBrowse
@@ -267,8 +267,30 @@
             this.tabPageXmlBased.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageXmlBased.Size = new System.Drawing.Size(470, 259);
             this.tabPageXmlBased.TabIndex = 1;
-            this.tabPageXmlBased.Text = "XML-based";
+            this.tabPageXmlBased.Text = "XML-based content";
             this.tabPageXmlBased.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.tbxCppEnvOutputSublocation);
+            this.groupBox2.Controls.Add(this.btnGenerateCppEnv);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Location = new System.Drawing.Point(2, 78);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(465, 69);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "C++ environment";
+            // 
+            // tbxCppEnvOutputSublocation
+            // 
+            this.tbxCppEnvOutputSublocation.Location = new System.Drawing.Point(168, 41);
+            this.tbxCppEnvOutputSublocation.Name = "tbxCppEnvOutputSublocation";
+            this.tbxCppEnvOutputSublocation.Size = new System.Drawing.Size(291, 20);
+            this.tbxCppEnvOutputSublocation.TabIndex = 6;
             // 
             // btnGenerateCppEnv
             // 
@@ -279,6 +301,24 @@
             this.btnGenerateCppEnv.Text = "Generate C++ Environment";
             this.btnGenerateCppEnv.UseVisualStyleBackColor = true;
             this.btnGenerateCppEnv.Click += new System.EventHandler(this.btnGenerateCppEnv_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 44);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(156, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Location in the output directory:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 17);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(173, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Generate a Greis C++ environment:";
             // 
             // groupBox1
             // 
@@ -302,46 +342,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Generate a baseline script for MySQL database:";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.tbxCppEnvOutputSublocation);
-            this.groupBox2.Controls.Add(this.btnGenerateCppEnv);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Location = new System.Drawing.Point(2, 78);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(465, 69);
-            this.groupBox2.TabIndex = 7;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "C++ environment";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 17);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(173, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Generate a Greis C++ environment:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 44);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(156, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Location in the output directory:";
-            // 
-            // tbxCppEnvOutputSublocation
-            // 
-            this.tbxCppEnvOutputSublocation.Location = new System.Drawing.Point(168, 41);
-            this.tbxCppEnvOutputSublocation.Name = "tbxCppEnvOutputSublocation";
-            this.tbxCppEnvOutputSublocation.Size = new System.Drawing.Size(291, 20);
-            this.tbxCppEnvOutputSublocation.TabIndex = 6;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,10 +359,10 @@
             this.tabPageMetaInfo.ResumeLayout(false);
             this.tabPageXmlBased.ResumeLayout(false);
             this.tabPageXmlBased.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

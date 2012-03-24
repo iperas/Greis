@@ -1,9 +1,9 @@
 #ifndef DataStructureException_h__
 #define DataStructureException_h__
 
-#include "Util/Exception.h"
+#include "Exception.h"
 
-namespace Database 
+namespace ProjectBase 
 {
     class DataConsistencyException : public Exception
     {

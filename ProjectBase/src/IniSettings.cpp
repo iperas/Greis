@@ -1,29 +1,27 @@
 #include "IniSettings.h"
-#include <QCoreApplication>
-#include <QDir>
-#include <QFile>
-#include <QTextStream>
-#include <QRegExp>
-#include <QMap>
-#include <QTextCodec>
+#include "SmartPtr.h"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
+#include <QtCore/QRegExp>
+#include <QtCore/QMap>
+#include <QtCore/QTextCodec>
 
-namespace Util
+namespace ProjectBase
 {
     IniSettings::IniSettings()
     {
-        _pSettings = 0;
     }
 
     IniSettings::~IniSettings()
     {
-        if (_pSettings)
-            delete _pSettings;
     }
 
     bool IniSettings::Initialize(const QString& settingsFile)
     {
         _settingsFile = settingsFile;
-        _pSettings = new QSettings(_settingsFile, QSettings::IniFormat);
+        _pSettings = make_unique<QSettings>(_settingsFile, QSettings::IniFormat);
         _initialized = true;
         return true;
     }

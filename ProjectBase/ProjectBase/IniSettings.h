@@ -1,13 +1,15 @@
 #ifndef IniSettings_h__
 #define IniSettings_h__
 
-#include <QSettings>
-#include <QString>
-#include "Util/Singleton.h"
+#include <QtCore/QSettings>
+#include <QtCore/QString>
+#include <memory>
+#include <boost/utility.hpp>
+#include "Singleton.h"
 
-namespace Util
+namespace ProjectBase
 {
-    class IniSettings
+    class IniSettings : boost::noncopyable
     {
         SINGLETON_BLOCK(IniSettings)
     public:
@@ -18,14 +20,14 @@ namespace Util
         void setValue(const QString& key, const QVariant& value);
         QVariant value(const QString & key, const QVariant & defaultValue = QVariant()) const;
 
-        inline QSettings* settings() { return _pSettings; }
+        inline QSettings* settings() { return _pSettings.get(); }
     private:
-        QSettings* _pSettings;
+        std::unique_ptr<QSettings> _pSettings;
         QString _settingsFile;
         bool _initialized;
     };
 }
 
-#define sIniSettings SINGLETON_INSTANCE(::Util::IniSettings)
+#define sIniSettings SINGLETON_INSTANCE(::ProjectBase::IniSettings)
 
 #endif // IniSettings_h__

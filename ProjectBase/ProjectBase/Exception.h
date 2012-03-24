@@ -3,7 +3,7 @@
 
 #include <QtCore/QtCore>
 
-namespace Util
+namespace ProjectBase
 {
     class Exception
     {

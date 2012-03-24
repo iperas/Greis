@@ -2,18 +2,18 @@
 #define MySqlSink_h__
 
 #include <QList>
-#include "Database/Connection.h"
-#include "Util/SharedPtr.h"
+#include "ProjectBase/Connection.h"
+#include "ProjectBase/SmartPtr.h"
 #include "MetaInfo.h"
 #include "GreisMessage.h"
-#include "Util/BitConverter.h"
+#include "ProjectBase/BitConverter.h"
 #include "Tests/BitConverter.Tests.h"
-#include "Util/NotSupportedException.h"
-#include "Util/NotImplementedException.h"
-#include "Database/DataInserter.h"
-#include "Database/DataBatchInserter.h"
+#include "ProjectBase/NotSupportedException.h"
+#include "ProjectBase/NotImplementedException.h"
+#include "ProjectBase/DataInserter.h"
+#include "ProjectBase/DataBatchInserter.h"
 
-using namespace Database;
+using namespace ProjectBase;
 using namespace Greis;
 
 namespace Domain
@@ -22,43 +22,43 @@ namespace Domain
     {
     private:
         BitConverter _bitConverter;
-        MetaInfo::Pointer_t _metaInfo;
+        MetaInfo::SharedPtr_t _metaInfo;
         Connection* _connection;
         DatabaseHelper* _dbHelper;
-        QMap<MessageMeta*, DataBatchInserter::Pointer_t> _msgInsertersMap;
-        QMap<CustomTypeMeta*, DataBatchInserter::Pointer_t> _ctInsertersMap;
-        DataBatchInserter::Pointer_t _epochInserter;
+        QMap<MessageMeta*, DataBatchInserter::SharedPtr_t> _msgInsertersMap;
+        QMap<CustomTypeMeta*, DataBatchInserter::SharedPtr_t> _ctInsertersMap;
+        DataBatchInserter::SharedPtr_t _epochInserter;
         QMap<CustomTypeMeta*, int> _ctAvailableId;
         int _lastEpochId;
         QStringList _unknownTypes;
-        QMap<QString, MessageMeta::Pointer_t> _codeToMsgMap;
-        QMap<QString, CustomTypeMeta::Pointer_t> _nameToCustomTypeMap;
+        QMap<QString, MessageMeta::SharedPtr_t> _codeToMsgMap;
+        QMap<QString, CustomTypeMeta::SharedPtr_t> _nameToCustomTypeMap;
         int _inserterBatchSize;
     public:
-        SHARED_PTR_T(MySqlSink);
+        SMART_PTR_T(MySqlSink);
 
-        MySqlSink(MetaInfo::Pointer_t metaInfo, Connection* connection, int inserterBatchSize = 10000)
+        MySqlSink(MetaInfo::SharedPtr_t metaInfo, Connection* connection, int inserterBatchSize = 10000)
         {
             _metaInfo = metaInfo;
             _connection = connection;
             _dbHelper = _connection->DbHelper();
             _inserterBatchSize = inserterBatchSize;
 
-            foreach (MessageMeta::Pointer_t msg, _metaInfo->MessagesMeta)
+            foreach (MessageMeta::SharedPtr_t msg, _metaInfo->MessagesMeta)
             {
-                foreach (MessageCode::Pointer_t code, msg->Codes)
+                foreach (MessageCode::SharedPtr_t code, msg->Codes)
                 {
                     _codeToMsgMap[code->Code] = msg;
                 }
             }
 
-            foreach (CustomTypeMeta::Pointer_t ct, _metaInfo->CustomTypesMeta)
+            foreach (CustomTypeMeta::SharedPtr_t ct, _metaInfo->CustomTypesMeta)
             {
                 _nameToCustomTypeMap[ct->Name] = ct;
             }
 
             _lastEpochId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `epoch`")).toInt();
-            _epochInserter = DataBatchInserter::Pointer_t(new DataBatchInserter(
+            _epochInserter = DataBatchInserter::SharedPtr_t(new DataBatchInserter(
                 "INSERT INTO `epoch` (id, dt) VALUES (?, ?)", 2, _connection, "epoch", _inserterBatchSize));
         }
 
@@ -76,11 +76,11 @@ namespace Domain
             _epochInserter->AddRow(data);
         }
 
-        void AddMessage(StdMessage_t::Pointer_t msg, bool ignoreInvalidMessages = true)
+        void AddMessage(StdMessage_t::SharedPtr_t msg, bool ignoreInvalidMessages = true)
         {
             // MessageMeta retrieving
             auto msgCodeStr = QString::fromAscii(msg->id().c_str(), 2);
-            auto msgMeta = _codeToMsgMap.value(msgCodeStr, MessageMeta::Pointer_t());
+            auto msgMeta = _codeToMsgMap.value(msgCodeStr, MessageMeta::SharedPtr_t());
 
             if (!msgMeta.get())
             {
@@ -93,7 +93,7 @@ namespace Domain
                 validateMessage(msgMeta.get(), msg.get());
             }
 
-            DataBatchInserter::Pointer_t inserter = getMsgInserter(msgMeta.get());
+            DataBatchInserter::SharedPtr_t inserter = getMsgInserter(msgMeta.get());
             
             int fillFieldsCount = msgMeta->GetFilledArrayFieldsSize(_metaInfo.get(), msg->bodySize());
             
@@ -123,7 +123,7 @@ namespace Domain
 
         void serializeCustomType( CustomTypeMeta* msgMeta, const char* &dataPtr, int fillFieldsCount, QVariantList &sink ) 
         {
-            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
             {
                 auto varType = varMeta->Type;
                 if (varType == "a1")
@@ -290,7 +290,7 @@ namespace Domain
 
         void Flush()
         {
-            foreach (DataBatchInserter::Pointer_t inserter, _msgInsertersMap)
+            foreach (DataBatchInserter::SharedPtr_t inserter, _msgInsertersMap)
             {
                 inserter->Flush();
             }
@@ -331,7 +331,7 @@ namespace Domain
             return newId;
         }
 
-        int getArraySizeInItems(VariableMeta::Pointer_t varMeta, int fillFieldsCount)
+        int getArraySizeInItems(VariableMeta::SharedPtr_t varMeta, int fillFieldsCount)
         {
             int fieldsCount;
             switch (varMeta->GetSizeForDimension(1))
@@ -353,7 +353,7 @@ namespace Domain
         }
 
         // Вычисляет размер массива и копирует данные данного размера в результирующий массив
-        QByteArray getArrayValue( VariableMeta::Pointer_t varMeta, const char* msgPtr, int fillFieldsCount, int typeSize ) 
+        QByteArray getArrayValue( VariableMeta::SharedPtr_t varMeta, const char* msgPtr, int fillFieldsCount, int typeSize ) 
         {
             int fieldsCount = getArraySizeInItems(varMeta, fillFieldsCount);
             QByteArray ba(msgPtr, fieldsCount * typeSize);
@@ -361,9 +361,9 @@ namespace Domain
             return ba;
         }
 
-        DataBatchInserter::Pointer_t getMsgInserter(MessageMeta* msgMeta)
+        DataBatchInserter::SharedPtr_t getMsgInserter(MessageMeta* msgMeta)
         {
-            DataBatchInserter::Pointer_t inserter;
+            DataBatchInserter::SharedPtr_t inserter;
             if ((inserter = _msgInsertersMap.value(msgMeta)).get())
             {
                 return inserter;
@@ -374,9 +374,9 @@ namespace Domain
             return inserter;
         }
 
-        DataBatchInserter::Pointer_t getCtInserter(CustomTypeMeta* ctMeta)
+        DataBatchInserter::SharedPtr_t getCtInserter(CustomTypeMeta* ctMeta)
         {
-            DataBatchInserter::Pointer_t inserter;
+            DataBatchInserter::SharedPtr_t inserter;
             if ((inserter = _ctInsertersMap.value(ctMeta)).get())
             {
                 return inserter;
@@ -392,14 +392,14 @@ namespace Domain
         }
 
         // customFields - список дополнительных полей, идущих до полей данных в списке INSERT-команды
-        DataBatchInserter::Pointer_t createInserter(CustomTypeMeta* msgMeta, const QStringList& customFields = QStringList())
+        DataBatchInserter::SharedPtr_t createInserter(CustomTypeMeta* msgMeta, const QStringList& customFields = QStringList())
         {
-            DataBatchInserter::Pointer_t inserter;
+            DataBatchInserter::SharedPtr_t inserter;
 
             // Getting inserters for all fields
-            QList<DataBatchInserter::Pointer_t> childInserters;
+            QList<DataBatchInserter::SharedPtr_t> childInserters;
             childInserters.append(_epochInserter);
-            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
             {
                 auto ct = _nameToCustomTypeMap[varMeta->Type];
                 if (!ct.get())
@@ -425,7 +425,7 @@ namespace Domain
 
             // Creating a new inserter
             QStringList columnNames;
-            foreach (VariableMeta::Pointer_t varMeta, msgMeta->Variables)
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
             {
                 columnNames.append(varMeta->GetColumnName());
             }
@@ -439,8 +439,8 @@ namespace Domain
                 insertCommand.append(", ?");
             }
             insertCommand.append(")");
-            inserter = DataBatchInserter::Pointer_t(new DataBatchInserter(insertCommand, fieldsCount, _connection, msgMeta->TableName, _inserterBatchSize));
-            foreach (DataBatchInserter::Pointer_t ci, childInserters)
+            inserter = DataBatchInserter::SharedPtr_t(new DataBatchInserter(insertCommand, fieldsCount, _connection, msgMeta->TableName, _inserterBatchSize));
+            foreach (DataBatchInserter::SharedPtr_t ci, childInserters)
             {
                 inserter->AddChild(ci);
             }

@@ -2,8 +2,8 @@
 #define GreisMessageStream_h__
 
 #include <QtCore/QtCore>
-#include "Util/File.h"
-#include "Util/Logger.h"
+#include "ProjectBase/File.h"
+#include "ProjectBase/Logger.h"
 #include <string>
 #include "GreisException.h"
 
@@ -24,7 +24,7 @@ namespace Greis
             return _file->peek(1).size() > 0;
         }
 
-        Message_t::Pointer_t Next(bool skipInvalid = false, bool skipNonStd = true)
+        Message_t::SharedPtr_t Next(bool skipInvalid = false, bool skipNonStd = true)
         {
 NextLabel: // avoiding stack overflow in recursive call
             const int minNSTM = NonStdTextMessage_t::min_id;
@@ -32,7 +32,7 @@ NextLabel: // avoiding stack overflow in recursive call
             const int minSM = StdMessage_t::min_id_char;
             const int maxSM = StdMessage_t::max_id_char;
             char id;
-            Message_t::Pointer_t nullPtr = Message_t::null_ptr;
+            Message_t::SharedPtr_t nullPtr = Message_t::sharedNullPtr;
             int readed = _file->peek(&id, 1);
 
             if (readed == 0)
@@ -64,7 +64,7 @@ NextLabel: // avoiding stack overflow in recursive call
                     sLogger.Warn(QString("Unexpected end of file, readed %1 body bytes of non-standard text message, expected EOM.").arg(body.size()));
                     return nullPtr;
                 }
-                NonStdTextMessage_t::Pointer_t msg = NonStdTextMessage_t::Pointer_t(new NonStdTextMessage_t(id, body, eom));
+                NonStdTextMessage_t::SharedPtr_t msg = NonStdTextMessage_t::SharedPtr_t(new NonStdTextMessage_t(id, body, eom));
                 //sLog.addInfo(msg->toString());
                 if (skipNonStd)
                     goto NextLabel;
@@ -73,7 +73,7 @@ NextLabel: // avoiding stack overflow in recursive call
             } else if (id == '\r' || id == '\n')
             {
                 // Zero-length non-standard Text Message
-                NonStdTextMessage_t::Pointer_t msg = NonStdTextMessage_t::Pointer_t(new NonStdTextMessage_t(id));
+                NonStdTextMessage_t::SharedPtr_t msg = NonStdTextMessage_t::SharedPtr_t(new NonStdTextMessage_t(id));
                 _file->read(&id, 1);
                 //sLog.addInfo(msg->toString());
                 if (skipNonStd)
@@ -110,7 +110,7 @@ NextLabel: // avoiding stack overflow in recursive call
                             .arg(data.size()).arg(msgLen + StdMsgHeaderLen));
                         return nullPtr;
                     }
-                    StdMessage_t::Pointer_t msg = StdMessageFactory_t::Create(data.data(), msgLen + StdMsgHeaderLen);
+                    StdMessage_t::SharedPtr_t msg = StdMessageFactory_t::Create(data.data(), msgLen + StdMsgHeaderLen);
                     if (skipInvalid && !msg->validate())
                     {
                         sLogger.Debug(QString("Invalid message. ") + QString("Skip this one and look forward."));

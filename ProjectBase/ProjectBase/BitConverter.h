@@ -1,7 +1,7 @@
 #ifndef BitConverter_h__
 #define BitConverter_h__
 
-namespace Util
+namespace ProjectBase
 {
     class BitConverter
     {
@@ -17,14 +17,7 @@ namespace Util
         EByteOrder _machineByteOrder;
     public:
 
-        BitConverter(EByteOrder byteOrder = LeastSignificantByte)
-        {
-            _byteOrder = byteOrder;
-            
-            char test[4];
-            *((unsigned int*)test) = 0x1;
-            _machineByteOrder = test[0] == 0x1 ? LeastSignificantByte : MostSignificantByte;
-        }
+        BitConverter(EByteOrder byteOrder = LeastSignificantByte);
 
         inline void ToByteArray(unsigned int val, char* dst)
         {
