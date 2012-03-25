@@ -31,12 +31,6 @@ using namespace Domain;
 
 int main(int argc, char *argv[])
 {
-#ifdef _DEBUG
-    // ## TESTS ##
-    Tests::BitConverterTests bct;
-    bct.TestLittleEndian();
-#endif
-
     bool transactionStarted = false;
     bool wrapIntoTransaction;
     Connection::SharedPtr_t connection;

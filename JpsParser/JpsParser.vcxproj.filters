@@ -51,8 +51,5 @@
     <ClInclude Include="Domain\MySqlSink.h">
       <Filter>Domain</Filter>
     </ClInclude>
-    <ClInclude Include="Tests\BitConverter.Tests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

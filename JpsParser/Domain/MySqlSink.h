@@ -7,7 +7,6 @@
 #include "MetaInfo.h"
 #include "GreisMessage.h"
 #include "ProjectBase/BitConverter.h"
-#include "Tests/BitConverter.Tests.h"
 #include "ProjectBase/NotSupportedException.h"
 #include "ProjectBase/NotImplementedException.h"
 #include "ProjectBase/DataInserter.h"
