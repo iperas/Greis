@@ -83,13 +83,13 @@ namespace Greis
             _header.clear();
             _body.clear();
             int epochCounter = 0;
-            StdMessageStream stream(aFilename);
+            StdMessageStream stream(aFilename, true);
             Message_t::SharedPtr_t msg;
 
             QDateTime dateTime;
             dateTime.setTimeSpec(Qt::UTC);
             // before ~~(RT)
-            while((msg = stream.Next(true)).get())
+            while((msg = stream.Next()).get())
             {
                 if (msg->type() == UnknownStdMessage)
                 {

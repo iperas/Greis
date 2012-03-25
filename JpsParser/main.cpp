@@ -5,7 +5,7 @@
 #include "ProjectBase/Exception.h"
 #include "ProjectBase/IniSettings.h"
 
-#include "GreisMessage.h"
+#include "StdMessage.h"
 #include "GreisMessageStream.h"
 #include "JpsFile.h"
 #include "ProjectBase/FileException.h"

@@ -1,15 +1,15 @@
 #ifndef GreisException_h__
 #define GreisException_h__
 
-#include <QtCore/QtCore>
+#include <QtCore/QString>
 #include "ProjectBase/Exception.h"
 
 namespace Greis
 {
-    class GreisException : public Exception
+    class GreisException : public ProjectBase::Exception
     {
     public:
-        GreisException(const QString& message) : Exception(message)
+        GreisException(const QString& message) : ProjectBase::Exception(message)
         {
         }
     };

@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectBase", "ProjectBase\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectBase.Tests", "ProjectBase.Tests\ProjectBase.Tests.vcxproj", "{2E3676D0-A2AA-4580-97FE-87297EB77435}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis", "Greis\Greis.vcxproj", "{524DCC9B-B6E6-488A-9842-B33166C6B9F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -65,6 +67,16 @@ Global
 		{2E3676D0-A2AA-4580-97FE-87297EB77435}.Release|Win32.ActiveCfg = Release|Win32
 		{2E3676D0-A2AA-4580-97FE-87297EB77435}.Release|Win32.Build.0 = Release|Win32
 		{2E3676D0-A2AA-4580-97FE-87297EB77435}.Release|x86.ActiveCfg = Release|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Debug|Win32.Build.0 = Debug|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Debug|x86.ActiveCfg = Debug|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Release|Win32.ActiveCfg = Release|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Release|Win32.Build.0 = Release|Win32
+		{524DCC9B-B6E6-488A-9842-B33166C6B9F4}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
