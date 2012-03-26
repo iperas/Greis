@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CppEnvironmentGenerator.cs" />
     <Compile Include="CustomType.cs" />
+    <Compile Include="CustomTypeNameCustomizer.cs" />
     <Compile Include="MysqlBaselineGenerator.cs" />
     <Compile Include="GreisTypes.cs" />
     <Compile Include="MainForm.cs">

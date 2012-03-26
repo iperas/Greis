@@ -12,7 +12,7 @@ namespace GreisDocParser
         private readonly MetaInfo _metaInfo;
         private readonly string _templateFilename;
         private readonly string _databaseName;
-        private Dictionary<CustomType, string> _tableNameDic;
+        private CustomTypeNameCustomizer _tableNameProvider;
 
         public MysqlBaselineGenerator(MetaInfo metaInfo, string templateFilename, string databaseName)
         {
@@ -33,7 +33,7 @@ namespace GreisDocParser
         /// <param name="outFilename">Выходной файл.</param>
         public void GenerateMysqlBaseline(string outFilename)
         {
-            createTableNameCache();
+            _tableNameProvider = new CustomTypeNameCustomizer(_metaInfo, s => "msg_" + s.Name, s => "ct_" + s.Name);
 
             // Generate template content
             var useDatabase = generateUseDatabase();
@@ -51,45 +51,6 @@ namespace GreisDocParser
                                 Replace(PlaceholderInitialFillup, fillup);
 
             File.WriteAllText(outFilename, baseline, encoding);
-        }
-
-        /// <summary>
-        /// Кеширование имен таблиц для кастом типов и сообщений
-        /// </summary>
-        private void createTableNameCache()
-        {
-            var lookup = _metaInfo.StandardMessages.Concat(_metaInfo.CustomTypes).
-                ToLookup(ct => ct.Name.ToLowerInvariant());
-            var tableNameDic = new Dictionary<CustomType, string>();
-            foreach (var l in lookup)
-            {
-                if (l.Count() > 1)
-                {
-                    int i = 0;
-                    foreach (var ct in l)
-                    {
-                        if (ct is StandardMessage)
-                        {
-                            tableNameDic[ct] = validatedTableName("msg_" + ct.Name + i++);
-                        } else
-                        {
-                            tableNameDic[ct] = validatedTableName("ct_" + ct.Name + i++);
-                        }
-                    }
-                } else
-                {
-                    var ct = l.First();
-                    if (ct is StandardMessage)
-                    {
-                        tableNameDic[ct] = validatedTableName("msg_" + ct.Name);
-                    }
-                    else
-                    {
-                        tableNameDic[ct] = validatedTableName("ct_" + ct.Name);
-                    }
-                }
-            }
-            _tableNameDic = tableNameDic;
         }
 
         #region Template entries content generators
@@ -117,7 +78,7 @@ namespace GreisDocParser
                     colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), sqlType(v));
                 }
 
-                var query = string.Format(queryCtFmt, ct.Name, tableName(ct), colDefs);
+                var query = string.Format(queryCtFmt, ct.Name, _tableNameProvider.GetName(ct), colDefs);
                 tableCreationSb.Append(query);
             }
             // messages
@@ -143,7 +104,7 @@ namespace GreisDocParser
                 }
 
                 var query = string.Format(queryMsgFmt, msg.Name, msg.Title.Replace("\r", "").Replace('\n', ' '),
-                                          tableName(msg), colDefs);
+                                          _tableNameProvider.GetName(msg), colDefs);
                 tableCreationSb.Append(query);
             }
 
@@ -156,11 +117,11 @@ namespace GreisDocParser
             var tableDropSb = new StringBuilder();
             foreach (var msg in _metaInfo.StandardMessages)
             {
-                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", tableName(msg));
+                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNameProvider.GetName(msg));
             }
             foreach (var ct in _metaInfo.CustomTypes)
             {
-                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", tableName(ct));
+                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNameProvider.GetName(ct));
             }
             var tableDrop = tableDropSb.ToString();
             return tableDrop;
@@ -230,7 +191,8 @@ namespace GreisDocParser
                     customTypeVariableSizeForDimensionValues.Clear();
                 }
 
-                var ctMetaInsert = string.Format("({3}, '{0}', {1}, '{2}')", ct.Name, ct.Size, tableName(ct), customTypeId);
+                var ctMetaInsert = string.Format("({3}, '{0}', {1}, '{2}')", ct.Name, ct.Size,
+                                                 _tableNameProvider.GetName(ct), customTypeId);
                 metaValues.Add(ctMetaInsert);
                 customTypeId++;
             }
@@ -259,13 +221,15 @@ namespace GreisDocParser
                 }
                 foreach (var v in message.Variables)
                 {
-                    var messageVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", messageVariableId, v.Name, v.GreisType, v.RequiredValue, messageId);
+                    var messageVariableMetaInsert = string.Format("({0}, '{1}', '{2}', '{3}', {4})", messageVariableId,
+                                                                  v.Name, v.GreisType, v.RequiredValue, messageId);
                     messageVariableMetaValues.Add(messageVariableMetaInsert);
 
                     // customTypeVariableSizeForDimension
                     for (int i = 0; i < v.DimensionsCount; i++)
                     {
-                        var insert = string.Format("({0}, {1}, {2})", messageVariableId, i + 1, v.GetSizeForDimension(i + 1));
+                        var insert = string.Format("({0}, {1}, {2})", messageVariableId, i + 1,
+                                                   v.GetSizeForDimension(i + 1));
                         messageVariableSizeForDimensionValues.Add(insert);
                     }
 
@@ -285,7 +249,7 @@ namespace GreisDocParser
                 var messageMetaInsert = string.Format("({0}, '{1}', '{2}', {3}, {4}, {5}, {6}, '{7}')", messageId,
                                                       message.Name, message.Title, message.Size,
                                                       (int) message.Validation, (int) MessageKinds.GreisStandardMessage,
-                                                      (int) message.Type, tableName(message));
+                                                      (int)message.Type, _tableNameProvider.GetName(message));
                 metaValues.Add(messageMetaInsert);
                 messageId++;
             }
@@ -309,20 +273,6 @@ namespace GreisDocParser
         }
 
         #endregion
-
-        private string tableName(CustomType ct)
-        {
-            return _tableNameDic[ct];
-        }
-
-        private static string validatedTableName(string tableName)
-        {
-            if (!Regex.IsMatch(tableName, @"[A-Za-z_][A-Za-z0-9_]*", RegexOptions.Compiled))
-            {
-                throw new Exception(string.Format("Invalid table name '{0}' provided.", tableName));
-            }
-            return tableName;
-        }
 
         private static string columnName(Variable v)
         {

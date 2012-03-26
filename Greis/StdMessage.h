@@ -4,6 +4,7 @@
 #include <vector>
 #include "Message.h"
 #include "ProjectBase/InvalidOperationException.h"
+#include "EMessageId.h"
 
 namespace Greis
 {
@@ -19,7 +20,7 @@ namespace Greis
 
         virtual std::string Id() const = 0;
         virtual int BodySize() const = 0;
-        virtual const char* FullMessage() const = 0;
+        virtual QByteArray ToByteArray() const = 0;
 
         inline static int HeadSize() { return _headSize; }
         inline int FullSize() const { return HeadSize() + BodySize(); }
@@ -27,10 +28,13 @@ namespace Greis
         static const char MinIdValue = 48;
         static const char MaxIdValue = 126;
 
+        static EMessageId::Type MapIdStrToEnum(char* p_id);
     protected:
+        std::string toString(const std::string& tagName) const;
         static bool validateChecksum8Ascii(char* p_message, int p_length);
         static bool validateChecksum8Bin(char* p_message, int p_length);
-
+        static std::string convertByteArrayToReadableString(char* p_message, int p_length);
+        QByteArray headToByteArray() const;
     protected:
         static const int _headSize = 5;
     };

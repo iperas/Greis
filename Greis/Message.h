@@ -2,12 +2,13 @@
 #define Message_h__
 
 #include <string>
+#include <boost/utility.hpp>
 #include "ProjectBase/SmartPtr.h"
 #include "EMessageKind.h"
 
 namespace Greis
 {
-    class Message
+    class Message : boost::noncopyable
     {
     private:
         const EMessageKind::Type _kind;

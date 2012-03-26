@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -17,11 +16,13 @@ namespace GreisDocParser
         private const string PlainTextReferenceFileKey = "PlainTextReferenceFile";
         private const string MetaInfoFileKey = "MetaInfoFile";
         private const string OutputDirKey = "OutputDir";
+        private const string CppEnvTemplatesDirKey = "CppEnvTemplatesDir";
 
         public MainForm()
         {
             InitializeComponent();
 
+            theTabControl.SelectedIndex = 1;
             tbxPlainTextReferenceFilename.Text = getDefaultPathForKey(PlainTextReferenceFileKey);
             tbxMetaInfoFile.Text = getDefaultPathForKey(MetaInfoFileKey);
             tbxOutputDir.Text = getDefaultPathForKey(OutputDirKey);
@@ -149,7 +150,14 @@ namespace GreisDocParser
 
         private void btnGenerateCppEnv_Click(object sender, EventArgs e)
         {
+            // take meta-info
+            var metaInfo = MetaInfo.FromXmlFile(tbxMetaInfoFile.Text);
 
+            var cppEnvTemplatesDir = getDefaultPathForKey(CppEnvTemplatesDirKey);
+            var outDir = tbxOutputDir.Text + @"\Greis";
+
+            var cppGen = new CppEnvironmentGenerator(metaInfo, cppEnvTemplatesDir);
+            cppGen.Generate(outDir);
         }
     }
 }
