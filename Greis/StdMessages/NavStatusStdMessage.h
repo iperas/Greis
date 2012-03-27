@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class NavStatusStdMessage : public StdMessage
@@ -19,11 +17,25 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // Navigation Status
+        const std::vector<Types::u1>& Ns() const { return _ns; }
+        std::vector<Types::u1>& Ns() { return _ns; }
+
+        // Solution type
+        const Types::u1& SolType() const { return _solType; }
+        Types::u1& SolType() { return _solType; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::vector<Types::u1> _ns;
+        Types::u1 _solType;
+        Types::u1 _cs;
     };
 }
 

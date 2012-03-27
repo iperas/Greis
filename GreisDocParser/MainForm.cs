@@ -158,6 +158,8 @@ namespace GreisDocParser
 
             var cppGen = new CppEnvironmentGenerator(metaInfo, cppEnvTemplatesDir);
             cppGen.Generate(outDir);
+
+            MessageBox.Show("Complete!");
         }
     }
 }

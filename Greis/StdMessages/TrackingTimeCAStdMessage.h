@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class TrackingTimeCAStdMessage : public StdMessage
@@ -19,11 +17,20 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // tracking time [s]
+        const std::vector<Types::u2>& Tt() const { return _tt; }
+        std::vector<Types::u2>& Tt() { return _tt; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::vector<Types::u2> _tt;
+        Types::u1 _cs;
     };
 }
 

@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class SolutionTimeStdMessage : public StdMessage
@@ -19,11 +17,25 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // Solution time. Tr modulo 1 day (86400000 ms)[ms]
+        const Types::u4& Time() const { return _time; }
+        Types::u4& Time() { return _time; }
+
+        // Solution type
+        const Types::u1& SolType() const { return _solType; }
+        Types::u1& SolType() { return _solType; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        Types::u4 _time;
+        Types::u1 _solType;
+        Types::u1 _cs;
     };
 }
 

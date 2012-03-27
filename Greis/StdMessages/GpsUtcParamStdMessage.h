@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
+#include "UtcOffsCustomType.h"
 
 namespace Greis
 {
@@ -19,11 +19,20 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // GPS UTC time offset parameters
+        const UtcOffsCustomType& Utc() const { return _utc; }
+        UtcOffsCustomType& Utc() { return _utc; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        UtcOffsCustomType _utc;
+        Types::u1 _cs;
     };
 }
 

@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
+#include "SmoothCustomType.h"
 
 namespace Greis
 {
@@ -19,11 +19,20 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // PR smoothing
+        const std::vector<SmoothCustomType>& Smooth() const { return _smooth; }
+        std::vector<SmoothCustomType>& Smooth() { return _smooth; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::vector<SmoothCustomType> _smooth;
+        Types::u1 _cs;
     };
 }
 

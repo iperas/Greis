@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class SatElevationStdMessage : public StdMessage
@@ -19,11 +17,20 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // Elevation angle [degrees] [-90…90)
+        const std::vector<Types::i1>& Elev() const { return _elev; }
+        std::vector<Types::i1>& Elev() { return _elev; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::vector<Types::i1> _elev;
+        Types::u1 _cs;
     };
 }
 

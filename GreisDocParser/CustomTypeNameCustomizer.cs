@@ -8,6 +8,7 @@ namespace GreisDocParser
 {
     public class CustomTypeNameCustomizer
     {
+        public const string IdFieldReplacement = "idField";
         private readonly Func<StandardMessage, string> _stdMessageNameCustomizer;
         private readonly Func<CustomType, string> _customTypeNameCustomizer;
         private Dictionary<CustomType, string> _tableNameDic;
@@ -39,6 +40,25 @@ namespace GreisDocParser
             return _tableNameDic[ct];
         }
 
+        public static string ValidateNameAsVariable(string name)
+        {
+            if (!Regex.IsMatch(name, @"[A-Za-z_][A-Za-z0-9_]*", RegexOptions.Compiled))
+            {
+                throw new Exception(String.Format("Invalid table name '{0}' provided.", name));
+            }
+            return name;
+        }
+
+        public static string NormalizeNameToLowerCamelCase(string s)
+        {
+            return Regex.Replace(s, "_([a-z])", match => match.Groups[1].Value.ToUpper()).Replace("_", "");
+        }
+
+        public static string ReplaceIdField(string s)
+        {
+            return s.ToLower() == "id" ? IdFieldReplacement : s;
+        }
+
         private void createTableNameCache()
         {
             var lookup = _customTypes.ToLookup(ct => ct.Name.ToLowerInvariant());
@@ -52,11 +72,11 @@ namespace GreisDocParser
                     {
                         if (ct is StandardMessage)
                         {
-                            tableNameDic[ct] = validatedTableName(_stdMessageNameCustomizer((StandardMessage)ct) + i++);
+                            tableNameDic[ct] = ValidateNameAsVariable(_stdMessageNameCustomizer((StandardMessage)ct) + i++);
                         }
                         else
                         {
-                            tableNameDic[ct] = validatedTableName(_customTypeNameCustomizer(ct) + i++);
+                            tableNameDic[ct] = ValidateNameAsVariable(_customTypeNameCustomizer(ct) + i++);
                         }
                     }
                 }
@@ -65,24 +85,16 @@ namespace GreisDocParser
                     var ct = l.First();
                     if (ct is StandardMessage)
                     {
-                        tableNameDic[ct] = validatedTableName(_stdMessageNameCustomizer((StandardMessage)ct));
+                        tableNameDic[ct] = ValidateNameAsVariable(_stdMessageNameCustomizer((StandardMessage)ct));
                     }
                     else
                     {
-                        tableNameDic[ct] = validatedTableName(_customTypeNameCustomizer(ct));
+                        tableNameDic[ct] = ValidateNameAsVariable(_customTypeNameCustomizer(ct));
                     }
                 }
             }
             _tableNameDic = tableNameDic;
         }
 
-        private static string validatedTableName(string tableName)
-        {
-            if (!Regex.IsMatch(tableName, @"[A-Za-z_][A-Za-z0-9_]*", RegexOptions.Compiled))
-            {
-                throw new Exception(string.Format("Invalid table name '{0}' provided.", tableName));
-            }
-            return tableName;
-        }
     }
 }

@@ -5,6 +5,7 @@
 #include "Message.h"
 #include "ProjectBase/InvalidOperationException.h"
 #include "EMessageId.h"
+#include "GreisTypes.h"
 
 namespace Greis
 {

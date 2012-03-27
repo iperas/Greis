@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
+#include "GPSAlm1CustomType.h"
 
 namespace Greis
 {
@@ -19,11 +19,26 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // Without ‘cs’ field, gps.sv within the range [1…30]
+        // GALILEO-Specific data
+        const GPSAlm1CustomType& Gps() const { return _gps; }
+        GPSAlm1CustomType& Gps() { return _gps; }
+
+        // Issue of almanac data []
+        const Types::i2& Iod() const { return _iod; }
+        Types::i2& Iod() { return _iod; }
+
+        // Checksum
+        const Types::u1& Cs() const { return _cs; }
+        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        GPSAlm1CustomType _gps;
+        Types::i2 _iod;
+        Types::u1 _cs;
     };
 }
 

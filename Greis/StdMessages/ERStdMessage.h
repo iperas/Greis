@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class ERStdMessage : public StdMessage
@@ -19,11 +17,15 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // Error description
+        const std::string& Error() const { return _error; }
+        std::string& Error() { return _error; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::string _error;
     };
 }
 

@@ -4,8 +4,6 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-// ${includes}
-
 namespace Greis
 {
     class FileIdStdMessage : public StdMessage
@@ -19,11 +17,20 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
+        
+        // File type identifier
+        const std::string& IdField() const { return _idField; }
+        std::string& IdField() { return _idField; }
+
+        // Human-readable stream description
+        const std::string& Description() const { return _description; }
+        std::string& Description() { return _description; }
     private:
         std::string _id;
         int _bodySize;
 
-        // ${stub}
+        std::string _idField;
+        std::string _description;
     };
 }
 
