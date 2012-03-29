@@ -25,7 +25,7 @@ namespace Greis
 
         inline static int HeadSize() { return _headSize; }
         inline int FullSize() const { return HeadSize() + BodySize(); }
-
+        
         static const char MinIdValue = 48;
         static const char MaxIdValue = 126;
 

@@ -2,6 +2,8 @@
 #include "GreisTypes.h"
 #include "ChecksumComputer.h"
 #include "boost/format.hpp"
+#include "ProjectBase/BitConverter.h"
+#include "RawStdMessage.h"
 
 using std::string;
 using std::vector;
@@ -97,5 +99,126 @@ namespace Greis
         auto bodySizeStr = QString::number(BodySize(), 16).rightJustified(3, '0', true);
         head.append(bodySizeStr.toAscii(), 3);
         return head;
+    }
+
+    class GreisSerializer
+    {
+    public:
+        GreisSerializer(BitConverter::EByteOrder byteOrder) : _bitConverter(byteOrder)
+        {
+        }
+
+        template<typename T>
+        void Serialize(T val, QByteArray& outStream)
+        {
+            static_assert(std::is_arithmetic<T>::value && sizeof(T) > 1, "T is not a Greis type.");
+
+            char buffer[sizeof(T)];
+            _bitConverter.ToByteArray(val, buffer);
+            outStream.append(buffer, sizeof(T));
+        }
+
+        template<typename T>
+        void Serialize(const std::vector<T>& val, QByteArray& outStream)
+        {
+            for (auto it = val.begin(); it != val.end(); ++it)
+            {
+                Serialize(*it, outStream);
+            }
+        }
+
+        template<typename T>
+        void Serialize(const std::unique_ptr<T>& val, QByteArray& outStream)
+        {
+            outStream.append(val->ToByteArray());
+        }
+
+        void Serialize(char val, QByteArray& outStream)
+        {
+            outStream.append(val);
+        }
+
+        void Serialize(unsigned char val, QByteArray& outStream)
+        {
+            outStream.append(*((char*)&val));
+        }
+
+        void Serialize(const std::string& val, QByteArray& outStream)
+        {
+            outStream.append(val.c_str(), val.size());
+        }
+
+        template<typename T>
+        T Deserialize(const char* data)
+        {
+            return sizeof(T);
+        }
+
+        /*template<typename T>
+        void serialize(T* val, int size, QByteArray& outStream)
+        {
+            for (int i = 0; i < size; ++i)
+            {
+                serialize(val[i], outStream);
+            }
+        }
+
+        template<typename T>
+        void serialize(std::vector<T>* val, int size, QByteArray& outStream)
+        {
+            for (int i = 0; i < size; ++i)
+            {
+                serialize(&val[i][0], val[i].size(), outStream);
+            }
+        }*/
+
+
+        /*template<>
+        void serialize<std::string>(std::string val, QByteArray& outStream)
+        {
+            outStream.append(val.c_str(), val.size());
+        }
+
+        template<>
+        void serialize<std::string&>(std::string& val, QByteArray& outStream)
+        {
+            outStream.append(val.c_str(), val.size());
+        }*/
+
+        /*template<>
+        void serialize<const std::string&>(const std::string& val, QByteArray& outStream)
+        {
+            outStream.append(val.c_str(), val.size());
+        }*/
+    private:
+        BitConverter _bitConverter;
+    };
+
+    void f()
+    {
+        GreisSerializer aaa(BitConverter::LeastSignificantByte);
+        QByteArray asd;
+        char a = 123;
+        short b = 321;
+        int c = 3211;
+        long long d = 123123;
+        std::string e = "asdasd";
+        std::vector<int> h;
+        h.push_back(123);
+        unsigned char g = 123;
+        auto zzz = make_unique<RawStdMessage>("test",0);
+        
+        aaa.Serialize(a, asd);
+        aaa.Serialize(b, asd);
+        aaa.Serialize(c, asd);
+        aaa.Serialize(d, asd);
+        aaa.Serialize(e, asd);
+        aaa.Serialize(g, asd);
+        aaa.Serialize(h, asd);
+        aaa.Serialize(zzz, asd);
+
+        int az;
+        az = aaa.Deserialize<decltype(az)>(&a);
+        //short az2 = aaa.deserialize(&a);
     }
 }

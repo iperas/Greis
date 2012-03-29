@@ -9,7 +9,7 @@ using namespace ProjectBase;
 
 namespace Greis
 {
-    RawStdMessage::RawStdMessage(char* p_message, int p_length) : _message(p_message, p_length)
+    RawStdMessage::RawStdMessage(const char* p_message, int p_length) : _message(p_message, p_length)
     {
     }
 

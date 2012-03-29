@@ -19,6 +19,15 @@ namespace ProjectBase
 
         BitConverter(EByteOrder byteOrder = LeastSignificantByte);
 
+        inline void ToByteArray(unsigned long long val, char* dst)
+        {
+            *((unsigned long long*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned long long*)dst));
+            }
+        }
+
         inline void ToByteArray(unsigned int val, char* dst)
         {
             *((unsigned int*)dst) = val;
@@ -34,6 +43,20 @@ namespace ProjectBase
             if (_machineByteOrder != _byteOrder)
             {
                 endianSwap(*((unsigned short*)dst));
+            }
+        }
+
+        inline void ToByteArray(unsigned char val, char* dst)
+        {
+            *((unsigned char*)dst) = val;
+        }
+
+        inline void ToByteArray(long long val, char* dst)
+        {
+            *((long long*)dst) = val;
+            if (_machineByteOrder != _byteOrder)
+            {
+                endianSwap(*((unsigned long long*)dst));
             }
         }
 
@@ -53,6 +76,11 @@ namespace ProjectBase
             {
                 endianSwap(*((unsigned short*)dst));
             }
+        }
+
+        inline void ToByteArray(char val, char* dst)
+        {
+            *dst = val;
         }
 
         inline void ToByteArray(float val, char* dst)
@@ -105,24 +133,24 @@ namespace ProjectBase
             return val;
         }
 
-        /*inline unsigned long GetULong(const char* data)
+        inline unsigned long long GetULongLong(const char* data)
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
-            unsigned long val = (unsigned long)(
-                (((unsigned long)*(ucdata  )) << 56) + 
-                (((unsigned long)*(ucdata+1)) << 48) + 
-                (((unsigned long)*(ucdata+2)) << 40) + 
-                (((unsigned long)*(ucdata+3)) << 32) + 
-                (((unsigned long)*(ucdata+4)) << 24) + 
-                (((unsigned long)*(ucdata+5)) << 16) + 
-                (((unsigned long)*(ucdata+6)) << 8) + 
-                                (*(ucdata+7)));
+            unsigned long long val = (unsigned long long)(
+                (((unsigned long long)*ucdata) << 56) + 
+                (((unsigned long long)*ucdata+1) << 48) + 
+                (((unsigned long long)*ucdata+2) << 40) + 
+                (((unsigned long long)*ucdata+3) << 32) + 
+                (((unsigned long long)*ucdata+4) << 24) + 
+                (((unsigned long long)*(ucdata+5)) << 16) + 
+                (((unsigned long long)*(ucdata+6)) << 8) + 
+                (*(ucdata+7)));
             if (_byteOrder == LeastSignificantByte)
             {
                 endianSwap(val);
             }
             return val;
-        }*/
+        }
 
         inline char GetChar(const char* data)
         {
@@ -143,6 +171,13 @@ namespace ProjectBase
             return val;
         }
 
+        inline long long GetLongLong(const char* data)
+        {
+            unsigned long long uval = GetULongLong(data);
+            long long val = *(reinterpret_cast<long long*>(&uval));
+            return val;
+        }
+
         inline float GetFloat(const char* data)
         {
             unsigned int uiVal = GetUInt(data);
@@ -152,16 +187,8 @@ namespace ProjectBase
 
         inline double GetDouble(const char* data)
         {
-            unsigned int uiVal1 = GetUInt(data);
-            unsigned int uiVal2 = GetUInt(data + 4);
-            unsigned long long ulVal;
-            if (_byteOrder == LeastSignificantByte)
-            {
-                ulVal = uiVal1 + ((unsigned long long)uiVal2 << 32);
-            } else {
-                ulVal = uiVal2 + ((unsigned long long)uiVal1 << 32);
-            }
-            double dVal = *(reinterpret_cast<double*>(&ulVal));
+            unsigned long long uval = GetULongLong(data);
+            double dVal = *(reinterpret_cast<double*>(&uval));
             return dVal;
         }
 
