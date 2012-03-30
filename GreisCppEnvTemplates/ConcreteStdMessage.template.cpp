@@ -1,24 +1,24 @@
-#include "${ConcreteStdMessage}.h"
+#include "${ClassName}.h"
 
 namespace Greis
 {
-    ${ConcreteStdMessage}::${ConcreteStdMessage}( char* p_message, int p_length ) 
+    ${ClassName}::${ClassName}( char* p_message, int p_length ) 
         : _id(p_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${stub}
+        // ${DeserializationConstructorStub}
     }
 
-    std::string ${ConcreteStdMessage}::ToString() const
+    std::string ${ClassName}::ToString() const
     {
-        return toString("${ConcreteStdMessage}");
+        return toString("${ClassName}");
     }
 
-    QByteArray ${ConcreteStdMessage}::ToByteArray() const
+    QByteArray ${ClassName}::ToByteArray() const
     {
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${stub}
+        // ${ToByteArrayStub}
         
         return result;
     }

@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "SvData1CustomType.h"
+#include "CustomTypes/SvData1CustomType.h"
 
 namespace Greis
 {
@@ -27,8 +27,8 @@ namespace Greis
         // Satellite data. “N” can be derived from the
         // following expression:
         // N=([Message Length] - 2) / recSize)
-        const std::vector<SvData1CustomType>& Dat() const { return _dat; }
-        std::vector<SvData1CustomType>& Dat() { return _dat; }
+        const std::vector<SvData1CustomType::UniquePtr_t>& Dat() const { return _dat; }
+        std::vector<SvData1CustomType::UniquePtr_t>& Dat() { return _dat; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -38,7 +38,7 @@ namespace Greis
         int _bodySize;
 
         Types::u1 _recSize;
-        std::vector<SvData1CustomType> _dat;
+        std::vector<SvData1CustomType::UniquePtr_t> _dat;
         Types::u1 _cs;
     };
 }

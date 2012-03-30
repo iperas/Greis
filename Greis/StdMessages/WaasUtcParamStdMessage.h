@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "UtcOffsCustomType.h"
+#include "CustomTypes/UtcOffsCustomType.h"
 
 namespace Greis
 {
@@ -21,8 +21,8 @@ namespace Greis
         virtual QByteArray ToByteArray() const;
         
         // WAAS to UTC time offset parameters
-        const UtcOffsCustomType& Utc() const { return _utc; }
-        UtcOffsCustomType& Utc() { return _utc; }
+        const UtcOffsCustomType::UniquePtr_t& Utc() const { return _utc; }
+        UtcOffsCustomType::UniquePtr_t& Utc() { return _utc; }
 
         // UTC Standard Identifier[]
         const Types::i1& Utcsi() const { return _utcsi; }
@@ -47,7 +47,7 @@ namespace Greis
         std::string _id;
         int _bodySize;
 
-        UtcOffsCustomType _utc;
+        UtcOffsCustomType::UniquePtr_t _utc;
         Types::i1 _utcsi;
         Types::u4 _tow;
         Types::u2 _wn;

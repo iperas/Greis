@@ -22,9 +22,9 @@ namespace Greis
         virtual std::string Id() const = 0;
         virtual int BodySize() const = 0;
         virtual QByteArray ToByteArray() const = 0;
-
+        
         inline static int HeadSize() { return _headSize; }
-        inline int FullSize() const { return HeadSize() + BodySize(); }
+        inline int Size() const { return HeadSize() + BodySize(); }
         
         static const char MinIdValue = 48;
         static const char MaxIdValue = 126;

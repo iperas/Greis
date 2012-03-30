@@ -83,7 +83,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BitConverter.Tests.h" />
+    <ClInclude Include="BitConverterTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectBase\ProjectBase.vcxproj">

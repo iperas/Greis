@@ -5,7 +5,7 @@ namespace Greis
     CPStdMessage::CPStdMessage( char* p_message, int p_length ) 
         : _id(p_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${stub}
+        // ${DeserializationConstructorStub}
     }
 
     std::string CPStdMessage::ToString() const
@@ -18,7 +18,7 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${stub}
+        // ${ToByteArrayStub}
         
         return result;
     }

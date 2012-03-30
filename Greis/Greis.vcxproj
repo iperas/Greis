@@ -71,13 +71,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CustomType.h" />
+    <ClInclude Include="CustomTypes\ClkOffsCustomType.h" />
+    <ClInclude Include="CustomTypes\GPSAlm1CustomType.h" />
+    <ClInclude Include="CustomTypes\GPSEphemeris1CustomType.h" />
+    <ClInclude Include="CustomTypes\HeaderCustomType.h" />
+    <ClInclude Include="CustomTypes\SlotRecCustomType.h" />
+    <ClInclude Include="CustomTypes\SmoothCustomType.h" />
+    <ClInclude Include="CustomTypes\SvData0CustomType.h" />
+    <ClInclude Include="CustomTypes\SvData1CustomType.h" />
+    <ClInclude Include="CustomTypes\SvData2CustomType.h" />
+    <ClInclude Include="CustomTypes\UtcOffsCustomType.h" />
     <ClInclude Include="EMessageId.h" />
     <ClInclude Include="EMessageKind.h" />
     <ClInclude Include="ChecksumComputer.h" />
+    <ClInclude Include="GreisBinarySerializer.h" />
     <ClInclude Include="GreisException.h" />
     <ClInclude Include="GreisMessageStream.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NonStdTextMessage.h" />
+    <ClInclude Include="RawCustomType.h" />
     <ClInclude Include="RawStdMessage.h" />
     <ClInclude Include="StdMessage.h" />
     <ClInclude Include="StdMessageFactory.h" />
@@ -179,6 +192,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChecksumComputer.cpp" />
+    <ClCompile Include="CustomTypes\ClkOffsCustomType.cpp" />
+    <ClCompile Include="CustomTypes\GPSAlm1CustomType.cpp" />
+    <ClCompile Include="CustomTypes\GPSEphemeris1CustomType.cpp" />
+    <ClCompile Include="CustomTypes\HeaderCustomType.cpp" />
+    <ClCompile Include="CustomTypes\SlotRecCustomType.cpp" />
+    <ClCompile Include="CustomTypes\SmoothCustomType.cpp" />
+    <ClCompile Include="CustomTypes\SvData0CustomType.cpp" />
+    <ClCompile Include="CustomTypes\SvData1CustomType.cpp" />
+    <ClCompile Include="CustomTypes\SvData2CustomType.cpp" />
+    <ClCompile Include="CustomTypes\UtcOffsCustomType.cpp" />
+    <ClCompile Include="GreisBinarySerializer.cpp" />
     <ClCompile Include="GreisMessageStream.cpp" />
     <ClCompile Include="NonStdTextMessage.cpp" />
     <ClCompile Include="RawStdMessage.cpp" />

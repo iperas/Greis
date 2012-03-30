@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "UtcOffsCustomType.h"
+#include "CustomTypes/UtcOffsCustomType.h"
 
 namespace Greis
 {
@@ -22,8 +22,8 @@ namespace Greis
         
         // GALILEO to UTC time offset parameters
         // GALILEO to GPS time offset parameters
-        const UtcOffsCustomType& Utc() const { return _utc; }
-        UtcOffsCustomType& Utc() { return _utc; }
+        const UtcOffsCustomType::UniquePtr_t& Utc() const { return _utc; }
+        UtcOffsCustomType::UniquePtr_t& Utc() { return _utc; }
 
         // Constant term of time offset [s]
         const Types::f4& A0g() const { return _a0g; }
@@ -54,7 +54,7 @@ namespace Greis
         std::string _id;
         int _bodySize;
 
-        UtcOffsCustomType _utc;
+        UtcOffsCustomType::UniquePtr_t _utc;
         Types::f4 _a0g;
         Types::f4 _a1g;
         Types::u4 _t0g;

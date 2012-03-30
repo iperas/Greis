@@ -1,17 +1,17 @@
-#ifndef ${ConcreteStdMessage}_h__
-#define ${ConcreteStdMessage}_h__
+#ifndef ${ClassName}_h__
+#define ${ClassName}_h__
 
 #include "StdMessage.h"
 #include <QtCore/QByteArray>// ${includes}
 
 namespace Greis
 {
-    class ${ConcreteStdMessage} : public StdMessage
+    class ${ClassName} : public StdMessage
     {
     public:
-        SMART_PTR_T(${ConcreteStdMessage});
+        SMART_PTR_T(${ClassName});
 
-        ${ConcreteStdMessage}(char* p_message, int p_length);
+        ${ClassName}(char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
@@ -27,4 +27,4 @@ namespace Greis
     };
 }
 
-#endif // ${ConcreteStdMessage}_h__
+#endif // ${ClassName}_h__

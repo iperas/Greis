@@ -19,7 +19,10 @@ namespace ProjectBase
 
         BitConverter(EByteOrder byteOrder = LeastSignificantByte);
 
-        inline void ToByteArray(unsigned long long val, char* dst)
+        EByteOrder ByteOrder() const { return _byteOrder; }
+        EByteOrder MachineByteOrder() const { return _machineByteOrder; }
+
+        inline void ToByteArray(unsigned long long val, char* dst) const
         {
             *((unsigned long long*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -28,7 +31,7 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(unsigned int val, char* dst)
+        inline void ToByteArray(unsigned int val, char* dst) const
         {
             *((unsigned int*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -37,7 +40,7 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(unsigned short val, char* dst)
+        inline void ToByteArray(unsigned short val, char* dst) const
         {
             *((unsigned short*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -46,12 +49,12 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(unsigned char val, char* dst)
+        inline void ToByteArray(unsigned char val, char* dst) const
         {
             *((unsigned char*)dst) = val;
         }
 
-        inline void ToByteArray(long long val, char* dst)
+        inline void ToByteArray(long long val, char* dst) const
         {
             *((long long*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -60,7 +63,7 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(int val, char* dst)
+        inline void ToByteArray(int val, char* dst) const
         {
             *((int*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -69,7 +72,7 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(short val, char* dst)
+        inline void ToByteArray(short val, char* dst) const
         {
             *((short*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -78,12 +81,12 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(char val, char* dst)
+        inline void ToByteArray(char val, char* dst) const
         {
             *dst = val;
         }
 
-        inline void ToByteArray(float val, char* dst)
+        inline void ToByteArray(float val, char* dst) const
         {
             *((float*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -92,7 +95,7 @@ namespace ProjectBase
             }
         }
 
-        inline void ToByteArray(double val, char* dst)
+        inline void ToByteArray(double val, char* dst) const
         {
             *((double*)dst) = val;
             if (_machineByteOrder != _byteOrder)
@@ -101,13 +104,13 @@ namespace ProjectBase
             }
         }
 
-        inline unsigned char GetUChar(const char* data)
+        inline unsigned char GetUChar(const char* data) const
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
             return *ucdata;
         }
 
-        inline unsigned short GetUShort(const char* data)
+        inline unsigned short GetUShort(const char* data) const
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
             unsigned short val = (unsigned short)((((unsigned short)*ucdata) << 8) + (*(ucdata+1)));
@@ -118,7 +121,7 @@ namespace ProjectBase
             return val;
         }
 
-        inline unsigned int GetUInt(const char* data)
+        inline unsigned int GetUInt(const char* data) const
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
             unsigned int val = (unsigned int)(
@@ -133,15 +136,15 @@ namespace ProjectBase
             return val;
         }
 
-        inline unsigned long long GetULongLong(const char* data)
+        inline unsigned long long GetULongLong(const char* data) const
         {
             unsigned const char* ucdata = reinterpret_cast<unsigned const char*>(data);
             unsigned long long val = (unsigned long long)(
                 (((unsigned long long)*ucdata) << 56) + 
-                (((unsigned long long)*ucdata+1) << 48) + 
-                (((unsigned long long)*ucdata+2) << 40) + 
-                (((unsigned long long)*ucdata+3) << 32) + 
-                (((unsigned long long)*ucdata+4) << 24) + 
+                (((unsigned long long)*(ucdata+1)) << 48) + 
+                (((unsigned long long)*(ucdata+2)) << 40) + 
+                (((unsigned long long)*(ucdata+3)) << 32) + 
+                (((unsigned long long)*(ucdata+4)) << 24) + 
                 (((unsigned long long)*(ucdata+5)) << 16) + 
                 (((unsigned long long)*(ucdata+6)) << 8) + 
                 (*(ucdata+7)));
@@ -152,40 +155,40 @@ namespace ProjectBase
             return val;
         }
 
-        inline char GetChar(const char* data)
+        inline char GetChar(const char* data) const
         {
             return *data;
         }
 
-        inline short GetShort(const char* data)
+        inline short GetShort(const char* data) const
         {
             unsigned short uval = GetUShort(data);
             int val = *(reinterpret_cast<short*>(&uval));
             return val;
         }
 
-        inline int GetInt(const char* data)
+        inline int GetInt(const char* data) const
         {
             unsigned int uval = GetUInt(data);
             int val = *(reinterpret_cast<int*>(&uval));
             return val;
         }
 
-        inline long long GetLongLong(const char* data)
+        inline long long GetLongLong(const char* data) const
         {
             unsigned long long uval = GetULongLong(data);
             long long val = *(reinterpret_cast<long long*>(&uval));
             return val;
         }
 
-        inline float GetFloat(const char* data)
+        inline float GetFloat(const char* data) const
         {
             unsigned int uiVal = GetUInt(data);
             float fVal = *(reinterpret_cast<float*>(&uiVal));
             return fVal;
         }
 
-        inline double GetDouble(const char* data)
+        inline double GetDouble(const char* data) const
         {
             unsigned long long uval = GetULongLong(data);
             double dVal = *(reinterpret_cast<double*>(&uval));

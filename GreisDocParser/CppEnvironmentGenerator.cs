@@ -13,8 +13,9 @@ namespace GreisDocParser
         private const string IncludesStubToken = "// ${includes}";
         private const string ClassFieldsStubToken = "// ${ClassFieldsStub}";
         private const string ClassFieldsAccessorsStubToken = "// ${ClassFieldsAccessorsStub}";
-        private const string ConcreteStdMessageStubToken = "${ConcreteStdMessage}";
+        private const string ClassNameStubToken = "${ClassName}";
         private const string StdMessagesDir = "StdMessages";
+        private const string CustomTypesDir = "CustomTypes";
         private readonly MetaInfo _metaInfo;
         private readonly string _cppEnvTemplatesDir;
         private string _outDir;
@@ -41,6 +42,14 @@ namespace GreisDocParser
             generateStdMessageGeneratedMembers();
             generateStdMessageFactory();
             generateStdMessages();
+            generateCustomTypes();
+        }
+
+        private class CustomTypeStubsContent
+        {
+            public string Includes { get; set; }
+            public string ClassFields { get; set; }
+            public string ClassFieldsAccessors { get; set; }
         }
 
         private void generateStdMessages()
@@ -59,54 +68,15 @@ namespace GreisDocParser
             {
                 var className = _normalizedStdMessagesNamesProvider.GetName(msg) + "StdMessage";
 
-                // IncludesStubToken
-                var includeLines = msg.Variables.Where(v => !_simpleTypes.Contains(v.GreisType)).
-                    Select(v => string.Format("#include \"{0}CustomType.h\"", getLowerCamelCase(v.GreisType))
-                        ).ToArray();
-                var includeContent = string.Join("\r\n", includeLines);
-                if (includeLines.Length > 0)
-                {
-                    includeContent = "\r\n\r\n" + includeContent;
-                }
+                var content = generateCustomTypeStubsContent(msg, fieldsAccessorsListIntendation, 
+                    fieldsListIntendation);
 
-                // ClassFieldsStubToken
-                var fields = new List<string>();
-                foreach (var variable in msg.Variables)
-                {
-                    var field = string.Format("{0} {1};", 
-                        getTypeNameForVariable(variable), getFieldNameForVariable(variable));
-
-                    fields.Add(field);
-                }
-                var fieldsContent = string.Join("\r\n" + fieldsListIntendation, fields.ToArray());
-
-                // ClassFieldsAccessorsStubToken
-                var fieldsAccessors = new List<string>();
-                foreach (var variable in msg.Variables)
-                {
-                    var getter = string.Format("const {0}& {1}() const {{ return {2}; }}", 
-                        getTypeNameForVariable(variable),
-                        getAccessorNameForVariable(variable),
-                        getFieldNameForVariable(variable));
-                    string setter = string.Format("{0}& {1}() {{ return {2}; }}",
-                        getTypeNameForVariable(variable),
-                        getAccessorNameForVariable(variable),
-                        getFieldNameForVariable(variable));
-                    string comments = "// " + variable.Comment.
-                        Replace("\n", "\r\n" + fieldsAccessorsListIntendation + "// ");
-                    string alltogether = string.Format("{0}\r\n{2}{1}\r\n{2}{3}\r\n", comments, getter, 
-                        fieldsAccessorsListIntendation, setter);
-                    fieldsAccessors.Add(alltogether);
-                }
-                var fieldsAccesorsContent = string.Join("\r\n" + fieldsAccessorsListIntendation, 
-                    fieldsAccessors.ToArray()).TrimEnd();
-
-                // ConcreteStdMessageStubToken
-                var fileHContent = templateStrH.Replace(IncludesStubToken, includeContent).
-                    Replace(ClassFieldsStubToken, fieldsContent).
-                    Replace(ClassFieldsAccessorsStubToken, fieldsAccesorsContent).
-                    Replace(ConcreteStdMessageStubToken, className);
-                var fileCppContent = templateStrCpp.Replace(ConcreteStdMessageStubToken, className);
+                // ClassNameStubToken
+                var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
+                    Replace(ClassFieldsStubToken, content.ClassFields).
+                    Replace(ClassFieldsAccessorsStubToken, content.ClassFieldsAccessors).
+                    Replace(ClassNameStubToken, className);
+                var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className);
 
                 // Write
                 File.WriteAllText(Path.Combine(_outDir, StdMessagesDir, className + ".h"), fileHContent, 
@@ -114,6 +84,90 @@ namespace GreisDocParser
                 File.WriteAllText(Path.Combine(_outDir, StdMessagesDir, className + ".cpp"), fileCppContent, 
                                   Encoding.Default);
             }
+        }
+
+        private void generateCustomTypes()
+        {
+            var concreteCtHTemplatePath = Path.Combine(_cppEnvTemplatesDir, "ConcreteCustomType.template.h");
+            var concreteCtCppTemplatePath = Path.Combine(_cppEnvTemplatesDir, "ConcreteCustomType.template.cpp");
+            var templateStrH = File.ReadAllText(concreteCtHTemplatePath, Encoding.Default);
+            var templateStrCpp = File.ReadAllText(concreteCtCppTemplatePath, Encoding.Default);
+
+            var fieldsListIntendation = Regex.Match(templateStrH, @"([ \t]*)" + Regex.Escape(ClassFieldsStubToken)).
+                Groups[1].Value;
+            var fieldsAccessorsListIntendation = Regex.Match(templateStrH, @"([ \t]*)" + 
+                Regex.Escape(ClassFieldsAccessorsStubToken)).Groups[1].Value;
+
+            foreach (var ct in _metaInfo.CustomTypes)
+            {
+                var className = _normalizedCustomTypeNamesProvider.GetName(ct) + "CustomType";
+
+                var content = generateCustomTypeStubsContent(ct, fieldsAccessorsListIntendation, 
+                    fieldsListIntendation);
+
+                // ClassNameStubToken
+                var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
+                    Replace(ClassFieldsStubToken, content.ClassFields).
+                    Replace(ClassFieldsAccessorsStubToken, content.ClassFieldsAccessors).
+                    Replace(ClassNameStubToken, className);
+                var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className);
+
+                // Write
+                File.WriteAllText(Path.Combine(_outDir, CustomTypesDir, className + ".h"), fileHContent, 
+                                  Encoding.Default);
+                File.WriteAllText(Path.Combine(_outDir, CustomTypesDir, className + ".cpp"), fileCppContent, 
+                                  Encoding.Default);
+            }
+        }
+
+        private CustomTypeStubsContent generateCustomTypeStubsContent(CustomType msg, 
+            string fieldsAccessorsListIntendation, string fieldsListIntendation)
+        {
+            var content = new CustomTypeStubsContent();
+
+            // IncludesStubToken
+            var includeLines = msg.Variables.Where(v => !_simpleTypes.Contains(v.GreisType)).
+                Select(v => string.Format("#include \"CustomTypes/{0}CustomType.h\"", getLowerCamelCase(v.GreisType))
+                ).ToArray();
+            var contentIncludes = string.Join("\r\n", includeLines);
+            if (includeLines.Length > 0)
+            {
+                contentIncludes = "\r\n\r\n" + contentIncludes;
+            }
+            content.Includes = contentIncludes;
+
+            // ClassFieldsStubToken
+            var fields = new List<string>();
+            foreach (var variable in msg.Variables)
+            {
+                var field = string.Format("{0} {1};",
+                                          getTypeNameForVariable(variable), getFieldNameForVariable(variable));
+
+                fields.Add(field);
+            }
+            content.ClassFields = string.Join("\r\n" + fieldsListIntendation, fields.ToArray());
+
+            // ClassFieldsAccessorsStubToken
+            var fieldsAccessors = new List<string>();
+            foreach (var variable in msg.Variables)
+            {
+                var getter = string.Format("const {0}& {1}() const {{ return {2}; }}",
+                                           getTypeNameForVariable(variable),
+                                           getAccessorNameForVariable(variable),
+                                           getFieldNameForVariable(variable));
+                string setter = string.Format("{0}& {1}() {{ return {2}; }}",
+                                              getTypeNameForVariable(variable),
+                                              getAccessorNameForVariable(variable),
+                                              getFieldNameForVariable(variable));
+                string comments = "// " + variable.Comment.
+                                              Replace("\n", "\r\n" + fieldsAccessorsListIntendation + "// ");
+                string alltogether = string.Format("{0}\r\n{2}{1}\r\n{2}{3}\r\n", comments, getter,
+                                                   fieldsAccessorsListIntendation, setter);
+                fieldsAccessors.Add(alltogether);
+            }
+            content.ClassFieldsAccessors = string.Join("\r\n" + fieldsAccessorsListIntendation,
+                                                fieldsAccessors.ToArray()).TrimEnd();
+            return content;
         }
 
         private void generateStdMessageFactory()
@@ -177,7 +231,7 @@ namespace GreisDocParser
         {
             string typeName = _simpleTypes.Contains(variable.GreisType)
                                   ? string.Format("Types::{0}", variable.GreisType)
-                                  : string.Format("{0}CustomType", getLowerCamelCase(variable.GreisType));
+                                  : string.Format("{0}CustomType::UniquePtr_t", getLowerCamelCase(variable.GreisType));
             if (!variable.IsScalar)
             {
                 if (variable.GreisType == GreisTypes.a1.ToString())

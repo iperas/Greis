@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "GPSEphemeris1CustomType.h"
+#include "CustomTypes/GPSEphemeris1CustomType.h"
 
 namespace Greis
 {
@@ -22,8 +22,8 @@ namespace Greis
         
         // Without ‘cs’ field, gps.sv within the range [1…30]
         // GALILEO-specific data
-        const GPSEphemeris1CustomType& Gps() const { return _gps; }
-        GPSEphemeris1CustomType& Gps() { return _gps; }
+        const GPSEphemeris1CustomType::UniquePtr_t& Gps() const { return _gps; }
+        GPSEphemeris1CustomType::UniquePtr_t& Gps() { return _gps; }
 
         // broacast group delay E1 - E5A [s]
         const Types::f4& BgdE1E5a() const { return _bgdE1E5a; }
@@ -62,7 +62,7 @@ namespace Greis
         std::string _id;
         int _bodySize;
 
-        GPSEphemeris1CustomType _gps;
+        GPSEphemeris1CustomType::UniquePtr_t _gps;
         Types::f4 _bgdE1E5a;
         Types::f4 _bgdE1E5b;
         Types::f4 _ai0;

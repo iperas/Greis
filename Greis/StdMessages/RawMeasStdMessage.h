@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "SvData2CustomType.h"
+#include "CustomTypes/SvData2CustomType.h"
 
 namespace Greis
 {
@@ -55,8 +55,8 @@ namespace Greis
         Types::u2& Flags() { return _flags; }
 
         // SVs data (see below)
-        const std::vector<SvData2CustomType>& Svd() const { return _svd; }
-        std::vector<SvData2CustomType>& Svd() { return _svd; }
+        const std::vector<SvData2CustomType::UniquePtr_t>& Svd() const { return _svd; }
+        std::vector<SvData2CustomType::UniquePtr_t>& Svd() { return _svd; }
 
         // 16-bit CRC
         const Types::u2& Crc16() const { return _crc16; }
@@ -70,7 +70,7 @@ namespace Greis
         Types::u4 _reftime;
         Types::i2 _clock;
         Types::u2 _flags;
-        std::vector<SvData2CustomType> _svd;
+        std::vector<SvData2CustomType::UniquePtr_t> _svd;
         Types::u2 _crc16;
     };
 }

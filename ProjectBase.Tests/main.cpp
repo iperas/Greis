@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "BitConverter.Tests.h"
+#include "BitConverterTests.h"
 
 int main(int argc, char **argv)
 {

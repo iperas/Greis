@@ -4,7 +4,7 @@
 #include "StdMessage.h"
 #include <QtCore/QByteArray>
 
-#include "ClkOffsCustomType.h"
+#include "CustomTypes/ClkOffsCustomType.h"
 
 namespace Greis
 {
@@ -37,8 +37,8 @@ namespace Greis
         // ‘N’ can be derived from the following expression:
         // N = (len - 7) / recSize, where ‘len’ is message body
         // length taken from message header
-        const std::vector<ClkOffsCustomType>& Offs() const { return _Offs; }
-        std::vector<ClkOffsCustomType>& Offs() { return _Offs; }
+        const std::vector<ClkOffsCustomType::UniquePtr_t>& Offs() const { return _Offs; }
+        std::vector<ClkOffsCustomType::UniquePtr_t>& Offs() { return _Offs; }
 
         // 16-bit CRC
         const Types::u2& Crc16() const { return _crc16; }
@@ -50,7 +50,7 @@ namespace Greis
         Types::u2 _sample;
         Types::u2 _reserved;
         Types::u1 _recSize;
-        std::vector<ClkOffsCustomType> _Offs;
+        std::vector<ClkOffsCustomType::UniquePtr_t> _Offs;
         Types::u2 _crc16;
     };
 }
