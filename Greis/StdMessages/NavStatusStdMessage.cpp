@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 2) / 1;
 
-        _serializer.Deserialize(p_message, sizeof(_ns) * arraySizeInUniformFillFields, _ns);
-        p_message += sizeof(_ns) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _ns);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _solType);
         p_message += sizeof(_solType);
         _serializer.Deserialize(p_message, _cs);
@@ -25,6 +25,16 @@ namespace Greis
     std::string NavStatusStdMessage::ToString() const
     {
         return toString("NavStatusStdMessage");
+    }
+    bool NavStatusStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray NavStatusStdMessage::ToByteArray() const

@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 1;
 
-        _serializer.Deserialize(p_message, sizeof(_name) * arraySizeInUniformFillFields, _name);
-        p_message += sizeof(_name) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, arraySizeInUniformFillFields, _name);
+        p_message += arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string AntNameStdMessage::ToString() const
     {
         return toString("AntNameStdMessage");
+    }
+    bool AntNameStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray AntNameStdMessage::ToByteArray() const

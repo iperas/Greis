@@ -42,6 +42,15 @@ namespace Greis
     {
         return toString("PosVelVectorStdMessage");
     }
+    bool PosVelVectorStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     QByteArray PosVelVectorStdMessage::ToByteArray() const
     {

@@ -14,10 +14,10 @@ namespace Greis
 
         _serializer.Deserialize(p_message, _idField);
         p_message += sizeof(_idField);
-        _serializer.Deserialize(p_message, sizeof(_data) * arraySizeInUniformFillFields, _data);
-        p_message += sizeof(_data) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(_cs) * 2, _cs);
-        p_message += sizeof(_cs) * 2;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _data);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, 2, _cs);
+        p_message += 2;
         
         assert(p_message - pc_message == p_length);
     }
@@ -25,6 +25,16 @@ namespace Greis
     std::string WrapperStdMessage::ToString() const
     {
         return toString("WrapperStdMessage");
+    }
+    bool WrapperStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Ascii(message.data(), message.size());
     }
 
     QByteArray WrapperStdMessage::ToByteArray() const

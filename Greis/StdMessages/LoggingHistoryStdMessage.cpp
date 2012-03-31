@@ -19,6 +19,15 @@ namespace Greis
     {
         return toString("LoggingHistoryStdMessage");
     }
+    bool LoggingHistoryStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     QByteArray LoggingHistoryStdMessage::ToByteArray() const
     {

@@ -18,6 +18,7 @@ namespace GreisDocParser
         private const string ClassNameStubToken = "${ClassName}";
         private const string ToByteArrayStubToken = "// ${ToByteArrayStub}";
         private const string DeserializationConstructorStubToken = "// ${DeserializationConstructorStub}";
+        private const string ValidateStubToken = "// ${ValidateStub}";
         private const string StdMessagesDir = "StdMessages";
         private const string CustomTypesDir = "CustomTypes";
         private readonly MetaInfo _metaInfo;
@@ -56,6 +57,7 @@ namespace GreisDocParser
             public string ClassFieldsAccessors { get; set; }
             public string ToByteArrayCode { get; set; }
             public string DeserializationConstructorCode { get; set; }
+            public string ValidationCode { get; set; }
         }
 
         private void generateStdMessages()
@@ -79,13 +81,35 @@ namespace GreisDocParser
                 var content = generateCustomTypeStubsContent(msg, fieldsAccessorsListIntendation,
                     fieldsListIntendation, codeIntendation);
 
-                // ClassNameStubToken
+                // ValidateStubToken
+                if (msg.Validation == ValidationType.Checksum)
+                {
+                    content.ValidationCode =
+                        string.Format("\r\n" +
+                                      "\r\n{0}auto message = ToByteArray();" +
+                                      "\r\n{0}return validateChecksum8Bin(message.data(), message.size());", 
+                                      codeIntendation);
+                }
+                else if (msg.Validation == ValidationType.ChecksumAsHexAscii)
+                {
+                    content.ValidationCode =
+                        string.Format("\r\n" +
+                                      "\r\n{0}auto message = ToByteArray();" +
+                                      "\r\n{0}return validateChecksum8Ascii(message.data(), message.size());", 
+                                      codeIntendation);
+                } else
+                {
+                    content.ValidationCode = string.Format("\r\n" +
+                                                           "\r\n{0}return true;", codeIntendation);
+                }
+
                 var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
                     Replace(ClassFieldsStubToken, content.ClassFields).
                     Replace(ClassFieldsAccessorsStubToken, content.ClassFieldsAccessors).
                     Replace(ClassNameStubToken, className);
                 var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className).
                     Replace(ToByteArrayStubToken, content.ToByteArrayCode).
+                    Replace(ValidateStubToken, content.ValidationCode).
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
@@ -124,6 +148,7 @@ namespace GreisDocParser
                     Replace(ClassNameStubToken, className);
                 var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className).
                     Replace(ToByteArrayStubToken, content.ToByteArrayCode).
+                    Replace(ValidateStubToken, content.ValidationCode).
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
@@ -316,12 +341,13 @@ namespace GreisDocParser
                         arraySize = variable.GetSizeForDimension(1).ToString(CultureInfo.InvariantCulture);
                         break;
                     }
-                    line = string.Format("_serializer.Deserialize(p_message, sizeof({0}) * {2}, {0});\r\n{1}" +
-                                         "p_message += sizeof({0}) * {2};", getFieldNameForVariable(variable),
+                    line = string.Format("_serializer.Deserialize(p_message, {2}, {0});\r\n{1}" +
+                                         "p_message += {2};", getFieldNameForVariable(variable),
                                          codeIntendation, arraySize);
                 }
                 else
                 {
+                    Debug.Assert(variable.IsLinearArray, "Linear arrays of Greis types are only supported for now.");
                     // array of any dimensions
                     string countOfItemsInFieldStr;
                     switch (variable.GetSizeForDimension(1))
@@ -341,9 +367,10 @@ namespace GreisDocParser
                         countOfItemsInFieldStr = countOfItemsInField.ToString(CultureInfo.InvariantCulture);
                         break;
                     }
-                    line = string.Format("_serializer.Deserialize(p_message, sizeof({0}) * {2}, {0});\r\n{1}" +
-                                         "p_message += sizeof({0}) * {2};", getFieldNameForVariable(variable),
-                                         codeIntendation, countOfItemsInFieldStr);
+                    line = string.Format(
+                        "_serializer.Deserialize(p_message, sizeof({3}::value_type) * {2}, {0});\r\n{1}" +
+                        "p_message += sizeof({3}::value_type) * {2};", getFieldNameForVariable(variable),
+                        codeIntendation, countOfItemsInFieldStr, getTypeNameForVariable(variable));
                 }
             }
             else

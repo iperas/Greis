@@ -22,6 +22,16 @@ namespace Greis
     {
         return toString("TrackingTimeStdMessage");
     }
+    bool TrackingTimeStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray TrackingTimeStdMessage::ToByteArray() const
     {

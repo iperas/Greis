@@ -12,8 +12,8 @@ namespace Greis
         p_message += sizeof(_fcn1);
         _serializer.Deserialize(p_message, _cnt);
         p_message += sizeof(_cnt);
-        _serializer.Deserialize(p_message, sizeof(_data) * 4, _data);
-        p_message += sizeof(_data) * 4;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u4>::value_type) * 4, _data);
+        p_message += sizeof(std::vector<Types::u4>::value_type) * 4;
         
         assert(p_message - pc_message == p_length);
     }

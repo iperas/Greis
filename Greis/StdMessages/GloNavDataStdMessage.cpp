@@ -26,6 +26,16 @@ namespace Greis
     {
         return toString("GloNavDataStdMessage");
     }
+    bool GloNavDataStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GloNavDataStdMessage::ToByteArray() const
     {

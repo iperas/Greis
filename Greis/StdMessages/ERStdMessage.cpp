@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 0) / 1;
 
-        _serializer.Deserialize(p_message, sizeof(_error) * arraySizeInUniformFillFields, _error);
-        p_message += sizeof(_error) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, arraySizeInUniformFillFields, _error);
+        p_message += arraySizeInUniformFillFields;
         
         assert(p_message - pc_message == p_length);
     }
@@ -21,6 +21,15 @@ namespace Greis
     std::string ERStdMessage::ToString() const
     {
         return toString("ERStdMessage");
+    }
+    bool ERStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     QByteArray ERStdMessage::ToByteArray() const

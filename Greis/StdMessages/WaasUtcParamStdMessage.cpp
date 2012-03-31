@@ -30,6 +30,16 @@ namespace Greis
     {
         return toString("WaasUtcParamStdMessage");
     }
+    bool WaasUtcParamStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray WaasUtcParamStdMessage::ToByteArray() const
     {

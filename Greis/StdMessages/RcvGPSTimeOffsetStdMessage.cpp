@@ -24,6 +24,16 @@ namespace Greis
     {
         return toString("RcvGPSTimeOffsetStdMessage");
     }
+    bool RcvGPSTimeOffsetStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray RcvGPSTimeOffsetStdMessage::ToByteArray() const
     {

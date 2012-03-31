@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 1;
 
-        _serializer.Deserialize(p_message, sizeof(_usi) * arraySizeInUniformFillFields, _usi);
-        p_message += sizeof(_usi) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _usi);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string SatIndexStdMessage::ToString() const
     {
         return toString("SatIndexStdMessage");
+    }
+    bool SatIndexStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray SatIndexStdMessage::ToByteArray() const

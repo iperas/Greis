@@ -26,12 +26,12 @@ namespace Greis
         p_message += sizeof(_age);
         _serializer.Deserialize(p_message, _flags);
         p_message += sizeof(_flags);
-        _serializer.Deserialize(p_message, sizeof(_r) * 3, _r);
-        p_message += sizeof(_r) * 3;
-        _serializer.Deserialize(p_message, sizeof(_v) * 3, _v);
-        p_message += sizeof(_v) * 3;
-        _serializer.Deserialize(p_message, sizeof(_w) * 3, _w);
-        p_message += sizeof(_w) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f8>::value_type) * 3, _r);
+        p_message += sizeof(std::vector<Types::f8>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _v);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _w);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
         _serializer.Deserialize(p_message, _tauSys);
         p_message += sizeof(_tauSys);
         _serializer.Deserialize(p_message, _tau);
@@ -55,6 +55,16 @@ namespace Greis
     std::string GLOEphemerisStdMessage::ToString() const
     {
         return toString("GLOEphemerisStdMessage");
+    }
+    bool GLOEphemerisStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray GLOEphemerisStdMessage::ToByteArray() const

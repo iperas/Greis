@@ -14,7 +14,7 @@ namespace Greis
         SmoothCustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // Smoothing correction [s]
         const Types::f4& Value() const { return _value; }

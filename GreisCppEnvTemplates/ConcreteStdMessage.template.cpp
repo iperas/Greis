@@ -19,6 +19,13 @@ namespace Greis
     {
         return toString("${ClassName}");
     }
+    bool ${ClassName}::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }// ${ValidateStub}
+    }
 
     QByteArray ${ClassName}::ToByteArray() const
     {

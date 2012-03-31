@@ -46,6 +46,16 @@ namespace Greis
     {
         return toString("WAASAlmanacStdMessage");
     }
+    bool WAASAlmanacStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray WAASAlmanacStdMessage::ToByteArray() const
     {

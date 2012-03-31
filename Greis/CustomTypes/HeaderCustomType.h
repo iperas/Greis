@@ -14,7 +14,7 @@ namespace Greis
         HeaderCustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // Reference pseudo-range [0.02 meters]
         const Types::u4& Refrange() const { return _refrange; }

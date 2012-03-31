@@ -12,12 +12,12 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 9;
 
-        _serializer.Deserialize(p_message, sizeof(_fcn) * arraySizeInUniformFillFields, _fcn);
-        p_message += sizeof(_fcn) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(_phase) * arraySizeInUniformFillFields, _phase);
-        p_message += sizeof(_phase) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(_range) * arraySizeInUniformFillFields, _range);
-        p_message += sizeof(_range) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::i1>::value_type) * arraySizeInUniformFillFields, _fcn);
+        p_message += sizeof(std::vector<Types::i1>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _phase);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _range);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -27,6 +27,16 @@ namespace Greis
     std::string GloPhaseDelayStdMessage::ToString() const
     {
         return toString("GloPhaseDelayStdMessage");
+    }
+    bool GloPhaseDelayStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray GloPhaseDelayStdMessage::ToByteArray() const

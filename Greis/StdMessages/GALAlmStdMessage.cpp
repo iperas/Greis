@@ -24,6 +24,16 @@ namespace Greis
     {
         return toString("GALAlmStdMessage");
     }
+    bool GALAlmStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GALAlmStdMessage::ToByteArray() const
     {

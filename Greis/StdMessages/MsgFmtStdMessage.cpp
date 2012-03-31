@@ -10,16 +10,16 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, sizeof(_idField) * 2, _idField);
-        p_message += sizeof(_idField) * 2;
-        _serializer.Deserialize(p_message, sizeof(_majorVer) * 2, _majorVer);
-        p_message += sizeof(_majorVer) * 2;
-        _serializer.Deserialize(p_message, sizeof(_minorVer) * 2, _minorVer);
-        p_message += sizeof(_minorVer) * 2;
+        _serializer.Deserialize(p_message, 2, _idField);
+        p_message += 2;
+        _serializer.Deserialize(p_message, 2, _majorVer);
+        p_message += 2;
+        _serializer.Deserialize(p_message, 2, _minorVer);
+        p_message += 2;
         _serializer.Deserialize(p_message, _order);
         p_message += sizeof(_order);
-        _serializer.Deserialize(p_message, sizeof(_cs) * 2, _cs);
-        p_message += sizeof(_cs) * 2;
+        _serializer.Deserialize(p_message, 2, _cs);
+        p_message += 2;
         
         assert(p_message - pc_message == p_length);
     }
@@ -27,6 +27,16 @@ namespace Greis
     std::string MsgFmtStdMessage::ToString() const
     {
         return toString("MsgFmtStdMessage");
+    }
+    bool MsgFmtStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Ascii(message.data(), message.size());
     }
 
     QByteArray MsgFmtStdMessage::ToByteArray() const

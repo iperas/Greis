@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 4;
 
-        _serializer.Deserialize(p_message, sizeof(_scp) * arraySizeInUniformFillFields, _scp);
-        p_message += sizeof(_scp) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields, _scp);
+        p_message += sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string SCPStdMessage::ToString() const
     {
         return toString("SCPStdMessage");
+    }
+    bool SCPStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray SCPStdMessage::ToByteArray() const

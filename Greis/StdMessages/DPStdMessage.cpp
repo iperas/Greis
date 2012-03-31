@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 4;
 
-        _serializer.Deserialize(p_message, sizeof(_dp) * arraySizeInUniformFillFields, _dp);
-        p_message += sizeof(_dp) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::i4>::value_type) * arraySizeInUniformFillFields, _dp);
+        p_message += sizeof(std::vector<Types::i4>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string DPStdMessage::ToString() const
     {
         return toString("DPStdMessage");
+    }
+    bool DPStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray DPStdMessage::ToByteArray() const

@@ -30,6 +30,15 @@ namespace Greis
     {
         return toString("ClockOffsetsStdMessage");
     }
+    bool ClockOffsetsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     QByteArray ClockOffsetsStdMessage::ToByteArray() const
     {

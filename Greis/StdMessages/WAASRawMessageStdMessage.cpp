@@ -16,8 +16,8 @@ namespace Greis
         p_message += sizeof(_time);
         _serializer.Deserialize(p_message, _reserv);
         p_message += sizeof(_reserv);
-        _serializer.Deserialize(p_message, sizeof(_data) * 32, _data);
-        p_message += sizeof(_data) * 32;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * 32, _data);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * 32;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -27,6 +27,16 @@ namespace Greis
     std::string WAASRawMessageStdMessage::ToString() const
     {
         return toString("WAASRawMessageStdMessage");
+    }
+    bool WAASRawMessageStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray WAASRawMessageStdMessage::ToByteArray() const

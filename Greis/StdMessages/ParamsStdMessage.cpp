@@ -12,12 +12,12 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 4) / 1;
 
-        _serializer.Deserialize(p_message, sizeof(_params) * arraySizeInUniformFillFields, _params);
-        p_message += sizeof(_params) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(_delim) * 2, _delim);
-        p_message += sizeof(_delim) * 2;
-        _serializer.Deserialize(p_message, sizeof(_cs) * 2, _cs);
-        p_message += sizeof(_cs) * 2;
+        _serializer.Deserialize(p_message, arraySizeInUniformFillFields, _params);
+        p_message += arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, 2, _delim);
+        p_message += 2;
+        _serializer.Deserialize(p_message, 2, _cs);
+        p_message += 2;
         
         assert(p_message - pc_message == p_length);
     }
@@ -25,6 +25,16 @@ namespace Greis
     std::string ParamsStdMessage::ToString() const
     {
         return toString("ParamsStdMessage");
+    }
+    bool ParamsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Ascii(message.data(), message.size());
     }
 
     QByteArray ParamsStdMessage::ToByteArray() const

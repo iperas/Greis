@@ -20,18 +20,18 @@ namespace Greis
         p_message += sizeof(_q02);
         _serializer.Deserialize(p_message, _q12);
         p_message += sizeof(_q12);
-        _serializer.Deserialize(p_message, sizeof(_rms) * 3, _rms);
-        p_message += sizeof(_rms) * 3;
-        _serializer.Deserialize(p_message, sizeof(_solType) * 3, _solType);
-        p_message += sizeof(_solType) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _rms);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * 3, _solType);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * 3;
         _serializer.Deserialize(p_message, _flag);
         p_message += sizeof(_flag);
-        _serializer.Deserialize(p_message, sizeof(_bl0) * 3, _bl0);
-        p_message += sizeof(_bl0) * 3;
-        _serializer.Deserialize(p_message, sizeof(_bl1) * 3, _bl1);
-        p_message += sizeof(_bl1) * 3;
-        _serializer.Deserialize(p_message, sizeof(_bl2) * 3, _bl2);
-        p_message += sizeof(_bl2) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl0);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl1);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl2);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -41,6 +41,16 @@ namespace Greis
     std::string RotationMatrixAndVectorsStdMessage::ToString() const
     {
         return toString("RotationMatrixAndVectorsStdMessage");
+    }
+    bool RotationMatrixAndVectorsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray RotationMatrixAndVectorsStdMessage::ToByteArray() const

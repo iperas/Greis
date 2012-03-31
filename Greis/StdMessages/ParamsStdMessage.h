@@ -15,6 +15,7 @@ namespace Greis
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
+        virtual bool Validate() const;
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         

@@ -40,6 +40,16 @@ namespace Greis
     {
         return toString("IonoParamsStdMessage");
     }
+    bool IonoParamsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray IonoParamsStdMessage::ToByteArray() const
     {

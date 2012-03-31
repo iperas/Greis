@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 4;
 
-        _serializer.Deserialize(p_message, sizeof(_delay) * arraySizeInUniformFillFields, _delay);
-        p_message += sizeof(_delay) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _delay);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string IonoDelayStdMessage::ToString() const
     {
         return toString("IonoDelayStdMessage");
+    }
+    bool IonoDelayStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray IonoDelayStdMessage::ToByteArray() const

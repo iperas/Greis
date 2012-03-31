@@ -22,6 +22,16 @@ namespace Greis
     {
         return toString("GpsUtcParamStdMessage");
     }
+    bool GpsUtcParamStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GpsUtcParamStdMessage::ToByteArray() const
     {

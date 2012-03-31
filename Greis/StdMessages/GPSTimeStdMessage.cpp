@@ -24,6 +24,16 @@ namespace Greis
     {
         return toString("GPSTimeStdMessage");
     }
+    bool GPSTimeStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GPSTimeStdMessage::ToByteArray() const
     {

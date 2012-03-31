@@ -30,6 +30,16 @@ namespace Greis
     {
         return toString("PosStdMessage");
     }
+    bool PosStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray PosStdMessage::ToByteArray() const
     {

@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 8;
 
-        _serializer.Deserialize(p_message, sizeof(_cp) * arraySizeInUniformFillFields, _cp);
-        p_message += sizeof(_cp) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f8>::value_type) * arraySizeInUniformFillFields, _cp);
+        p_message += sizeof(std::vector<Types::f8>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string CPStdMessage::ToString() const
     {
         return toString("CPStdMessage");
+    }
+    bool CPStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray CPStdMessage::ToByteArray() const

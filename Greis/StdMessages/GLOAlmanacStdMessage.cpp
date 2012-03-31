@@ -46,6 +46,16 @@ namespace Greis
     {
         return toString("GLOAlmanacStdMessage");
     }
+    bool GLOAlmanacStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GLOAlmanacStdMessage::ToByteArray() const
     {

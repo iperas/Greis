@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 4;
 
-        _serializer.Deserialize(p_message, sizeof(_rcp) * arraySizeInUniformFillFields, _rcp);
-        p_message += sizeof(_rcp) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _rcp);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string RCPRC0StdMessage::ToString() const
     {
         return toString("RCPRC0StdMessage");
+    }
+    bool RCPRC0StdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray RCPRC0StdMessage::ToByteArray() const

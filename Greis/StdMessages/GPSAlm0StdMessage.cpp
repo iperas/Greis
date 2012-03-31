@@ -50,6 +50,16 @@ namespace Greis
     {
         return toString("GPSAlm0StdMessage");
     }
+    bool GPSAlm0StdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GPSAlm0StdMessage::ToByteArray() const
     {

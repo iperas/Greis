@@ -28,6 +28,16 @@ namespace Greis
     {
         return toString("DopsStdMessage");
     }
+    bool DopsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray DopsStdMessage::ToByteArray() const
     {

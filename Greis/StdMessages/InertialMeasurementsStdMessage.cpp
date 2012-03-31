@@ -10,10 +10,10 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, sizeof(_accelerations) * 3, _accelerations);
-        p_message += sizeof(_accelerations) * 3;
-        _serializer.Deserialize(p_message, sizeof(_angularVelocities) * 3, _angularVelocities);
-        p_message += sizeof(_angularVelocities) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _accelerations);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _angularVelocities);
+        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string InertialMeasurementsStdMessage::ToString() const
     {
         return toString("InertialMeasurementsStdMessage");
+    }
+    bool InertialMeasurementsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray InertialMeasurementsStdMessage::ToByteArray() const

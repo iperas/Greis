@@ -1,4 +1,5 @@
 #include "StdMessageFactory.h"
+#include "ProjectBase/Logger.h"
 #include "RawStdMessage.h"
 // ${includes}
 
@@ -6,6 +7,7 @@ namespace Greis
 {
     StdMessage::UniquePtr_t StdMessageFactory::Create( char* p_message, int p_length )
     {
+        sLogger.Debug(QString("StdMessageFactory::Create: id = %1").arg(QString::fromAscii(p_message, 2)));
         auto id = StdMessage::MapIdStrToEnum(p_message);
         switch (id)
         {

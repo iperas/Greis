@@ -17,7 +17,7 @@ namespace Greis
         SvData2CustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // Header (see below)
         const HeaderCustomType::UniquePtr_t& Header() const { return _header; }

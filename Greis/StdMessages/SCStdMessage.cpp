@@ -24,6 +24,16 @@ namespace Greis
     {
         return toString("SCStdMessage");
     }
+    bool SCStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray SCStdMessage::ToByteArray() const
     {

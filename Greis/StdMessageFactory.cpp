@@ -1,4 +1,5 @@
 #include "StdMessageFactory.h"
+#include "ProjectBase/Logger.h"
 #include "RawStdMessage.h"
 #include "StdMessages/AngularVelocityStdMessage.h"
 #include "StdMessages/AntNameStdMessage.h"
@@ -99,6 +100,7 @@ namespace Greis
     StdMessage::UniquePtr_t StdMessageFactory::Create( char* p_message, int p_length )
     {
         auto id = StdMessage::MapIdStrToEnum(p_message);
+        sLogger.Debug(QString("StdMessageFactory::Create: id = %1").arg(QString::fromAscii(p_message, 2)));
         switch (id)
         {
         case EMessageId::AngularVelocity:

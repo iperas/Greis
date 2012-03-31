@@ -20,8 +20,8 @@ namespace Greis
         p_message += sizeof(_type);
         _serializer.Deserialize(p_message, _len);
         p_message += sizeof(_len);
-        _serializer.Deserialize(p_message, sizeof(_data) * arraySizeInUniformFillFields, _data);
-        p_message += sizeof(_data) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _data);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -31,6 +31,16 @@ namespace Greis
     std::string GALRawMessageStdMessage::ToString() const
     {
         return toString("GALRawMessageStdMessage");
+    }
+    bool GALRawMessageStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray GALRawMessageStdMessage::ToByteArray() const

@@ -14,7 +14,7 @@ namespace Greis
         SlotRecCustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // SV status [bitfield], or
         // Delta pseudo-range [0.02 meters].

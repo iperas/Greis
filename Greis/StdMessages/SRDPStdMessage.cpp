@@ -12,8 +12,8 @@ namespace Greis
     
         int arraySizeInUniformFillFields = (BodySize() - 1) / 2;
 
-        _serializer.Deserialize(p_message, sizeof(_srdp) * arraySizeInUniformFillFields, _srdp);
-        p_message += sizeof(_srdp) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::i2>::value_type) * arraySizeInUniformFillFields, _srdp);
+        p_message += sizeof(std::vector<Types::i2>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -23,6 +23,16 @@ namespace Greis
     std::string SRDPStdMessage::ToString() const
     {
         return toString("SRDPStdMessage");
+    }
+    bool SRDPStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray SRDPStdMessage::ToByteArray() const

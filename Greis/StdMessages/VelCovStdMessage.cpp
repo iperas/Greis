@@ -42,6 +42,16 @@ namespace Greis
     {
         return toString("VelCovStdMessage");
     }
+    bool VelCovStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray VelCovStdMessage::ToByteArray() const
     {

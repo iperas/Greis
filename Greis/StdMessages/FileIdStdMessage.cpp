@@ -10,10 +10,10 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, sizeof(_idField) * 5, _idField);
-        p_message += sizeof(_idField) * 5;
-        _serializer.Deserialize(p_message, sizeof(_description) * 80, _description);
-        p_message += sizeof(_description) * 80;
+        _serializer.Deserialize(p_message, 5, _idField);
+        p_message += 5;
+        _serializer.Deserialize(p_message, 80, _description);
+        p_message += 80;
         
         assert(p_message - pc_message == p_length);
     }
@@ -21,6 +21,15 @@ namespace Greis
     std::string FileIdStdMessage::ToString() const
     {
         return toString("FileIdStdMessage");
+    }
+    bool FileIdStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     QByteArray FileIdStdMessage::ToByteArray() const

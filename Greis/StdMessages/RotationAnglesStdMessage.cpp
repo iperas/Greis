@@ -36,6 +36,16 @@ namespace Greis
     {
         return toString("RotationAnglesStdMessage");
     }
+    bool RotationAnglesStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray RotationAnglesStdMessage::ToByteArray() const
     {

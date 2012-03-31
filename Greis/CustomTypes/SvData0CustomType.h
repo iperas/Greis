@@ -14,7 +14,7 @@ namespace Greis
         SvData0CustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // Pseudo-Range Number (PRN)
         const Types::i1& Prn() const { return _prn; }

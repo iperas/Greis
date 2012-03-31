@@ -34,6 +34,16 @@ namespace Greis
     {
         return toString("GloUtcGpsParamStdMessage");
     }
+    bool GloUtcGpsParamStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray GloUtcGpsParamStdMessage::ToByteArray() const
     {

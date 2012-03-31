@@ -14,7 +14,7 @@ namespace Greis
         SvData1CustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // Frequency Channel Number plus 1(FCN+1)
         const Types::i1& Fcn1() const { return _fcn1; }

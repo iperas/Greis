@@ -19,6 +19,15 @@ namespace Greis
     {
         return toString("RawMeasStdMessage");
     }
+    bool RawMeasStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     QByteArray RawMeasStdMessage::ToByteArray() const
     {

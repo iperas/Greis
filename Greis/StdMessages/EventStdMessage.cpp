@@ -16,8 +16,8 @@ namespace Greis
         p_message += sizeof(_time);
         _serializer.Deserialize(p_message, _type);
         p_message += sizeof(_type);
-        _serializer.Deserialize(p_message, sizeof(_data) * arraySizeInUniformFillFields, _data);
-        p_message += sizeof(_data) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _data);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -27,6 +27,16 @@ namespace Greis
     std::string EventStdMessage::ToString() const
     {
         return toString("EventStdMessage");
+    }
+    bool EventStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
 
     QByteArray EventStdMessage::ToByteArray() const

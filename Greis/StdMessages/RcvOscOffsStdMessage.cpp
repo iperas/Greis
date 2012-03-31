@@ -22,6 +22,16 @@ namespace Greis
     {
         return toString("RcvOscOffsStdMessage");
     }
+    bool RcvOscOffsStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray RcvOscOffsStdMessage::ToByteArray() const
     {

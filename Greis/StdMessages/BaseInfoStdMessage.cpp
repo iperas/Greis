@@ -30,6 +30,16 @@ namespace Greis
     {
         return toString("BaseInfoStdMessage");
     }
+    bool BaseInfoStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray BaseInfoStdMessage::ToByteArray() const
     {

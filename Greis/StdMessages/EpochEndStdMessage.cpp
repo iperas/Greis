@@ -20,6 +20,16 @@ namespace Greis
     {
         return toString("EpochEndStdMessage");
     }
+    bool EpochEndStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray EpochEndStdMessage::ToByteArray() const
     {

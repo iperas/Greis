@@ -26,6 +26,15 @@ namespace Greis
     {
         return toString("RefEpochStdMessage");
     }
+    bool RefEpochStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     QByteArray RefEpochStdMessage::ToByteArray() const
     {

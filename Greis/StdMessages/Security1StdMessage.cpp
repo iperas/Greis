@@ -10,8 +10,8 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, sizeof(_data) * 6, _data);
-        p_message += sizeof(_data) * 6;
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * 6, _data);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * 6;
         _serializer.Deserialize(p_message, _crc16);
         p_message += sizeof(_crc16);
         
@@ -21,6 +21,15 @@ namespace Greis
     std::string Security1StdMessage::ToString() const
     {
         return toString("Security1StdMessage");
+    }
+    bool Security1StdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     QByteArray Security1StdMessage::ToByteArray() const

@@ -14,7 +14,7 @@ namespace Greis
         ${ClassName}(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
-        virtual int Size() const;
+        virtual int Size() const { return _size; }
 
         // ${ClassFieldsAccessorsStub}
     private:

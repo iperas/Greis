@@ -24,6 +24,16 @@ namespace Greis
     {
         return toString("RcvGLOTimeOffsetStdMessage");
     }
+    bool RcvGLOTimeOffsetStdMessage::Validate() const
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
+    }
 
     QByteArray RcvGLOTimeOffsetStdMessage::ToByteArray() const
     {
