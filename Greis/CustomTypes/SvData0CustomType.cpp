@@ -1,19 +1,32 @@
 #include "SvData0CustomType.h"
+#include <cassert>
 
 namespace Greis
 {
-    SvData0CustomType::SvData0CustomType( char* p_message, int p_length ) 
+    SvData0CustomType::SvData0CustomType( const char* pc_message, int p_length ) 
         : _size(p_length)
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+    
+        _serializer.Deserialize(p_message, _prn);
+        p_message += sizeof(_prn);
+        _serializer.Deserialize(p_message, _cnt);
+        p_message += sizeof(_cnt);
+        _serializer.Deserialize(p_message, sizeof(_data) * 10, _data);
+        p_message += sizeof(_data) * 10;
+        
+        assert(p_message - pc_message == p_length);
     }
 
     QByteArray SvData0CustomType::ToByteArray() const
     {
         QByteArray result;
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_prn, result);
+        _serializer.Serialize(_cnt, result);
+        _serializer.Serialize(_data, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }

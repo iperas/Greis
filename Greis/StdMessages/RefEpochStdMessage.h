@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(RefEpochStdMessage);
 
-        RefEpochStdMessage(char* p_message, int p_length);
+        RefEpochStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

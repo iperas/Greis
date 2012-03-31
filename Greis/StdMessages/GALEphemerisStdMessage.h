@@ -13,7 +13,7 @@ namespace Greis
     public:
         SMART_PTR_T(GALEphemerisStdMessage);
 
-        GALEphemerisStdMessage(char* p_message, int p_length);
+        GALEphemerisStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

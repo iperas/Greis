@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(GPSEphemeris1CustomType);
 
-        GPSEphemeris1CustomType(char* p_message, int p_length);
+        GPSEphemeris1CustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
         virtual int Size() const;

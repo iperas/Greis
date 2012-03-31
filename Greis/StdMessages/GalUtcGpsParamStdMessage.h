@@ -13,7 +13,7 @@ namespace Greis
     public:
         SMART_PTR_T(GalUtcGpsParamStdMessage);
 
-        GalUtcGpsParamStdMessage(char* p_message, int p_length);
+        GalUtcGpsParamStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

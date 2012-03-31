@@ -5,6 +5,8 @@
 #include <QtCore/QByteArray>
 #include "GreisTypes.h"
 #include "ProjectBase/SmartPtr.h"
+#include "GreisBinarySerializer.h"
+#include "ProjectBase/NotImplementedException.h"
 
 namespace Greis
 {
@@ -15,6 +17,8 @@ namespace Greis
 
         virtual QByteArray ToByteArray() const = 0;
         virtual int Size() const = 0;
+    protected:
+        static GreisBinarySerializer _serializer;
     };
 }
 

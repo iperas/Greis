@@ -1,11 +1,18 @@
 #include "${ClassName}.h"
+#include <cassert>
 
 namespace Greis
 {
-    ${ClassName}::${ClassName}( char* p_message, int p_length ) 
-        : _id(p_message, 2), _bodySize(p_length - HeadSize())
+    ${ClassName}::${ClassName}( const char* pc_message, int p_length ) 
+        : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
+        char* p_message = const_cast<char*>(pc_message);
+        
+        p_message += HeadSize();
+    
         // ${DeserializationConstructorStub}
+        
+        assert(p_message - pc_message == p_length);
     }
 
     std::string ${ClassName}::ToString() const
@@ -20,6 +27,7 @@ namespace Greis
 
         // ${ToByteArrayStub}
         
+        assert(result.size() == Size());
         return result;
     }
 }

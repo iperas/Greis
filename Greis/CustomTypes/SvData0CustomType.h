@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(SvData0CustomType);
 
-        SvData0CustomType(char* p_message, int p_length);
+        SvData0CustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
         virtual int Size() const;

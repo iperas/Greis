@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(TrackingTimeCAStdMessage);
 
-        TrackingTimeCAStdMessage(char* p_message, int p_length);
+        TrackingTimeCAStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

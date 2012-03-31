@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(GloUtcGpsParamStdMessage);
 
-        GloUtcGpsParamStdMessage(char* p_message, int p_length);
+        GloUtcGpsParamStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

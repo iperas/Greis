@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(GPSTimeStdMessage);
 
-        GPSTimeStdMessage(char* p_message, int p_length);
+        GPSTimeStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

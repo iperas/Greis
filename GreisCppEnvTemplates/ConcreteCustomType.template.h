@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(${ClassName});
 
-        ${ClassName}(char* p_message, int p_length);
+        ${ClassName}(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
         virtual int Size() const;

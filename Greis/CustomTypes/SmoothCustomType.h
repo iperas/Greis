@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(SmoothCustomType);
 
-        SmoothCustomType(char* p_message, int p_length);
+        SmoothCustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
         virtual int Size() const;

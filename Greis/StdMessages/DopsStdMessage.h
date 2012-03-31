@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(DopsStdMessage);
 
-        DopsStdMessage(char* p_message, int p_length);
+        DopsStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

@@ -1,11 +1,23 @@
 #include "GALAlmStdMessage.h"
+#include <cassert>
 
 namespace Greis
 {
-    GALAlmStdMessage::GALAlmStdMessage( char* p_message, int p_length ) 
-        : _id(p_message, 2), _bodySize(p_length - HeadSize())
+    GALAlmStdMessage::GALAlmStdMessage( const char* pc_message, int p_length ) 
+        : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+        
+        p_message += HeadSize();
+    
+        _serializer.Deserialize(p_message, 47, _gps);
+        p_message += 47;
+        _serializer.Deserialize(p_message, _iod);
+        p_message += sizeof(_iod);
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
+        
+        assert(p_message - pc_message == p_length);
     }
 
     std::string GALAlmStdMessage::ToString() const
@@ -18,8 +30,11 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_gps, result);
+        _serializer.Serialize(_iod, result);
+        _serializer.Serialize(_cs, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }

@@ -1,11 +1,27 @@
 #include "MsgFmtStdMessage.h"
+#include <cassert>
 
 namespace Greis
 {
-    MsgFmtStdMessage::MsgFmtStdMessage( char* p_message, int p_length ) 
-        : _id(p_message, 2), _bodySize(p_length - HeadSize())
+    MsgFmtStdMessage::MsgFmtStdMessage( const char* pc_message, int p_length ) 
+        : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+        
+        p_message += HeadSize();
+    
+        _serializer.Deserialize(p_message, sizeof(_idField) * 2, _idField);
+        p_message += sizeof(_idField) * 2;
+        _serializer.Deserialize(p_message, sizeof(_majorVer) * 2, _majorVer);
+        p_message += sizeof(_majorVer) * 2;
+        _serializer.Deserialize(p_message, sizeof(_minorVer) * 2, _minorVer);
+        p_message += sizeof(_minorVer) * 2;
+        _serializer.Deserialize(p_message, _order);
+        p_message += sizeof(_order);
+        _serializer.Deserialize(p_message, sizeof(_cs) * 2, _cs);
+        p_message += sizeof(_cs) * 2;
+        
+        assert(p_message - pc_message == p_length);
     }
 
     std::string MsgFmtStdMessage::ToString() const
@@ -18,8 +34,13 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_idField, result);
+        _serializer.Serialize(_majorVer, result);
+        _serializer.Serialize(_minorVer, result);
+        _serializer.Serialize(_order, result);
+        _serializer.Serialize(_cs, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }

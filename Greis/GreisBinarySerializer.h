@@ -4,6 +4,7 @@
 #include <QtCore/QByteArray>
 #include <string>
 #include <vector>
+#include <cassert>
 #include "ProjectBase\BitConverter.h"
 
 namespace Greis
@@ -11,7 +12,8 @@ namespace Greis
     class GreisBinarySerializer
     {
     public:
-        GreisBinarySerializer(ProjectBase::BitConverter::EByteOrder byteOrder);
+        GreisBinarySerializer(ProjectBase::BitConverter::EByteOrder byteOrder = 
+            ProjectBase::BitConverter::LeastSignificantByte);
 
         // Serialization
 
@@ -105,7 +107,7 @@ namespace Greis
         template<typename T>
         void Deserialize(const char* data, int length, std::unique_ptr<T>& retVal)
         {
-            retVal = make_unique<T>(data, length);
+            retVal = ProjectBase::make_unique<T>(data, length);
         }
 
         // Deserialization for std::vector<Greis::Type>
@@ -128,16 +130,15 @@ namespace Greis
 
         // Deserialization for std::vector<CustomType::UniquePtr_t> && std::vector<std::vector<...>> 
         // (where ... is GreisType or vector)
-
         template<typename T>
         void Deserialize(const char* data, int length, int itemSize, std::vector<T>& retVal)
         {
-            assert(length % ItemSize == 0);
+            assert(length % itemSize == 0);
             retVal.clear();
-            for (int i = 0; i < length; i += ItemSize)
+            for (int i = 0; i < length; i += itemSize)
             {
                 T val;
-                Deserialize(data + i, ItemSize, val);
+                Deserialize(data + i, itemSize, val);
                 retVal.push_back(std::move(val));
             }
         }

@@ -13,7 +13,7 @@ namespace Greis
     public:
         SMART_PTR_T(RawMeasStdMessage);
 
-        RawMeasStdMessage(char* p_message, int p_length);
+        RawMeasStdMessage(const char* p_message, int p_length);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

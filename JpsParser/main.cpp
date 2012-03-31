@@ -7,7 +7,7 @@
 
 #include "StdMessage.h"
 #include "GreisMessageStream.h"
-#include "JpsFile.h"
+//#include "JpsFile.h"
 #include "ProjectBase/FileException.h"
 
 #include <fstream>
@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
         int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();
         connection = Connection::FromSettings("Db");
         connection->Connect();
-        MetaInfo::SharedPtr_t metaInfo = MetaInfo::FromDatabase(connection.get());
+        
+        /*MetaInfo::SharedPtr_t metaInfo = MetaInfo::FromDatabase(connection.get());
 
         EpochsReader er(metaInfo, connection.get());
         auto range = er.Load(QDateTime(QDate(2011, 03, 22), QTime(0, 0, 0), Qt::LocalTime), QDateTime(QDate(2011, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
             connection->Database().commit();
             sLogger.Info("The transaction has been committed.");
         }
-        sLogger.Info(QString("Insertion completed."));
+        sLogger.Info(QString("Insertion completed."));*/
 #ifdef _DEBUG
         system("PAUSE");
 #endif

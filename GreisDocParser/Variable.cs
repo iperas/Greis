@@ -65,6 +65,8 @@ namespace GreisDocParser
         public string Comment { get; set; }
         [XmlIgnore]
         public bool IsScalar { get { return DimensionsCount == 0; } }
+        [XmlIgnore]
+        public bool IsLinearArray { get { return DimensionsCount == 1; } }
 
         public override string ToString()
         {

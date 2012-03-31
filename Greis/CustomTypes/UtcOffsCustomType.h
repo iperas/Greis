@@ -11,7 +11,7 @@ namespace Greis
     public:
         SMART_PTR_T(UtcOffsCustomType);
 
-        UtcOffsCustomType(char* p_message, int p_length);
+        UtcOffsCustomType(const char* p_message, int p_length);
 
         virtual QByteArray ToByteArray() const;
         virtual int Size() const;

@@ -1,11 +1,23 @@
 #include "SatElevationStdMessage.h"
+#include <cassert>
 
 namespace Greis
 {
-    SatElevationStdMessage::SatElevationStdMessage( char* p_message, int p_length ) 
-        : _id(p_message, 2), _bodySize(p_length - HeadSize())
+    SatElevationStdMessage::SatElevationStdMessage( const char* pc_message, int p_length ) 
+        : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+        
+        p_message += HeadSize();
+    
+        int arraySizeInUniformFillFields = (BodySize() - 1) / 1;
+
+        _serializer.Deserialize(p_message, sizeof(_elev) * arraySizeInUniformFillFields, _elev);
+        p_message += sizeof(_elev) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
+        
+        assert(p_message - pc_message == p_length);
     }
 
     std::string SatElevationStdMessage::ToString() const
@@ -18,8 +30,10 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_elev, result);
+        _serializer.Serialize(_cs, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }

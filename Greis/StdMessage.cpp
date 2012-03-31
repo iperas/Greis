@@ -100,4 +100,6 @@ namespace Greis
         head.append(bodySizeStr.toAscii(), 3);
         return head;
     }
+
+    Greis::GreisBinarySerializer StdMessage::_serializer;
 }

@@ -6,6 +6,8 @@
 #include "ProjectBase/InvalidOperationException.h"
 #include "EMessageId.h"
 #include "GreisTypes.h"
+#include "GreisBinarySerializer.h"
+#include "ProjectBase/NotImplementedException.h"
 
 namespace Greis
 {
@@ -38,6 +40,7 @@ namespace Greis
         QByteArray headToByteArray() const;
     protected:
         static const int _headSize = 5;
+        static GreisBinarySerializer _serializer;
     };
 }
 

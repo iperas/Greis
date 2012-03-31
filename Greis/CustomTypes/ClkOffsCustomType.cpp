@@ -1,19 +1,29 @@
 #include "ClkOffsCustomType.h"
+#include <cassert>
 
 namespace Greis
 {
-    ClkOffsCustomType::ClkOffsCustomType( char* p_message, int p_length ) 
+    ClkOffsCustomType::ClkOffsCustomType( const char* pc_message, int p_length ) 
         : _size(p_length)
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+    
+        _serializer.Deserialize(p_message, _word1);
+        p_message += sizeof(_word1);
+        _serializer.Deserialize(p_message, _word2);
+        p_message += sizeof(_word2);
+        
+        assert(p_message - pc_message == p_length);
     }
 
     QByteArray ClkOffsCustomType::ToByteArray() const
     {
         QByteArray result;
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_word1, result);
+        _serializer.Serialize(_word2, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }

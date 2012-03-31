@@ -1,11 +1,35 @@
 #include "RotationAnglesStdMessage.h"
+#include <cassert>
 
 namespace Greis
 {
-    RotationAnglesStdMessage::RotationAnglesStdMessage( char* p_message, int p_length ) 
-        : _id(p_message, 2), _bodySize(p_length - HeadSize())
+    RotationAnglesStdMessage::RotationAnglesStdMessage( const char* pc_message, int p_length ) 
+        : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
-        // ${DeserializationConstructorStub}
+        char* p_message = const_cast<char*>(pc_message);
+        
+        p_message += HeadSize();
+    
+        _serializer.Deserialize(p_message, _time);
+        p_message += sizeof(_time);
+        _serializer.Deserialize(p_message, _pitch);
+        p_message += sizeof(_pitch);
+        _serializer.Deserialize(p_message, _roll);
+        p_message += sizeof(_roll);
+        _serializer.Deserialize(p_message, _heading);
+        p_message += sizeof(_heading);
+        _serializer.Deserialize(p_message, _pitchRms);
+        p_message += sizeof(_pitchRms);
+        _serializer.Deserialize(p_message, _rollRms);
+        p_message += sizeof(_rollRms);
+        _serializer.Deserialize(p_message, _headingRms);
+        p_message += sizeof(_headingRms);
+        _serializer.Deserialize(p_message, _flags);
+        p_message += sizeof(_flags);
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
+        
+        assert(p_message - pc_message == p_length);
     }
 
     std::string RotationAnglesStdMessage::ToString() const
@@ -18,8 +42,17 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        // ${ToByteArrayStub}
+        _serializer.Serialize(_time, result);
+        _serializer.Serialize(_pitch, result);
+        _serializer.Serialize(_roll, result);
+        _serializer.Serialize(_heading, result);
+        _serializer.Serialize(_pitchRms, result);
+        _serializer.Serialize(_rollRms, result);
+        _serializer.Serialize(_headingRms, result);
+        _serializer.Serialize(_flags, result);
+        _serializer.Serialize(_cs, result);
         
+        assert(result.size() == Size());
         return result;
     }
 }
