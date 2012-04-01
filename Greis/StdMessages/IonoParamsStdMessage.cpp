@@ -42,7 +42,7 @@ namespace Greis
     }
     bool IonoParamsStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

@@ -378,6 +378,18 @@
     <ClInclude Include="JpsFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Epoch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreisMysqlSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MySqlSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECustomTypeId.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NonStdTextMessage.cpp">
@@ -717,6 +729,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CustomType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JpsFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

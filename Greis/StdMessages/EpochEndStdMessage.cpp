@@ -22,7 +22,7 @@ namespace Greis
     }
     bool EpochEndStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

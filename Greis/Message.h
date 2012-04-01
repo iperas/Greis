@@ -9,7 +9,7 @@
 
 namespace Greis
 {
-    class Message : boost::noncopyable
+    class Message : private boost::noncopyable
     {
     private:
         const EMessageKind::Type _kind;

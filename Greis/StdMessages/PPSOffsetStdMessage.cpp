@@ -24,7 +24,7 @@ namespace Greis
     }
     bool PPSOffsetStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

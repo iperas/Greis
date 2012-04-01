@@ -22,6 +22,7 @@ namespace Greis
         virtual bool Validate() const;
 
         virtual std::string Id() const = 0;
+        virtual EMessageId::Type IdNumber() const = 0;
         virtual int BodySize() const = 0;
         virtual int Size() const { return HeadSize() + BodySize(); }
         virtual QByteArray ToByteArray() const = 0;

@@ -3,6 +3,7 @@
 
 #include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "ECustomTypeId.h"
 
 #include "CustomTypes/HeaderCustomType.h"
 #include "CustomTypes/SlotRecCustomType.h"
@@ -15,7 +16,8 @@ namespace Greis
         SMART_PTR_T(SvData2CustomType);
 
         SvData2CustomType(const char* p_message, int p_length);
-
+        
+        virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SvData2; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
 

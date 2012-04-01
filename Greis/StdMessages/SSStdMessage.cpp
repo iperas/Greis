@@ -26,7 +26,7 @@ namespace Greis
     }
     bool SSStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

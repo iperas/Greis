@@ -1,8 +1,9 @@
 #ifndef WaasUtcParamStdMessage_h__
 #define WaasUtcParamStdMessage_h__
 
-#include "StdMessage.h"
 #include <QtCore/QByteArray>
+#include "StdMessage.h"
+#include "EMessageId.h"
 
 #include "CustomTypes/UtcOffsCustomType.h"
 
@@ -17,6 +18,7 @@ namespace Greis
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::WaasUtcParam; }
         virtual bool Validate() const;
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;

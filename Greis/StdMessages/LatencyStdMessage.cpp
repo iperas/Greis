@@ -24,7 +24,7 @@ namespace Greis
     }
     bool LatencyStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

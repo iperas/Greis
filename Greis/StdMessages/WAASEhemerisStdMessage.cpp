@@ -58,7 +58,7 @@ namespace Greis
     }
     bool WAASEhemerisStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

@@ -21,7 +21,7 @@ namespace Greis
     }
     bool RawMeasStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

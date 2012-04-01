@@ -44,7 +44,7 @@ namespace Greis
     }
     bool PosVelVectorStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

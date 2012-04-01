@@ -30,7 +30,7 @@ namespace Greis
     }
     bool GloPhaseDelayStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

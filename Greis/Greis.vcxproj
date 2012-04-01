@@ -82,14 +82,18 @@
     <ClInclude Include="CustomTypes\SvData1CustomType.h" />
     <ClInclude Include="CustomTypes\SvData2CustomType.h" />
     <ClInclude Include="CustomTypes\UtcOffsCustomType.h" />
+    <ClInclude Include="ECustomTypeId.h" />
     <ClInclude Include="EMessageId.h" />
     <ClInclude Include="EMessageKind.h" />
     <ClInclude Include="ChecksumComputer.h" />
+    <ClInclude Include="Epoch.h" />
     <ClInclude Include="GreisBinarySerializer.h" />
     <ClInclude Include="GreisException.h" />
     <ClInclude Include="GreisMessageStream.h" />
+    <ClInclude Include="GreisMysqlSerializer.h" />
     <ClInclude Include="JpsFile.h" />
     <ClInclude Include="Message.h" />
+    <ClInclude Include="MySqlSink.h" />
     <ClInclude Include="NonStdTextMessage.h" />
     <ClInclude Include="RawCustomType.h" />
     <ClInclude Include="RawStdMessage.h" />
@@ -206,6 +210,7 @@
     <ClCompile Include="CustomTypes\UtcOffsCustomType.cpp" />
     <ClCompile Include="GreisBinarySerializer.cpp" />
     <ClCompile Include="GreisMessageStream.cpp" />
+    <ClCompile Include="JpsFile.cpp" />
     <ClCompile Include="NonStdTextMessage.cpp" />
     <ClCompile Include="RawStdMessage.cpp" />
     <ClCompile Include="StdMessage.cpp" />

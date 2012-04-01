@@ -1,12 +1,12 @@
 #ifndef GreisMessageStreamTests_h__
 #define GreisMessageStreamTests_h__
 
-#include "GreisMessageStream.h"
 #include <gtest/gtest.h>
-#include "ProjectBase/SmartPtr.h"
 #include <vector>
-#include <boost/thread.hpp>
 #include <cmath>
+#include <boost/thread.hpp>
+#include "ProjectBase/SmartPtr.h"
+#include "GreisMessageStream.h"
 
 using namespace Greis;
 using namespace ProjectBase;

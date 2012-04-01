@@ -28,7 +28,7 @@ namespace Greis
     }
     bool GpsNavDataStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

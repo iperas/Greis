@@ -19,6 +19,8 @@ namespace GreisDocParser
         private const string ToByteArrayStubToken = "// ${ToByteArrayStub}";
         private const string DeserializationConstructorStubToken = "// ${DeserializationConstructorStub}";
         private const string ValidateStubToken = "// ${ValidateStub}";
+        private const string EMessageIdStubToken = "${EMessageId}";
+        private const string ECustomTypeIdStubToken = "${ECustomTypeId}";
         private const string StdMessagesDir = "StdMessages";
         private const string CustomTypesDir = "CustomTypes";
         private readonly MetaInfo _metaInfo;
@@ -44,6 +46,7 @@ namespace GreisDocParser
             _outDir = outDir;
 
             generateEMessageId();
+            generateECustomTypeId();
             generateStdMessageGeneratedMembers();
             generateStdMessageFactory();
             generateStdMessages();
@@ -57,7 +60,6 @@ namespace GreisDocParser
             public string ClassFieldsAccessors { get; set; }
             public string ToByteArrayCode { get; set; }
             public string DeserializationConstructorCode { get; set; }
-            public string ValidationCode { get; set; }
         }
 
         private void generateStdMessages()
@@ -81,10 +83,14 @@ namespace GreisDocParser
                 var content = generateCustomTypeStubsContent(msg, fieldsAccessorsListIntendation,
                     fieldsListIntendation, codeIntendation);
 
+                // EMessageIdName
+                var eMessageIdName = getEnumNameForStdMessage(msg);
+
                 // ValidateStubToken
+                string validationCode;
                 if (msg.Validation == ValidationType.Checksum)
                 {
-                    content.ValidationCode =
+                    validationCode =
                         string.Format("\r\n" +
                                       "\r\n{0}auto message = ToByteArray();" +
                                       "\r\n{0}return validateChecksum8Bin(message.data(), message.size());", 
@@ -92,24 +98,25 @@ namespace GreisDocParser
                 }
                 else if (msg.Validation == ValidationType.ChecksumAsHexAscii)
                 {
-                    content.ValidationCode =
+                    validationCode =
                         string.Format("\r\n" +
                                       "\r\n{0}auto message = ToByteArray();" +
                                       "\r\n{0}return validateChecksum8Ascii(message.data(), message.size());", 
                                       codeIntendation);
                 } else
                 {
-                    content.ValidationCode = string.Format("\r\n" +
+                    validationCode = string.Format("\r\n" +
                                                            "\r\n{0}return true;", codeIntendation);
                 }
 
                 var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
                     Replace(ClassFieldsStubToken, content.ClassFields).
                     Replace(ClassFieldsAccessorsStubToken, content.ClassFieldsAccessors).
+                    Replace(EMessageIdStubToken, eMessageIdName).
                     Replace(ClassNameStubToken, className);
                 var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className).
                     Replace(ToByteArrayStubToken, content.ToByteArrayCode).
-                    Replace(ValidateStubToken, content.ValidationCode).
+                    Replace(ValidateStubToken, validationCode).
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
@@ -141,14 +148,17 @@ namespace GreisDocParser
                 var content = generateCustomTypeStubsContent(ct, fieldsAccessorsListIntendation,
                     fieldsListIntendation, codeIntendation);
 
+                // EMessageIdName
+                var eCustomTypeIdName = getEnumNameForCustomType(ct);
+
                 // ClassNameStubToken
                 var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
                     Replace(ClassFieldsStubToken, content.ClassFields).
                     Replace(ClassFieldsAccessorsStubToken, content.ClassFieldsAccessors).
+                    Replace(ECustomTypeIdStubToken, eCustomTypeIdName).
                     Replace(ClassNameStubToken, className);
                 var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className).
                     Replace(ToByteArrayStubToken, content.ToByteArrayCode).
-                    Replace(ValidateStubToken, content.ValidationCode).
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
@@ -463,12 +473,38 @@ namespace GreisDocParser
             var intendation = Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(StubToken)).Groups[1].Value;
             var lastIndex = _metaInfo.StandardMessages.Count - 1;
             var lines = _metaInfo.StandardMessages.OrderBy(msg => msg.Name).
-                Select((msg, i) => _normalizedStdMessagesNamesProvider.GetName(msg) + (lastIndex == i ? " // " : ", // ") + msg.Title).
+                Select((msg, i) => getEnumNameForStdMessage(msg) + (lastIndex == i ? " // " : ", // ") + msg.Title).
                 ToArray();
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
             File.WriteAllText(Path.Combine(_outDir, "EMessageId.h"), fileContent, Encoding.Default);
+        }
+
+        private void generateECustomTypeId()
+        {
+            var eCtIdTemplatePath = Path.Combine(_cppEnvTemplatesDir, "ECustomTypeId.template.h");
+            var templateStr = File.ReadAllText(eCtIdTemplatePath, Encoding.Default);
+
+            var intendation = Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(StubToken)).Groups[1].Value;
+            var lastIndex = _metaInfo.CustomTypes.Count - 1;
+            var lines = _metaInfo.CustomTypes.OrderBy(ct => ct.Name).
+                Select((ct, i) => getEnumNameForCustomType(ct) + (lastIndex == i ? "" : ",")).
+                ToArray();
+            var stubContent = string.Join("\r\n" + intendation, lines);
+            var fileContent = templateStr.Replace(StubToken, stubContent);
+
+            File.WriteAllText(Path.Combine(_outDir, "ECustomTypeId.h"), fileContent, Encoding.Default);
+        }
+
+        private string getEnumNameForCustomType(CustomType ct)
+        {
+            return _normalizedCustomTypeNamesProvider.GetName(ct);
+        }
+
+        private string getEnumNameForStdMessage(StandardMessage msg)
+        {
+            return _normalizedStdMessagesNamesProvider.GetName(msg);
         }
 
         private string getTypeNameForVariable(Variable variable)

@@ -26,7 +26,7 @@ namespace Greis
     }
     bool GPSTimeStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

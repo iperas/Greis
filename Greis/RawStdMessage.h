@@ -15,6 +15,7 @@ namespace Greis
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return std::string(_message.data(), 2); }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::Unknown; }
         virtual int BodySize() const { return _message.size() - HeadSize(); }
         virtual QByteArray ToByteArray() const { return _message; };
 

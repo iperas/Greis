@@ -36,7 +36,7 @@ namespace Greis
     }
     bool GloUtcGpsParamStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

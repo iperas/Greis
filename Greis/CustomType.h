@@ -3,18 +3,21 @@
 
 #include <vector>
 #include <QtCore/QByteArray>
+#include <boost/noncopyable.hpp>
 #include "GreisTypes.h"
 #include "ProjectBase/SmartPtr.h"
 #include "GreisBinarySerializer.h"
 #include "ProjectBase/NotImplementedException.h"
+#include "ECustomTypeId.h"
 
 namespace Greis
 {
-    class CustomType
+    class CustomType : private boost::noncopyable
     {
     public:
         SMART_PTR_T(CustomType);
 
+        virtual ECustomTypeId::Type IdNumber() const = 0;
         virtual QByteArray ToByteArray() const = 0;
         virtual int Size() const = 0;
     protected:

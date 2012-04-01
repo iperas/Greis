@@ -30,7 +30,7 @@ namespace Greis
     }
     bool DopsStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

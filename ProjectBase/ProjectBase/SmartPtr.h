@@ -48,6 +48,13 @@ namespace ProjectBase
     {
         return std::unique_ptr<T>(new T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), std::forward<Arg3>(arg3)));
     }
+
+    // Move object from one unique pointer to another with dynamic cast
+    template<typename T, typename Y>
+    std::unique_ptr<Y> dynamic_pointer_cast(std::unique_ptr<T> obj)
+    {
+        return std::unique_ptr<Y>(dynamic_cast<Y*>(obj.release()));
+    }
 }
 
 #endif // SharedPtr_h__

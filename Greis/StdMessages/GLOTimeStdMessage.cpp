@@ -26,7 +26,7 @@ namespace Greis
     }
     bool GLOTimeStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

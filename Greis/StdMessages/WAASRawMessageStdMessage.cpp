@@ -30,7 +30,7 @@ namespace Greis
     }
     bool WAASRawMessageStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

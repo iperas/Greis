@@ -38,7 +38,7 @@ namespace Greis
     }
     bool PosStatStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

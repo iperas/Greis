@@ -21,7 +21,7 @@ namespace Greis
     }
     bool ${ClassName}::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }// ${ValidateStub}

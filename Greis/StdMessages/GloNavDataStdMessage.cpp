@@ -28,7 +28,7 @@ namespace Greis
     }
     bool GloNavDataStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

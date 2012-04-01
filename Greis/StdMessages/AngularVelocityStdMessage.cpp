@@ -34,7 +34,7 @@ namespace Greis
     }
     bool AngularVelocityStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

@@ -2,25 +2,24 @@
 #define MySqlSink_h__
 
 #include <QList>
+#include <QMap>
 #include "ProjectBase/Connection.h"
 #include "ProjectBase/SmartPtr.h"
-#include "MetaInfo.h"
 #include "GreisMessage.h"
-#include "ProjectBase/BitConverter.h"
 #include "ProjectBase/NotSupportedException.h"
 #include "ProjectBase/NotImplementedException.h"
 #include "ProjectBase/DataInserter.h"
 #include "ProjectBase/DataBatchInserter.h"
+#include "EMessageId.h"
+#include "ECustomTypeId.h"
 
 using namespace ProjectBase;
-using namespace Greis;
 
-namespace Domain
+namespace Greis
 {
     class MySqlSink
     {
     private:
-        BitConverter _bitConverter;
         MetaInfo::SharedPtr_t _metaInfo;
         Connection* _connection;
         DatabaseHelper* _dbHelper;
@@ -94,8 +93,6 @@ namespace Domain
 
             DataBatchInserter::SharedPtr_t inserter = getMsgInserter(msgMeta.get());
             
-            int fillFieldsCount = msgMeta->GetFilledArrayFieldsSize(_metaInfo.get(), msg->bodySize());
-            
             // Message code id finding
             auto msgCodeId = msgMeta->FindMessageCodeId(msg->message());
             if (msgCodeId == -1)
@@ -111,7 +108,7 @@ namespace Domain
                 rowValues.append(_lastEpochId);
                 rowValues.append(msgCodeId);
                 rowValues.append(msg->bodySize());
-                serializeCustomType(msgMeta.get(), msgPtr, fillFieldsCount, rowValues);
+                serializeCustomType(msgMeta.get(), msgPtr, rowValues);
                 inserter->AddRow(rowValues);
             }
             catch (NotImplementedException& e)
@@ -120,137 +117,12 @@ namespace Domain
             }
         }
 
-        void serializeCustomType( CustomTypeMeta* msgMeta, const char* &dataPtr, int fillFieldsCount, QVariantList &sink ) 
+        void serializeCustomType( CustomTypeMeta* msgMeta, const char* &dataPtr, QVariantList &sink ) 
         {
             foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
             {
                 auto varType = varMeta->Type;
-                if (varType == "a1")
-                {
-                    int typeSize = 1;
-                    int fieldsCount;
-                    if (varMeta->IsScalar())
-                    {
-                        fieldsCount = 1;
-                    } else if (varMeta->IsLinearArray())
-                    {
-                        switch (varMeta->GetSizeForDimension(1))
-                        {
-                        case SizeSpecialValueClassifier::Dynamic:
-                        case SizeSpecialValueClassifier::Fill:
-                            fieldsCount = fillFieldsCount;
-                            break;
-                        default:
-                            fieldsCount = varMeta->GetSizeForDimension(1);
-                            break;
-                        }
-                    } else {
-                        throw NotSupportedException("Character arrays with dimension more than linear are not supported.");
-                    }
-                    QString varStr;
-                    while (fieldsCount-- > 0)
-                    {
-                        char a1 = _bitConverter.GetChar(dataPtr++);
-                        varStr.append(QChar::fromAscii(a1));
-                    }
-                    sink.append(varStr);
-                } else if (varType == "i1")
-                {
-                    int typeSize = 1;
-                    if (varMeta->IsScalar())
-                    {
-                        char i1 = _bitConverter.GetChar(dataPtr++);
-                        sink.append((int) i1);
-                    } else 
-                    {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "i2")
-                {
-                    int typeSize = 2;
-                    if (varMeta->IsScalar())
-                    {
-                        short i2 = _bitConverter.GetShort(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append((int) i2);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "i4")
-                {
-                    int typeSize = 4;
-                    if (varMeta->IsScalar())
-                    {
-                        int i4 = _bitConverter.GetInt(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append(i4);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "u1")
-                {
-                    int typeSize = 1;
-                    if (varMeta->IsScalar())
-                    {
-                        unsigned char u1 = _bitConverter.GetUChar(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append((unsigned int) u1);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "u2")
-                {
-                    int typeSize = 2;
-                    if (varMeta->IsScalar())
-                    {
-                        unsigned short u2 = _bitConverter.GetUShort(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append((unsigned int) u2);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "u4")
-                {
-                    int typeSize = 4;
-                    if (varMeta->IsScalar())
-                    {
-                        unsigned int u4 = _bitConverter.GetUInt(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append(u4);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "f4")
-                {
-                    int typeSize = 4;
-                    if (varMeta->IsScalar())
-                    {
-                        float f4 = _bitConverter.GetFloat(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append((double) f4);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else if (varType == "f8")
-                {
-                    int typeSize = 8;
-                    if (varMeta->IsScalar())
-                    {
-                        double f8 = _bitConverter.GetDouble(dataPtr);
-                        dataPtr += typeSize;
-                        sink.append(f8);
-                    } else {
-                        QByteArray ba = getArrayValue(varMeta, dataPtr, fillFieldsCount, typeSize);
-                        sink.append(ba);
-                    }
-                } else {
+                 {
                     auto ct = _nameToCustomTypeMap[varType];
                     if (!ct.get())
                     {
@@ -328,36 +200,6 @@ namespace Domain
 
             _ctAvailableId[ct] = newId;
             return newId;
-        }
-
-        int getArraySizeInItems(VariableMeta::SharedPtr_t varMeta, int fillFieldsCount)
-        {
-            int fieldsCount;
-            switch (varMeta->GetSizeForDimension(1))
-            {
-            case SizeSpecialValueClassifier::Dynamic:
-            case SizeSpecialValueClassifier::Fill:
-                BOOST_ASSERT(fillFieldsCount >= 0);
-                fieldsCount = fillFieldsCount;
-                break;
-            default:
-                fieldsCount = varMeta->GetSizeForDimension(1);
-                for (int i = 1; i < varMeta->GetDimensionsCount(); ++i)
-                {
-                    fieldsCount *= varMeta->GetSizeForDimension(i + 1);
-                }
-                break;
-            }
-            return fieldsCount;
-        }
-
-        // ¬ычисл€ет размер массива и копирует данные данного размера в результирующий массив
-        QByteArray getArrayValue( VariableMeta::SharedPtr_t varMeta, const char* msgPtr, int fillFieldsCount, int typeSize ) 
-        {
-            int fieldsCount = getArraySizeInItems(varMeta, fillFieldsCount);
-            QByteArray ba(msgPtr, fieldsCount * typeSize);
-            msgPtr += fieldsCount * typeSize;
-            return ba;
         }
 
         DataBatchInserter::SharedPtr_t getMsgInserter(MessageMeta* msgMeta)
@@ -445,35 +287,30 @@ namespace Domain
             }
             return inserter;
         }
+    };
 
-        void validateMessage(MessageMeta* msgMeta, StdMessage_t* msg)
+    class MySqlSink2
+    {
+        QMap<EMessageId::Type, DataBatchInserter::SharedPtr_t> _stdMessagesInserters;
+        QMap<ECustomTypeId::Type, DataBatchInserter::SharedPtr_t> _customTypesInserters;
+
+        QMultiMap<EMessageId::Type, ECustomTypeId::Type> _msgDependencies;
+        QMultiMap<ECustomTypeId::Type, ECustomTypeId::Type> _ctDependencies;
+        QMap<EMessageId::Type, QString> _msgInsertStrings;
+        QMap<ECustomTypeId::Type, QString> _ctInsertStrings;
+    private:
+        MySqlSink2()
         {
-            if (msgMeta->Size >= 0)
-            {
-                if (msg->bodySize() != msgMeta->Size)
-                {
-                    throw Exception(QString("Invalid size for message '%1': expected %2, actual %3.").
-                        arg(msgMeta->Name).arg(msgMeta->Size).arg(msg->bodySize()));
-                }
-            }
-            switch (msgMeta->Validation->Id)
-            {
-            case ValidationClassifier::Checksum:
-                if (!msg->validateChecksum8bin())
-                {
-                    throw Exception(QString("Invalid checksum for message '%1'.").arg(msgMeta->Name));
-                }
-                break;
-            case ValidationClassifier::ChecksumAsHexAscii:
-                if (!msg->validateChecksum8ascii())
-                {
-                    throw Exception(QString("Invalid checksum for message '%1'.").arg(msgMeta->Name));
-                }
-                break;
-            case ValidationClassifier::Crc16:
-                // TODO
-                break;
-            }
+            // Standard messages dependencies
+            _msgDependencies.insert(EMessageId::AngularVelocity, EMessageId::BaseInfo);
+            _msgDependencies.insert(EMessageId::AngularVelocity, EMessageId::AntName);
+            // Custom types dependencies
+            _ctDependencies.insert(ECustomTypeId::Header, ECustomTypeId::Smooth);
+
+            // Batch standard messages SQL-insert strings
+            _msgInsertStrings[EMessageId::AngularVelocity] = "";
+            // Batch custom types SQL-insert strings
+            _ctInsertStrings[ECustomTypeId::Header] = "";
         }
     };
 }

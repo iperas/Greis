@@ -40,7 +40,7 @@ namespace Greis
     }
     bool PosVelStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

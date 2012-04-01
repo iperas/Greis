@@ -3,6 +3,7 @@
 
 #include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "ECustomTypeId.h"
 
 namespace Greis
 {
@@ -12,7 +13,8 @@ namespace Greis
         SMART_PTR_T(UtcOffsCustomType);
 
         UtcOffsCustomType(const char* p_message, int p_length);
-
+        
+        virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::UtcOffs; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
 

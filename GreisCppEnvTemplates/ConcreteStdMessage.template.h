@@ -1,8 +1,9 @@
 #ifndef ${ClassName}_h__
 #define ${ClassName}_h__
 
+#include <QtCore/QByteArray>
 #include "StdMessage.h"
-#include <QtCore/QByteArray>// ${includes}
+#include "EMessageId.h"// ${includes}
 
 namespace Greis
 {
@@ -15,6 +16,7 @@ namespace Greis
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::${EMessageId}; }
         virtual bool Validate() const;
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;

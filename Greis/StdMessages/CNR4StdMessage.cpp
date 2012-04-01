@@ -26,7 +26,7 @@ namespace Greis
     }
     bool CNR4StdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

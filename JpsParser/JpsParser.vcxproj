@@ -98,7 +98,6 @@
   <ItemGroup>
     <ClInclude Include="Domain\MetaInfo.h" />
     <ClInclude Include="Domain\MetaInfoReader.h" />
-    <ClInclude Include="Domain\MySqlSink.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectBase\ProjectBase.vcxproj">

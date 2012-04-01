@@ -24,7 +24,7 @@ namespace Greis
     }
     bool RcvTimeAccuracyStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

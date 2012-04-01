@@ -28,7 +28,7 @@ namespace Greis
     }
     bool RefEpochStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

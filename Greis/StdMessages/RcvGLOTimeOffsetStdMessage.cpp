@@ -26,7 +26,7 @@ namespace Greis
     }
     bool RcvGLOTimeOffsetStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

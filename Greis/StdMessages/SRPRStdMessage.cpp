@@ -26,7 +26,7 @@ namespace Greis
     }
     bool SRPRStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

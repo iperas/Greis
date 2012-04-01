@@ -32,7 +32,7 @@ namespace Greis
     }
     bool ClockOffsetsStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }

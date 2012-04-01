@@ -26,7 +26,7 @@ namespace Greis
     }
     bool GALAlmStdMessage::Validate() const
     {
-        if (!Validate())
+        if (!StdMessage::Validate())
         {
             return false;
         }
