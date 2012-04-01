@@ -20,9 +20,9 @@ DROP TABLE IF EXISTS `messageTypeClassifier`;
 CREATE TABLE `epoch` (
          id SERIAL,
          -- dt DATETIME NOT NULL,
-         dt BIGINT UNSIGNED NOT NULL,
+         unixTime BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_dt` (`dt`)
+         INDEX `idx_unixTime` (`unixTime`)
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов

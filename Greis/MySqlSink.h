@@ -86,11 +86,6 @@ namespace Greis
                 return;
             }
 
-            if (!ignoreInvalidMessages)
-            {
-                validateMessage(msgMeta.get(), msg.get());
-            }
-
             DataBatchInserter::SharedPtr_t inserter = getMsgInserter(msgMeta.get());
             
             // Message code id finding
@@ -291,16 +286,31 @@ namespace Greis
 
     class MySqlSink2
     {
-        QMap<EMessageId::Type, DataBatchInserter::SharedPtr_t> _stdMessagesInserters;
-        QMap<ECustomTypeId::Type, DataBatchInserter::SharedPtr_t> _customTypesInserters;
+        Connection* _connection;
+        DatabaseHelper* _dbHelper;
+        int _inserterBatchSize;
+
+        QMap<EMessageId::Type, DataBatchInserter::SharedPtr_t> _msgInserters;
+        QMap<ECustomTypeId::Type, DataBatchInserter::SharedPtr_t> _ctInserters;
 
         QMultiMap<EMessageId::Type, ECustomTypeId::Type> _msgDependencies;
         QMultiMap<ECustomTypeId::Type, ECustomTypeId::Type> _ctDependencies;
         QMap<EMessageId::Type, QString> _msgInsertStrings;
         QMap<ECustomTypeId::Type, QString> _ctInsertStrings;
+
     private:
-        MySqlSink2()
+        MySqlSink2(Connection* connection, int inserterBatchSize = 10000)
         {
+            _connection = connection;
+            _dbHelper = _connection->DbHelper();
+            _inserterBatchSize = inserterBatchSize;
+
+            _msgInsertersMap[EMessageId::AngularVelocity] = std::make_shared<DataBatchInserter>(
+                "${InsertCmd}", 
+                fieldsCount, _connection, "${TableName}", _inserterBatchSize);
+
+            _msgInsertersMap[EMessageId::AngularVelocity]->AddChild(_msgInsertersMap[EMessageId::AngularVelocity]);
+
             // Standard messages dependencies
             _msgDependencies.insert(EMessageId::AngularVelocity, EMessageId::BaseInfo);
             _msgDependencies.insert(EMessageId::AngularVelocity, EMessageId::AntName);
@@ -311,6 +321,93 @@ namespace Greis
             _msgInsertStrings[EMessageId::AngularVelocity] = "";
             // Batch custom types SQL-insert strings
             _ctInsertStrings[ECustomTypeId::Header] = "";
+        }
+
+        DataBatchInserter* getMsgInserter(EMessageId::Type msgId)
+        {
+            DataBatchInserter::SharedPtr_t inserter;
+            if ((inserter = _msgInserters.value(msgId)).get())
+            {
+                return inserter.get();
+            }
+
+            
+            inserter = createInserter(msgMeta, QStringList() << "idEpoch" << "idMessageCode" << "bodySize");
+            _msgInsertersMap[msgMeta] = inserter;
+            return inserter;
+        }
+
+        DataBatchInserter::SharedPtr_t getCtInserter(CustomTypeMeta* ctMeta)
+        {
+            DataBatchInserter::SharedPtr_t inserter;
+            if ((inserter = _ctInsertersMap.value(ctMeta)).get())
+            {
+                return inserter;
+            }
+
+            inserter = createInserter(ctMeta, QStringList() << "id" << "idEpoch" << "bodySize");
+            _ctInsertersMap[ctMeta] = inserter;
+
+            int lastId = _dbHelper->ExecuteSingleValueQuery(QString("SELECT MAX(`id`) FROM `%1`").arg(ctMeta->TableName)).toInt();
+            _ctAvailableId[ctMeta] = lastId + 1;
+
+            return inserter;
+        }
+
+        // customFields - список дополнительных полей, идущих до полей данных в списке INSERT-команды
+        DataBatchInserter::SharedPtr_t createInserter(CustomTypeMeta* msgMeta, const QStringList& customFields = QStringList())
+        {
+            DataBatchInserter::SharedPtr_t inserter;
+
+            // Getting inserters for all fields
+            QList<DataBatchInserter::SharedPtr_t> childInserters;
+            childInserters.append(_epochInserter);
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
+            {
+                auto ct = _nameToCustomTypeMap[varMeta->Type];
+                if (!ct.get())
+                {
+                    continue;
+                }
+                childInserters.append(getCtInserter(ct.get()));
+            }
+
+            QString insertCommand;
+            if (customFields.empty())
+            {
+                insertCommand = QString("INSERT INTO `%1` (`%2`) VALUES ").arg(msgMeta->TableName);
+            } else {
+                QStringList customFieldsEscaped;
+                foreach (QString f, customFields)
+                {
+                    customFieldsEscaped << QString("`%1`").arg(f);
+                }
+                QString customFieldsStr = customFieldsEscaped.join(", ");
+                insertCommand = QString("INSERT INTO `%1` (%2, `%3`) VALUES ").arg(msgMeta->TableName).arg(customFieldsStr);
+            }
+
+            // Creating a new inserter
+            QStringList columnNames;
+            foreach (VariableMeta::SharedPtr_t varMeta, msgMeta->Variables)
+            {
+                columnNames.append(varMeta->GetColumnName());
+            }
+            auto columnNamesStr = columnNames.join("`, `");
+            insertCommand = insertCommand.arg((columnNamesStr));
+
+            int fieldsCount = msgMeta->Variables.count() + customFields.count();
+            insertCommand.append("(?");
+            for (int i = 0; i < fieldsCount - 1; ++i)
+            {
+                insertCommand.append(", ?");
+            }
+            insertCommand.append(")");
+            inserter = DataBatchInserter::SharedPtr_t(new DataBatchInserter(insertCommand, fieldsCount, _connection, msgMeta->TableName, _inserterBatchSize));
+            foreach (DataBatchInserter::SharedPtr_t ci, childInserters)
+            {
+                inserter->AddChild(ci);
+            }
+            return inserter;
         }
     };
 }

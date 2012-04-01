@@ -12,13 +12,16 @@ namespace GreisDocParser
         private readonly MetaInfo _metaInfo;
         private readonly string _templateFilename;
         private readonly string _databaseName;
-        private CustomTypeNameCustomizer _tableNameProvider;
+
+        private TableNameProvider _tableNames;
 
         public MysqlBaselineGenerator(MetaInfo metaInfo, string templateFilename, string databaseName)
         {
             _metaInfo = metaInfo;
             _templateFilename = templateFilename;
             _databaseName = databaseName;
+
+            _tableNames = new TableNameProvider(_metaInfo);
         }
 
         private const string PlaceholderUseDatabase = "-- @{USE-DATABASE-HERE}@";
@@ -33,8 +36,6 @@ namespace GreisDocParser
         /// <param name="outFilename">Выходной файл.</param>
         public void GenerateMysqlBaseline(string outFilename)
         {
-            _tableNameProvider = new CustomTypeNameCustomizer(_metaInfo, s => "msg_" + s.Name, s => "ct_" + s.Name);
-
             // Generate template content
             var useDatabase = generateUseDatabase();
             var tableDrop = generateTableDrop();
@@ -68,17 +69,19 @@ namespace GreisDocParser
                                       "CREATE TABLE `{1}` (\r\n" +
                                       "    id SERIAL, \r\n" +
                                       "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
+                                      "    unixTimeEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
                                       "    bodySize INT NOT NULL, \r\n{2}" +
-                                      "    PRIMARY KEY (`id`));\r\n\r\n";
+                                      "    PRIMARY KEY (`id`), \r\n" +
+                                      "    INDEX `idx_fk_{1}_unixTimeEpoch` (`unixTimeEpoch`));\r\n\r\n";
             foreach (var ct in _metaInfo.CustomTypes)
             {
                 var colDefs = new StringBuilder();
                 foreach (var v in ct.Variables)
                 {
-                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), sqlType(v));
+                    colDefs.AppendFormat("    `{0}` {1}, \r\n", GetColumnName(v), sqlType(v));
                 }
 
-                var query = string.Format(queryCtFmt, ct.Name, _tableNameProvider.GetName(ct), colDefs);
+                var query = string.Format(queryCtFmt, ct.Name, _tableNames.GetName(ct), colDefs);
                 tableCreationSb.Append(query);
             }
             // messages
@@ -86,10 +89,12 @@ namespace GreisDocParser
                                        "CREATE TABLE `{2}` (\r\n" +
                                        "    id SERIAL, \r\n" +
                                        "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
+                                       "    unixTimeEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
                                        "    idMessageCode BIGINT UNSIGNED NOT NULL, \r\n" +
                                        "    bodySize INT NOT NULL, \r\n{3}" +
                                        "    PRIMARY KEY (`id`), \r\n" +
                                        "    INDEX `idx_fk_{2}_idEpoch` (`idEpoch`), \r\n" +
+                                       "    INDEX `idx_fk_{2}_unixTimeEpoch` (`unixTimeEpoch`), \r\n" +
                                        "    INDEX `idx_fk_{2}_idMessageCode` (`idMessageCode`), \r\n" +
                                        "    CONSTRAINT `fk_{2}_idEpoch` FOREIGN KEY (`idEpoch`) \r\n" +
                                        "        REFERENCES `epoch` (`id`), \r\n" +
@@ -100,11 +105,11 @@ namespace GreisDocParser
                 var colDefs = new StringBuilder();
                 foreach (var v in msg.Variables)
                 {
-                    colDefs.AppendFormat("    `{0}` {1}, \r\n", columnName(v), sqlType(v));
+                    colDefs.AppendFormat("    `{0}` {1}, \r\n", GetColumnName(v), sqlType(v));
                 }
 
                 var query = string.Format(queryMsgFmt, msg.Name, msg.Title.Replace("\r", "").Replace('\n', ' '),
-                                          _tableNameProvider.GetName(msg), colDefs);
+                                          _tableNames.GetName(msg), colDefs);
                 tableCreationSb.Append(query);
             }
 
@@ -117,11 +122,11 @@ namespace GreisDocParser
             var tableDropSb = new StringBuilder();
             foreach (var msg in _metaInfo.StandardMessages)
             {
-                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNameProvider.GetName(msg));
+                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNames.GetName(msg));
             }
             foreach (var ct in _metaInfo.CustomTypes)
             {
-                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNameProvider.GetName(ct));
+                tableDropSb.AppendFormat("DROP TABLE IF EXISTS `{0}`;\r\n", _tableNames.GetName(ct));
             }
             var tableDrop = tableDropSb.ToString();
             return tableDrop;
@@ -192,7 +197,7 @@ namespace GreisDocParser
                 }
 
                 var ctMetaInsert = string.Format("({3}, '{0}', {1}, '{2}')", ct.Name, ct.Size,
-                                                 _tableNameProvider.GetName(ct), customTypeId);
+                                                 _tableNames.GetName(ct), customTypeId);
                 metaValues.Add(ctMetaInsert);
                 customTypeId++;
             }
@@ -249,7 +254,7 @@ namespace GreisDocParser
                 var messageMetaInsert = string.Format("({0}, '{1}', '{2}', {3}, {4}, {5}, {6}, '{7}')", messageId,
                                                       message.Name, message.Title, message.Size,
                                                       (int) message.Validation, (int) MessageKinds.GreisStandardMessage,
-                                                      (int)message.Type, _tableNameProvider.GetName(message));
+                                                      (int)message.Type, _tableNames.GetName(message));
                 metaValues.Add(messageMetaInsert);
                 messageId++;
             }
@@ -274,7 +279,7 @@ namespace GreisDocParser
 
         #endregion
 
-        private static string columnName(Variable v)
+        public static string GetColumnName(Variable v)
         {
             var colName = v.Name;
             if (!Regex.IsMatch(colName, @"[A-Za-z_][A-Za-z0-9_]*", RegexOptions.Compiled))

@@ -45,12 +45,37 @@ namespace GreisDocParser
         {
             _outDir = outDir;
 
+            generateMySqlSink();
             generateEMessageId();
             generateECustomTypeId();
             generateStdMessageGeneratedMembers();
             generateStdMessageFactory();
             generateStdMessages();
             generateCustomTypes();
+        }
+
+        private void generateMySqlSink()
+        {
+            var tableNames = new TableNameProvider(_metaInfo);
+
+            foreach (var msg in _metaInfo.StandardMessages)
+            {
+                var tableName = tableNames.GetName(msg);
+
+                const string predefinedCols = "`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                var colNames = msg.Variables.Select(
+                    variable => string.Format("`{0}`", MysqlBaselineGenerator.GetColumnName(variable))).ToArray();
+                var columns = predefinedCols + string.Join(", ", colNames);
+
+                var fieldsCount = msg.Variables.Count + 4;
+                var valuesSb = new StringBuilder("?");
+                for (int i = 1; i < fieldsCount; i++)
+                {
+                    valuesSb.Append(", ?");
+                }
+
+                var insertCommand = string.Format("INSERT INTO `{0}` ({1}) VALUES ({2})", tableName, columns, valuesSb);
+            }
         }
 
         private class CustomTypeStubsContent
