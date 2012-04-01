@@ -93,14 +93,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Domain\MetaInfo.cpp" />
-    <ClCompile Include="JpsFile.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Domain\MetaInfo.h" />
     <ClInclude Include="Domain\MetaInfoReader.h" />
     <ClInclude Include="Domain\MySqlSink.h" />
-    <ClInclude Include="JpsFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectBase\ProjectBase.vcxproj">

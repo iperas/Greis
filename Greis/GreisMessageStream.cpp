@@ -113,10 +113,15 @@ NextLabel: // avoiding stack overflow in recursive call
                     return nullPtr;
                 }
                 auto msg = StdMessageFactory::Create(data.data(), msgLen + StdMessage::HeadSize());
-                if (_skipInvalid && !msg->Validate())
+                if (!msg->Validate())
                 {
-                    sLogger.Debug(QString("Invalid message. ") + QString("Skip this one and look forward."));
-                    goto NextLabel;
+                    if (_skipInvalid)
+                    {
+                        sLogger.Debug(QString("Invalid message. ") + QString("Skip this one and look further."));
+                        goto NextLabel;
+                    } else {
+                        throw GreisException(QString("Invalid message."));
+                    }
                 }
                 //sLog.addInfo(msg->toString());
                 return std::move(msg);

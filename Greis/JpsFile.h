@@ -1,83 +1,58 @@
 #ifndef JpsFile_h__
 #define JpsFile_h__
 
-#include "ProjectBase/Macro.h"
-#include "GreisMessage.h"
 #include "GreisMessageStream.h"
-#include <list>
-#include "Domain/MySqlSink.h"
-
-using std::list;
-using std::dynamic_pointer_cast;
-using namespace Domain;
+#include <vector>
 
 namespace Greis
 {
-    typedef vector<Message_t::SharedPtr_t> Messages_t;
-
-    class Epoch_t
+    class Epoch
     {
     public:
         QDateTime DateTime;
-        Messages_t Messages;
+        std::vector<Message> Messages;
     };
 
-    class JpsFile_t
+    class JpsFile
     {
     public:
-        SMART_PTR_T(JpsFile_t);
-        NULL_PTR_DECL;
+        SMART_PTR_T(JpsFile);
 
-        JpsFile_t(QString aFilename)
+        static JpsFile::UniquePtr_t FromFile(QString filename)
         {
-            parse(aFilename);
+            auto jpsFile = make_unique<JpsFile::UniquePtr_t>();
+
+
+
+            return jpsFile;
         }
 
-        inline const Messages_t& header() const { return _header; }
-        inline const list<Epoch_t>& body() const { return _body; }
-        inline QString filename() const { return _filename; }
+        inline const std::vector<Message>& header() const { return _header; }
+        inline const std::vector<Epoch>& body() const { return _body; }
 
-        void toBinaryStream(std::ostream& out) const
+        QByteArray toByteArray() const
         {
-            foreach(Message_t::SharedPtr_t msg, header())
+            QByteArray result;
+            for (auto it = _header.cbegin(); it != _header.cend(); ++it)
             {
-                StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
-                out.write(stdMsg->message(), stdMsg->fullSize());
-                out.write("\0\n", 2);
+                result.append((*it)->ToByteArray());
             }
-            foreach(Epoch_t epoch, body())
+            for (auto epochIt = _body.cbegin(); epochIt != _body.cend(); ++epochIt)
             {
-                foreach(Message_t::SharedPtr_t msg, epoch.Messages)
+                for (auto msgIt = epochIt->Messages.cbegin(); msgIt != epochIt->Messages.cend(); ++msgIt)
                 {
-                    StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
-                    out.write(stdMsg->message(), stdMsg->fullSize());
-                    out.write("\0\n", 2);
-                }
-            }
-            out.flush();
-        }
-
-        void toMySqlSink(MySqlSink::SharedPtr_t sink)
-        {
-            /*foreach(Message_t::SharedPtr_t msg, header())
-            {
-                StdMessage_t::SharedPtr_t stdMsg = boost::shared_dynamic_cast<StdMessage_t>(msg);
-                sink->AddMessage(stdMsg, false);
-            }*/
-            foreach(Epoch_t epoch, body())
-            {
-                sink->AddEpoch(epoch.DateTime);
-                foreach(Message_t::SharedPtr_t msg, epoch.Messages)
-                {
-                    StdMessage_t::SharedPtr_t stdMsg = dynamic_pointer_cast<StdMessage_t>(msg);
-                    sink->AddMessage(stdMsg, false);
+                    result.append((*msgIt)->ToByteArray());
                 }
             }
         }
     private:
+        JpsFile(QString aFilename)
+        {
+        }
+
         void parse(QString aFilename)
         {
-            const string messageCodeRT("~~");
+            /*const string messageCodeRT("~~");
             const string messageCodeRD("RD");
             _filename = aFilename;
             _header.clear();
@@ -107,7 +82,7 @@ namespace Greis
                 _header.push_back(msg);
             }
             // epoch contains PM ? header : body
-            Epoch_t epoch;
+            Epoch epoch;
             if (msg.get())
             {
                 epoch.Messages.push_back(msg);
@@ -135,7 +110,7 @@ namespace Greis
                                 }
                             }
                             headerParsed = true;
-                            }*/
+                            }* /
                         if (isHeader)
                         {
                             std::copy(epoch.Messages.begin(), epoch.Messages.end(), std::back_inserter(_header));
@@ -160,10 +135,10 @@ namespace Greis
             {
                 _body.push_back(epoch);
             }
-            //sLog.addInfo(QString("В файле '%1' выделено %2 эпох.").arg(aFilename).arg(_body.size()));
+            //sLog.addInfo(QString("В файле '%1' выделено %2 эпох.").arg(aFilename).arg(_body.size()));*/
         }
 
-        inline void handleRTMessage( StdMessage_t* stdMsg, QDateTime &dateTime )
+        /*inline void handleRTMessage( StdMessage_t* stdMsg, QDateTime &dateTime )
         {
             auto dataPtr = stdMsg->body();
             auto timeOfDay = _bitConverter.GetUInt(dataPtr);
@@ -178,12 +153,10 @@ namespace Greis
             unsigned short month = _bitConverter.GetUChar(dataPtr++);
             unsigned short day = _bitConverter.GetUChar(dataPtr++);
             dateTime.setDate(QDate(year, month, day));
-        }
+        }*/
 
-        Messages_t _header;
-        list<Epoch_t> _body;
-        QString _filename;
-        BitConverter _bitConverter;
+        std::vector<Message> _header;
+        std::vector<Epoch> _body;
     };
 }
 

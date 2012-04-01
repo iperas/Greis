@@ -375,6 +375,9 @@
     <ClInclude Include="RawCustomType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JpsFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NonStdTextMessage.cpp">
