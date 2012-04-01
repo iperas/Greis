@@ -7,7 +7,8 @@ namespace Greis
 {
     StdMessage::UniquePtr_t StdMessageFactory::Create( char* p_message, int p_length )
     {
-        sLogger.Debug(QString("StdMessageFactory::Create: id = %1").arg(QString::fromAscii(p_message, 2)));
+        sLogger.Debug(QString("StdMessageFactory::Create: creating standard message with id `%1`...").
+            arg(QString::fromAscii(p_message, 2)));
         auto id = StdMessage::MapIdStrToEnum(p_message);
         switch (id)
         {

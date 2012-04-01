@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis", "Greis\Greis.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis.Tests", "Greis.Tests\Greis.Tests.vcxproj", "{ACF70C5A-AA7E-49EC-9725-367B670947C7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BUILD_STEPS", "BUILD_STEPS\BUILD_STEPS.vcxproj", "{4F58376E-7494-4819-BD89-1CD36CA9A414}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -89,6 +91,16 @@ Global
 		{ACF70C5A-AA7E-49EC-9725-367B670947C7}.Release|Win32.ActiveCfg = Release|Win32
 		{ACF70C5A-AA7E-49EC-9725-367B670947C7}.Release|Win32.Build.0 = Release|Win32
 		{ACF70C5A-AA7E-49EC-9725-367B670947C7}.Release|x86.ActiveCfg = Release|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Debug|Win32.Build.0 = Debug|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Win32.ActiveCfg = Release|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Win32.Build.0 = Release|Win32
+		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

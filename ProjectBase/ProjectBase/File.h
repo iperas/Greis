@@ -12,8 +12,11 @@ namespace ProjectBase
     class File
     {
     public:
-        // Открытие файла на чтение в бинарном виде. Ошибка если файла нет.
+        // Открытие файла на чтение в бинарном режиме. Ошибка если файла нет.
         static QFilePtr OpenReadBinary(QString filename);
+
+        // Создание файла или удаление содержимого имеющегося файла и его открытие. В бинарном режиме.
+        static QFilePtr CreateBinary(QString filename);
     };
 }
 

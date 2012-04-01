@@ -147,13 +147,13 @@ namespace GreisDocParser
             var ctGpsAlm = new CustomType
                                {
                                    Name = gpsAlm.Name,
-                                   Size = gpsAlm.Size,
+                                   Size = gpsAlm.Size - 1,
                                    Variables = gpsAlm.Variables.Where(v => v.Name != "cs").ToList()
                                };
             var ctGpsEphemeris = new CustomType
                                      {
                                          Name = gpsEphemeris.Name,
-                                         Size = gpsEphemeris.Size,
+                                         Size = gpsEphemeris.Size - 1,
                                          Variables = gpsEphemeris.Variables.Where(v => v.Name != "cs").ToList()
                                      };
             metaInfo.CustomTypes.Add(ctGpsAlm);

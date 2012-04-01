@@ -3132,7 +3132,7 @@ offset is unavailable or exceeds ±33554431;</Comment>
         </Variable>
       </Variables>
     </CustomType>
-    <CustomType Name="GPSAlm1" Size="47">
+    <CustomType Name="GPSAlm1" Size="46">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
@@ -3207,7 +3207,7 @@ at the start of week ‘wna’ [semi-circles]</Comment>
         </Variable>
       </Variables>
     </CustomType>
-    <CustomType Name="GPSEphemeris1" Size="123">
+    <CustomType Name="GPSEphemeris1" Size="122">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />

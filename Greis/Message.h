@@ -3,6 +3,7 @@
 
 #include <string>
 #include <boost/utility.hpp>
+#include <QtCore/QByteArray>
 #include "ProjectBase/SmartPtr.h"
 #include "EMessageKind.h"
 
@@ -21,6 +22,8 @@ namespace Greis
 
         virtual std::string ToString() const = 0;
         virtual bool Validate() const = 0;
+        virtual int Size() const = 0;
+        virtual QByteArray ToByteArray() const = 0;
 
         inline EMessageKind::Type Kind() const { return _kind; }
     };

@@ -96,7 +96,7 @@ namespace Greis
     {
         QByteArray head;
         head.append(Id().c_str(), 2);
-        auto bodySizeStr = QString::number(BodySize(), 16).rightJustified(3, '0', true);
+        auto bodySizeStr = QString::number(BodySize(), 16).toUpper().rightJustified(3, '0', true);
         head.append(bodySizeStr.toAscii(), 3);
         return head;
     }

@@ -1,13 +1,15 @@
 #include "NonStdTextMessage.h"
 #include <boost/format.hpp>
+#include "ProjectBase/SmartPtr.h"
 
 using std::string;
+using namespace ProjectBase;
 
 namespace Greis
 {
     NonStdTextMessage::NonStdTextMessage(char p_eom) : Message(EMessageKind::NonStdTextMessage)
     {
-        _id = 0;
+        _id = IdForEomOnlyMessage;
         _eom = p_eom;
     }
 
@@ -35,5 +37,29 @@ namespace Greis
         if (!IsEom(_eom))
             return false;
         return true;
+    }
+
+    NonStdTextMessage::UniquePtr_t NonStdTextMessage::CreateCarriageReturnMessage()
+    {
+        return make_unique<NonStdTextMessage>('\r');
+    }
+
+    NonStdTextMessage::UniquePtr_t NonStdTextMessage::CreateNewLineMessage()
+    {
+        return make_unique<NonStdTextMessage>('\n');
+    }
+
+    QByteArray NonStdTextMessage::ToByteArray() const
+    {
+        QByteArray result;
+        if (_id == IdForEomOnlyMessage)
+        {
+            result.append(_eom);
+        } else {
+            result.append(_id);
+            result.append(_body.c_str(), _body.size());
+            result.append(_eom);
+        }
+        return result;
     }
 }

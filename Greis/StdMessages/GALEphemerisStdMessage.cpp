@@ -10,8 +10,8 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, 123, _gps);
-        p_message += 123;
+        _serializer.Deserialize(p_message, 122, _gps);
+        p_message += 122;
         _serializer.Deserialize(p_message, _bgdE1E5a);
         p_message += sizeof(_bgdE1E5a);
         _serializer.Deserialize(p_message, _bgdE1E5b);

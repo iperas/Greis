@@ -57,7 +57,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>log4cxx.lib;gtest.lib;QtSqld4.lib;QtCored4.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(GTEST_DIR)\lib\$(Configuration);$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_DIR)\lib;$(GTEST_DIR)\lib\$(Configuration);$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,7 +70,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(LOG4CXX)\include;$(BOOST_DIR);$(QTDIR)\include;..\Greis;..\ProjectBase;$(GTEST_DIR)\include</AdditionalIncludeDirectories>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,13 +78,16 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>log4cxx.lib;gtest.lib;QtSql4.lib;QtCore4.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(GTEST_DIR)\lib\$(Configuration);$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_DIR)\lib;$(GTEST_DIR)\lib\$(Configuration);$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BUILD_STEPS\BUILD_STEPS.vcxproj">
+      <Project>{f73691ee-dacc-4e78-95bc-470fcbc49de4}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Greis\Greis.vcxproj">
       <Project>{524dcc9b-b6e6-488a-9842-b33166c6b9f4}</Project>
     </ProjectReference>
