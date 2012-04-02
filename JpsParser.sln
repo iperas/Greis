@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JpsParser", "JpsParser\JpsParser.vcxproj", "{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D15C12DE-4E13-4B20-8B13-D3AFC914D61E}"
 	ProjectSection(SolutionItems) = preProject
 		config.ini = config.ini
@@ -33,16 +31,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Debug|Win32.Build.0 = Debug|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Debug|x86.ActiveCfg = Debug|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Release|Win32.ActiveCfg = Release|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Release|Win32.Build.0 = Release|Win32
-		{C9787DB9-BE63-4C38-AD48-5DD0D23F64A9}.Release|x86.ActiveCfg = Release|Win32
 		{CE756DDB-9655-43FE-A209-230363E3D62D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{CE756DDB-9655-43FE-A209-230363E3D62D}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{CE756DDB-9655-43FE-A209-230363E3D62D}.Debug|Win32.ActiveCfg = Debug|x86
