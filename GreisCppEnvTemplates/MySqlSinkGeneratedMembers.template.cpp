@@ -16,20 +16,22 @@ namespace Greis
 
         // ${InsertersCreationCode}
     }
-    
-    void MySqlSink::AddMessage( Message* msg )
+
+    void MySqlSink::serializeMessage( StdMessage* msg, QVariantList& out )
     {
-        if (msg->Kind() != EMessageKind::StdMessage)
+        switch (msg->IdNumber())
         {
-            return;
+        // ${MsgSerializationCodeStub}
+        default:
+            throw InvalidOperationException();
         }
+    }
 
-        auto stdMsg = dynamic_cast<StdMessage*>(msg);
-
-        QVariantList fields;
-        switch (stdMsg->IdNumber())
+    void MySqlSink::serializeCustomType( CustomType* ct, QVariantList& out )
+    {
+        switch (ct->IdNumber())
         {
-        // ${SerializationCodeStub}
+        // ${CtSerializationCodeStub}
         default:
             throw InvalidOperationException();
         }

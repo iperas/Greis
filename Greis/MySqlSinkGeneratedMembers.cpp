@@ -324,18 +324,121 @@ namespace Greis
             "INSERT INTO `ct_UtcOffs` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `a0`, `a1`, `tot`, `wnt`, `dtls`, `dn`, `wnlsf`, `dtlsf`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             12, _connection, "ct_UtcOffs", _inserterBatchSize);
 
+        angularVelocityInserter->AddChild(_epochInserter);
+        antNameInserter->AddChild(_epochInserter);
+        baseInfoInserter->AddChild(_epochInserter);
+        baseLineInserter->AddChild(_epochInserter);
         clockOffsetsInserter->AddChild(clkOffsInserter);
+        clockOffsetsInserter->AddChild(_epochInserter);
+        cNRInserter->AddChild(_epochInserter);
+        cNR4Inserter->AddChild(_epochInserter);
+        cPInserter->AddChild(_epochInserter);
+        dopsInserter->AddChild(_epochInserter);
+        dPInserter->AddChild(_epochInserter);
+        epochEndInserter->AddChild(_epochInserter);
+        epochTimeInserter->AddChild(_epochInserter);
+        eRInserter->AddChild(_epochInserter);
+        eventInserter->AddChild(_epochInserter);
+        extEventInserter->AddChild(_epochInserter);
+        fileIdInserter->AddChild(_epochInserter);
+        flagsInserter->AddChild(_epochInserter);
         gALAlmInserter->AddChild(gPSAlm1Inserter);
+        gALAlmInserter->AddChild(_epochInserter);
         gALEphemerisInserter->AddChild(gPSEphemeris1Inserter);
+        gALEphemerisInserter->AddChild(_epochInserter);
+        gALRawMessageInserter->AddChild(_epochInserter);
         galUtcGpsParamInserter->AddChild(utcOffsInserter);
+        galUtcGpsParamInserter->AddChild(_epochInserter);
+        geoPosInserter->AddChild(_epochInserter);
+        geoVelInserter->AddChild(_epochInserter);
+        gLOAlmanacInserter->AddChild(_epochInserter);
+        gLOEphemerisInserter->AddChild(_epochInserter);
         gloNavDataInserter->AddChild(svData1Inserter);
+        gloNavDataInserter->AddChild(_epochInserter);
+        gloPhaseDelayInserter->AddChild(_epochInserter);
+        gLOTimeInserter->AddChild(_epochInserter);
+        gloUtcGpsParamInserter->AddChild(_epochInserter);
+        gPSAlm0Inserter->AddChild(_epochInserter);
+        gPSEphemeris0Inserter->AddChild(_epochInserter);
         gpsNavDataInserter->AddChild(svData0Inserter);
+        gpsNavDataInserter->AddChild(_epochInserter);
+        gPSTimeInserter->AddChild(_epochInserter);
         gpsUtcParamInserter->AddChild(utcOffsInserter);
+        gpsUtcParamInserter->AddChild(_epochInserter);
+        inertialMeasurementsInserter->AddChild(_epochInserter);
+        ionoDelayInserter->AddChild(_epochInserter);
+        ionoParamsInserter->AddChild(_epochInserter);
+        latencyInserter->AddChild(_epochInserter);
+        loggingHistoryInserter->AddChild(_epochInserter);
+        msgFmtInserter->AddChild(_epochInserter);
+        navStatusInserter->AddChild(_epochInserter);
+        paramsInserter->AddChild(_epochInserter);
+        posInserter->AddChild(_epochInserter);
+        posCompTimeInserter->AddChild(_epochInserter);
+        posCovInserter->AddChild(_epochInserter);
+        posStatInserter->AddChild(_epochInserter);
+        posVelInserter->AddChild(_epochInserter);
+        posVelVectorInserter->AddChild(_epochInserter);
+        pPSOffsetInserter->AddChild(_epochInserter);
+        pRInserter->AddChild(_epochInserter);
         rawMeasInserter->AddChild(svData2Inserter);
+        rawMeasInserter->AddChild(_epochInserter);
+        rCPRc1Inserter->AddChild(_epochInserter);
+        rCPRC0Inserter->AddChild(_epochInserter);
+        rcvDateInserter->AddChild(_epochInserter);
+        rcvGALTimeOffsetInserter->AddChild(_epochInserter);
+        rcvGLOTimeOffsetInserter->AddChild(_epochInserter);
+        rcvGPSTimeOffsetInserter->AddChild(_epochInserter);
+        rcvOscOffsInserter->AddChild(_epochInserter);
+        rcvTimeInserter->AddChild(_epochInserter);
+        rcvTimeAccuracyInserter->AddChild(_epochInserter);
+        rcvTimeOffsAtPPSInserter->AddChild(_epochInserter);
+        rcvTimeOffsetInserter->AddChild(_epochInserter);
+        rcvTimeOffsetDotInserter->AddChild(_epochInserter);
+        rcvWAASTimeOffsetInserter->AddChild(_epochInserter);
+        rEInserter->AddChild(_epochInserter);
+        refEpochInserter->AddChild(_epochInserter);
+        rmsInserter->AddChild(_epochInserter);
+        rotationAnglesInserter->AddChild(_epochInserter);
+        rotationMatrixInserter->AddChild(_epochInserter);
+        rotationMatrixAndVectorsInserter->AddChild(_epochInserter);
+        rPRInserter->AddChild(_epochInserter);
+        satAzimuthInserter->AddChild(_epochInserter);
+        satElevationInserter->AddChild(_epochInserter);
+        satIndexInserter->AddChild(_epochInserter);
+        satNumbersInserter->AddChild(_epochInserter);
         sCInserter->AddChild(smoothInserter);
+        sCInserter->AddChild(_epochInserter);
+        sCPInserter->AddChild(_epochInserter);
+        security0Inserter->AddChild(_epochInserter);
+        security1Inserter->AddChild(_epochInserter);
+        solutionTimeInserter->AddChild(_epochInserter);
+        sPRInserter->AddChild(_epochInserter);
+        sRDPInserter->AddChild(_epochInserter);
+        sRPRInserter->AddChild(_epochInserter);
+        sSInserter->AddChild(_epochInserter);
+        trackingTimeInserter->AddChild(_epochInserter);
+        trackingTimeCAInserter->AddChild(_epochInserter);
+        velInserter->AddChild(_epochInserter);
+        velCovInserter->AddChild(_epochInserter);
+        wAASAlmanacInserter->AddChild(_epochInserter);
+        wAASEhemerisInserter->AddChild(_epochInserter);
+        wAASRawMessageInserter->AddChild(_epochInserter);
         waasUtcParamInserter->AddChild(utcOffsInserter);
+        waasUtcParamInserter->AddChild(_epochInserter);
+        wrapperInserter->AddChild(_epochInserter);
+        clkOffsInserter->AddChild(_epochInserter);
+        gPSAlm1Inserter->AddChild(_epochInserter);
+        gPSEphemeris1Inserter->AddChild(_epochInserter);
+        headerInserter->AddChild(_epochInserter);
+        slotRecInserter->AddChild(_epochInserter);
+        smoothInserter->AddChild(_epochInserter);
+        svData0Inserter->AddChild(_epochInserter);
+        svData1Inserter->AddChild(_epochInserter);
         svData2Inserter->AddChild(headerInserter);
         svData2Inserter->AddChild(slotRecInserter);
+        svData2Inserter->AddChild(_epochInserter);
+        utcOffsInserter->AddChild(_epochInserter);
 
         _msgInserters[EMessageId::AngularVelocity] = angularVelocityInserter;
         _msgInserters[EMessageId::AntName] = antNameInserter;
@@ -440,944 +543,1088 @@ namespace Greis
         _ctInserters[ECustomTypeId::SvData1] = svData1Inserter;
         _ctInserters[ECustomTypeId::SvData2] = svData2Inserter;
         _ctInserters[ECustomTypeId::UtcOffs] = utcOffsInserter;
+
+        int maxIdForClkOffs = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_ClkOffs`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::ClkOffs] = maxIdForClkOffs;
+        int maxIdForGPSAlm1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GPSAlm1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::GPSAlm1] = maxIdForGPSAlm1;
+        int maxIdForGPSEphemeris1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GPSEphemeris1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::GPSEphemeris1] = maxIdForGPSEphemeris1;
+        int maxIdForHeader = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_Header`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::Header] = maxIdForHeader;
+        int maxIdForSlotRec = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SlotRec`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::SlotRec] = maxIdForSlotRec;
+        int maxIdForSmooth = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_Smooth`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::Smooth] = maxIdForSmooth;
+        int maxIdForSvData0 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SvData0`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::SvData0] = maxIdForSvData0;
+        int maxIdForSvData1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SvData1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::SvData1] = maxIdForSvData1;
+        int maxIdForSvData2 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SvData2`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::SvData2] = maxIdForSvData2;
+        int maxIdForUtcOffs = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_UtcOffs`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::UtcOffs] = maxIdForUtcOffs;
     }
-    
-    void MySqlSink::AddMessage( Message* msg )
+
+    void MySqlSink::serializeMessage( StdMessage* msg, QVariantList& out )
     {
-        if (msg->Kind() != EMessageKind::StdMessage)
-        {
-            return;
-        }
-
-        auto stdMsg = dynamic_cast<StdMessage*>(msg);
-
-        QVariantList fields;
-        switch (stdMsg->IdNumber())
+        switch (msg->IdNumber())
         {
         case EMessageId::AngularVelocity:
             {
-                auto cmsg = dynamic_cast<AngularVelocityStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_rms);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<AngularVelocityStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->Rms());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::AntName:
             {
-                auto cmsg = dynamic_cast<AntNameStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_name);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<AntNameStdMessage*>(msg);
+                out << _serializer.Serialize(c->Name());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::BaseInfo:
             {
-                auto cmsg = dynamic_cast<BaseInfoStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_idField);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<BaseInfoStdMessage*>(msg);
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::BaseLine:
             {
-                auto cmsg = dynamic_cast<BaseLineStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_sigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<BaseLineStdMessage*>(msg);
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->Sigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::ClockOffsets:
             {
-                auto cmsg = dynamic_cast<ClockOffsetsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sample);
-                fields << _serializer.Serialize(_reserved);
-                fields << _serializer.Serialize(_recSize);
-                // TODO
-                fields << _serializer.Serialize(_crc16);
+                auto c = dynamic_cast<ClockOffsetsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Sample());
+                out << _serializer.Serialize(c->Reserved());
+                out << _serializer.Serialize(c->RecSize());
+                out << addCustomTypesAndSerialize(c->Offs());
+                out << _serializer.Serialize(c->Crc16());
             }
             break;
         case EMessageId::CNR:
             {
-                auto cmsg = dynamic_cast<CNRStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_cnr);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<CNRStdMessage*>(msg);
+                out << _serializer.Serialize(c->Cnr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::CNR4:
             {
-                auto cmsg = dynamic_cast<CNR4StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_cnrX4);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<CNR4StdMessage*>(msg);
+                out << _serializer.Serialize(c->CnrX4());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::CP:
             {
-                auto cmsg = dynamic_cast<CPStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_cp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<CPStdMessage*>(msg);
+                out << _serializer.Serialize(c->Cp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Dops:
             {
-                auto cmsg = dynamic_cast<DopsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_hdop);
-                fields << _serializer.Serialize(_vdop);
-                fields << _serializer.Serialize(_tdop);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<DopsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Hdop());
+                out << _serializer.Serialize(c->Vdop());
+                out << _serializer.Serialize(c->Tdop());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::DP:
             {
-                auto cmsg = dynamic_cast<DPStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_dp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<DPStdMessage*>(msg);
+                out << _serializer.Serialize(c->Dp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::EpochEnd:
             {
-                auto cmsg = dynamic_cast<EpochEndStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<EpochEndStdMessage*>(msg);
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::EpochTime:
             {
-                auto cmsg = dynamic_cast<EpochTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tod);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<EpochTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::ER:
             {
-                auto cmsg = dynamic_cast<ERStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_error);
+                auto c = dynamic_cast<ERStdMessage*>(msg);
+                out << _serializer.Serialize(c->Error());
             }
             break;
         case EMessageId::Event:
             {
-                auto cmsg = dynamic_cast<EventStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_type);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<EventStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::ExtEvent:
             {
-                auto cmsg = dynamic_cast<ExtEventStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_ms);
-                fields << _serializer.Serialize(_ns);
-                fields << _serializer.Serialize(_timeScale);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<ExtEventStdMessage*>(msg);
+                out << _serializer.Serialize(c->Ms());
+                out << _serializer.Serialize(c->Ns());
+                out << _serializer.Serialize(c->TimeScale());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::FileId:
             {
-                auto cmsg = dynamic_cast<FileIdStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_idField);
-                fields << _serializer.Serialize(_description);
+                auto c = dynamic_cast<FileIdStdMessage*>(msg);
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->Description());
             }
             break;
         case EMessageId::Flags:
             {
-                auto cmsg = dynamic_cast<FlagsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<FlagsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GALAlm:
             {
-                auto cmsg = dynamic_cast<GALAlmStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_iod);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GALAlmStdMessage*>(msg);
+                out << addCustomType(c->Gps().get());
+                out << _serializer.Serialize(c->Iod());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GALEphemeris:
             {
-                auto cmsg = dynamic_cast<GALEphemerisStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_bgdE1E5a);
-                fields << _serializer.Serialize(_bgdE1E5b);
-                fields << _serializer.Serialize(_ai0);
-                fields << _serializer.Serialize(_ai1);
-                fields << _serializer.Serialize(_ai2);
-                fields << _serializer.Serialize(_sfi);
-                fields << _serializer.Serialize(_navType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GALEphemerisStdMessage*>(msg);
+                out << addCustomType(c->Gps().get());
+                out << _serializer.Serialize(c->BgdE1E5a());
+                out << _serializer.Serialize(c->BgdE1E5b());
+                out << _serializer.Serialize(c->Ai0());
+                out << _serializer.Serialize(c->Ai1());
+                out << _serializer.Serialize(c->Ai2());
+                out << _serializer.Serialize(c->Sfi());
+                out << _serializer.Serialize(c->NavType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GALRawMessage:
             {
-                auto cmsg = dynamic_cast<GALRawMessageStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_prn);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_type);
-                fields << _serializer.Serialize(_len);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GALRawMessageStdMessage*>(msg);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Len());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GalUtcGpsParam:
             {
-                auto cmsg = dynamic_cast<GalUtcGpsParamStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_a0g);
-                fields << _serializer.Serialize(_a1g);
-                fields << _serializer.Serialize(_t0g);
-                fields << _serializer.Serialize(_wn0g);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GalUtcGpsParamStdMessage*>(msg);
+                out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->A0g());
+                out << _serializer.Serialize(c->A1g());
+                out << _serializer.Serialize(c->T0g());
+                out << _serializer.Serialize(c->Wn0g());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GeoPos:
             {
-                auto cmsg = dynamic_cast<GeoPosStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_lat);
-                fields << _serializer.Serialize(_lon);
-                fields << _serializer.Serialize(_alt);
-                fields << _serializer.Serialize(_pSigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GeoPosStdMessage*>(msg);
+                out << _serializer.Serialize(c->Lat());
+                out << _serializer.Serialize(c->Lon());
+                out << _serializer.Serialize(c->Alt());
+                out << _serializer.Serialize(c->PSigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GeoVel:
             {
-                auto cmsg = dynamic_cast<GeoVelStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_lat);
-                fields << _serializer.Serialize(_lon);
-                fields << _serializer.Serialize(_alt);
-                fields << _serializer.Serialize(_pSigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GeoVelStdMessage*>(msg);
+                out << _serializer.Serialize(c->Lat());
+                out << _serializer.Serialize(c->Lon());
+                out << _serializer.Serialize(c->Alt());
+                out << _serializer.Serialize(c->PSigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GLOAlmanac:
             {
-                auto cmsg = dynamic_cast<GLOAlmanacStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sv);
-                fields << _serializer.Serialize(_frqNum);
-                fields << _serializer.Serialize(_dna);
-                fields << _serializer.Serialize(_tlam);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_tauN);
-                fields << _serializer.Serialize(_tauSys);
-                fields << _serializer.Serialize(_ecc);
-                fields << _serializer.Serialize(_lambda);
-                fields << _serializer.Serialize(_argPer);
-                fields << _serializer.Serialize(_delT);
-                fields << _serializer.Serialize(_delTdt);
-                fields << _serializer.Serialize(_deli);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GLOAlmanacStdMessage*>(msg);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->FrqNum());
+                out << _serializer.Serialize(c->Dna());
+                out << _serializer.Serialize(c->Tlam());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->TauN());
+                out << _serializer.Serialize(c->TauSys());
+                out << _serializer.Serialize(c->Ecc());
+                out << _serializer.Serialize(c->Lambda());
+                out << _serializer.Serialize(c->ArgPer());
+                out << _serializer.Serialize(c->DelT());
+                out << _serializer.Serialize(c->DelTdt());
+                out << _serializer.Serialize(c->Deli());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GLOEphemeris:
             {
-                auto cmsg = dynamic_cast<GLOEphemerisStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sv);
-                fields << _serializer.Serialize(_frqNum);
-                fields << _serializer.Serialize(_dne);
-                fields << _serializer.Serialize(_tk);
-                fields << _serializer.Serialize(_tb);
-                fields << _serializer.Serialize(_health);
-                fields << _serializer.Serialize(_age);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_r);
-                fields << _serializer.Serialize(_v);
-                fields << _serializer.Serialize(_w);
-                fields << _serializer.Serialize(_tauSys);
-                fields << _serializer.Serialize(_tau);
-                fields << _serializer.Serialize(_gamma);
-                fields << _serializer.Serialize(_fDelTauN);
-                fields << _serializer.Serialize(_nFt);
-                fields << _serializer.Serialize(_nN4);
-                fields << _serializer.Serialize(_flags2);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GLOEphemerisStdMessage*>(msg);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->FrqNum());
+                out << _serializer.Serialize(c->Dne());
+                out << _serializer.Serialize(c->Tk());
+                out << _serializer.Serialize(c->Tb());
+                out << _serializer.Serialize(c->Health());
+                out << _serializer.Serialize(c->Age());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->R());
+                out << _serializer.Serialize(c->V());
+                out << _serializer.Serialize(c->W());
+                out << _serializer.Serialize(c->TauSys());
+                out << _serializer.Serialize(c->Tau());
+                out << _serializer.Serialize(c->Gamma());
+                out << _serializer.Serialize(c->FDelTauN());
+                out << _serializer.Serialize(c->NFt());
+                out << _serializer.Serialize(c->NN4());
+                out << _serializer.Serialize(c->Flags2());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GloNavData:
             {
-                auto cmsg = dynamic_cast<GloNavDataStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_recSize);
-                // TODO
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GloNavDataStdMessage*>(msg);
+                out << _serializer.Serialize(c->RecSize());
+                out << addCustomTypesAndSerialize(c->Dat());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GloPhaseDelay:
             {
-                auto cmsg = dynamic_cast<GloPhaseDelayStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_fcn);
-                fields << _serializer.Serialize(_phase);
-                fields << _serializer.Serialize(_range);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GloPhaseDelayStdMessage*>(msg);
+                out << _serializer.Serialize(c->Fcn());
+                out << _serializer.Serialize(c->Phase());
+                out << _serializer.Serialize(c->Range());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GLOTime:
             {
-                auto cmsg = dynamic_cast<GLOTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tod);
-                fields << _serializer.Serialize(_dn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GLOTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Dn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GloUtcGpsParam:
             {
-                auto cmsg = dynamic_cast<GloUtcGpsParamStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tauSys);
-                fields << _serializer.Serialize(_tauGps);
-                fields << _serializer.Serialize(_B1);
-                fields << _serializer.Serialize(_B2);
-                fields << _serializer.Serialize(_KP);
-                fields << _serializer.Serialize(_N4);
-                fields << _serializer.Serialize(_Dn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GloUtcGpsParamStdMessage*>(msg);
+                out << _serializer.Serialize(c->TauSys());
+                out << _serializer.Serialize(c->TauGps());
+                out << _serializer.Serialize(c->B1());
+                out << _serializer.Serialize(c->B2());
+                out << _serializer.Serialize(c->KP());
+                out << _serializer.Serialize(c->N4());
+                out << _serializer.Serialize(c->Dn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GPSAlm0:
             {
-                auto cmsg = dynamic_cast<GPSAlm0StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sv);
-                fields << _serializer.Serialize(_wna);
-                fields << _serializer.Serialize(_toa);
-                fields << _serializer.Serialize(_healthA);
-                fields << _serializer.Serialize(_healthS);
-                fields << _serializer.Serialize(_config);
-                fields << _serializer.Serialize(_af1);
-                fields << _serializer.Serialize(_af0);
-                fields << _serializer.Serialize(_rootA);
-                fields << _serializer.Serialize(_ecc);
-                fields << _serializer.Serialize(_m0);
-                fields << _serializer.Serialize(_omega0);
-                fields << _serializer.Serialize(_argPer);
-                fields << _serializer.Serialize(_deli);
-                fields << _serializer.Serialize(_omegaDot);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GPSAlm0StdMessage*>(msg);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->Wna());
+                out << _serializer.Serialize(c->Toa());
+                out << _serializer.Serialize(c->HealthA());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Config());
+                out << _serializer.Serialize(c->Af1());
+                out << _serializer.Serialize(c->Af0());
+                out << _serializer.Serialize(c->RootA());
+                out << _serializer.Serialize(c->Ecc());
+                out << _serializer.Serialize(c->M0());
+                out << _serializer.Serialize(c->Omega0());
+                out << _serializer.Serialize(c->ArgPer());
+                out << _serializer.Serialize(c->Deli());
+                out << _serializer.Serialize(c->OmegaDot());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GPSEphemeris0:
             {
-                auto cmsg = dynamic_cast<GPSEphemeris0StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sv);
-                fields << _serializer.Serialize(_tow);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_iodc);
-                fields << _serializer.Serialize(_toc);
-                fields << _serializer.Serialize(_ura);
-                fields << _serializer.Serialize(_healthS);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_tgd);
-                fields << _serializer.Serialize(_af2);
-                fields << _serializer.Serialize(_af1);
-                fields << _serializer.Serialize(_af0);
-                fields << _serializer.Serialize(_toe);
-                fields << _serializer.Serialize(_iode);
-                fields << _serializer.Serialize(_rootA);
-                fields << _serializer.Serialize(_ecc);
-                fields << _serializer.Serialize(_m0);
-                fields << _serializer.Serialize(_omega0);
-                fields << _serializer.Serialize(_inc0);
-                fields << _serializer.Serialize(_argPer);
-                fields << _serializer.Serialize(_deln);
-                fields << _serializer.Serialize(_omegaDot);
-                fields << _serializer.Serialize(_incDot);
-                fields << _serializer.Serialize(_crc);
-                fields << _serializer.Serialize(_crs);
-                fields << _serializer.Serialize(_cuc);
-                fields << _serializer.Serialize(_cus);
-                fields << _serializer.Serialize(_cic);
-                fields << _serializer.Serialize(_cis);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GPSEphemeris0StdMessage*>(msg);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Iodc());
+                out << _serializer.Serialize(c->Toc());
+                out << _serializer.Serialize(c->Ura());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Tgd());
+                out << _serializer.Serialize(c->Af2());
+                out << _serializer.Serialize(c->Af1());
+                out << _serializer.Serialize(c->Af0());
+                out << _serializer.Serialize(c->Toe());
+                out << _serializer.Serialize(c->Iode());
+                out << _serializer.Serialize(c->RootA());
+                out << _serializer.Serialize(c->Ecc());
+                out << _serializer.Serialize(c->M0());
+                out << _serializer.Serialize(c->Omega0());
+                out << _serializer.Serialize(c->Inc0());
+                out << _serializer.Serialize(c->ArgPer());
+                out << _serializer.Serialize(c->Deln());
+                out << _serializer.Serialize(c->OmegaDot());
+                out << _serializer.Serialize(c->IncDot());
+                out << _serializer.Serialize(c->Crc());
+                out << _serializer.Serialize(c->Crs());
+                out << _serializer.Serialize(c->Cuc());
+                out << _serializer.Serialize(c->Cus());
+                out << _serializer.Serialize(c->Cic());
+                out << _serializer.Serialize(c->Cis());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GpsNavData:
             {
-                auto cmsg = dynamic_cast<GpsNavDataStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_recSize);
-                // TODO
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GpsNavDataStdMessage*>(msg);
+                out << _serializer.Serialize(c->RecSize());
+                out << addCustomTypesAndSerialize(c->Dat());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GPSTime:
             {
-                auto cmsg = dynamic_cast<GPSTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tow);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GPSTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::GpsUtcParam:
             {
-                auto cmsg = dynamic_cast<GpsUtcParamStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<GpsUtcParamStdMessage*>(msg);
+                out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::InertialMeasurements:
             {
-                auto cmsg = dynamic_cast<InertialMeasurementsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_accelerations);
-                fields << _serializer.Serialize(_angularVelocities);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<InertialMeasurementsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Accelerations());
+                out << _serializer.Serialize(c->AngularVelocities());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::IonoDelay:
             {
-                auto cmsg = dynamic_cast<IonoDelayStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_delay);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<IonoDelayStdMessage*>(msg);
+                out << _serializer.Serialize(c->Delay());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::IonoParams:
             {
-                auto cmsg = dynamic_cast<IonoParamsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tot);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_alpha0);
-                fields << _serializer.Serialize(_alpha1);
-                fields << _serializer.Serialize(_alpha2);
-                fields << _serializer.Serialize(_alpha3);
-                fields << _serializer.Serialize(_beta0);
-                fields << _serializer.Serialize(_beta1);
-                fields << _serializer.Serialize(_beta2);
-                fields << _serializer.Serialize(_beta3);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<IonoParamsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tot());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Alpha0());
+                out << _serializer.Serialize(c->Alpha1());
+                out << _serializer.Serialize(c->Alpha2());
+                out << _serializer.Serialize(c->Alpha3());
+                out << _serializer.Serialize(c->Beta0());
+                out << _serializer.Serialize(c->Beta1());
+                out << _serializer.Serialize(c->Beta2());
+                out << _serializer.Serialize(c->Beta3());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Latency:
             {
-                auto cmsg = dynamic_cast<LatencyStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_lt);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<LatencyStdMessage*>(msg);
+                out << _serializer.Serialize(c->Lt());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::LoggingHistory:
             {
-                auto cmsg = dynamic_cast<LoggingHistoryStdMessage*>(stdMsg);
+                auto c = dynamic_cast<LoggingHistoryStdMessage*>(msg);
                 
                 throw ProjectBase::NotImplementedException();
             }
             break;
         case EMessageId::MsgFmt:
             {
-                auto cmsg = dynamic_cast<MsgFmtStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_idField);
-                fields << _serializer.Serialize(_majorVer);
-                fields << _serializer.Serialize(_minorVer);
-                fields << _serializer.SerializeChar(_order);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<MsgFmtStdMessage*>(msg);
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->MajorVer());
+                out << _serializer.Serialize(c->MinorVer());
+                out << _serializer.SerializeChar(c->Order());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::NavStatus:
             {
-                auto cmsg = dynamic_cast<NavStatusStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_ns);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<NavStatusStdMessage*>(msg);
+                out << _serializer.Serialize(c->Ns());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Params:
             {
-                auto cmsg = dynamic_cast<ParamsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_params);
-                fields << _serializer.Serialize(_delim);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<ParamsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Params());
+                out << _serializer.Serialize(c->Delim());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Pos:
             {
-                auto cmsg = dynamic_cast<PosStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_sigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PosStdMessage*>(msg);
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->Sigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PosCompTime:
             {
-                auto cmsg = dynamic_cast<PosCompTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_pt);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PosCompTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Pt());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PosCov:
             {
-                auto cmsg = dynamic_cast<PosCovStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_xx);
-                fields << _serializer.Serialize(_yy);
-                fields << _serializer.Serialize(_zz);
-                fields << _serializer.Serialize(_tt);
-                fields << _serializer.Serialize(_xy);
-                fields << _serializer.Serialize(_xz);
-                fields << _serializer.Serialize(_xt);
-                fields << _serializer.Serialize(_yz);
-                fields << _serializer.Serialize(_yt);
-                fields << _serializer.Serialize(_zt);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PosCovStdMessage*>(msg);
+                out << _serializer.Serialize(c->Xx());
+                out << _serializer.Serialize(c->Yy());
+                out << _serializer.Serialize(c->Zz());
+                out << _serializer.Serialize(c->Tt());
+                out << _serializer.Serialize(c->Xy());
+                out << _serializer.Serialize(c->Xz());
+                out << _serializer.Serialize(c->Xt());
+                out << _serializer.Serialize(c->Yz());
+                out << _serializer.Serialize(c->Yt());
+                out << _serializer.Serialize(c->Zt());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PosStat:
             {
-                auto cmsg = dynamic_cast<PosStatStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_gpsLocked);
-                fields << _serializer.Serialize(_gloLocked);
-                fields << _serializer.Serialize(_gpsAvail);
-                fields << _serializer.Serialize(_gloAvail);
-                fields << _serializer.Serialize(_gpsUsed);
-                fields << _serializer.Serialize(_gloUsed);
-                fields << _serializer.Serialize(_fixProg);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PosStatStdMessage*>(msg);
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->GpsLocked());
+                out << _serializer.Serialize(c->GloLocked());
+                out << _serializer.Serialize(c->GpsAvail());
+                out << _serializer.Serialize(c->GloAvail());
+                out << _serializer.Serialize(c->GpsUsed());
+                out << _serializer.Serialize(c->GloUsed());
+                out << _serializer.Serialize(c->FixProg());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PosVel:
             {
-                auto cmsg = dynamic_cast<PosVelStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_pSigma);
-                fields << _serializer.Serialize(_vx);
-                fields << _serializer.Serialize(_vy);
-                fields << _serializer.Serialize(_vz);
-                fields << _serializer.Serialize(_vSigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PosVelStdMessage*>(msg);
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->PSigma());
+                out << _serializer.Serialize(c->Vx());
+                out << _serializer.Serialize(c->Vy());
+                out << _serializer.Serialize(c->Vz());
+                out << _serializer.Serialize(c->VSigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PosVelVector:
             {
-                auto cmsg = dynamic_cast<PosVelVectorStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sample);
-                fields << _serializer.Serialize(_delta);
-                fields << _serializer.Serialize(_word1);
-                fields << _serializer.Serialize(_word2);
-                fields << _serializer.Serialize(_word3);
-                fields << _serializer.Serialize(_word4);
-                fields << _serializer.Serialize(_word5);
-                fields << _serializer.Serialize(_word6);
-                fields << _serializer.Serialize(_word7);
-                fields << _serializer.Serialize(_word8);
-                fields << _serializer.Serialize(_word9);
-                fields << _serializer.Serialize(_crc16);
+                auto c = dynamic_cast<PosVelVectorStdMessage*>(msg);
+                out << _serializer.Serialize(c->Sample());
+                out << _serializer.Serialize(c->Delta());
+                out << _serializer.Serialize(c->Word1());
+                out << _serializer.Serialize(c->Word2());
+                out << _serializer.Serialize(c->Word3());
+                out << _serializer.Serialize(c->Word4());
+                out << _serializer.Serialize(c->Word5());
+                out << _serializer.Serialize(c->Word6());
+                out << _serializer.Serialize(c->Word7());
+                out << _serializer.Serialize(c->Word8());
+                out << _serializer.Serialize(c->Word9());
+                out << _serializer.Serialize(c->Crc16());
             }
             break;
         case EMessageId::PPSOffset:
             {
-                auto cmsg = dynamic_cast<PPSOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_offs);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PPSOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Offs());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PR:
             {
-                auto cmsg = dynamic_cast<PRStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_pr);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<PRStdMessage*>(msg);
+                out << _serializer.Serialize(c->Pr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RawMeas:
             {
-                auto cmsg = dynamic_cast<RawMeasStdMessage*>(stdMsg);
+                auto c = dynamic_cast<RawMeasStdMessage*>(msg);
                 
                 throw ProjectBase::NotImplementedException();
             }
             break;
         case EMessageId::RCPRc1:
             {
-                auto cmsg = dynamic_cast<RCPRc1StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_rcp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RCPRc1StdMessage*>(msg);
+                out << _serializer.Serialize(c->Rcp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RCPRC0:
             {
-                auto cmsg = dynamic_cast<RCPRC0StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_rcp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RCPRC0StdMessage*>(msg);
+                out << _serializer.Serialize(c->Rcp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvDate:
             {
-                auto cmsg = dynamic_cast<RcvDateStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_year);
-                fields << _serializer.Serialize(_month);
-                fields << _serializer.Serialize(_day);
-                fields << _serializer.Serialize(_base);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvDateStdMessage*>(msg);
+                out << _serializer.Serialize(c->Year());
+                out << _serializer.Serialize(c->Month());
+                out << _serializer.Serialize(c->Day());
+                out << _serializer.Serialize(c->Base());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvGALTimeOffset:
             {
-                auto cmsg = dynamic_cast<RcvGALTimeOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvGALTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvGLOTimeOffset:
             {
-                auto cmsg = dynamic_cast<RcvGLOTimeOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvGLOTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvGPSTimeOffset:
             {
-                auto cmsg = dynamic_cast<RcvGPSTimeOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvGPSTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvOscOffs:
             {
-                auto cmsg = dynamic_cast<RcvOscOffsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvOscOffsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvTime:
             {
-                auto cmsg = dynamic_cast<RcvTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tod);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvTimeAccuracy:
             {
-                auto cmsg = dynamic_cast<RcvTimeAccuracyStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_acc);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvTimeAccuracyStdMessage*>(msg);
+                out << _serializer.Serialize(c->Acc());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvTimeOffsAtPPS:
             {
-                auto cmsg = dynamic_cast<RcvTimeOffsAtPPSStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_offs);
-                fields << _serializer.Serialize(_timeScale);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvTimeOffsAtPPSStdMessage*>(msg);
+                out << _serializer.Serialize(c->Offs());
+                out << _serializer.Serialize(c->TimeScale());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvTimeOffset:
             {
-                auto cmsg = dynamic_cast<RcvTimeOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvTimeOffsetDot:
             {
-                auto cmsg = dynamic_cast<RcvTimeOffsetDotStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvTimeOffsetDotStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RcvWAASTimeOffset:
             {
-                auto cmsg = dynamic_cast<RcvWAASTimeOffsetStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_val);
-                fields << _serializer.Serialize(_sval);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RcvWAASTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RE:
             {
-                auto cmsg = dynamic_cast<REStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_reply);
+                auto c = dynamic_cast<REStdMessage*>(msg);
+                out << _serializer.Serialize(c->Reply());
             }
             break;
         case EMessageId::RefEpoch:
             {
-                auto cmsg = dynamic_cast<RefEpochStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_sample);
-                fields << _serializer.Serialize(_scale);
-                fields << _serializer.Serialize(_reftime);
-                fields << _serializer.Serialize(_crc16);
+                auto c = dynamic_cast<RefEpochStdMessage*>(msg);
+                out << _serializer.Serialize(c->Sample());
+                out << _serializer.Serialize(c->Scale());
+                out << _serializer.Serialize(c->Reftime());
+                out << _serializer.Serialize(c->Crc16());
             }
             break;
         case EMessageId::Rms:
             {
-                auto cmsg = dynamic_cast<RmsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_hpos);
-                fields << _serializer.Serialize(_vpos);
-                fields << _serializer.Serialize(_hvel);
-                fields << _serializer.Serialize(_vvel);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RmsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Hpos());
+                out << _serializer.Serialize(c->Vpos());
+                out << _serializer.Serialize(c->Hvel());
+                out << _serializer.Serialize(c->Vvel());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RotationAngles:
             {
-                auto cmsg = dynamic_cast<RotationAnglesStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_pitch);
-                fields << _serializer.Serialize(_roll);
-                fields << _serializer.Serialize(_heading);
-                fields << _serializer.Serialize(_pitchRms);
-                fields << _serializer.Serialize(_rollRms);
-                fields << _serializer.Serialize(_headingRms);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RotationAnglesStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Pitch());
+                out << _serializer.Serialize(c->Roll());
+                out << _serializer.Serialize(c->Heading());
+                out << _serializer.Serialize(c->PitchRms());
+                out << _serializer.Serialize(c->RollRms());
+                out << _serializer.Serialize(c->HeadingRms());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RotationMatrix:
             {
-                auto cmsg = dynamic_cast<RotationMatrixStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_q00);
-                fields << _serializer.Serialize(_q01);
-                fields << _serializer.Serialize(_q02);
-                fields << _serializer.Serialize(_q12);
-                fields << _serializer.Serialize(_rms);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_flag);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RotationMatrixStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Q00());
+                out << _serializer.Serialize(c->Q01());
+                out << _serializer.Serialize(c->Q02());
+                out << _serializer.Serialize(c->Q12());
+                out << _serializer.Serialize(c->Rms());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Flag());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RotationMatrixAndVectors:
             {
-                auto cmsg = dynamic_cast<RotationMatrixAndVectorsStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_q00);
-                fields << _serializer.Serialize(_q01);
-                fields << _serializer.Serialize(_q02);
-                fields << _serializer.Serialize(_q12);
-                fields << _serializer.Serialize(_rms);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_flag);
-                fields << _serializer.Serialize(_bl0);
-                fields << _serializer.Serialize(_bl1);
-                fields << _serializer.Serialize(_bl2);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RotationMatrixAndVectorsStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Q00());
+                out << _serializer.Serialize(c->Q01());
+                out << _serializer.Serialize(c->Q02());
+                out << _serializer.Serialize(c->Q12());
+                out << _serializer.Serialize(c->Rms());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Flag());
+                out << _serializer.Serialize(c->Bl0());
+                out << _serializer.Serialize(c->Bl1());
+                out << _serializer.Serialize(c->Bl2());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RPR:
             {
-                auto cmsg = dynamic_cast<RPRStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_rpr);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<RPRStdMessage*>(msg);
+                out << _serializer.Serialize(c->Rpr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SatAzimuth:
             {
-                auto cmsg = dynamic_cast<SatAzimuthStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_azim);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SatAzimuthStdMessage*>(msg);
+                out << _serializer.Serialize(c->Azim());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SatElevation:
             {
-                auto cmsg = dynamic_cast<SatElevationStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_elev);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SatElevationStdMessage*>(msg);
+                out << _serializer.Serialize(c->Elev());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SatIndex:
             {
-                auto cmsg = dynamic_cast<SatIndexStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_usi);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SatIndexStdMessage*>(msg);
+                out << _serializer.Serialize(c->Usi());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SatNumbers:
             {
-                auto cmsg = dynamic_cast<SatNumbersStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_osn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SatNumbersStdMessage*>(msg);
+                out << _serializer.Serialize(c->Osn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SC:
             {
-                auto cmsg = dynamic_cast<SCStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SCStdMessage*>(msg);
+                out << addCustomTypesAndSerialize(c->Smooth());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SCP:
             {
-                auto cmsg = dynamic_cast<SCPStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_scp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SCPStdMessage*>(msg);
+                out << _serializer.Serialize(c->Scp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Security0:
             {
-                auto cmsg = dynamic_cast<Security0StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<Security0StdMessage*>(msg);
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Security1:
             {
-                auto cmsg = dynamic_cast<Security1StdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_crc16);
+                auto c = dynamic_cast<Security1StdMessage*>(msg);
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Crc16());
             }
             break;
         case EMessageId::SolutionTime:
             {
-                auto cmsg = dynamic_cast<SolutionTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SolutionTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SPR:
             {
-                auto cmsg = dynamic_cast<SPRStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_spr);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SPRStdMessage*>(msg);
+                out << _serializer.Serialize(c->Spr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SRDP:
             {
-                auto cmsg = dynamic_cast<SRDPStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_srdp);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SRDPStdMessage*>(msg);
+                out << _serializer.Serialize(c->Srdp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SRPR:
             {
-                auto cmsg = dynamic_cast<SRPRStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_srpr);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SRPRStdMessage*>(msg);
+                out << _serializer.Serialize(c->Srpr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SS:
             {
-                auto cmsg = dynamic_cast<SSStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_smooth);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<SSStdMessage*>(msg);
+                out << _serializer.Serialize(c->Smooth());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::TrackingTime:
             {
-                auto cmsg = dynamic_cast<TrackingTimeStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tt);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<TrackingTimeStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tt());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::TrackingTimeCA:
             {
-                auto cmsg = dynamic_cast<TrackingTimeCAStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_tt);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<TrackingTimeCAStdMessage*>(msg);
+                out << _serializer.Serialize(c->Tt());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Vel:
             {
-                auto cmsg = dynamic_cast<VelStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_x);
-                fields << _serializer.Serialize(_y);
-                fields << _serializer.Serialize(_z);
-                fields << _serializer.Serialize(_sigma);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<VelStdMessage*>(msg);
+                out << _serializer.Serialize(c->X());
+                out << _serializer.Serialize(c->Y());
+                out << _serializer.Serialize(c->Z());
+                out << _serializer.Serialize(c->Sigma());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::VelCov:
             {
-                auto cmsg = dynamic_cast<VelCovStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_xx);
-                fields << _serializer.Serialize(_yy);
-                fields << _serializer.Serialize(_zz);
-                fields << _serializer.Serialize(_tt);
-                fields << _serializer.Serialize(_xy);
-                fields << _serializer.Serialize(_xz);
-                fields << _serializer.Serialize(_xt);
-                fields << _serializer.Serialize(_yz);
-                fields << _serializer.Serialize(_yt);
-                fields << _serializer.Serialize(_zt);
-                fields << _serializer.Serialize(_solType);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<VelCovStdMessage*>(msg);
+                out << _serializer.Serialize(c->Xx());
+                out << _serializer.Serialize(c->Yy());
+                out << _serializer.Serialize(c->Zz());
+                out << _serializer.Serialize(c->Tt());
+                out << _serializer.Serialize(c->Xy());
+                out << _serializer.Serialize(c->Xz());
+                out << _serializer.Serialize(c->Xt());
+                out << _serializer.Serialize(c->Yz());
+                out << _serializer.Serialize(c->Yt());
+                out << _serializer.Serialize(c->Zt());
+                out << _serializer.Serialize(c->SolType());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::WAASAlmanac:
             {
-                auto cmsg = dynamic_cast<WAASAlmanacStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_waasPrn);
-                fields << _serializer.Serialize(_gpsPrn);
-                fields << _serializer.Serialize(_idField);
-                fields << _serializer.Serialize(_healthS);
-                fields << _serializer.Serialize(_tod);
-                fields << _serializer.Serialize(_xg);
-                fields << _serializer.Serialize(_yg);
-                fields << _serializer.Serialize(_zg);
-                fields << _serializer.Serialize(_vxg);
-                fields << _serializer.Serialize(_vyg);
-                fields << _serializer.Serialize(_vzg);
-                fields << _serializer.Serialize(_tow);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<WAASAlmanacStdMessage*>(msg);
+                out << _serializer.Serialize(c->WaasPrn());
+                out << _serializer.Serialize(c->GpsPrn());
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Xg());
+                out << _serializer.Serialize(c->Yg());
+                out << _serializer.Serialize(c->Zg());
+                out << _serializer.Serialize(c->Vxg());
+                out << _serializer.Serialize(c->Vyg());
+                out << _serializer.Serialize(c->Vzg());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::WAASEhemeris:
             {
-                auto cmsg = dynamic_cast<WAASEhemerisStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_waasPrn);
-                fields << _serializer.Serialize(_gpsPrn);
-                fields << _serializer.Serialize(_iod);
-                fields << _serializer.Serialize(_acc);
-                fields << _serializer.Serialize(_tod);
-                fields << _serializer.Serialize(_xg);
-                fields << _serializer.Serialize(_yg);
-                fields << _serializer.Serialize(_zg);
-                fields << _serializer.Serialize(_vxg);
-                fields << _serializer.Serialize(_vyg);
-                fields << _serializer.Serialize(_vzg);
-                fields << _serializer.Serialize(_vvxg);
-                fields << _serializer.Serialize(_vvyg);
-                fields << _serializer.Serialize(_vvzg);
-                fields << _serializer.Serialize(_agf0);
-                fields << _serializer.Serialize(_agf1);
-                fields << _serializer.Serialize(_tow);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<WAASEhemerisStdMessage*>(msg);
+                out << _serializer.Serialize(c->WaasPrn());
+                out << _serializer.Serialize(c->GpsPrn());
+                out << _serializer.Serialize(c->Iod());
+                out << _serializer.Serialize(c->Acc());
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Xg());
+                out << _serializer.Serialize(c->Yg());
+                out << _serializer.Serialize(c->Zg());
+                out << _serializer.Serialize(c->Vxg());
+                out << _serializer.Serialize(c->Vyg());
+                out << _serializer.Serialize(c->Vzg());
+                out << _serializer.Serialize(c->Vvxg());
+                out << _serializer.Serialize(c->Vvyg());
+                out << _serializer.Serialize(c->Vvzg());
+                out << _serializer.Serialize(c->Agf0());
+                out << _serializer.Serialize(c->Agf1());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::WAASRawMessage:
             {
-                auto cmsg = dynamic_cast<WAASRawMessageStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_prn);
-                fields << _serializer.Serialize(_time);
-                fields << _serializer.Serialize(_reserv);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<WAASRawMessageStdMessage*>(msg);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Reserv());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::WaasUtcParam:
             {
-                auto cmsg = dynamic_cast<WaasUtcParamStdMessage*>(stdMsg);
-                // TODO
-                fields << _serializer.Serialize(_utcsi);
-                fields << _serializer.Serialize(_tow);
-                fields << _serializer.Serialize(_wn);
-                fields << _serializer.Serialize(_flags);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<WaasUtcParamStdMessage*>(msg);
+                out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->Utcsi());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Wrapper:
             {
-                auto cmsg = dynamic_cast<WrapperStdMessage*>(stdMsg);
-                fields << _serializer.Serialize(_idField);
-                fields << _serializer.Serialize(_data);
-                fields << _serializer.Serialize(_cs);
+                auto c = dynamic_cast<WrapperStdMessage*>(msg);
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        default:
+            throw InvalidOperationException();
+        }
+    }
+
+    void MySqlSink::serializeCustomType( CustomType* ct, QVariantList& out )
+    {
+        switch (ct->IdNumber())
+        {
+        case ECustomTypeId::ClkOffs:
+            {
+                auto c = dynamic_cast<ClkOffsCustomType*>(ct);
+                out << _serializer.Serialize(c->Word1());
+                out << _serializer.Serialize(c->Word2());
+            }
+            break;
+        case ECustomTypeId::GPSAlm1:
+            {
+                auto c = dynamic_cast<GPSAlm1CustomType*>(ct);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->Wna());
+                out << _serializer.Serialize(c->Toa());
+                out << _serializer.Serialize(c->HealthA());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Config());
+                out << _serializer.Serialize(c->Af1());
+                out << _serializer.Serialize(c->Af0());
+                out << _serializer.Serialize(c->RootA());
+                out << _serializer.Serialize(c->Ecc());
+                out << _serializer.Serialize(c->M0());
+                out << _serializer.Serialize(c->Omega0());
+                out << _serializer.Serialize(c->ArgPer());
+                out << _serializer.Serialize(c->Deli());
+                out << _serializer.Serialize(c->OmegaDot());
+            }
+            break;
+        case ECustomTypeId::GPSEphemeris1:
+            {
+                auto c = dynamic_cast<GPSEphemeris1CustomType*>(ct);
+                out << _serializer.Serialize(c->Sv());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Iodc());
+                out << _serializer.Serialize(c->Toc());
+                out << _serializer.Serialize(c->Ura());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Tgd());
+                out << _serializer.Serialize(c->Af2());
+                out << _serializer.Serialize(c->Af1());
+                out << _serializer.Serialize(c->Af0());
+                out << _serializer.Serialize(c->Toe());
+                out << _serializer.Serialize(c->Iode());
+                out << _serializer.Serialize(c->RootA());
+                out << _serializer.Serialize(c->Ecc());
+                out << _serializer.Serialize(c->M0());
+                out << _serializer.Serialize(c->Omega0());
+                out << _serializer.Serialize(c->Inc0());
+                out << _serializer.Serialize(c->ArgPer());
+                out << _serializer.Serialize(c->Deln());
+                out << _serializer.Serialize(c->OmegaDot());
+                out << _serializer.Serialize(c->IncDot());
+                out << _serializer.Serialize(c->Crc());
+                out << _serializer.Serialize(c->Crs());
+                out << _serializer.Serialize(c->Cuc());
+                out << _serializer.Serialize(c->Cus());
+                out << _serializer.Serialize(c->Cic());
+                out << _serializer.Serialize(c->Cis());
+            }
+            break;
+        case ECustomTypeId::Header:
+            {
+                auto c = dynamic_cast<HeaderCustomType*>(ct);
+                out << _serializer.Serialize(c->Refrange());
+                out << _serializer.Serialize(c->Usi());
+                out << _serializer.Serialize(c->Num());
+            }
+            break;
+        case ECustomTypeId::SlotRec:
+            {
+                auto c = dynamic_cast<SlotRecCustomType*>(ct);
+                out << _serializer.Serialize(c->SvstOrDelrange());
+                out << _serializer.Serialize(c->Word1());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Lock());
+                out << _serializer.Serialize(c->Word2());
+            }
+            break;
+        case ECustomTypeId::Smooth:
+            {
+                auto c = dynamic_cast<SmoothCustomType*>(ct);
+                out << _serializer.Serialize(c->Value());
+                out << _serializer.Serialize(c->Interval());
+            }
+            break;
+        case ECustomTypeId::SvData0:
+            {
+                auto c = dynamic_cast<SvData0CustomType*>(ct);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Cnt());
+                out << _serializer.Serialize(c->Data());
+            }
+            break;
+        case ECustomTypeId::SvData1:
+            {
+                auto c = dynamic_cast<SvData1CustomType*>(ct);
+                out << _serializer.Serialize(c->Fcn1());
+                out << _serializer.Serialize(c->Cnt());
+                out << _serializer.Serialize(c->Data());
+            }
+            break;
+        case ECustomTypeId::SvData2:
+            {
+                auto c = dynamic_cast<SvData2CustomType*>(ct);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case ECustomTypeId::UtcOffs:
+            {
+                auto c = dynamic_cast<UtcOffsCustomType*>(ct);
+                out << _serializer.Serialize(c->A0());
+                out << _serializer.Serialize(c->A1());
+                out << _serializer.Serialize(c->Tot());
+                out << _serializer.Serialize(c->Wnt());
+                out << _serializer.Serialize(c->Dtls());
+                out << _serializer.Serialize(c->Dn());
+                out << _serializer.Serialize(c->Wnlsf());
+                out << _serializer.Serialize(c->Dtlsf());
             }
             break;
         default:

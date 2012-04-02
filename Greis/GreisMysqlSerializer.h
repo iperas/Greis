@@ -76,10 +76,17 @@ namespace Greis
 
         // vector of Greis types
         template<typename T>
-        QVariant Serialize(const std::vector<T>& val)
+        inline QVariant Serialize(const std::vector<T>& val)
         {
             static_assert(std::is_arithmetic<T>::value, "T is not a Greis type.");
 
+            QByteArray ba;
+            _binSerializer.Serialize(val, ba);
+            return ba;
+        }
+
+        inline QVariant SerializeIds(const std::vector<int>& val)
+        {
             QByteArray ba;
             _binSerializer.Serialize(val, ba);
             return ba;

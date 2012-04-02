@@ -48,8 +48,24 @@ namespace
         int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();
         auto connection = Connection::FromSettings("Db");
         connection->Connect();
-        auto sink = make_unique<MySqlSink>(connection.get(), inserterBatchSize);
-        sink->AddJpsFile(file.get());
+
+        bool transactionStarted;
+        if (wrapIntoTransaction)
+        {
+            sLogger.Info("Starting a new transaction...");
+            transactionStarted = connection->Database().transaction();
+        }
+        {
+            auto sink = make_unique<MySqlSink>(connection.get(), inserterBatchSize);
+            sink->AddJpsFile(file.get());
+            sink->Flush();
+        }
+        if (wrapIntoTransaction && transactionStarted)
+        {
+            connection->Database().commit();
+            sLogger.Info("Transaction has been committed.");
+        }
+        sLogger.Info(QString("Insertion completed."));
     }
 }
 

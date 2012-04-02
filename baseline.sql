@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `ct_ClkOffs`;
 DROP TABLE IF EXISTS `ct_GPSAlm1`;
 DROP TABLE IF EXISTS `ct_GPSEphemeris1`;
 
-DROP TABLE IF EXISTS `exampleMessage`;
+DROP TABLE IF EXISTS `rawBinaryMessages`;
 DROP TABLE IF EXISTS `epoch`;
 DROP TABLE IF EXISTS `customTypeVariableSizeForDimension`;
 DROP TABLE IF EXISTS `messageVariableSizeForDimension`;
@@ -123,9 +123,9 @@ DROP TABLE IF EXISTS `messageTypeClassifier`;
 CREATE TABLE `epoch` (
          id SERIAL,
          -- dt DATETIME NOT NULL,
-         dt BIGINT UNSIGNED NOT NULL,
+         unixTime BIGINT UNSIGNED NOT NULL,
          PRIMARY KEY (`id`),
-         INDEX `idx_dt` (`dt`)
+         INDEX `idx_unixTime` (`unixTime`)
        );
 
 -- классификатор специальных значений поля `size` у сообщений и custom-типов
@@ -251,10 +251,27 @@ CREATE TABLE `messageVariableSizeForDimension` (
             REFERENCES `messageVariableMeta` (`id`)
        );
 
+-- message 'FileId': [JP] File Identifier
+CREATE TABLE `rawBinaryMessages` (
+    id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
+    code CHAR(2) NOT NULL, 
+    bodySize INT NOT NULL, 
+    `data` BLOB, 
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_rawBinaryMessages_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_rawBinaryMessages_unixTimeEpoch` (`unixTimeEpoch`), 
+    INDEX `idx_fk_rawBinaryMessages_code` (`code`), 
+    CONSTRAINT `fk_rawBinaryMessages_idEpoch` FOREIGN KEY (`idEpoch`) 
+        REFERENCES `epoch` (`id`)
+    );
+
 -- custom type 'UtcOffs'
 CREATE TABLE `ct_UtcOffs` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `a0` DOUBLE, 
     `a1` FLOAT, 
@@ -264,81 +281,97 @@ CREATE TABLE `ct_UtcOffs` (
     `dn` TINYINT UNSIGNED, 
     `wnlsf` SMALLINT UNSIGNED, 
     `dtlsf` TINYINT, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_UtcOffs_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'Smooth'
 CREATE TABLE `ct_Smooth` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `value` FLOAT, 
     `interval` SMALLINT UNSIGNED, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_Smooth_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'SvData0'
 CREATE TABLE `ct_SvData0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `prn` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
     `data` BLOB, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_SvData0_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'SvData1'
 CREATE TABLE `ct_SvData1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `fcn1` TINYINT, 
     `cnt` TINYINT UNSIGNED, 
     `data` BLOB, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_SvData1_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'SvData2'
 CREATE TABLE `ct_SvData2` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `header` BIGINT UNSIGNED, 
     `slot` BLOB, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_SvData2_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'Header'
 CREATE TABLE `ct_Header` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `refrange` INT UNSIGNED, 
     `usi` TINYINT UNSIGNED, 
     `num` TINYINT UNSIGNED, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_Header_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'SlotRec'
 CREATE TABLE `ct_SlotRec` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `svstOrDelrange` SMALLINT, 
     `word1` INT UNSIGNED, 
     `flags` SMALLINT UNSIGNED, 
     `lock` SMALLINT UNSIGNED, 
     `word2` INT UNSIGNED, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_SlotRec_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'ClkOffs'
 CREATE TABLE `ct_ClkOffs` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `word1` INT UNSIGNED, 
     `word2` INT UNSIGNED, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_ClkOffs_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'GPSAlm1'
 CREATE TABLE `ct_GPSAlm1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
     `wna` SMALLINT, 
@@ -355,12 +388,14 @@ CREATE TABLE `ct_GPSAlm1` (
     `argPer` FLOAT, 
     `deli` FLOAT, 
     `omegaDot` FLOAT, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_GPSAlm1_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'GPSEphemeris1'
 CREATE TABLE `ct_GPSEphemeris1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
     `tow` INT UNSIGNED, 
@@ -391,18 +426,21 @@ CREATE TABLE `ct_GPSEphemeris1` (
     `cus` FLOAT, 
     `cic` FLOAT, 
     `cis` FLOAT, 
-    PRIMARY KEY (`id`));
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_ct_GPSEphemeris1_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- message 'FileId': [JP] File Identifier
 CREATE TABLE `msg_FileId` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `id_sugar` VARCHAR(1000), 
     `description` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_FileId_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_FileId_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_FileId_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_FileId_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -413,6 +451,7 @@ CREATE TABLE `msg_FileId` (
 CREATE TABLE `msg_MsgFmt` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `id_sugar` VARCHAR(1000), 
@@ -422,6 +461,7 @@ CREATE TABLE `msg_MsgFmt` (
     `cs` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_MsgFmt_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_MsgFmt_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_MsgFmt_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_MsgFmt_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -432,12 +472,14 @@ CREATE TABLE `msg_MsgFmt` (
 CREATE TABLE `msg_RcvTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tod` INT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -448,12 +490,14 @@ CREATE TABLE `msg_RcvTime` (
 CREATE TABLE `msg_EpochTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tod` INT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_EpochTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_EpochTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_EpochTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_EpochTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -464,6 +508,7 @@ CREATE TABLE `msg_EpochTime` (
 CREATE TABLE `msg_RcvDate` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `year` SMALLINT UNSIGNED, 
@@ -473,6 +518,7 @@ CREATE TABLE `msg_RcvDate` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvDate_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvDate_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvDate_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvDate_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -483,6 +529,7 @@ CREATE TABLE `msg_RcvDate` (
 CREATE TABLE `msg_RcvTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` DOUBLE, 
@@ -490,6 +537,7 @@ CREATE TABLE `msg_RcvTimeOffset` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvTimeOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvTimeOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -500,6 +548,7 @@ CREATE TABLE `msg_RcvTimeOffset` (
 CREATE TABLE `msg_RcvTimeOffsetDot` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` FLOAT, 
@@ -507,6 +556,7 @@ CREATE TABLE `msg_RcvTimeOffsetDot` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffsetDot_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvTimeOffsetDot_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvTimeOffsetDot_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvTimeOffsetDot_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -517,12 +567,14 @@ CREATE TABLE `msg_RcvTimeOffsetDot` (
 CREATE TABLE `msg_RcvTimeAccuracy` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `acc` FLOAT, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeAccuracy_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvTimeAccuracy_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvTimeAccuracy_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvTimeAccuracy_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -533,6 +585,7 @@ CREATE TABLE `msg_RcvTimeAccuracy` (
 CREATE TABLE `msg_GPSTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tow` INT UNSIGNED, 
@@ -540,6 +593,7 @@ CREATE TABLE `msg_GPSTime` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GPSTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GPSTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GPSTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -550,6 +604,7 @@ CREATE TABLE `msg_GPSTime` (
 CREATE TABLE `msg_RcvGPSTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` DOUBLE, 
@@ -557,6 +612,7 @@ CREATE TABLE `msg_RcvGPSTimeOffset` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGPSTimeOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvGPSTimeOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvGPSTimeOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvGPSTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -567,6 +623,7 @@ CREATE TABLE `msg_RcvGPSTimeOffset` (
 CREATE TABLE `msg_GLOTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tod` INT UNSIGNED, 
@@ -574,6 +631,7 @@ CREATE TABLE `msg_GLOTime` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GLOTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GLOTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GLOTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -584,6 +642,7 @@ CREATE TABLE `msg_GLOTime` (
 CREATE TABLE `msg_RcvGLOTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` DOUBLE, 
@@ -591,6 +650,7 @@ CREATE TABLE `msg_RcvGLOTimeOffset` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGLOTimeOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvGLOTimeOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvGLOTimeOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvGLOTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -601,6 +661,7 @@ CREATE TABLE `msg_RcvGLOTimeOffset` (
 CREATE TABLE `msg_RcvGALTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` DOUBLE, 
@@ -608,6 +669,7 @@ CREATE TABLE `msg_RcvGALTimeOffset` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvGALTimeOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvGALTimeOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvGALTimeOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvGALTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -618,6 +680,7 @@ CREATE TABLE `msg_RcvGALTimeOffset` (
 CREATE TABLE `msg_RcvWAASTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` DOUBLE, 
@@ -625,6 +688,7 @@ CREATE TABLE `msg_RcvWAASTimeOffset` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvWAASTimeOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvWAASTimeOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvWAASTimeOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvWAASTimeOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -635,12 +699,14 @@ CREATE TABLE `msg_RcvWAASTimeOffset` (
 CREATE TABLE `msg_GpsUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `utc` BIGINT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GpsUtcParam_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GpsUtcParam_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GpsUtcParam_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GpsUtcParam_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -651,6 +717,7 @@ CREATE TABLE `msg_GpsUtcParam` (
 CREATE TABLE `msg_WaasUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `utc` BIGINT UNSIGNED, 
@@ -661,6 +728,7 @@ CREATE TABLE `msg_WaasUtcParam` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WaasUtcParam_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_WaasUtcParam_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_WaasUtcParam_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_WaasUtcParam_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -671,6 +739,7 @@ CREATE TABLE `msg_WaasUtcParam` (
 CREATE TABLE `msg_GalUtcGpsParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `utc` BIGINT UNSIGNED, 
@@ -682,6 +751,7 @@ CREATE TABLE `msg_GalUtcGpsParam` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GalUtcGpsParam_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GalUtcGpsParam_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GalUtcGpsParam_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GalUtcGpsParam_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -692,6 +762,7 @@ CREATE TABLE `msg_GalUtcGpsParam` (
 CREATE TABLE `msg_GloUtcGpsParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tauSys` DOUBLE, 
@@ -704,6 +775,7 @@ CREATE TABLE `msg_GloUtcGpsParam` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloUtcGpsParam_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GloUtcGpsParam_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GloUtcGpsParam_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GloUtcGpsParam_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -714,6 +786,7 @@ CREATE TABLE `msg_GloUtcGpsParam` (
 CREATE TABLE `msg_SolutionTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -721,6 +794,7 @@ CREATE TABLE `msg_SolutionTime` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SolutionTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SolutionTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SolutionTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SolutionTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -731,6 +805,7 @@ CREATE TABLE `msg_SolutionTime` (
 CREATE TABLE `msg_Pos` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `x` DOUBLE, 
@@ -741,6 +816,7 @@ CREATE TABLE `msg_Pos` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Pos_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Pos_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Pos_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Pos_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -751,6 +827,7 @@ CREATE TABLE `msg_Pos` (
 CREATE TABLE `msg_Vel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `x` FLOAT, 
@@ -761,6 +838,7 @@ CREATE TABLE `msg_Vel` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Vel_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Vel_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Vel_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Vel_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -771,6 +849,7 @@ CREATE TABLE `msg_Vel` (
 CREATE TABLE `msg_PosVel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `x` DOUBLE, 
@@ -785,6 +864,7 @@ CREATE TABLE `msg_PosVel` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosVel_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PosVel_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PosVel_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PosVel_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -795,6 +875,7 @@ CREATE TABLE `msg_PosVel` (
 CREATE TABLE `msg_GeoPos` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `lat` DOUBLE, 
@@ -805,6 +886,7 @@ CREATE TABLE `msg_GeoPos` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GeoPos_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GeoPos_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GeoPos_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GeoPos_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -815,6 +897,7 @@ CREATE TABLE `msg_GeoPos` (
 CREATE TABLE `msg_GeoVel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `lat` FLOAT, 
@@ -825,6 +908,7 @@ CREATE TABLE `msg_GeoVel` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GeoVel_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GeoVel_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GeoVel_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GeoVel_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -835,6 +919,7 @@ CREATE TABLE `msg_GeoVel` (
 CREATE TABLE `msg_Rms` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `hpos` FLOAT, 
@@ -845,6 +930,7 @@ CREATE TABLE `msg_Rms` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Rms_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Rms_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Rms_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Rms_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -855,6 +941,7 @@ CREATE TABLE `msg_Rms` (
 CREATE TABLE `msg_Dops` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `hdop` FLOAT, 
@@ -864,6 +951,7 @@ CREATE TABLE `msg_Dops` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Dops_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Dops_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Dops_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Dops_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -874,6 +962,7 @@ CREATE TABLE `msg_Dops` (
 CREATE TABLE `msg_PosCov` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `xx` FLOAT, 
@@ -890,6 +979,7 @@ CREATE TABLE `msg_PosCov` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosCov_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PosCov_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PosCov_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PosCov_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -900,6 +990,7 @@ CREATE TABLE `msg_PosCov` (
 CREATE TABLE `msg_VelCov` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `xx` FLOAT, 
@@ -916,6 +1007,7 @@ CREATE TABLE `msg_VelCov` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_VelCov_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_VelCov_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_VelCov_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_VelCov_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -926,6 +1018,7 @@ CREATE TABLE `msg_VelCov` (
 CREATE TABLE `msg_BaseLine` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `x` DOUBLE, 
@@ -937,6 +1030,7 @@ CREATE TABLE `msg_BaseLine` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_BaseLine_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_BaseLine_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_BaseLine_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_BaseLine_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -947,6 +1041,7 @@ CREATE TABLE `msg_BaseLine` (
 CREATE TABLE `msg_PosStat` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `solType` TINYINT UNSIGNED, 
@@ -960,6 +1055,7 @@ CREATE TABLE `msg_PosStat` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosStat_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PosStat_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PosStat_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PosStat_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -970,12 +1066,14 @@ CREATE TABLE `msg_PosStat` (
 CREATE TABLE `msg_PosCompTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `pt` INT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosCompTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PosCompTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PosCompTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PosCompTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -986,12 +1084,14 @@ CREATE TABLE `msg_PosCompTime` (
 CREATE TABLE `msg_SatIndex` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `usi` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatIndex_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SatIndex_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SatIndex_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SatIndex_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1002,12 +1102,14 @@ CREATE TABLE `msg_SatIndex` (
 CREATE TABLE `msg_AntName` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `name` VARCHAR(1000), 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_AntName_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_AntName_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_AntName_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_AntName_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1018,12 +1120,14 @@ CREATE TABLE `msg_AntName` (
 CREATE TABLE `msg_SatNumbers` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `osn` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatNumbers_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SatNumbers_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SatNumbers_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SatNumbers_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1034,12 +1138,14 @@ CREATE TABLE `msg_SatNumbers` (
 CREATE TABLE `msg_SatElevation` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `elev` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatElevation_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SatElevation_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SatElevation_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SatElevation_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1050,12 +1156,14 @@ CREATE TABLE `msg_SatElevation` (
 CREATE TABLE `msg_SatAzimuth` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `azim` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SatAzimuth_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SatAzimuth_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SatAzimuth_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SatAzimuth_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1066,12 +1174,14 @@ CREATE TABLE `msg_SatAzimuth` (
 CREATE TABLE `msg_PR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `pr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PR_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PR_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PR_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PR_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1082,12 +1192,14 @@ CREATE TABLE `msg_PR` (
 CREATE TABLE `msg_SPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `spr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SPR_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SPR_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SPR_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SPR_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1098,12 +1210,14 @@ CREATE TABLE `msg_SPR` (
 CREATE TABLE `msg_RPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `rpr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RPR_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RPR_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RPR_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RPR_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1114,12 +1228,14 @@ CREATE TABLE `msg_RPR` (
 CREATE TABLE `msg_SRPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `srpr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SRPR_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SRPR_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SRPR_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SRPR_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1130,12 +1246,14 @@ CREATE TABLE `msg_SRPR` (
 CREATE TABLE `msg_SC` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `smooth` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SC_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SC_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SC_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SC_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1146,12 +1264,14 @@ CREATE TABLE `msg_SC` (
 CREATE TABLE `msg_SS` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `smooth` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SS_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SS_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SS_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SS_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1162,12 +1282,14 @@ CREATE TABLE `msg_SS` (
 CREATE TABLE `msg_CP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `cp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CP_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_CP_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_CP_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_CP_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1178,12 +1300,14 @@ CREATE TABLE `msg_CP` (
 CREATE TABLE `msg_SCP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `scp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SCP_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SCP_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SCP_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SCP_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1194,12 +1318,14 @@ CREATE TABLE `msg_SCP` (
 CREATE TABLE `msg_RCP_RC0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `rcp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RCP_RC0_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RCP_RC0_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RCP_RC0_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RCP_RC0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1210,12 +1336,14 @@ CREATE TABLE `msg_RCP_RC0` (
 CREATE TABLE `msg_RCP_rc1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `rcp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RCP_rc1_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RCP_rc1_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RCP_rc1_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RCP_rc1_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1226,12 +1354,14 @@ CREATE TABLE `msg_RCP_rc1` (
 CREATE TABLE `msg_DP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `dp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_DP_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_DP_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_DP_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_DP_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1242,12 +1372,14 @@ CREATE TABLE `msg_DP` (
 CREATE TABLE `msg_SRDP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `srdp` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SRDP_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_SRDP_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_SRDP_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_SRDP_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1258,12 +1390,14 @@ CREATE TABLE `msg_SRDP` (
 CREATE TABLE `msg_CNR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `cnr` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CNR_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_CNR_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_CNR_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_CNR_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1274,12 +1408,14 @@ CREATE TABLE `msg_CNR` (
 CREATE TABLE `msg_CNR_4` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `cnrX4` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_CNR_4_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_CNR_4_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_CNR_4_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_CNR_4_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1290,12 +1426,14 @@ CREATE TABLE `msg_CNR_4` (
 CREATE TABLE `msg_Flags` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `flags` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Flags_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Flags_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Flags_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Flags_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1306,12 +1444,14 @@ CREATE TABLE `msg_Flags` (
 CREATE TABLE `msg_TrackingTimeCA` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tt` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_TrackingTimeCA_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_TrackingTimeCA_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_TrackingTimeCA_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_TrackingTimeCA_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1322,6 +1462,7 @@ CREATE TABLE `msg_TrackingTimeCA` (
 CREATE TABLE `msg_NavStatus` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `ns` BLOB, 
@@ -1329,6 +1470,7 @@ CREATE TABLE `msg_NavStatus` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_NavStatus_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_NavStatus_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_NavStatus_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_NavStatus_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1339,12 +1481,14 @@ CREATE TABLE `msg_NavStatus` (
 CREATE TABLE `msg_IonoDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `delay` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_IonoDelay_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_IonoDelay_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_IonoDelay_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_IonoDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1355,6 +1499,7 @@ CREATE TABLE `msg_IonoDelay` (
 CREATE TABLE `msg_GPSAlm0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1375,6 +1520,7 @@ CREATE TABLE `msg_GPSAlm0` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSAlm0_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GPSAlm0_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GPSAlm0_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GPSAlm0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1385,6 +1531,7 @@ CREATE TABLE `msg_GPSAlm0` (
 CREATE TABLE `msg_GALAlm` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `gps` BIGINT UNSIGNED, 
@@ -1392,6 +1539,7 @@ CREATE TABLE `msg_GALAlm` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALAlm_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GALAlm_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GALAlm_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GALAlm_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1402,6 +1550,7 @@ CREATE TABLE `msg_GALAlm` (
 CREATE TABLE `msg_GLOAlmanac` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1420,6 +1569,7 @@ CREATE TABLE `msg_GLOAlmanac` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOAlmanac_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GLOAlmanac_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GLOAlmanac_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GLOAlmanac_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1430,6 +1580,7 @@ CREATE TABLE `msg_GLOAlmanac` (
 CREATE TABLE `msg_WAASAlmanac` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `waasPrn` TINYINT UNSIGNED, 
@@ -1448,6 +1599,7 @@ CREATE TABLE `msg_WAASAlmanac` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASAlmanac_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_WAASAlmanac_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_WAASAlmanac_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_WAASAlmanac_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1458,6 +1610,7 @@ CREATE TABLE `msg_WAASAlmanac` (
 CREATE TABLE `msg_GPSEphemeris0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1492,6 +1645,7 @@ CREATE TABLE `msg_GPSEphemeris0` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GPSEphemeris0_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GPSEphemeris0_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GPSEphemeris0_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GPSEphemeris0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1502,6 +1656,7 @@ CREATE TABLE `msg_GPSEphemeris0` (
 CREATE TABLE `msg_GLOEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sv` TINYINT UNSIGNED, 
@@ -1525,6 +1680,7 @@ CREATE TABLE `msg_GLOEphemeris` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GLOEphemeris_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GLOEphemeris_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GLOEphemeris_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GLOEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1535,6 +1691,7 @@ CREATE TABLE `msg_GLOEphemeris` (
 CREATE TABLE `msg_WAASEhemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `waasPrn` TINYINT UNSIGNED, 
@@ -1558,6 +1715,7 @@ CREATE TABLE `msg_WAASEhemeris` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASEhemeris_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_WAASEhemeris_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_WAASEhemeris_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_WAASEhemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1568,6 +1726,7 @@ CREATE TABLE `msg_WAASEhemeris` (
 CREATE TABLE `msg_GALEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `gps` BIGINT UNSIGNED, 
@@ -1581,6 +1740,7 @@ CREATE TABLE `msg_GALEphemeris` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALEphemeris_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GALEphemeris_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GALEphemeris_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GALEphemeris_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1591,6 +1751,7 @@ CREATE TABLE `msg_GALEphemeris` (
 CREATE TABLE `msg_GpsNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `recSize` TINYINT UNSIGNED, 
@@ -1598,6 +1759,7 @@ CREATE TABLE `msg_GpsNavData` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GpsNavData_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GpsNavData_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GpsNavData_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GpsNavData_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1608,6 +1770,7 @@ CREATE TABLE `msg_GpsNavData` (
 CREATE TABLE `msg_GloNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `recSize` TINYINT UNSIGNED, 
@@ -1615,6 +1778,7 @@ CREATE TABLE `msg_GloNavData` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloNavData_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GloNavData_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GloNavData_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GloNavData_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1625,6 +1789,7 @@ CREATE TABLE `msg_GloNavData` (
 CREATE TABLE `msg_WAASRawMessage` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `prn` TINYINT UNSIGNED, 
@@ -1634,6 +1799,7 @@ CREATE TABLE `msg_WAASRawMessage` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_WAASRawMessage_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_WAASRawMessage_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_WAASRawMessage_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_WAASRawMessage_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1644,6 +1810,7 @@ CREATE TABLE `msg_WAASRawMessage` (
 CREATE TABLE `msg_GALRawMessage` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `prn` TINYINT UNSIGNED, 
@@ -1654,6 +1821,7 @@ CREATE TABLE `msg_GALRawMessage` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GALRawMessage_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GALRawMessage_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GALRawMessage_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GALRawMessage_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1664,6 +1832,7 @@ CREATE TABLE `msg_GALRawMessage` (
 CREATE TABLE `msg_GloPhaseDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `fcn` BLOB, 
@@ -1672,6 +1841,7 @@ CREATE TABLE `msg_GloPhaseDelay` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_GloPhaseDelay_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_GloPhaseDelay_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_GloPhaseDelay_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_GloPhaseDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1682,6 +1852,7 @@ CREATE TABLE `msg_GloPhaseDelay` (
 CREATE TABLE `msg_RotationMatrix` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -1695,6 +1866,7 @@ CREATE TABLE `msg_RotationMatrix` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationMatrix_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RotationMatrix_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RotationMatrix_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RotationMatrix_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1705,6 +1877,7 @@ CREATE TABLE `msg_RotationMatrix` (
 CREATE TABLE `msg_RotationMatrixAndVectors` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -1721,6 +1894,7 @@ CREATE TABLE `msg_RotationMatrixAndVectors` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationMatrixAndVectors_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RotationMatrixAndVectors_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RotationMatrixAndVectors_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RotationMatrixAndVectors_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1731,6 +1905,7 @@ CREATE TABLE `msg_RotationMatrixAndVectors` (
 CREATE TABLE `msg_RotationAngles` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -1744,6 +1919,7 @@ CREATE TABLE `msg_RotationAngles` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RotationAngles_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RotationAngles_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RotationAngles_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RotationAngles_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1754,6 +1930,7 @@ CREATE TABLE `msg_RotationAngles` (
 CREATE TABLE `msg_AngularVelocity` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -1765,6 +1942,7 @@ CREATE TABLE `msg_AngularVelocity` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_AngularVelocity_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_AngularVelocity_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_AngularVelocity_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_AngularVelocity_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1775,6 +1953,7 @@ CREATE TABLE `msg_AngularVelocity` (
 CREATE TABLE `msg_InertialMeasurements` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `accelerations` BLOB, 
@@ -1782,6 +1961,7 @@ CREATE TABLE `msg_InertialMeasurements` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_InertialMeasurements_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_InertialMeasurements_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_InertialMeasurements_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_InertialMeasurements_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1792,6 +1972,7 @@ CREATE TABLE `msg_InertialMeasurements` (
 CREATE TABLE `msg_ExtEvent` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `ms` INT, 
@@ -1800,6 +1981,7 @@ CREATE TABLE `msg_ExtEvent` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ExtEvent_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_ExtEvent_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_ExtEvent_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_ExtEvent_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1810,12 +1992,14 @@ CREATE TABLE `msg_ExtEvent` (
 CREATE TABLE `msg_PPSOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `offs` FLOAT, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PPSOffset_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PPSOffset_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PPSOffset_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PPSOffset_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1826,6 +2010,7 @@ CREATE TABLE `msg_PPSOffset` (
 CREATE TABLE `msg_RcvTimeOffsAtPPS` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `offs` DOUBLE, 
@@ -1833,6 +2018,7 @@ CREATE TABLE `msg_RcvTimeOffsAtPPS` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvTimeOffsAtPPS_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvTimeOffsAtPPS_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvTimeOffsAtPPS_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvTimeOffsAtPPS_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1843,6 +2029,7 @@ CREATE TABLE `msg_RcvTimeOffsAtPPS` (
 CREATE TABLE `msg_RefEpoch` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sample` SMALLINT UNSIGNED, 
@@ -1851,6 +2038,7 @@ CREATE TABLE `msg_RefEpoch` (
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RefEpoch_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RefEpoch_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RefEpoch_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RefEpoch_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1861,6 +2049,7 @@ CREATE TABLE `msg_RefEpoch` (
 CREATE TABLE `msg_RawMeas` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sample` SMALLINT UNSIGNED, 
@@ -1872,6 +2061,7 @@ CREATE TABLE `msg_RawMeas` (
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RawMeas_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RawMeas_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RawMeas_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RawMeas_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1882,6 +2072,7 @@ CREATE TABLE `msg_RawMeas` (
 CREATE TABLE `msg_PosVelVector` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sample` SMALLINT UNSIGNED, 
@@ -1898,6 +2089,7 @@ CREATE TABLE `msg_PosVelVector` (
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_PosVelVector_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_PosVelVector_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_PosVelVector_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_PosVelVector_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1908,6 +2100,7 @@ CREATE TABLE `msg_PosVelVector` (
 CREATE TABLE `msg_ClockOffsets` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `sample` SMALLINT UNSIGNED, 
@@ -1917,6 +2110,7 @@ CREATE TABLE `msg_ClockOffsets` (
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ClockOffsets_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_ClockOffsets_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_ClockOffsets_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_ClockOffsets_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1927,11 +2121,13 @@ CREATE TABLE `msg_ClockOffsets` (
 CREATE TABLE `msg_RE` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `reply` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RE_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RE_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RE_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RE_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1942,11 +2138,13 @@ CREATE TABLE `msg_RE` (
 CREATE TABLE `msg_ER` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `error` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_ER_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_ER_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_ER_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_ER_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1957,6 +2155,7 @@ CREATE TABLE `msg_ER` (
 CREATE TABLE `msg_IonoParams` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tot` INT UNSIGNED, 
@@ -1972,6 +2171,7 @@ CREATE TABLE `msg_IonoParams` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_IonoParams_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_IonoParams_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_IonoParams_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_IonoParams_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -1982,6 +2182,7 @@ CREATE TABLE `msg_IonoParams` (
 CREATE TABLE `msg_Event` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `time` INT UNSIGNED, 
@@ -1990,6 +2191,7 @@ CREATE TABLE `msg_Event` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Event_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Event_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Event_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Event_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2000,12 +2202,14 @@ CREATE TABLE `msg_Event` (
 CREATE TABLE `msg_Latency` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `lt` TINYINT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Latency_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Latency_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Latency_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Latency_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2016,6 +2220,7 @@ CREATE TABLE `msg_Latency` (
 CREATE TABLE `msg_Wrapper` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `id_sugar` TINYINT UNSIGNED, 
@@ -2023,6 +2228,7 @@ CREATE TABLE `msg_Wrapper` (
     `cs` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Wrapper_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Wrapper_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Wrapper_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Wrapper_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2033,6 +2239,7 @@ CREATE TABLE `msg_Wrapper` (
 CREATE TABLE `msg_Params` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `params` VARCHAR(1000), 
@@ -2040,6 +2247,7 @@ CREATE TABLE `msg_Params` (
     `cs` VARCHAR(1000), 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Params_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Params_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Params_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Params_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2050,6 +2258,7 @@ CREATE TABLE `msg_Params` (
 CREATE TABLE `msg_LoggingHistory` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `svsCount` TINYINT UNSIGNED, 
@@ -2062,6 +2271,7 @@ CREATE TABLE `msg_LoggingHistory` (
     `hist` BLOB, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_LoggingHistory_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_LoggingHistory_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_LoggingHistory_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_LoggingHistory_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2072,6 +2282,7 @@ CREATE TABLE `msg_LoggingHistory` (
 CREATE TABLE `msg_BaseInfo` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `x` DOUBLE, 
@@ -2082,6 +2293,7 @@ CREATE TABLE `msg_BaseInfo` (
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_BaseInfo_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_BaseInfo_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_BaseInfo_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_BaseInfo_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2092,12 +2304,14 @@ CREATE TABLE `msg_BaseInfo` (
 CREATE TABLE `msg_Security0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `data` BLOB, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Security0_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Security0_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Security0_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Security0_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2108,12 +2322,14 @@ CREATE TABLE `msg_Security0` (
 CREATE TABLE `msg_Security1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `data` BLOB, 
     `crc16` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_Security1_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_Security1_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_Security1_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_Security1_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2124,12 +2340,14 @@ CREATE TABLE `msg_Security1` (
 CREATE TABLE `msg_TrackingTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `tt` INT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_TrackingTime_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_TrackingTime_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_TrackingTime_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_TrackingTime_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2140,12 +2358,14 @@ CREATE TABLE `msg_TrackingTime` (
 CREATE TABLE `msg_RcvOscOffs` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `val` FLOAT, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_RcvOscOffs_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_RcvOscOffs_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_RcvOscOffs_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_RcvOscOffs_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2156,11 +2376,13 @@ CREATE TABLE `msg_RcvOscOffs` (
 CREATE TABLE `msg_EpochEnd` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_EpochEnd_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_EpochEnd_unixTimeEpoch` (`unixTimeEpoch`), 
     INDEX `idx_fk_msg_EpochEnd_idMessageCode` (`idMessageCode`), 
     CONSTRAINT `fk_msg_EpochEnd_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
@@ -2207,8 +2429,8 @@ INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`)
            (6, 'Header', 6, 'ct_Header'), 
            (7, 'SlotRec', 14, 'ct_SlotRec'), 
            (8, 'ClkOffs', 8, 'ct_ClkOffs'), 
-           (9, 'GPSAlm1', 47, 'ct_GPSAlm1'), 
-           (10, 'GPSEphemeris1', 123, 'ct_GPSEphemeris1');
+           (9, 'GPSAlm1', 46, 'ct_GPSAlm1'), 
+           (10, 'GPSEphemeris1', 122, 'ct_GPSEphemeris1');
 
 -- Наполнение мета-информации о сообщениях
 INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKind`, `idType`, `tableName`) 

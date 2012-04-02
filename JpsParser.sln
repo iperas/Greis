@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis.Tests", "Greis.Tests\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BUILD_STEPS", "BUILD_STEPS\BUILD_STEPS.vcxproj", "{4F58376E-7494-4819-BD89-1CD36CA9A414}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JpsToDatabase", "JpsToDatabase\JpsToDatabase.vcxproj", "{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -101,6 +103,16 @@ Global
 		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Win32.ActiveCfg = Release|Win32
 		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|Win32.Build.0 = Release|Win32
 		{4F58376E-7494-4819-BD89-1CD36CA9A414}.Release|x86.ActiveCfg = Release|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Debug|Win32.Build.0 = Debug|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Debug|x86.ActiveCfg = Debug|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Win32.ActiveCfg = Release|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Win32.Build.0 = Release|Win32
+		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

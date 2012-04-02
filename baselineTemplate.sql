@@ -2,7 +2,7 @@
 SET GLOBAL sql_mode='STRICT_ALL_TABLES';
 
 -- @{TABLE-DROP-HERE}@
-DROP TABLE IF EXISTS `exampleMessage`;
+DROP TABLE IF EXISTS `rawBinaryMessages`;
 DROP TABLE IF EXISTS `epoch`;
 DROP TABLE IF EXISTS `customTypeVariableSizeForDimension`;
 DROP TABLE IF EXISTS `messageVariableSizeForDimension`;
@@ -147,6 +147,22 @@ CREATE TABLE `messageVariableSizeForDimension` (
          CONSTRAINT `fk_messageVariableSizeForDimension_idVariable` FOREIGN KEY (`idVariable`) 
             REFERENCES `messageVariableMeta` (`id`)
        );
+
+-- message 'FileId': [JP] File Identifier
+CREATE TABLE `rawBinaryMessages` (
+    id SERIAL, 
+    idEpoch BIGINT UNSIGNED NOT NULL, 
+    unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
+    code CHAR(2) NOT NULL, 
+    bodySize INT NOT NULL, 
+    `data` BLOB, 
+    PRIMARY KEY (`id`), 
+    INDEX `idx_fk_rawBinaryMessages_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_rawBinaryMessages_unixTimeEpoch` (`unixTimeEpoch`), 
+    INDEX `idx_fk_rawBinaryMessages_code` (`code`), 
+    CONSTRAINT `fk_rawBinaryMessages_idEpoch` FOREIGN KEY (`idEpoch`) 
+        REFERENCES `epoch` (`id`)
+    );
 
 -- @{TABLE-CREATION-HERE}@
 

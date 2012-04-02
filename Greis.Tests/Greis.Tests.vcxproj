@@ -79,6 +79,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>log4cxx.lib;gtest.lib;QtSql4.lib;QtCore4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(BOOST_DIR)\lib;$(GTEST_DIR)\lib\$(Configuration);$(LOG4CXX)\lib\$(PlatformToolset)\$(Configuration);$(QTDIR)\lib</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

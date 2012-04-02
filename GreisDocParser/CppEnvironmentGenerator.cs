@@ -12,7 +12,8 @@ namespace GreisDocParser
     public class CppEnvironmentGenerator
     {
         private const string StubToken = "// ${stub}";
-        private const string SerializationCodeStubToken = "// ${SerializationCodeStub}";
+        private const string MsgSerializationCodeStubToken = "// ${MsgSerializationCodeStub}";
+        private const string CtSerializationCodeStubToken = "// ${CtSerializationCodeStub}";
         private const string IncludesStubToken = "// ${includes}";
         private const string ClassFieldsStubToken = "// ${ClassFieldsStub}";
         private const string ClassFieldsAccessorsStubToken = "// ${ClassFieldsAccessorsStub}";
@@ -57,6 +58,8 @@ namespace GreisDocParser
             generateCustomTypes();
         }
 
+        #region MySqlSinkGeneratedMembers.cpp
+
         private void generateMySqlSink()
         {
             var templatePath = Path.Combine(_cppEnvTemplatesDir, "MySqlSinkGeneratedMembers.template.cpp");
@@ -66,67 +69,28 @@ namespace GreisDocParser
 
             var insertersCreationCode = generateInsertersCreationCodeContent(codeIntend);
 
-            var greisTypesNames = Enum.GetNames(typeof(GreisTypes));
+            var msgSerializationContent = generateMsgMySqlSinkSerializationContent(codeIntend);
+            var ctSerializationContent = generateCtMySqlSinkSerializationContent(codeIntend);
+
+            var fileContent = templateStr.Replace(InsertersCreationCodeStubToken, insertersCreationCode)
+                                         .Replace(MsgSerializationCodeStubToken, msgSerializationContent)
+                                         .Replace(CtSerializationCodeStubToken, ctSerializationContent);
+
+            File.WriteAllText(Path.Combine(_outDir, "MySqlSinkGeneratedMembers.cpp"), fileContent,
+                              Encoding.Default);
+        }
+
+        private string generateMsgMySqlSinkSerializationContent(string codeIntend)
+        {
             var serializationContentList = new List<string>();
             foreach (var msg in _metaInfo.StandardMessages.OrderBy(m => m.Name))
             {
-                string linesStr;
-                if (msg.Size != (int)SizeSpecialValue.Dynamic)
-                {
-                    var lines = new List<string>();
-                    foreach (var variable in msg.Variables)
-                    {
-                        string line;
-                        if (variable.IsScalar)
-                        {
-                            if (variable.GreisType == GreisTypes.a1.ToString())
-                            {
-                                // Types::a1
-                                line = string.Format("fields << _serializer.SerializeChar({0});",
-                                    getFieldNameForVariable(variable));
-                            }
-                            else if (greisTypesNames.Contains(variable.GreisType))
-                            {
-                                // other Greis types
-                                line = string.Format("fields << _serializer.Serialize({0});",
-                                    getFieldNameForVariable(variable));
-                            }
-                            else
-                            {
-                                // custom type
-                                line = "// TODO";
-                            }
-                        }
-                        else if (variable.IsLinearArray)
-                        {
-                            if (greisTypesNames.Contains(variable.GreisType))
-                            {
-                                // string and other Greis types
-                                line = string.Format("fields << _serializer.Serialize({0});",
-                                    getFieldNameForVariable(variable));
-                            }
-                            else
-                            {
-                                // custom type
-                                line = "// TODO";
-                            }
-                        }
-                        else
-                        {
-                            throw new NotSupportedException("Multi-dim arrays are not supported.");
-                        }
-                        lines.Add(line);
-                    }
-                    linesStr = string.Join("\r\n        " + codeIntend, lines);
-                } else
-                {
-                    linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
-                }
+                var linesStr = generateVariablesMySqlSinkSerializationContent(codeIntend, msg);
 
                 var msgSerializationContent =
                     string.Format("case EMessageId::{2}:\r\n{0}" +
                                   "    {{\r\n{0}" +
-                                  "        auto cmsg = dynamic_cast<{3}*>(stdMsg);\r\n{0}" +
+                                  "        auto c = dynamic_cast<{3}*>(msg);\r\n{0}" +
                                   "        {1}\r\n{0}" +
                                   "    }}\r\n{0}" +
                                   "    break;", codeIntend, linesStr,
@@ -134,12 +98,88 @@ namespace GreisDocParser
                 serializationContentList.Add(msgSerializationContent);
             }
             var serializationContent = string.Join("\r\n" + codeIntend, serializationContentList);
+            return serializationContent;
+        }
 
-            var fileContent = templateStr.Replace(InsertersCreationCodeStubToken, insertersCreationCode)
-                                         .Replace(SerializationCodeStubToken, serializationContent);
+        private string generateCtMySqlSinkSerializationContent(string codeIntend)
+        {
+            var serializationContentList = new List<string>();
+            foreach (var ct in _metaInfo.CustomTypes.OrderBy(m => m.Name))
+            {
+                var linesStr = generateVariablesMySqlSinkSerializationContent(codeIntend, ct);
 
-            File.WriteAllText(Path.Combine(_outDir, "MySqlSinkGeneratedMembers.cpp"), fileContent,
-                              Encoding.Default);
+                var ctSerializationContent =
+                    string.Format("case ECustomTypeId::{2}:\r\n{0}" +
+                                  "    {{\r\n{0}" +
+                                  "        auto c = dynamic_cast<{3}*>(ct);\r\n{0}" +
+                                  "        {1}\r\n{0}" +
+                                  "    }}\r\n{0}" +
+                                  "    break;", codeIntend, linesStr,
+                                  getEnumNameForCustomType(ct), getClassName(ct));
+                serializationContentList.Add(ctSerializationContent);
+            }
+            var serializationContent = string.Join("\r\n" + codeIntend, serializationContentList);
+            return serializationContent;
+        }
+
+        private string generateVariablesMySqlSinkSerializationContent(string codeIntend, CustomType msg)
+        {
+            string linesStr;
+            if (msg.Size != (int) SizeSpecialValue.Dynamic)
+            {
+                var lines = new List<string>();
+                foreach (var variable in msg.Variables)
+                {
+                    string line;
+                    if (variable.IsScalar)
+                    {
+                        if (variable.GreisType == GreisTypes.a1.ToString())
+                        {
+                            // Types::a1
+                            line = string.Format("out << _serializer.SerializeChar(c->{0}());",
+                                                 getAccessorNameForVariable(variable));
+                        }
+                        else if (_simpleTypes.Contains(variable.GreisType))
+                        {
+                            // other Greis types
+                            line = string.Format("out << _serializer.Serialize(c->{0}());",
+                                                 getAccessorNameForVariable(variable));
+                        }
+                        else
+                        {
+                            // custom type
+                            line = string.Format("out << addCustomType(c->{0}().get());",
+                                                 getAccessorNameForVariable(variable));
+                        }
+                    }
+                    else if (variable.IsLinearArray)
+                    {
+                        if (_simpleTypes.Contains(variable.GreisType))
+                        {
+                            // string and other Greis types
+                            line = string.Format("out << _serializer.Serialize(c->{0}());",
+                                                 getAccessorNameForVariable(variable));
+                        }
+                        else
+                        {
+                            // custom type
+                            line = string.Format("out << addCustomTypesAndSerialize(c->{0}());",
+                                                 getAccessorNameForVariable(variable));
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException("Multi-dim arrays are not supported.");
+                    }
+                    lines.Add(line);
+                }
+                linesStr = string.Join("\r\n        " + codeIntend, lines);
+            }
+            else
+            {
+                linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
+            }
+            return linesStr;
         }
 
         private string generateInsertersCreationCodeContent(string codeIntend)
@@ -180,7 +220,7 @@ namespace GreisDocParser
                 var insertCommand = string.Format("INSERT INTO `{0}` ({1}) VALUES ({2})", tableName, columns, valuesSb);
 
                 var inserterVar = string.Format("auto {0} = std::make_shared<DataBatchInserter>(\r\n{1}    " +
-                                                "\"{2}\", \r\n{1}    " +
+                                                "\"{2}\", \r\n{1}    " + 
                                                 "{4}, _connection, \"{3}\", _inserterBatchSize);",
                                                 getInserterVarName(ct), codeIntend, insertCommand, tableName,
                                                 fieldsCount);
@@ -193,6 +233,7 @@ namespace GreisDocParser
                     var op = string.Format("{0}->AddChild({1});", getInserterVarName(ct), getInserterVarName(child));
                     addChildOps.Add(op);
                 }
+                addChildOps.Add(string.Format("{0}->AddChild(_epochInserter);", getInserterVarName(ct)));
 
                 string insertionIntoMaps;
                 if (ct is StandardMessage)
@@ -207,11 +248,25 @@ namespace GreisDocParser
                 }
                 insertionsIntoMaps.Add(insertionIntoMaps);
             }
+            var ctCurrentMaxIds = new List<string>();
+            foreach (var ct in _metaInfo.CustomTypes.OrderBy(c => c.Name))
+            {
+                var tableName = tableNames.GetName(ct);
+
+                var ctCurrentMaxId = string.Format(
+                    "int maxIdFor{0} = _dbHelper->ExecuteSingleValueQuery(\"SELECT MAX(`id`) FROM `{1}`\").toInt();\r\n{2}" +
+                    "_ctCurrentMaxId[ECustomTypeId::{0}] = maxIdFor{0};", getEnumNameForCustomType(ct), tableName, 
+                    codeIntend);
+                ctCurrentMaxIds.Add(ctCurrentMaxId);
+            }
             string insertersCreationCode = string.Join("\r\n" + codeIntend, inserterVars) + "\r\n\r\n" + codeIntend +
                                            string.Join("\r\n" + codeIntend, addChildOps) + "\r\n\r\n" + codeIntend +
-                                           string.Join("\r\n" + codeIntend, insertionsIntoMaps);
+                                           string.Join("\r\n" + codeIntend, insertionsIntoMaps) + "\r\n\r\n" + codeIntend + 
+                                           string.Join("\r\n" + codeIntend, ctCurrentMaxIds);
             return insertersCreationCode;
         }
+
+        #endregion
 
         private static string getCodeIntend(string templateStr, string stubToken)
         {
