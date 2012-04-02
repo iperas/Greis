@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "MySqlSinkTests.h"
 #include "JpsFileTests.h"
 #include "GreisBinarySerializerTests.h"
 #include "GreisMessageStreamTests.h"

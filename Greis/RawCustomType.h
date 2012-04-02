@@ -14,7 +14,7 @@ namespace Greis
         {
         }
 
-        virtual EMessageId::Type IdNumber() const { return ECustomTypeId::Unknown; }
+        virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::Unknown; }
         virtual QByteArray ToByteArray() const { return _message; };
         virtual int Size() const { return _message.size(); };
 

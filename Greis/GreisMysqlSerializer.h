@@ -20,7 +20,9 @@ namespace Greis
 
         // Serialization
 
-        // Custom Types are not serialized this way
+        // Important limitations:
+        // Custom Types are not serialized this way (nor scalar or vector).
+        // Only linear vectors of Greis Types are supported.
 
         inline QVariant SerializeChar(Types::a1 val)
         {
@@ -72,6 +74,7 @@ namespace Greis
             return QVariant(QString::fromAscii(val.c_str(), val.size()));
         }
 
+        // vector of Greis types
         template<typename T>
         QVariant Serialize(const std::vector<T>& val)
         {

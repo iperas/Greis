@@ -1,7 +1,7 @@
 #include "StdMessageFactory.h"
 #include "ProjectBase/Logger.h"
 #include "RawStdMessage.h"
-// ${includes}
+#include "AllStdMessages.h"
 
 namespace Greis
 {

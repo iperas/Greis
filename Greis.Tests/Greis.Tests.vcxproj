@@ -99,6 +99,7 @@
     <ClInclude Include="GreisBinarySerializerTests.h" />
     <ClInclude Include="GreisMessageStreamTests.h" />
     <ClInclude Include="JpsFileTests.h" />
+    <ClInclude Include="MySqlSinkTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

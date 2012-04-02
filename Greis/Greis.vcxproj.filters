@@ -390,6 +390,9 @@
     <ClInclude Include="ECustomTypeId.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AllStdMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NonStdTextMessage.cpp">
@@ -732,6 +735,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JpsFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MySqlSinkGeneratedMembers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MySqlSink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

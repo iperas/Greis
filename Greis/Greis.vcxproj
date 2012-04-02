@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllStdMessages.h" />
     <ClInclude Include="CustomType.h" />
     <ClInclude Include="CustomTypes\ClkOffsCustomType.h" />
     <ClInclude Include="CustomTypes\GPSAlm1CustomType.h" />
@@ -211,6 +212,8 @@
     <ClCompile Include="GreisBinarySerializer.cpp" />
     <ClCompile Include="GreisMessageStream.cpp" />
     <ClCompile Include="JpsFile.cpp" />
+    <ClCompile Include="MySqlSink.cpp" />
+    <ClCompile Include="MySqlSinkGeneratedMembers.cpp" />
     <ClCompile Include="NonStdTextMessage.cpp" />
     <ClCompile Include="RawStdMessage.cpp" />
     <ClCompile Include="StdMessage.cpp" />
