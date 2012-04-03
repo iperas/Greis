@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BUILD_STEPS", "BUILD_STEPS\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JpsToDatabase", "JpsToDatabase\JpsToDatabase.vcxproj", "{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DatabaseToJps", "DatabaseToJps\DatabaseToJps.vcxproj", "{427D8279-65B1-4F05-A6F9-134E3CBE29AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -101,6 +103,16 @@ Global
 		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Win32.ActiveCfg = Release|Win32
 		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|Win32.Build.0 = Release|Win32
 		{7FD82A61-B4AA-44B2-8A65-4999BA8176EE}.Release|x86.ActiveCfg = Release|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Debug|Win32.Build.0 = Debug|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Debug|x86.ActiveCfg = Debug|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Release|Win32.ActiveCfg = Release|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Release|Win32.Build.0 = Release|Win32
+		{427D8279-65B1-4F05-A6F9-134E3CBE29AC}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,6 +14,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    RawMeasStdMessage::RawMeasStdMessage( const std::string& p_id, int p_bodySize ) 
+        : _id(p_id), _bodySize(p_bodySize)
+    {
+    }
 
     std::string RawMeasStdMessage::ToString() const
     {

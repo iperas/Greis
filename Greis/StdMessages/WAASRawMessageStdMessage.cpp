@@ -23,6 +23,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    WAASRawMessageStdMessage::WAASRawMessageStdMessage( const std::string& p_id, int p_bodySize ) 
+        : _id(p_id), _bodySize(p_bodySize)
+    {
+    }
 
     std::string WAASRawMessageStdMessage::ToString() const
     {

@@ -2,6 +2,7 @@
 #include <clocale>
 #include <locale>
 #include <gtest/gtest.h>
+#include "MySqlSourceTests.h"
 #include "MySqlSinkTests.h"
 #include "JpsFileTests.h"
 #include "GreisBinarySerializerTests.h"
@@ -18,7 +19,6 @@ int main(int argc, char **argv)
 
     QCoreApplication a(argc, argv);
 
-    // кодеки
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec* codecMs = QTextCodec::codecForName("Windows-1251");
     QTextCodec::setCodecForCStrings(codecMs);

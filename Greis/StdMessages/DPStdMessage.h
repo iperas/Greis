@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(DPStdMessage);
 
         DPStdMessage(const char* p_message, int p_length);
+        DPStdMessage(const std::string& p_id, int p_bodySize);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

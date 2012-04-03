@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(CNR4StdMessage);
 
         CNR4StdMessage(const char* p_message, int p_length);
+        CNR4StdMessage(const std::string& p_id, int p_bodySize);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

@@ -95,6 +95,7 @@
     <ClInclude Include="JpsFile.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MySqlSink.h" />
+    <ClInclude Include="MySqlSource.h" />
     <ClInclude Include="NonStdTextMessage.h" />
     <ClInclude Include="RawCustomType.h" />
     <ClInclude Include="RawStdMessage.h" />
@@ -214,6 +215,8 @@
     <ClCompile Include="JpsFile.cpp" />
     <ClCompile Include="MySqlSink.cpp" />
     <ClCompile Include="MySqlSinkGeneratedMembers.cpp" />
+    <ClCompile Include="MySqlSource.cpp" />
+    <ClCompile Include="MySqlSourceGeneratedMembers.cpp" />
     <ClCompile Include="NonStdTextMessage.cpp" />
     <ClCompile Include="RawStdMessage.cpp" />
     <ClCompile Include="StdMessage.cpp" />

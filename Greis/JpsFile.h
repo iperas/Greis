@@ -19,13 +19,16 @@ namespace Greis
         static JpsFile::UniquePtr_t FromFile(QString filename);
 
         inline const std::vector<Message::UniquePtr_t>& Head() const { return _head; }
+        inline std::vector<Message::UniquePtr_t>& Head() { return _head; }
         inline const std::vector<Epoch::UniquePtr_t>& Body() const { return _body; }
+        inline std::vector<Epoch::UniquePtr_t>& Body() { return _body; }
 
         QByteArray ToByteArray() const;
-    private:
+
         JpsFile()
         {
         }
+    private:
 
         inline static void updateTimePart( RcvTimeStdMessage* msg, QDateTime &dateTime )
         {

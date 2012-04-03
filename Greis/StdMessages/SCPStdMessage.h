@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(SCPStdMessage);
 
         SCPStdMessage(const char* p_message, int p_length);
+        SCPStdMessage(const std::string& p_id, int p_bodySize);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

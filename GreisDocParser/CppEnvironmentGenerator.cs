@@ -24,6 +24,7 @@ namespace GreisDocParser
         private const string EMessageIdStubToken = "${EMessageId}";
         private const string ECustomTypeIdStubToken = "${ECustomTypeId}";
         private const string InsertersCreationCodeStubToken = "// ${InsertersCreationCode}";
+        private const string HandleMessageStubToken = "// ${HandleMessageStub}";
         private const string StdMessagesDir = "StdMessages";
         private const string CustomTypesDir = "CustomTypes";
         private readonly MetaInfo _metaInfo;
@@ -48,6 +49,7 @@ namespace GreisDocParser
         {
             _outDir = outDir;
 
+            generateMySqlSource();
             generateAllStdMessagesHeader();
             generateMySqlSink();
             generateEMessageId();
@@ -57,6 +59,34 @@ namespace GreisDocParser
             generateStdMessages();
             generateCustomTypes();
         }
+
+        #region MySqlSourceGeneratedMembers.cpp
+
+        private void generateMySqlSource()
+        {
+            var templatePath = Path.Combine(_cppEnvTemplatesDir, "MySqlSourceGeneratedMembers.template.cpp");
+            var templateStr = File.ReadAllText(templatePath, Encoding.Default);
+
+            var codeIntend = getCodeIntend(templateStr, HandleMessageStubToken);
+
+            var handleMessageContent = generateHandleMessageContent(codeIntend);
+
+            var fileContent = templateStr.Replace(HandleMessageStubToken, handleMessageContent);
+
+            File.WriteAllText(Path.Combine(_outDir, "MySqlSourceGeneratedMembers.cpp"), fileContent,
+                              Encoding.Default);
+        }
+
+        private string generateHandleMessageContent(string codeIntend)
+        {
+            foreach (var msg in _metaInfo.StandardMessages)
+            {
+                
+            }
+            return "";
+        }
+
+        #endregion
 
         #region MySqlSinkGeneratedMembers.cpp
 
