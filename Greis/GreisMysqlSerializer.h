@@ -94,89 +94,72 @@ namespace Greis
 
         // Deserialization
 
-        /*void Deserialize(const char* data, unsigned char& retVal)
+        inline void DeserializeChar(const QVariant& val, char& out)
         {
-            retVal = *((unsigned char*)data);
+            out = val.toChar().toAscii();
         }
 
-        void Deserialize(const char* data, unsigned short& retVal)
+        inline void Deserialize(const QVariant& val, std::string& out)
         {
-            retVal = _bitConverter.GetUShort(data);
+            auto qs = val.toString().toAscii();
+            out = std::string(qs, qs.size());
         }
 
-        void Deserialize(const char* data, unsigned int& retVal)
+        inline void Deserialize(const QVariant& val, unsigned char& out)
         {
-            retVal = _bitConverter.GetUInt(data);
+            out = (unsigned char) val.toUInt();
         }
 
-        void Deserialize(const char* data, char& retVal)
+        inline void Deserialize(const QVariant& val, unsigned short& out)
         {
-            retVal = *data;
+            out = (unsigned short) val.toUInt();
         }
 
-        void Deserialize(const char* data, short& retVal)
+        inline void Deserialize(const QVariant& val, unsigned int& out)
         {
-            retVal = _bitConverter.GetShort(data);
+            out = val.toUInt();
         }
 
-        void Deserialize(const char* data, int& retVal)
+        inline void Deserialize(const QVariant& val, char& out)
         {
-            retVal = _bitConverter.GetInt(data);
+            out = (char) val.toInt();
         }
 
-        void Deserialize(const char* data, float& retVal)
+        inline void Deserialize(const QVariant& val, short& out)
         {
-            retVal = _bitConverter.GetFloat(data);
+            out = (short) val.toInt();
         }
 
-        void Deserialize(const char* data, double& retVal)
+        inline void Deserialize(const QVariant& val, int& out)
         {
-            retVal = _bitConverter.GetDouble(data);
+            out = val.toInt();
         }
 
-        void Deserialize(const char* data, int length, std::string& retVal)
+        inline void Deserialize(const QVariant& val, float& out)
         {
-            retVal = std::string(data, length);
+            out = val.toFloat();
         }
 
+        inline void Deserialize(const QVariant& val, double& out)
+        {
+            out = val.toDouble();
+        }
+
+        // vector of Greis types
         template<typename T>
-        void Deserialize(const char* data, int length, std::unique_ptr<T>& retVal)
-        {
-            retVal = ProjectBase::make_unique<T>(data, length);
-        }
-
-        // Deserialization for std::vector<Greis::Type>
-        template<typename T>
-        void Deserialize(const char* data, int length, std::vector<T>& retVal)
+        inline void Deserialize(const QVariant& val, std::vector<T>& out)
         {
             static_assert(std::is_arithmetic<T>::value, "T is not a Greis type.");
-            int itemSize = sizeof(T);
-            assert(length % itemSize == 0);
-            retVal.clear();
-            for (int i = 0; i < length; i += itemSize)
-            {
-                T val;
-                Deserialize(data + i, val);
-                retVal.push_back(std::move(val));
-            }
+
+            QByteArray ba = val.toByteArray();
+            _binSerializer.Deserialize(ba, ba.size(), out);
         }
 
-        // Deserialization for std::vector<std::string> is not possible
-
-        // Deserialization for std::vector<CustomType::UniquePtr_t> && std::vector<std::vector<...>> 
-        // (where ... is GreisType or vector)
-        template<typename T>
-        void Deserialize(const char* data, int length, int itemSize, std::vector<T>& retVal)
+        inline void DeserializeIds(const QVariant& val, std::vector<int>& out)
         {
-            assert(length % itemSize == 0);
-            retVal.clear();
-            for (int i = 0; i < length; i += itemSize)
-            {
-                T val;
-                Deserialize(data + i, itemSize, val);
-                retVal.push_back(std::move(val));
-            }
-        }*/
+            QByteArray ba = val.toByteArray();
+            _binSerializer.Deserialize(ba, ba.size(), out);
+        }
     private:
         GreisBinarySerializer _binSerializer;
     };

@@ -21,14 +21,6 @@ namespace Greis
         QMap<qulonglong, Epoch*> epochsByDateTime;
 
         // ${HandleMessageStub}
-        handleMessage(QString("SELECT \
-                              `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, \
-                              `sv`, `frqNum`, `cs` \
-                              FROM `msg_gloephemeris` \
-                              WHERE `unixTimeEpoch` BETWEEN %3 AND %4").
-                              arg(_from.toMSecsSinceEpoch()).
-                              arg(to.toMSecsSinceEpoch()), [] (const QSqlQuery& q, Message* msg) {},
-                              epochsByDateTime);
 
         for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
         {

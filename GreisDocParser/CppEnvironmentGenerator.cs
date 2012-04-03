@@ -60,6 +60,15 @@ namespace GreisDocParser
             generateCustomTypes();
         }
 
+        private void writeGeneratedFile(string filename, string content)
+        {
+            var path = Path.Combine(_outDir, filename);
+            if (File.ReadAllText(path, Encoding.Default) != content)
+            {
+                File.WriteAllText(path, content, Encoding.Default);
+            }
+        }
+
         #region MySqlSourceGeneratedMembers.cpp
 
         private void generateMySqlSource()
@@ -73,17 +82,45 @@ namespace GreisDocParser
 
             var fileContent = templateStr.Replace(HandleMessageStubToken, handleMessageContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "MySqlSourceGeneratedMembers.cpp"), fileContent,
-                              Encoding.Default);
+            writeGeneratedFile("MySqlSourceGeneratedMembers.cpp", fileContent);
         }
 
         private string generateHandleMessageContent(string codeIntend)
         {
-            foreach (var msg in _metaInfo.StandardMessages)
+            var tableNames = new TableNameProvider(_metaInfo);
+
+            var handleMessageLines = new List<string>();
+            foreach (var ct in _metaInfo.StandardMessages)
             {
-                
+                var tableName = tableNames.GetName(ct);
+
+                const string predefinedMsgCols =
+                    "`id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                var colNames = ct.Variables.Select(
+                    variable => string.Format("`{0}`", MysqlBaselineGenerator.GetColumnName(variable))).ToArray();
+                var columns = predefinedMsgCols + string.Join(", ", colNames);
+
+                var selectCommand = string.Format("SELECT {0} FROM `{1}` WHERE `unixTimeEpoch` BETWEEN %1 AND %2",
+                                                  columns, tableName);
+
+                var handleMessageFields = "[] (const QSqlQuery& q, Message* msg) {}";
+                /*[&serializer] (const QSqlQuery& q, Message* msg)
+                {
+                    auto c = dynamic_cast<FileIdStdMessage*>(msg);
+                    serializer.Deserialize(q.value(5), c->IdField());
+                }*/
+
+                var handleMessageLine = string.Format(
+                    "handleMessage(QString(\"{0}\")\r\n{2}" +
+                    "    .arg(_from.toMSecsSinceEpoch())\r\n{2}" +
+                    "    .arg(to.toMSecsSinceEpoch()), {1}, epochsByDateTime);",
+                    selectCommand, handleMessageFields, codeIntend);
+
+                handleMessageLines.Add(handleMessageLine);
             }
-            return "";
+
+            var result = string.Join("\r\n" + codeIntend, handleMessageLines);
+            return result;
         }
 
         #endregion
@@ -106,8 +143,7 @@ namespace GreisDocParser
                                          .Replace(MsgSerializationCodeStubToken, msgSerializationContent)
                                          .Replace(CtSerializationCodeStubToken, ctSerializationContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "MySqlSinkGeneratedMembers.cpp"), fileContent,
-                              Encoding.Default);
+            writeGeneratedFile("MySqlSinkGeneratedMembers.cpp", fileContent);
         }
 
         private string generateMsgMySqlSinkSerializationContent(string codeIntend)
@@ -370,10 +406,8 @@ namespace GreisDocParser
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
-                File.WriteAllText(Path.Combine(_outDir, StdMessagesDir, className + ".h"), fileHContent, 
-                                  Encoding.Default);
-                File.WriteAllText(Path.Combine(_outDir, StdMessagesDir, className + ".cpp"), fileCppContent, 
-                                  Encoding.Default);
+                writeGeneratedFile(Path.Combine(StdMessagesDir, className + ".h"), fileHContent);
+                writeGeneratedFile(Path.Combine(StdMessagesDir, className + ".cpp"), fileCppContent);
             }
         }
 
@@ -423,10 +457,8 @@ namespace GreisDocParser
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
-                File.WriteAllText(Path.Combine(_outDir, CustomTypesDir, className + ".h"), fileHContent, 
-                                  Encoding.Default);
-                File.WriteAllText(Path.Combine(_outDir, CustomTypesDir, className + ".cpp"), fileCppContent, 
-                                  Encoding.Default);
+                writeGeneratedFile(Path.Combine(CustomTypesDir, className + ".h"), fileHContent);
+                writeGeneratedFile(Path.Combine(CustomTypesDir, className + ".cpp"), fileCppContent);
             }
         }
 
@@ -700,7 +732,7 @@ namespace GreisDocParser
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "StdMessageFactory.cpp"), fileContent, Encoding.Default);
+            writeGeneratedFile("StdMessageFactory.cpp", fileContent);
         }
 
         private void generateAllStdMessagesHeader()
@@ -716,7 +748,7 @@ namespace GreisDocParser
             var includesContent = string.Join("\r\n", includeLines);
             var fileContent = templateStr.Replace(IncludesStubToken, includesContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "AllStdMessages.h"), fileContent, Encoding.Default);
+            writeGeneratedFile("AllStdMessages.h", fileContent);
         }
 
         private void generateStdMessageGeneratedMembers()
@@ -734,7 +766,7 @@ namespace GreisDocParser
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "StdMessageGeneratedMembers.cpp"), fileContent, Encoding.Default);
+            writeGeneratedFile("StdMessageGeneratedMembers.cpp", fileContent);
         }
 
         private void generateEMessageId()
@@ -750,7 +782,7 @@ namespace GreisDocParser
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "EMessageId.h"), fileContent, Encoding.Default);
+            writeGeneratedFile("EMessageId.h", fileContent);
         }
 
         private void generateECustomTypeId()
@@ -766,7 +798,7 @@ namespace GreisDocParser
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
-            File.WriteAllText(Path.Combine(_outDir, "ECustomTypeId.h"), fileContent, Encoding.Default);
+            writeGeneratedFile("ECustomTypeId.h", fileContent);
         }
 
         private string getInserterVarName(CustomType ct)
