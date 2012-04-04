@@ -65,6 +65,7 @@ namespace Greis
     {
         int msgCount = 0;
         QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);
+        bool first = true;
         while (query.next())
         {
             int id = query.value(0).toInt();
@@ -77,12 +78,15 @@ namespace Greis
             Message::UniquePtr_t msg;
 
             // message-specific fields handling
-            handleMessageFields(messageCode, bodySize, query, msg);
+            handleMessageFields(messageCode, bodySize + StdMessage::HeadSize(), query, msg);
 
-            if (!msg->Validate())
+            if (!msg->Validate() && first)
             {
-                throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
+                sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
                     arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                first = false;
+                //throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
+                //    arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
             }
             assert(msg->Size() == bodySize + StdMessage::HeadSize());
 

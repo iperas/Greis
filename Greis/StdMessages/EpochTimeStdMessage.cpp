@@ -18,8 +18,8 @@ namespace Greis
         assert(p_message - pc_message == p_length);
     }
     
-    EpochTimeStdMessage::EpochTimeStdMessage( const std::string& p_id, int p_bodySize ) 
-        : _id(p_id), _bodySize(p_bodySize)
+    EpochTimeStdMessage::EpochTimeStdMessage( const std::string& p_id, int p_size ) 
+        : _id(p_id), _bodySize(p_size - HeadSize())
     {
     }
 

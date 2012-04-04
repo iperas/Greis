@@ -12,20 +12,14 @@ namespace GreisDocParser
 {
     public partial class MainForm : Form
     {
-        private const string BaselineTemplateFileKey = "baselineTemplateFile";
-        private const string PlainTextReferenceFileKey = "PlainTextReferenceFile";
-        private const string MetaInfoFileKey = "MetaInfoFile";
-        private const string OutputDirKey = "OutputDir";
-        private const string CppEnvTemplatesDirKey = "CppEnvTemplatesDir";
-
         public MainForm()
         {
             InitializeComponent();
 
             theTabControl.SelectedIndex = 1;
-            tbxPlainTextReferenceFilename.Text = getDefaultPathForKey(PlainTextReferenceFileKey);
-            tbxMetaInfoFile.Text = getDefaultPathForKey(MetaInfoFileKey);
-            tbxOutputDir.Text = getDefaultPathForKey(OutputDirKey);
+            tbxPlainTextReferenceFilename.Text = Program.GetDefaultPathForKey(Program.PlainTextReferenceFileKey);
+            tbxMetaInfoFile.Text = Program.GetDefaultPathForKey(Program.MetaInfoFileKey);
+            tbxOutputDir.Text = Program.GetDefaultPathForKey(Program.OutputDirKey);
             radioButtonFile_CheckedChanged(this, EventArgs.Empty);
         }
 
@@ -111,16 +105,10 @@ namespace GreisDocParser
         {
             try
             {
-                // take meta-info
-                var metaInfo = MetaInfo.FromXmlFile(tbxMetaInfoFile.Text);
+                Program.MetaInfoFile = tbxMetaInfoFile.Text;
+                Program.OutputDir = tbxOutputDir.Text;
+                Program.GenerateBaseline();
 
-                // take template file path
-                var baselineTemplateFile = getDefaultPathForKey(BaselineTemplateFileKey);
-
-                // generate script
-                var baselineGenerator = new MysqlBaselineGenerator(metaInfo, baselineTemplateFile, "world");
-                baselineGenerator.GenerateMysqlBaseline(Path.Combine(tbxOutputDir.Text, "baseline.sql"));
-                // end
                 MessageBox.Show("Complete!");
             }
             catch (Exception ex)
@@ -129,35 +117,11 @@ namespace GreisDocParser
             }
         }
 
-        private static string getDefaultPathForKey(string key)
-        {
-            var path = ConfigurationManager.AppSettings[key];
-            if (string.IsNullOrEmpty(path))
-            {
-                return "";
-            }
-            if (path.StartsWith("\\"))
-            {
-                path = path.Substring(1);
-            }
-            if (!Path.IsPathRooted(path))
-            {
-                path = Path.Combine(Application.StartupPath, path);
-            }
-            path = Path.GetFullPath(path);
-            return path;
-        }
-
         private void btnGenerateCppEnv_Click(object sender, EventArgs e)
         {
-            // take meta-info
-            var metaInfo = MetaInfo.FromXmlFile(tbxMetaInfoFile.Text);
-
-            var cppEnvTemplatesDir = getDefaultPathForKey(CppEnvTemplatesDirKey);
-            var outDir = tbxOutputDir.Text + @"\Greis";
-
-            var cppGen = new CppEnvironmentGenerator(metaInfo, cppEnvTemplatesDir);
-            cppGen.Generate(outDir);
+            Program.MetaInfoFile = tbxMetaInfoFile.Text;
+            Program.OutputDir = tbxOutputDir.Text;
+            Program.GenerateCppEnv();
 
             MessageBox.Show("Complete!");
         }

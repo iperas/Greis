@@ -15,7 +15,7 @@ namespace Greis
         SMART_PTR_T(GALAlmStdMessage);
 
         GALAlmStdMessage(const char* p_message, int p_length);
-        GALAlmStdMessage(const std::string& p_id, int p_bodySize);
+        GALAlmStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

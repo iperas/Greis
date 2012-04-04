@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(RcvTimeAccuracyStdMessage);
 
         RcvTimeAccuracyStdMessage(const char* p_message, int p_length);
-        RcvTimeAccuracyStdMessage(const std::string& p_id, int p_bodySize);
+        RcvTimeAccuracyStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

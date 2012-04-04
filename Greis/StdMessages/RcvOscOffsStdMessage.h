@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(RcvOscOffsStdMessage);
 
         RcvOscOffsStdMessage(const char* p_message, int p_length);
-        RcvOscOffsStdMessage(const std::string& p_id, int p_bodySize);
+        RcvOscOffsStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

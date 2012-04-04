@@ -39,6 +39,15 @@ namespace
 
         auto file = JpsFile::FromFile(filename);
 
+        for (auto e = file->Body().begin(); e != file->Body().end(); ++e)
+        {
+            for (auto it = (*e)->Messages.begin(); it != (*e)->Messages.end(); ++it)
+            {
+                bool res = (*it)->Validate();
+                EXPECT_TRUE(res);
+            }
+        }
+
         auto ba = file->ToByteArray();
         auto outFile = File::CreateBinary("generatedJpsFile.jps");
         outFile->write(ba);

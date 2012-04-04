@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(RcvGPSTimeOffsetStdMessage);
 
         RcvGPSTimeOffsetStdMessage(const char* p_message, int p_length);
-        RcvGPSTimeOffsetStdMessage(const std::string& p_id, int p_bodySize);
+        RcvGPSTimeOffsetStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

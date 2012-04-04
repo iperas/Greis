@@ -42,7 +42,7 @@ namespace Greis
     {
         auto fileId = make_unique<FileIdStdMessage>(
             "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);
-        auto msgFmt = make_unique<MsgFmtStdMessage>("MF009JP010109F", 9);
+        auto msgFmt = make_unique<MsgFmtStdMessage>("MF009JP010109F", 14);
         jpsFile->Head().push_back(std::move(fileId));
         jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
         jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());

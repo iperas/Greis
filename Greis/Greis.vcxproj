@@ -51,6 +51,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate cppEnv
+$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate sqlBaseline</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -69,6 +73,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate cppEnv
+$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate sqlBaseline</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AllCustomTypes.h" />

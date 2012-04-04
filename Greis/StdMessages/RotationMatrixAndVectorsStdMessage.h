@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(RotationMatrixAndVectorsStdMessage);
 
         RotationMatrixAndVectorsStdMessage(const char* p_message, int p_length);
-        RotationMatrixAndVectorsStdMessage(const std::string& p_id, int p_bodySize);
+        RotationMatrixAndVectorsStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

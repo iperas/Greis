@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(CPStdMessage);
 
         CPStdMessage(const char* p_message, int p_length);
-        CPStdMessage(const std::string& p_id, int p_bodySize);
+        CPStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

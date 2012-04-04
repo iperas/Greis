@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(WAASRawMessageStdMessage);
 
         WAASRawMessageStdMessage(const char* p_message, int p_length);
-        WAASRawMessageStdMessage(const std::string& p_id, int p_bodySize);
+        WAASRawMessageStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

@@ -13,7 +13,7 @@ namespace Greis
         SMART_PTR_T(GPSEphemeris0StdMessage);
 
         GPSEphemeris0StdMessage(const char* p_message, int p_length);
-        GPSEphemeris0StdMessage(const std::string& p_id, int p_bodySize);
+        GPSEphemeris0StdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

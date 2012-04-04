@@ -80,7 +80,7 @@ namespace Greis
             jpsFile->_body.push_back(std::move(epoch));
         }
 
-        sLogger.Info(QString("%1 epochs has been totally deserialized.").arg(epochCounter));
+        sLogger.Info(QString("%1 epochs have been totally deserialized.").arg(epochCounter));
         return jpsFile;
     }
 

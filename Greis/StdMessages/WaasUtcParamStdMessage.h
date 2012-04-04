@@ -15,7 +15,7 @@ namespace Greis
         SMART_PTR_T(WaasUtcParamStdMessage);
 
         WaasUtcParamStdMessage(const char* p_message, int p_length);
-        WaasUtcParamStdMessage(const std::string& p_id, int p_bodySize);
+        WaasUtcParamStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }

@@ -44,12 +44,12 @@ namespace Greis
 
         void Serialize(char val, QByteArray& outStream)
         {
-            outStream.append(val);
+            outStream.append(&val, 1);
         }
 
         void Serialize(unsigned char val, QByteArray& outStream)
         {
-            outStream.append(*((char*)&val));
+            outStream.append((char*)&val, 1);
         }
 
         void Serialize(const std::string& val, QByteArray& outStream)
