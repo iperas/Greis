@@ -187,11 +187,13 @@ namespace Greis
         _to = to;
 
         auto jpsFile = make_unique<JpsFile>();
-        fillStandardJpsHeader(jpsFile.get());
+        pushStandardJpsHeader(jpsFile.get());
         
         QMap<qulonglong, Epoch*> epochsByDateTime;
 
         GreisMysqlSerializer& serializer = _serializer;
+
+        readRawStdMessages();
         
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `description` FROM `msg_FileId` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
@@ -1491,6 +1493,8 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Cs());
             }, 
             epochsByDateTime);
+
+        insertRawMessage(epochsByDateTime);
 
         for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
         {

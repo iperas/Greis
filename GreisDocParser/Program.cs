@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -24,6 +25,41 @@ namespace GreisDocParser
         [STAThread]
         static void Main()
         {
+            {
+                //List<string> codePairs = new List<string>();
+                /*var codePairs = new Dictionary<string,int>();
+                string lastCode = null;
+                var file = File.OpenText(
+                    @"D:\Documents\svn_ifz_ipg\Projects\trunk\src\JpsParser\DataSample\ipg_2011_03_28_00.00.00.jps");
+                while (!file.EndOfStream)
+                {
+                    var line = file.ReadLine();
+                    if (line.Length > 5)
+                    {
+                        var thisCode = line.Substring(0, 2);
+                        if (lastCode != null)
+                        {
+                            var key = lastCode + thisCode;
+                            int val;
+                            if (codePairs.TryGetValue(key, out val))
+                            {
+                                codePairs[key] = val + 1;
+                            } else
+                            {
+                                codePairs[key] = 1;
+                            }
+                        }
+                        lastCode = thisCode;
+                    }
+                }
+                GC.Collect();
+
+                var cc = codePairs.Where(p => p.Key.All(c => c > 48 && c < 126)).OrderByDescending(p => p.Value).Select(p => p.Key + "=>" + p.Value).ToList();
+                //var sample = File.ReadAllText(@"D:\Documents\svn_ifz_ipg\Projects\trunk\src\JpsParser\DataSample\ipg_2011_03_28_00.00.00.jps");
+                //var lines = sample.Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+                return;*/
+            }
+
             MetaInfoFile = GetDefaultPathForKey(MetaInfoFileKey);
             OutputDir = GetDefaultPathForKey(OutputDirKey);
 

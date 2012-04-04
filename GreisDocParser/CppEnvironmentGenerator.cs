@@ -65,15 +65,6 @@ namespace GreisDocParser
             generateCustomTypes();
         }
 
-        private void writeGeneratedFile(string filename, string content)
-        {
-            var path = Path.Combine(_outDir, filename);
-            if (!File.Exists(path) || File.ReadAllText(path, Encoding.Default) != content)
-            {
-                File.WriteAllText(path, content, Encoding.Default);
-            }
-        }
-
         #region MySqlSourceGeneratedMembers.cpp
 
         private void generateMySqlSource()
@@ -478,10 +469,7 @@ namespace GreisDocParser
 
         #endregion
 
-        private static string getCodeIntend(string templateStr, string stubToken)
-        {
-            return Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(stubToken)).Groups[1].Value;
-        }
+        #region ConcreteStdMessage.(h/cpp)
 
         private class CustomTypeStubsContent
         {
@@ -863,6 +851,10 @@ namespace GreisDocParser
             return line;
         }
 
+        #endregion
+
+        #region StdMessageFactory.cpp
+
         private void generateStdMessageFactory()
         {
             var stdMessageFactoryTemplatePath = Path.Combine(_cppEnvTemplatesDir, "StdMessageFactory.template.cpp");
@@ -880,6 +872,8 @@ namespace GreisDocParser
 
             writeGeneratedFile("StdMessageFactory.cpp", fileContent);
         }
+
+        #endregion
 
         #region AllStdMessages.h
 
@@ -921,6 +915,8 @@ namespace GreisDocParser
 
         #endregion
 
+        #region StdMessageGeneratedMembers.cpp
+
         private void generateStdMessageGeneratedMembers()
         {
             var stdMessageGeneratedMembersTemplatePath = Path.Combine(_cppEnvTemplatesDir, "StdMessageGeneratedMembers.template.cpp");
@@ -939,6 +935,10 @@ namespace GreisDocParser
             writeGeneratedFile("StdMessageGeneratedMembers.cpp", fileContent);
         }
 
+        #endregion
+
+        #region EMessageId.h
+
         private void generateEMessageId()
         {
             var eMessageIdTemplatePath = Path.Combine(_cppEnvTemplatesDir, "EMessageId.template.h");
@@ -955,6 +955,10 @@ namespace GreisDocParser
             writeGeneratedFile("EMessageId.h", fileContent);
         }
 
+        #endregion
+
+        #region ECustomTypeId.h
+
         private void generateECustomTypeId()
         {
             var eCtIdTemplatePath = Path.Combine(_cppEnvTemplatesDir, "ECustomTypeId.template.h");
@@ -969,6 +973,17 @@ namespace GreisDocParser
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
             writeGeneratedFile("ECustomTypeId.h", fileContent);
+        }
+
+        #endregion
+
+        private void writeGeneratedFile(string filename, string content)
+        {
+            var path = Path.Combine(_outDir, filename);
+            if (!File.Exists(path) || File.ReadAllText(path, Encoding.Default) != content)
+            {
+                File.WriteAllText(path, content, Encoding.Default);
+            }
         }
 
         private string getClassName(CustomType ct)
@@ -987,6 +1002,11 @@ namespace GreisDocParser
             string name = getEnumName(ct);
             name = char.ToLower(name[0]) + name.Substring(1);
             return name + "Inserter";
+        }
+
+        private static string getCodeIntend(string templateStr, string stubToken)
+        {
+            return Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(stubToken)).Groups[1].Value;
         }
 
         private string getEnumName(CustomType ct)

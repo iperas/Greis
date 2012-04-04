@@ -5,6 +5,7 @@
 #include "ECustomTypeId.h"
 #include "JpsFile.h"
 #include "AllStdMessages.h"
+#include "RawStdMessage.h"
 
 using namespace ProjectBase;
 
@@ -33,12 +34,25 @@ namespace Greis
         {
             for (auto jt = it->begin(); jt != it->end(); ++jt)
             {
-                delete jt.value();
+                delete *jt;
+                *jt = 0;
+            }
+        }
+
+        for (auto it = _rawMsgBuffer.begin(); it != _rawMsgBuffer.end(); ++it)
+        {
+            for (auto jt = it->begin(); jt != it->end(); ++jt)
+            {
+                for (auto kt = jt->begin(); kt != jt->end(); ++kt)
+                {
+                    delete *kt;
+                    *kt = 0;
+                }
             }
         }
     }
 
-    void MySqlSource::fillStandardJpsHeader( JpsFile* jpsFile )
+    void MySqlSource::pushStandardJpsHeader( JpsFile* jpsFile )
     {
         auto fileId = make_unique<FileIdStdMessage>(
             "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);
@@ -49,5 +63,77 @@ namespace Greis
         jpsFile->Head().push_back(std::move(msgFmt));
         jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
         jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
+    }
+
+    void MySqlSource::readRawStdMessages()
+    {
+        int msgCount = 0;
+        QSqlQuery query = _dbHelper->ExecuteQuery(QString(
+            "SELECT `id`, `idEpoch`, `unixTimeEpoch`, `code`, `bodySize`, `data` FROM `rawBinaryMessages` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch()));
+        bool first = true;
+        while (query.next())
+        {
+            int id = query.value(0).toInt();
+            //int idEpoch = query.value(1).toInt();
+            qulonglong unixTime = query.value(2).toULongLong();
+            //auto messageCodeBa = query.value(3).toString().toAscii();
+            //std::string messageCode(messageCodeBa, 2);
+            int bodySize = query.value(4).toInt();
+            auto data = query.value(5).toByteArray();
+
+            //messageCodeBa.append(QString::number(bodySize, 16));
+            //data.prepend(messageCodeBa);
+
+            StdMessage* msg = new RawStdMessage(data.data(), data.size());
+
+            assert(msg->Size() == bodySize + StdMessage::HeadSize());
+
+            _rawMsgBuffer[__CHAR2_TO_USHORT(data)][unixTime].push_back(msg);
+            ++msgCount;
+        }
+        sLogger.Info(QString("%1 raw messages readed into memory...").arg(msgCount));
+    }
+
+    void MySqlSource::insertRawMessage( const char* msgId, QMap<qulonglong, Epoch*>& epochsByDateTime )
+    {
+        auto& rawMsgs = _rawMsgBuffer[__CHAR2_TO_USHORT(msgId)];
+        insertRawMessage(rawMsgs, epochsByDateTime);
+    }
+
+    void MySqlSource::insertRawMessage( QMap<qulonglong, std::vector<StdMessage*>>& rawMsgs, QMap<qulonglong, Epoch*>& epochsByDateTime )
+    {
+        for (auto it = rawMsgs.begin(); it != rawMsgs.end(); ++it)
+        {
+            auto epochIt = epochsByDateTime.find(it.key());
+            if (epochIt == epochsByDateTime.end())
+            {
+                auto epoch = new Epoch();
+                epoch->DateTime = QDateTime::fromMSecsSinceEpoch(it.key());
+                for (auto msgIt = it->begin(); msgIt != it->end(); ++msgIt)
+                {
+                    epoch->Messages.push_back(Message::UniquePtr_t(*msgIt));
+                    (*epochIt)->Messages.push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+                    (*epochIt)->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
+                }
+                epochsByDateTime[it.key()] = epoch;
+            } else {
+                for (auto msgIt = it->begin(); msgIt != it->end(); ++msgIt)
+                {
+                    (*epochIt)->Messages.push_back(Message::UniquePtr_t(*msgIt));
+                    (*epochIt)->Messages.push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+                    (*epochIt)->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
+                }
+            }
+        }
+        rawMsgs.clear();
+    }
+
+    void MySqlSource::insertRawMessage( QMap<qulonglong, Epoch*>& epochsByDateTime )
+    {
+        for (auto it = _rawMsgBuffer.begin(); it != _rawMsgBuffer.end(); ++it)
+        {
+            insertRawMessage(it.value(), epochsByDateTime);
+        }
     }
 }

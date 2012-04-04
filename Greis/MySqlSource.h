@@ -20,6 +20,11 @@ using namespace ProjectBase;
 
 namespace Greis
 {
+    inline unsigned short __CHAR2_TO_USHORT(const char* c_id)
+    {
+        return (((unsigned short)(c_id)[0]) << 8) | (c_id)[1];
+    }
+
     class MySqlSource : private boost::noncopyable
     {
     public:
@@ -42,7 +47,14 @@ namespace Greis
         template<typename T>
         std::vector<typename T::UniquePtr_t> deserializeAndGetCustomTypes(ECustomTypeId::Type ctId, const QVariant& encodedIds);
 
-        void fillStandardJpsHeader(JpsFile* jpsFile);
+        void pushStandardJpsHeader(JpsFile* jpsFile);
+        void readRawStdMessages();
+        // Moving messages with specified id from _rawMsgBuffer into epochsByDateTime
+        void insertRawMessage(const char* msgId, QMap<qulonglong, Epoch*>& epochsByDateTime);
+        // Moving messages from collection into epochsByDateTime
+        void insertRawMessage(QMap<qulonglong, std::vector<StdMessage*>>& rawMsgs, QMap<qulonglong, Epoch*>& epochsByDateTime);
+        // Moving all buffered raw messages into epochsByDateTime
+        void insertRawMessage(QMap<qulonglong, Epoch*>& epochsByDateTime);
     private:
         Connection* _connection;
         DatabaseHelper* _dbHelper;
@@ -55,6 +67,8 @@ namespace Greis
         QMap<ECustomTypeId::Type, QMap<int, CustomType*>> _ctBuffer;
         QMap<ECustomTypeId::Type, QString> _ctQueries;
         QMap<ECustomTypeId::Type, std::function<void (int,const QSqlQuery&,CustomType*&)>> _ctHandlers;
+
+        QMap<unsigned short, QMap<qulonglong, std::vector<StdMessage*>>> _rawMsgBuffer;
 
         QMap<int, std::string> _codes;
     };
@@ -114,7 +128,10 @@ namespace Greis
             epoch->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
             ++msgCount;
         }
-        sLogger.Info(QString("%1 messages readed into memory...").arg(msgCount));
+        if (msgCount > 0)
+        {
+            sLogger.Info(QString("%1 messages readed into memory...").arg(msgCount));
+        }
     }
 
     template<typename T>
@@ -159,7 +176,10 @@ namespace Greis
             buffer[id] = ct;
             ++ctCount;
         }
-        sLogger.Info(QString("%1 custom types readed into memory...").arg(ctCount));
+        if (ctCount > 0)
+        {
+            sLogger.Info(QString("%1 custom types readed into memory...").arg(ctCount));
+        }
 
         if (!retVal.get())
         {

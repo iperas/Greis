@@ -26,13 +26,17 @@ namespace Greis
         _to = to;
 
         auto jpsFile = make_unique<JpsFile>();
-        fillStandardJpsHeader(jpsFile.get());
+        pushStandardJpsHeader(jpsFile.get());
         
         QMap<qulonglong, Epoch*> epochsByDateTime;
 
         GreisMysqlSerializer& serializer = _serializer;
+
+        readRawStdMessages();
         
         // ${HandleMessageStub}
+
+        insertRawMessage(epochsByDateTime);
 
         for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
         {
