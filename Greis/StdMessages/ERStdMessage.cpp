@@ -1,5 +1,6 @@
 #include "ERStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -27,6 +28,7 @@ namespace Greis
     {
         return toString("ERStdMessage");
     }
+    
     bool ERStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -35,6 +37,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void ERStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray ERStdMessage::ToByteArray() const

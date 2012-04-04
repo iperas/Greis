@@ -1,5 +1,6 @@
 #include "GPSEphemeris0StdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -83,6 +84,7 @@ namespace Greis
     {
         return toString("GPSEphemeris0StdMessage");
     }
+    
     bool GPSEphemeris0StdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -92,6 +94,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void GPSEphemeris0StdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray GPSEphemeris0StdMessage::ToByteArray() const

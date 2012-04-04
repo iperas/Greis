@@ -1,5 +1,6 @@
 #include "WrapperStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -31,6 +32,7 @@ namespace Greis
     {
         return toString("WrapperStdMessage");
     }
+    
     bool WrapperStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -40,6 +42,14 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Ascii(message.data(), message.size());
+    }
+    
+    void WrapperStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        auto cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
+        auto ba = QString::number(cs, 16).toAscii();
+        _cs[0] = ba[0]; _cs[1] = ba[1];
     }
 
     QByteArray WrapperStdMessage::ToByteArray() const

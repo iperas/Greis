@@ -1,5 +1,6 @@
 #include "WAASRawMessageStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -33,6 +34,7 @@ namespace Greis
     {
         return toString("WAASRawMessageStdMessage");
     }
+    
     bool WAASRawMessageStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -42,6 +44,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void WAASRawMessageStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray WAASRawMessageStdMessage::ToByteArray() const

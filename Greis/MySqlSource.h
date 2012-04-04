@@ -80,11 +80,23 @@ namespace Greis
             // message-specific fields handling
             handleMessageFields(messageCode, bodySize + StdMessage::HeadSize(), query, msg);
 
-            if (!msg->Validate() && first)
+            if (!msg->Validate())
             {
-                sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
-                    arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
-                first = false;
+                if (first)
+                {
+                    sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
+                        arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                    first = false;
+                }
+                if (msg->Kind() == EMessageKind::StdMessage)
+                {
+                    dynamic_cast<StdMessage*>(msg.get())->RecalculateChecksum();
+                    if (!msg->Validate())
+                    {
+                        throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
+                            arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                    }
+                }
                 //throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
                 //    arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
             }

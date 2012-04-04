@@ -1,5 +1,6 @@
 #include "LoggingHistoryStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -24,6 +25,7 @@ namespace Greis
     {
         return toString("LoggingHistoryStdMessage");
     }
+    
     bool LoggingHistoryStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -32,6 +34,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void LoggingHistoryStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray LoggingHistoryStdMessage::ToByteArray() const

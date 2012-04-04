@@ -20,6 +20,7 @@ namespace Greis
 
         virtual std::string ToString() const = 0;
         virtual bool Validate() const;
+        virtual void RecalculateChecksum() = 0;
 
         virtual std::string Id() const = 0;
         virtual EMessageId::Type IdNumber() const = 0;

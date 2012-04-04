@@ -1,5 +1,6 @@
 #include "RawMeasStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -24,6 +25,7 @@ namespace Greis
     {
         return toString("RawMeasStdMessage");
     }
+    
     bool RawMeasStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -32,6 +34,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void RawMeasStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray RawMeasStdMessage::ToByteArray() const

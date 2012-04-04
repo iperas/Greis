@@ -1,5 +1,6 @@
 #include "ClockOffsetsStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -35,6 +36,7 @@ namespace Greis
     {
         return toString("ClockOffsetsStdMessage");
     }
+    
     bool ClockOffsetsStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -43,6 +45,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void ClockOffsetsStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray ClockOffsetsStdMessage::ToByteArray() const

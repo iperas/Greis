@@ -1,5 +1,6 @@
 #include "RefEpochStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -31,6 +32,7 @@ namespace Greis
     {
         return toString("RefEpochStdMessage");
     }
+    
     bool RefEpochStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -39,6 +41,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void RefEpochStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray RefEpochStdMessage::ToByteArray() const

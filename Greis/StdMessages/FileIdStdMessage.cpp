@@ -1,5 +1,6 @@
 #include "FileIdStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -27,6 +28,7 @@ namespace Greis
     {
         return toString("FileIdStdMessage");
     }
+    
     bool FileIdStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -35,6 +37,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void FileIdStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray FileIdStdMessage::ToByteArray() const

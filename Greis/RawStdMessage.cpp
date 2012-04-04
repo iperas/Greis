@@ -17,4 +17,8 @@ namespace Greis
     {
         return toString("RawStdMessage");
     }
+
+    void RawStdMessage::RecalculateChecksum()
+    {
+    }
 }

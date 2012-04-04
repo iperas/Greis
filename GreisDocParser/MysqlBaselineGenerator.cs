@@ -51,7 +51,10 @@ namespace GreisDocParser
                                 Replace(PlaceholderTableCreation, tableCreation).
                                 Replace(PlaceholderInitialFillup, fillup);
 
-            File.WriteAllText(outFilename, baseline, encoding);
+            if (!File.Exists(outFilename) || File.ReadAllText(outFilename, encoding) != baseline)
+            {
+                File.WriteAllText(outFilename, baseline, encoding);
+            }
         }
 
         #region Template entries content generators

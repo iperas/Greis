@@ -1,5 +1,6 @@
 #include "FlagsStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -29,6 +30,7 @@ namespace Greis
     {
         return toString("FlagsStdMessage");
     }
+    
     bool FlagsStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -38,6 +40,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void FlagsStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray FlagsStdMessage::ToByteArray() const

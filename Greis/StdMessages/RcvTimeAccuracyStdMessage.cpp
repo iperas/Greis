@@ -1,5 +1,6 @@
 #include "RcvTimeAccuracyStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -27,6 +28,7 @@ namespace Greis
     {
         return toString("RcvTimeAccuracyStdMessage");
     }
+    
     bool RcvTimeAccuracyStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -36,6 +38,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void RcvTimeAccuracyStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray RcvTimeAccuracyStdMessage::ToByteArray() const

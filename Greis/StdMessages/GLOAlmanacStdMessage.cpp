@@ -1,5 +1,6 @@
 #include "GLOAlmanacStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -51,6 +52,7 @@ namespace Greis
     {
         return toString("GLOAlmanacStdMessage");
     }
+    
     bool GLOAlmanacStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -60,6 +62,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void GLOAlmanacStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray GLOAlmanacStdMessage::ToByteArray() const

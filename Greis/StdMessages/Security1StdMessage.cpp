@@ -1,5 +1,6 @@
 #include "Security1StdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -27,6 +28,7 @@ namespace Greis
     {
         return toString("Security1StdMessage");
     }
+    
     bool Security1StdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -35,6 +37,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void Security1StdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray Security1StdMessage::ToByteArray() const

@@ -1,5 +1,6 @@
 #include "IonoParamsStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -45,6 +46,7 @@ namespace Greis
     {
         return toString("IonoParamsStdMessage");
     }
+    
     bool IonoParamsStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -54,6 +56,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void IonoParamsStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray IonoParamsStdMessage::ToByteArray() const

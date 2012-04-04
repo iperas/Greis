@@ -1,5 +1,6 @@
 #include "${ClassName}.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -24,12 +25,18 @@ namespace Greis
     {
         return toString("${ClassName}");
     }
+    
     bool ${ClassName}::Validate() const
     {
         if (!StdMessage::Validate())
         {
             return false;
         }// ${ValidateStub}
+    }
+    
+    void ${ClassName}::RecalculateChecksum()
+    {
+        // ${RecalculateChecksumStub}
     }
 
     QByteArray ${ClassName}::ToByteArray() const

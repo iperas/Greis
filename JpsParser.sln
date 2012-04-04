@@ -14,6 +14,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectBase.Tests", "ProjectBase.Tests\ProjectBase.Tests.vcxproj", "{2E3676D0-A2AA-4580-97FE-87297EB77435}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis", "Greis\Greis.vcxproj", "{524DCC9B-B6E6-488A-9842-B33166C6B9F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CE756DDB-9655-43FE-A209-230363E3D62D} = {CE756DDB-9655-43FE-A209-230363E3D62D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Greis.Tests", "Greis.Tests\Greis.Tests.vcxproj", "{ACF70C5A-AA7E-49EC-9725-367B670947C7}"
 EndProject

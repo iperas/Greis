@@ -1,5 +1,6 @@
 #include "VelCovStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -47,6 +48,7 @@ namespace Greis
     {
         return toString("VelCovStdMessage");
     }
+    
     bool VelCovStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -56,6 +58,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void VelCovStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray VelCovStdMessage::ToByteArray() const

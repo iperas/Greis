@@ -1,5 +1,6 @@
 #include "PosVelVectorStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -47,6 +48,7 @@ namespace Greis
     {
         return toString("PosVelVectorStdMessage");
     }
+    
     bool PosVelVectorStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -55,6 +57,11 @@ namespace Greis
         }
 
         return true;
+    }
+    
+    void PosVelVectorStdMessage::RecalculateChecksum()
+    {
+        
     }
 
     QByteArray PosVelVectorStdMessage::ToByteArray() const

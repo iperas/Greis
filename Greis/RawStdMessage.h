@@ -18,6 +18,7 @@ namespace Greis
         virtual EMessageId::Type IdNumber() const { return EMessageId::Unknown; }
         virtual int BodySize() const { return _message.size() - HeadSize(); }
         virtual QByteArray ToByteArray() const { return _message; };
+        virtual void RecalculateChecksum();
 
     private:
         QByteArray _message; // Id+Len+Body

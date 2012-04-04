@@ -1,5 +1,6 @@
 #include "TrackingTimeCAStdMessage.h"
 #include <cassert>
+#include "ChecksumComputer.h"
 
 namespace Greis
 {
@@ -29,6 +30,7 @@ namespace Greis
     {
         return toString("TrackingTimeCAStdMessage");
     }
+    
     bool TrackingTimeCAStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
@@ -38,6 +40,12 @@ namespace Greis
 
         auto message = ToByteArray();
         return validateChecksum8Bin(message.data(), message.size());
+    }
+    
+    void TrackingTimeCAStdMessage::RecalculateChecksum()
+    {
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
     QByteArray TrackingTimeCAStdMessage::ToByteArray() const

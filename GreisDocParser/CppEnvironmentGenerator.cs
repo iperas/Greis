@@ -26,6 +26,7 @@ namespace GreisDocParser
         private const string InsertersCreationCodeStubToken = "// ${InsertersCreationCode}";
         private const string HandleMessageStubToken = "// ${HandleMessageStub}";
         private const string ConstructCtQueriesAndHandlersStubToken = "// ${ConstructCtQueriesAndHandlers}";
+        private const string RecalculateChecksumStubToken = "// ${RecalculateChecksumStub}";
         private const string StdMessagesDir = "StdMessages";
         private const string CustomTypesDir = "CustomTypes";
         private const int CountOfCommonFieldsInMsgTable = 5;
@@ -517,6 +518,7 @@ namespace GreisDocParser
 
                 // ValidateStubToken
                 string validationCode;
+                string recalculateChecksumCode;
                 if (msg.Validation == ValidationType.Checksum)
                 {
                     validationCode =
@@ -524,18 +526,29 @@ namespace GreisDocParser
                                       "\r\n{0}auto message = ToByteArray();" +
                                       "\r\n{0}return validateChecksum8Bin(message.data(), message.size());", 
                                       codeIntendation);
+                    recalculateChecksumCode =
+                        string.Format("auto message = ToByteArray();\r\n{1}" +
+                                      "{0} = ChecksumComputer::ComputeCs8(message, message.size() - 1);",
+                                      getFieldNameForVariable(msg.Variables.Last()), codeIntendation);
                 }
                 else if (msg.Validation == ValidationType.ChecksumAsHexAscii)
                 {
                     validationCode =
                         string.Format("\r\n" +
                                       "\r\n{0}auto message = ToByteArray();" +
-                                      "\r\n{0}return validateChecksum8Ascii(message.data(), message.size());", 
+                                      "\r\n{0}return validateChecksum8Ascii(message.data(), message.size());",
                                       codeIntendation);
+                    recalculateChecksumCode =
+                        string.Format("auto message = ToByteArray();\r\n{1}" +
+                                      "auto cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);\r\n{1}" +
+                                      "auto ba = QString::number(cs, 16).toAscii();\r\n{1}" +
+                                      "{0}[0] = ba[0]; {0}[1] = ba[1];",
+                                      getFieldNameForVariable(msg.Variables.Last()), codeIntendation);
                 } else
                 {
                     validationCode = string.Format("\r\n" +
                                                    "\r\n{0}return true;", codeIntendation);
+                    recalculateChecksumCode = "";
                 }
 
                 var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
@@ -546,22 +559,12 @@ namespace GreisDocParser
                 var fileCppContent = templateStrCpp.Replace(ClassNameStubToken, className).
                     Replace(ToByteArrayStubToken, content.ToByteArrayCode).
                     Replace(ValidateStubToken, validationCode).
+                    Replace(RecalculateChecksumStubToken, recalculateChecksumCode).
                     Replace(DeserializationConstructorStubToken, content.DeserializationConstructorCode);
 
                 // Write
                 writeGeneratedFile(Path.Combine(StdMessagesDir, className + ".h"), fileHContent);
                 writeGeneratedFile(Path.Combine(StdMessagesDir, className + ".cpp"), fileCppContent);
-            }
-        }
-
-        private string getClassName(CustomType ct)
-        {
-            if (ct is StandardMessage)
-            {
-                return _normalizedStdMessagesNamesProvider.GetName(ct) + "StdMessage";
-            } else
-            {
-                return _normalizedCustomTypeNamesProvider.GetName(ct) + "CustomType";
             }
         }
 
@@ -966,6 +969,17 @@ namespace GreisDocParser
             var fileContent = templateStr.Replace(StubToken, stubContent);
 
             writeGeneratedFile("ECustomTypeId.h", fileContent);
+        }
+
+        private string getClassName(CustomType ct)
+        {
+            if (ct is StandardMessage)
+            {
+                return _normalizedStdMessagesNamesProvider.GetName(ct) + "StdMessage";
+            } else
+            {
+                return _normalizedCustomTypeNamesProvider.GetName(ct) + "CustomType";
+            }
         }
 
         private string getInserterVarName(CustomType ct)
