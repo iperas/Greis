@@ -27,6 +27,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    UtcOffsCustomType::UtcOffsCustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray UtcOffsCustomType::ToByteArray() const
     {

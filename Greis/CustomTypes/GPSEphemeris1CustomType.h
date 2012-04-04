@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(GPSEphemeris1CustomType);
 
         GPSEphemeris1CustomType(const char* p_message, int p_length);
+        GPSEphemeris1CustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GPSEphemeris1; }
         virtual QByteArray ToByteArray() const;

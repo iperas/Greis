@@ -17,6 +17,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    HeaderCustomType::HeaderCustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray HeaderCustomType::ToByteArray() const
     {

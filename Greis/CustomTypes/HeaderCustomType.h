@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(HeaderCustomType);
 
         HeaderCustomType(const char* p_message, int p_length);
+        HeaderCustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::Header; }
         virtual QByteArray ToByteArray() const;

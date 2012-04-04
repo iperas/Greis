@@ -15,6 +15,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    SmoothCustomType::SmoothCustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray SmoothCustomType::ToByteArray() const
     {

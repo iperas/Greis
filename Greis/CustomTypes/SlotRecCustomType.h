@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(SlotRecCustomType);
 
         SlotRecCustomType(const char* p_message, int p_length);
+        SlotRecCustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SlotRec; }
         virtual QByteArray ToByteArray() const;

@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(${ClassName});
 
         ${ClassName}(const char* p_message, int p_length);
+        ${ClassName}(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::${ECustomTypeId}; }
         virtual QByteArray ToByteArray() const;

@@ -69,6 +69,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    GPSEphemeris1CustomType::GPSEphemeris1CustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray GPSEphemeris1CustomType::ToByteArray() const
     {

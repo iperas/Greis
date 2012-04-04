@@ -81,8 +81,8 @@ namespace Greis
             fields << _lastEpochId;
             fields << _lastEpochDateTime.toMSecsSinceEpoch();
             fields << QString::fromAscii(stdMsg->Id().c_str(), 2);
-            fields << msg->Size();
-            fields << msg->ToByteArray();
+            fields << stdMsg->BodySize();
+            fields << stdMsg->ToByteArray();
             _rawMessageInserter->AddRow(fields);
             return;
         }
@@ -91,7 +91,7 @@ namespace Greis
         fields << _lastEpochId;
         fields << _lastEpochDateTime.toMSecsSinceEpoch();
         fields << _codeIds[stdMsg->Id()];
-        fields << msg->Size();
+        fields << stdMsg->BodySize();
         serializeMessage(stdMsg, fields);
         auto inserter = _msgInserters[stdMsg->IdNumber()];
         inserter->AddRow(fields);

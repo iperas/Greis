@@ -23,14 +23,31 @@ namespace Greis
             std::string codeStr(code.toAscii(), code.size());
             _codes[id] = codeStr;
         }
+
+        constructCtQueriesAndHandlers();
     }
 
     MySqlSource::~MySqlSource()
     {
+        for (auto it = _ctBuffer.begin(); it != _ctBuffer.end(); ++it)
+        {
+            for (auto jt = it->begin(); jt != it->end(); ++jt)
+            {
+                delete jt.value();
+            }
+        }
     }
 
-    /*CustomType::UniquePtr_t MySqlSource::extractCustomType( ECustomTypeId::Type ctId, int dbId )
+    void MySqlSource::fillStandardJpsHeader( JpsFile* jpsFile )
     {
-        return CustomType::UniquePtr_t();
-    }*/
+        auto fileId = make_unique<FileIdStdMessage>(
+            "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);
+        auto msgFmt = make_unique<MsgFmtStdMessage>("MF009JP010109F", 9);
+        jpsFile->Head().push_back(std::move(fileId));
+        jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+        jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
+        jpsFile->Head().push_back(std::move(msgFmt));
+        jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+        jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
+    }
 }

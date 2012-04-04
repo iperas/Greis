@@ -25,8 +25,11 @@ namespace GreisDocParser
         private const string ECustomTypeIdStubToken = "${ECustomTypeId}";
         private const string InsertersCreationCodeStubToken = "// ${InsertersCreationCode}";
         private const string HandleMessageStubToken = "// ${HandleMessageStub}";
+        private const string ConstructCtQueriesAndHandlersStubToken = "// ${ConstructCtQueriesAndHandlers}";
         private const string StdMessagesDir = "StdMessages";
         private const string CustomTypesDir = "CustomTypes";
+        private const int CountOfCommonFieldsInMsgTable = 5;
+        private const int CountOfCommonFieldsInCtTable = 4;
         private readonly MetaInfo _metaInfo;
         private readonly string _cppEnvTemplatesDir;
         private string _outDir;
@@ -50,6 +53,7 @@ namespace GreisDocParser
             _outDir = outDir;
 
             generateMySqlSource();
+            generateAllCustomTypesHeader();
             generateAllStdMessagesHeader();
             generateMySqlSink();
             generateEMessageId();
@@ -63,7 +67,7 @@ namespace GreisDocParser
         private void writeGeneratedFile(string filename, string content)
         {
             var path = Path.Combine(_outDir, filename);
-            if (File.ReadAllText(path, Encoding.Default) != content)
+            if (!File.Exists(path) || File.ReadAllText(path, Encoding.Default) != content)
             {
                 File.WriteAllText(path, content, Encoding.Default);
             }
@@ -79,23 +83,26 @@ namespace GreisDocParser
             var codeIntend = getCodeIntend(templateStr, HandleMessageStubToken);
 
             var handleMessageContent = generateHandleMessageContent(codeIntend);
+            var constructCtQueriesAndHandlers = generateCtQueriesAndHandlersCode(codeIntend);
 
-            var fileContent = templateStr.Replace(HandleMessageStubToken, handleMessageContent);
+            var fileContent = templateStr.Replace(HandleMessageStubToken, handleMessageContent)
+                                         .Replace(ConstructCtQueriesAndHandlersStubToken, constructCtQueriesAndHandlers);
 
             writeGeneratedFile("MySqlSourceGeneratedMembers.cpp", fileContent);
         }
 
-        private string generateHandleMessageContent(string codeIntend)
+        private string generateCtQueriesAndHandlersCode(string codeIntend)
         {
             var tableNames = new TableNameProvider(_metaInfo);
 
-            var handleMessageLines = new List<string>();
-            foreach (var ct in _metaInfo.StandardMessages)
+            var handleCustomTypeLines = new List<string>();
+            var ctMapLines = new List<string>();
+            foreach (var ct in _metaInfo.CustomTypes)
             {
                 var tableName = tableNames.GetName(ct);
 
                 const string predefinedMsgCols =
-                    "`id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                    "`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, ";
                 var colNames = ct.Variables.Select(
                     variable => string.Format("`{0}`", MysqlBaselineGenerator.GetColumnName(variable))).ToArray();
                 var columns = predefinedMsgCols + string.Join(", ", colNames);
@@ -103,17 +110,71 @@ namespace GreisDocParser
                 var selectCommand = string.Format("SELECT {0} FROM `{1}` WHERE `unixTimeEpoch` BETWEEN %1 AND %2",
                                                   columns, tableName);
 
-                var handleMessageFields = "[] (const QSqlQuery& q, Message* msg) {}";
-                /*[&serializer] (const QSqlQuery& q, Message* msg)
-                {
-                    auto c = dynamic_cast<FileIdStdMessage*>(msg);
-                    serializer.Deserialize(q.value(5), c->IdField());
-                }*/
+                var serCode = generateVariablesMySqlSourceSerializationContent(codeIntend, ct);
+
+                var handleCustomTypeFields =
+                    string.Format("[&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)\r\n{0}" +
+                                  "{{\r\n{0}" +
+                                  "    ct = new {1}(size);\r\n{0}" +
+                                  "    auto c = dynamic_cast<{1}*>(ct);\r\n{0}" +
+                                  "    {2}\r\n{0}" +
+                                  "}}",
+                                  codeIntend + "    ", getClassName(ct), serCode);
+
+                var handleCustomTypeLine = string.Format(
+                    "auto query{3} = QString(\"{0}\");\r\n{2}" +
+                    "auto handler{3} = {1};\r\n{2}",
+                    selectCommand, handleCustomTypeFields, codeIntend, getClassName(ct));
+
+                handleCustomTypeLines.Add(handleCustomTypeLine);
+
+                var mapLine = string.Format("_ctQueries.insert(ECustomTypeId::{1}, query{2});\r\n{0}" +
+                                            "_ctHandlers.insert(ECustomTypeId::{1}, handler{2});",
+                                            codeIntend, getEnumName(ct), getClassName(ct));
+                ctMapLines.Add(mapLine);
+            }
+
+            var result = string.Join("\r\n" + codeIntend, handleCustomTypeLines) +
+                         "\r\n" + codeIntend +
+                         string.Join("\r\n" + codeIntend, ctMapLines);
+            return result;
+        }
+
+        private string generateHandleMessageContent(string codeIntend)
+        {
+            var tableNames = new TableNameProvider(_metaInfo);
+
+            var handleMessageLines = new List<string>();
+            foreach (var msg in _metaInfo.StandardMessages)
+            {
+                var tableName = tableNames.GetName(msg);
+
+                const string predefinedMsgCols =
+                    "`id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                var colNames = msg.Variables.Select(
+                    variable => string.Format("`{0}`", MysqlBaselineGenerator.GetColumnName(variable))).ToArray();
+                var columns = predefinedMsgCols + string.Join(", ", colNames);
+
+                var selectCommand = string.Format("SELECT {0} FROM `{1}` WHERE `unixTimeEpoch` BETWEEN %1 AND %2",
+                                                  columns, tableName);
+
+                var serCode = generateVariablesMySqlSourceSerializationContent(codeIntend, msg);
+
+                var handleMessageFields =
+                    string.Format("[&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)\r\n{0}" +
+                                  "{{\r\n{0}" +
+                                  "    msg = make_unique<{1}>(id, bodySize);\r\n{0}" +
+                                  "    auto c = dynamic_cast<{1}*>(msg.get());\r\n{0}" +
+                                  "    {2}\r\n{0}" +
+                                  "}}",
+                                  codeIntend + "    ", getClassName(msg), serCode);
 
                 var handleMessageLine = string.Format(
                     "handleMessage(QString(\"{0}\")\r\n{2}" +
                     "    .arg(_from.toMSecsSinceEpoch())\r\n{2}" +
-                    "    .arg(to.toMSecsSinceEpoch()), {1}, epochsByDateTime);",
+                    "    .arg(_to.toMSecsSinceEpoch()), \r\n{2}" +
+                    "    {1}, \r\n{2}" +
+                    "    epochsByDateTime);",
                     selectCommand, handleMessageFields, codeIntend);
 
                 handleMessageLines.Add(handleMessageLine);
@@ -121,6 +182,88 @@ namespace GreisDocParser
 
             var result = string.Join("\r\n" + codeIntend, handleMessageLines);
             return result;
+        }
+
+        private string generateVariablesMySqlSourceSerializationContent(string codeIntend, CustomType ct)
+        {
+            string linesStr;
+            if (ct.Size != (int) SizeSpecialValue.Dynamic)
+            {
+                var lines = new List<string>();
+                var indexInQuery = ct is StandardMessage 
+                                   ? CountOfCommonFieldsInMsgTable 
+                                   : CountOfCommonFieldsInCtTable;
+                foreach (var variable in ct.Variables)
+                {
+                    string line;
+                    if (variable.IsScalar)
+                    {
+                        if (variable.GreisType == GreisTypes.a1.ToString())
+                        {
+                            // Types::a1
+                            line = string.Format("serializer.DeserializeChar(q.value({1}), c->{0}());",
+                                                 getAccessorNameForVariable(variable),
+                                                 indexInQuery);
+                        }
+                        else if (_simpleTypes.Contains(variable.GreisType))
+                        {
+                            // other Greis types
+                            line = string.Format("serializer.Deserialize(q.value({1}), c->{0}());",
+                                                 getAccessorNameForVariable(variable),
+                                                 indexInQuery);
+                        }
+                        else
+                        {
+                            // custom type
+                            var varType = getCustomTypeForVariable(variable);
+                            line = string.Format("c->{0}() = this->extractCustomType<{3}>" +
+                                                 "(ECustomTypeId::{2}, q.value({1}).toInt());", 
+                                                 getAccessorNameForVariable(variable), 
+                                                 indexInQuery, 
+                                                 getEnumName(varType),
+                                                 getClassName(varType));
+                        }
+                    }
+                    else if (variable.IsLinearArray)
+                    {
+                        if (_simpleTypes.Contains(variable.GreisType))
+                        {
+                            // string and other Greis types
+                            line = string.Format("serializer.Deserialize(q.value({1}), c->{0}());",
+                                                 getAccessorNameForVariable(variable),
+                                                 indexInQuery);
+                        }
+                        else
+                        {
+                            // custom type deserializeAndGetCustomTypes
+                            var varType = getCustomTypeForVariable(variable);
+                            line = string.Format("c->{0}() = this->deserializeAndGetCustomTypes<{3}>" +
+                                                 "(ECustomTypeId::{2}, q.value({1}));",
+                                                 getAccessorNameForVariable(variable),
+                                                 indexInQuery,
+                                                 getEnumName(varType),
+                                                 getClassName(varType));
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException("Multi-dim arrays are not supported.");
+                    }
+                    indexInQuery++;
+                    lines.Add(line);
+                }
+                linesStr = string.Join("\r\n        " + codeIntend, lines);
+            }
+            else
+            {
+                linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
+            }
+            return linesStr;
+        }
+
+        private CustomType getCustomTypeForVariable(Variable variable)
+        {
+            return _metaInfo.CustomTypes.Single(c => c.Name == variable.GreisType);
         }
 
         #endregion
@@ -160,7 +303,7 @@ namespace GreisDocParser
                                   "        {1}\r\n{0}" +
                                   "    }}\r\n{0}" +
                                   "    break;", codeIntend, linesStr,
-                                  getEnumNameForStdMessage(msg), getClassName(msg));
+                                  getEnumName(msg), getClassName(msg));
                 serializationContentList.Add(msgSerializationContent);
             }
             var serializationContent = string.Join("\r\n" + codeIntend, serializationContentList);
@@ -181,7 +324,7 @@ namespace GreisDocParser
                                   "        {1}\r\n{0}" +
                                   "    }}\r\n{0}" +
                                   "    break;", codeIntend, linesStr,
-                                  getEnumNameForCustomType(ct), getClassName(ct));
+                                  getEnumName(ct), getClassName(ct));
                 serializationContentList.Add(ctSerializationContent);
             }
             var serializationContent = string.Join("\r\n" + codeIntend, serializationContentList);
@@ -305,12 +448,12 @@ namespace GreisDocParser
                 if (ct is StandardMessage)
                 {
                     insertionIntoMaps = string.Format("_msgInserters[EMessageId::{0}] = {1};",
-                                                      getEnumNameForStdMessage(ct as StandardMessage), getInserterVarName(ct));
+                                                      getEnumName(ct), getInserterVarName(ct));
                 }
                 else
                 {
                     insertionIntoMaps = string.Format("_ctInserters[ECustomTypeId::{0}] = {1};",
-                                                      getEnumNameForCustomType(ct), getInserterVarName(ct));
+                                                      getEnumName(ct), getInserterVarName(ct));
                 }
                 insertionsIntoMaps.Add(insertionIntoMaps);
             }
@@ -321,7 +464,7 @@ namespace GreisDocParser
 
                 var ctCurrentMaxId = string.Format(
                     "int maxIdFor{0} = _dbHelper->ExecuteSingleValueQuery(\"SELECT MAX(`id`) FROM `{1}`\").toInt();\r\n{2}" +
-                    "_ctCurrentMaxId[ECustomTypeId::{0}] = maxIdFor{0};", getEnumNameForCustomType(ct), tableName, 
+                    "_ctCurrentMaxId[ECustomTypeId::{0}] = maxIdFor{0};", getEnumName(ct), tableName, 
                     codeIntend);
                 ctCurrentMaxIds.Add(ctCurrentMaxId);
             }
@@ -370,7 +513,7 @@ namespace GreisDocParser
                     fieldsListIntendation, codeIntendation);
 
                 // EMessageIdName
-                var eMessageIdName = getEnumNameForStdMessage(msg);
+                var eMessageIdName = getEnumName(msg);
 
                 // ValidateStubToken
                 string validationCode;
@@ -444,7 +587,7 @@ namespace GreisDocParser
                     fieldsListIntendation, codeIntendation);
 
                 // EMessageIdName
-                var eCustomTypeIdName = getEnumNameForCustomType(ct);
+                var eCustomTypeIdName = getEnumName(ct);
 
                 // ClassNameStubToken
                 var fileHContent = templateStrH.Replace(IncludesStubToken, content.Includes).
@@ -735,6 +878,8 @@ namespace GreisDocParser
             writeGeneratedFile("StdMessageFactory.cpp", fileContent);
         }
 
+        #region AllStdMessages.h
+
         private void generateAllStdMessagesHeader()
         {
             var templatePath = Path.Combine(_cppEnvTemplatesDir, "AllStdMessages.template.h");
@@ -750,6 +895,28 @@ namespace GreisDocParser
 
             writeGeneratedFile("AllStdMessages.h", fileContent);
         }
+
+        #endregion
+
+        #region AllCustomTypes.h
+
+        private void generateAllCustomTypesHeader()
+        {
+            var templatePath = Path.Combine(_cppEnvTemplatesDir, "AllCustomTypes.template.h");
+            var templateStr = File.ReadAllText(templatePath, Encoding.Default);
+
+            var includeLines = _metaInfo.CustomTypes.OrderBy(ct => ct.Name).
+                Select((ct, i) =>
+                       string.Format("#include \"{0}/{1}CustomType.h\"", CustomTypesDir,
+                                     _normalizedCustomTypeNamesProvider.GetName(ct))).ToArray();
+            
+            var includesContent = string.Join("\r\n", includeLines);
+            var fileContent = templateStr.Replace(IncludesStubToken, includesContent);
+
+            writeGeneratedFile("AllCustomTypes.h", fileContent);
+        }
+
+        #endregion
 
         private void generateStdMessageGeneratedMembers()
         {
@@ -777,7 +944,7 @@ namespace GreisDocParser
             var intendation = Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(StubToken)).Groups[1].Value;
             var lastIndex = _metaInfo.StandardMessages.Count - 1;
             var lines = _metaInfo.StandardMessages.OrderBy(msg => msg.Name).
-                Select((msg, i) => getEnumNameForStdMessage(msg) + (lastIndex == i ? " // " : ", // ") + msg.Title).
+                Select((msg, i) => getEnumName(msg) + (lastIndex == i ? " // " : ", // ") + msg.Title).
                 ToArray();
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
@@ -793,7 +960,7 @@ namespace GreisDocParser
             var intendation = Regex.Match(templateStr, @"([ \t]*)" + Regex.Escape(StubToken)).Groups[1].Value;
             var lastIndex = _metaInfo.CustomTypes.Count - 1;
             var lines = _metaInfo.CustomTypes.OrderBy(ct => ct.Name).
-                Select((ct, i) => getEnumNameForCustomType(ct) + (lastIndex == i ? "" : ",")).
+                Select((ct, i) => getEnumName(ct) + (lastIndex == i ? "" : ",")).
                 ToArray();
             var stubContent = string.Join("\r\n" + intendation, lines);
             var fileContent = templateStr.Replace(StubToken, stubContent);
@@ -803,27 +970,18 @@ namespace GreisDocParser
 
         private string getInserterVarName(CustomType ct)
         {
-            string name;
-            if (ct is StandardMessage)
-            {
-                name = getEnumNameForStdMessage(ct as StandardMessage);
-            }
-            else
-            {
-                name = getEnumNameForCustomType(ct);
-            }
+            string name = getEnumName(ct);
             name = char.ToLower(name[0]) + name.Substring(1);
             return name + "Inserter";
         }
 
-        private string getEnumNameForCustomType(CustomType ct)
+        private string getEnumName(CustomType ct)
         {
+            if (ct is StandardMessage)
+            {
+                return _normalizedStdMessagesNamesProvider.GetName(ct as StandardMessage);
+            }
             return _normalizedCustomTypeNamesProvider.GetName(ct);
-        }
-
-        private string getEnumNameForStdMessage(StandardMessage msg)
-        {
-            return _normalizedStdMessagesNamesProvider.GetName(msg);
         }
 
         private string getTypeNameForVariable(Variable variable)

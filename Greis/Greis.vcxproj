@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllCustomTypes.h" />
     <ClInclude Include="AllStdMessages.h" />
     <ClInclude Include="CustomType.h" />
     <ClInclude Include="CustomTypes\ClkOffsCustomType.h" />

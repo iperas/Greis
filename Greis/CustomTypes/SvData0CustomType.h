@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(SvData0CustomType);
 
         SvData0CustomType(const char* p_message, int p_length);
+        SvData0CustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SvData0; }
         virtual QByteArray ToByteArray() const;

@@ -12,6 +12,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    ${ClassName}::${ClassName}( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray ${ClassName}::ToByteArray() const
     {

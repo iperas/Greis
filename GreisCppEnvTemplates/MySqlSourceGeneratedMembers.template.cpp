@@ -5,11 +5,19 @@
 #include "ECustomTypeId.h"
 #include "JpsFile.h"
 #include "AllStdMessages.h"
+#include "AllCustomTypes.h"
 
 using namespace ProjectBase;
 
 namespace Greis
 {
+    void MySqlSource::constructCtQueriesAndHandlers()
+    {
+        GreisMysqlSerializer& serializer = _serializer;
+        
+        // ${ConstructCtQueriesAndHandlers}
+    }
+    
     JpsFile::UniquePtr_t MySqlSource::ReadRange( const QDateTime& from, const QDateTime& to )
     {
         _ctBuffer.clear();
@@ -18,8 +26,12 @@ namespace Greis
         _to = to;
 
         auto jpsFile = make_unique<JpsFile>();
+        fillStandardJpsHeader(jpsFile.get());
+        
         QMap<qulonglong, Epoch*> epochsByDateTime;
 
+        GreisMysqlSerializer& serializer = _serializer;
+        
         // ${HandleMessageStub}
 
         for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)

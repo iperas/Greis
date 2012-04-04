@@ -50,7 +50,7 @@ namespace ProjectBase
     }
 
     // Move object from one unique pointer to another with dynamic cast
-    template<typename T, typename Y>
+    template<typename Y, typename T>
     std::unique_ptr<Y> dynamic_pointer_cast(std::unique_ptr<T> obj)
     {
         return std::unique_ptr<Y>(dynamic_cast<Y*>(obj.release()));

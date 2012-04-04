@@ -17,6 +17,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    SvData0CustomType::SvData0CustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray SvData0CustomType::ToByteArray() const
     {

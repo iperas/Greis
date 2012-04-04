@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(GPSAlm1CustomType);
 
         GPSAlm1CustomType(const char* p_message, int p_length);
+        GPSAlm1CustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GPSAlm1; }
         virtual QByteArray ToByteArray() const;

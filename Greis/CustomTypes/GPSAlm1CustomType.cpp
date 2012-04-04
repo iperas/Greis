@@ -41,6 +41,11 @@ namespace Greis
         
         assert(p_message - pc_message == p_length);
     }
+    
+    GPSAlm1CustomType::GPSAlm1CustomType( int p_size ) 
+        : _size(p_size)
+    {
+    }
 
     QByteArray GPSAlm1CustomType::ToByteArray() const
     {

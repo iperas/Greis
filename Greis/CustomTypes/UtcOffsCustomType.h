@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(UtcOffsCustomType);
 
         UtcOffsCustomType(const char* p_message, int p_length);
+        UtcOffsCustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::UtcOffs; }
         virtual QByteArray ToByteArray() const;

@@ -13,6 +13,7 @@ namespace Greis
         SMART_PTR_T(SmoothCustomType);
 
         SmoothCustomType(const char* p_message, int p_length);
+        SmoothCustomType(int p_size);
         
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::Smooth; }
         virtual QByteArray ToByteArray() const;
