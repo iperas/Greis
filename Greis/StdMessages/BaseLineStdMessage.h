@@ -1,5 +1,5 @@
-#ifndef BaseLineStdMessage_h__
-#define BaseLineStdMessage_h__
+#ifndef BaselineStdMessage_h__
+#define BaselineStdMessage_h__
 
 #include <QtCore/QByteArray>
 #include "StdMessage.h"
@@ -7,17 +7,17 @@
 
 namespace Greis
 {
-    class BaseLineStdMessage : public StdMessage
+    class BaselineStdMessage : public StdMessage
     {
     public:
-        SMART_PTR_T(BaseLineStdMessage);
+        SMART_PTR_T(BaselineStdMessage);
 
-        BaseLineStdMessage(const char* p_message, int p_length);
-        BaseLineStdMessage(const std::string& p_id, int p_size);
+        BaselineStdMessage(const char* p_message, int p_length);
+        BaselineStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
-        virtual EMessageId::Type IdNumber() const { return EMessageId::BaseLine; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::Baseline; }
         virtual bool Validate() const;
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
@@ -64,4 +64,4 @@ namespace Greis
     };
 }
 
-#endif // BaseLineStdMessage_h__
+#endif // BaselineStdMessage_h__

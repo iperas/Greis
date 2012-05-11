@@ -268,7 +268,7 @@ starting from 1996) []</Comment>
         <Code>EO</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="RcvWAASTimeOffset" Size="17" Title="[WO] WAAS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="RcvSBASTimeOffset" Size="17" Title="[WO] WAAS/EGNOS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f8" Name="val" RequiredValue="">
           <SizeOfDimensions />
@@ -287,6 +287,25 @@ starting from 1996) []</Comment>
         <Code>WO</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="RcvQZSSTimeOffset" Size="17" Title="[QO] QZSS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f8" Name="val" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>(Tq - Tr) [s]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="sval" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Smoothed (Tq - Tr) [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QO</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="GpsUtcParam" Size="24" Title="[UO] GPS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
@@ -302,11 +321,11 @@ starting from 1996) []</Comment>
         <Code>UO</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="WaasUtcParam" Size="32" Title="[WU] WAAS UTC Time Parameters" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SbasUtcParam" Size="32" Title="[WU] WAAS/EGNOS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS to UTC time offset parameters</Comment>
+          <Comment>SBAS to UTC time offset parameters</Comment>
         </Variable>
         <Variable GreisType="i1" Name="utcsi" RequiredValue="">
           <SizeOfDimensions />
@@ -369,6 +388,21 @@ GALILEO to GPS time offset parameters</Comment>
       </Variables>
       <Codes>
         <Code>EU</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QzssUtcParam" Size="24" Title="[QU] QZSS UTC Time Parameters" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>QZSS UTC time offset parameters</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QU</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="GloUtcGpsParam" Size="25" Title="[NU] GLONASS UTC and GPS Time Parameters" Validation="Checksum" Type="Unknown">
@@ -769,7 +803,7 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
         <Code>SV</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="BaseLine" Size="34" Title="[BL] Base Line" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="Baseline" Size="34" Title="[BL] Baseline" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f8" Name="x" RequiredValue="">
           <SizeOfDimensions />
@@ -948,7 +982,7 @@ controllable by RTK engine [%]</Comment>
         <Code>AZ</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="PR" Size="-2" Title="[RC], [R1], [R2], [R3], [R5]: Pseudoranges" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="PR" Size="-2" Title="[RC], [R1], [R2], [R3], [R5], [Rl]: Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f8" Name="pr" RequiredValue="">
           <SizeOfDimensions>
@@ -967,9 +1001,10 @@ controllable by RTK engine [%]</Comment>
         <Code>R2</Code>
         <Code>R3</Code>
         <Code>R5</Code>
+        <Code>Rl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SPR" Size="-2" Title="[rc], [r1], [r2], [r3], [r5]: Short Pseudoranges" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SPR" Size="-2" Title="[rc], [r1], [r2], [r3], [r5], [rl]: Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i4" Name="spr" RequiredValue="">
           <SizeOfDimensions>
@@ -988,9 +1023,10 @@ controllable by RTK engine [%]</Comment>
         <Code>r2</Code>
         <Code>r3</Code>
         <Code>r5</Code>
+        <Code>rl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="RPR" Size="-2" Title="[1R], [2R], [3R], [5R]: Relative Pseudoranges" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="RPR" Size="-2" Title="[1R], [2R], [3R], [5R], [lR]: Relative Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f4" Name="rpr" RequiredValue="">
           <SizeOfDimensions>
@@ -1008,9 +1044,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2R</Code>
         <Code>3R</Code>
         <Code>5R</Code>
+        <Code>lR</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SRPR" Size="-2" Title="[1r], [2r], [3r], [5r]: Short Relative Pseudoranges" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SRPR" Size="-2" Title="[1r], [2r], [3r], [5r], [lr]: Relative Pseudoranges" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i2" Name="srpr" RequiredValue="">
           <SizeOfDimensions>
@@ -1028,9 +1065,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2r</Code>
         <Code>3r</Code>
         <Code>5r</Code>
+        <Code>lr</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SC" Size="-2" Title="[CC], [C1], [C2], [C3], [C5]: Smoothing Corrections" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SC" Size="-2" Title="[CC],[C1],[C2],[C3],[C5],[Cl]: Smoothing Corrections" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="Smooth" Name="smooth" RequiredValue="">
           <SizeOfDimensions>
@@ -1049,9 +1087,10 @@ controllable by RTK engine [%]</Comment>
         <Code>C2</Code>
         <Code>C3</Code>
         <Code>C5</Code>
+        <Code>Cl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SS" Size="-2" Title="[cc], [c1], [c2], [c3], [c5]: Short Smoothing Corrections" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SS" Size="-2" Title="[cc],[c1],[c2],[c3],[c5],[cl]: Smoothing Corrections" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i2" Name="smooth" RequiredValue="">
           <SizeOfDimensions>
@@ -1070,9 +1109,10 @@ controllable by RTK engine [%]</Comment>
         <Code>c2</Code>
         <Code>c3</Code>
         <Code>c5</Code>
+        <Code>cl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="CP" Size="-2" Title="[PC], [P1], [P2], [P3], [P5]: Carrier Phases" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="CP" Size="-2" Title="[PC], [P1], [P2], [P3], [P5], [Pl]: Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f8" Name="cp" RequiredValue="">
           <SizeOfDimensions>
@@ -1091,9 +1131,10 @@ controllable by RTK engine [%]</Comment>
         <Code>P2</Code>
         <Code>P3</Code>
         <Code>P5</Code>
+        <Code>Pl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SCP" Size="-2" Title="[pc], [p1], [p2], [p3], [p5]: Short Carrier Phases" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SCP" Size="-2" Title="[pc], [p1], [p2], [p3], [p5], [pl]: Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u4" Name="scp" RequiredValue="">
           <SizeOfDimensions>
@@ -1112,9 +1153,10 @@ controllable by RTK engine [%]</Comment>
         <Code>p2</Code>
         <Code>p3</Code>
         <Code>p5</Code>
+        <Code>pl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="RCP_RC" Size="-2" Title="[CP], [1P], [2P], [3P], [5P]: Short Relative Carrier Phases" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="RCP_RC" Size="-2" Title="[CP],[1P],[2P],[3P],[5P],[lP]: Relative Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f4" Name="rcp" RequiredValue="">
           <SizeOfDimensions>
@@ -1133,9 +1175,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2P</Code>
         <Code>3P</Code>
         <Code>5P</Code>
+        <Code>lP</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="RCP_rc" Size="-2" Title="[cp], [1p], [2p], [3p], [5p]: Short Relative Carrier Phases" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="RCP_rc" Size="-2" Title="[cp],[1p],[2p],[3p],[5p],[lp]: Relative Carrier Phases" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i4" Name="rcp" RequiredValue="">
           <SizeOfDimensions>
@@ -1154,9 +1197,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2p</Code>
         <Code>3p</Code>
         <Code>5p</Code>
+        <Code>lp</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="DP" Size="-2" Title="[DC], [D1], [D2], [D3], [D5]: Doppler" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="DP" Size="-2" Title="[DC], [D1], [D2], [D3], [D5], [Dl]: Doppler" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i4" Name="dp" RequiredValue="">
           <SizeOfDimensions>
@@ -1175,15 +1219,16 @@ controllable by RTK engine [%]</Comment>
         <Code>D2</Code>
         <Code>D3</Code>
         <Code>D5</Code>
+        <Code>Dl</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SRDP" Size="-2" Title="[1d], [2d], [3d], [5d]: Short Relative Doppler" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SRDP" Size="-2" Title="[1d], [2d], [3d], [5d], [ld]: Relative Doppler" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="i2" Name="srdp" RequiredValue="">
           <SizeOfDimensions>
             <Dimension>-2</Dimension>
           </SizeOfDimensions>
-          <Comment>(dp - dpCA1)[Hz*10-4]</Comment>
+          <Comment>(dp * FL1/FLn - dpCA1)[Hz*10-4]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
@@ -1195,9 +1240,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2d</Code>
         <Code>3d</Code>
         <Code>5d</Code>
+        <Code>ld</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="CNR" Size="-2" Title="[EC], [E1], [E2], [E3], [E5]: Carrier to Noise Ratio" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="CNR" Size="-2" Title="[EC], [E1], [E2], [E3], [E5], [El]: SNR" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="cnr" RequiredValue="">
           <SizeOfDimensions>
@@ -1216,9 +1262,10 @@ controllable by RTK engine [%]</Comment>
         <Code>E2</Code>
         <Code>E3</Code>
         <Code>E5</Code>
+        <Code>El</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="CNR_4" Size="-2" Title="[CE], [1E], [2E], [3E], [5E]: Carrier to Noise Ratio x " Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="CNR_4" Size="-2" Title="[CE], [1E], [2E], [3E], [5E], [lE]: SNR x " Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="cnrX4" RequiredValue="">
           <SizeOfDimensions>
@@ -1237,9 +1284,10 @@ controllable by RTK engine [%]</Comment>
         <Code>2E</Code>
         <Code>3E</Code>
         <Code>5E</Code>
+        <Code>lE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="Flags" Size="-2" Title="[FC], [F1], [F2], [F3], [F5]: Signal Lock Loop Flags" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="Flags" Size="-2" Title="[FC],[F1],[F2],[F3],[F5],[Fl]: Signal Lock Loop Flags" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u2" Name="flags" RequiredValue="">
           <SizeOfDimensions>
@@ -1258,6 +1306,49 @@ controllable by RTK engine [%]</Comment>
         <Code>F2</Code>
         <Code>F3</Code>
         <Code>F5</Code>
+        <Code>Fl</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="IAmp" Size="-1" Title="[ec], [e1], [e2], [e3], [e5]: Raw Inphases (I)" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="i2" Name="amp" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>(I) amplitudes</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ec</Code>
+        <Code>e1</Code>
+        <Code>e2</Code>
+        <Code>e3</Code>
+        <Code>e5</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QAmp" Size="-1" Title="[qc], [q1], [q2], [q3], [q5]: Raw Quadratures (Q)" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="i2" Name="amp" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>(Q) amplitudes</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>qc</Code>
+        <Code>q1</Code>
+        <Code>q2</Code>
+        <Code>q3</Code>
+        <Code>q5</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="TrackingTimeCA" Size="-2" Title="[TC] CA/L1 Continuous Tracking Time" Validation="Checksum" Type="Unknown">
@@ -1417,7 +1508,22 @@ GALILEO-Specific data</Comment>
         <Code>EA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GLOAlmanac" Size="46" Title="[NA] GLONASS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="QZSSAlm" Size="47" Title="[QA] QZSS Almanac" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GPSAlm1" Name="gps" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Without ‘cs’ field, gps.sv within the range [193…197]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QA</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="GLOAlmanac" Size="-3" Title="[NA] GLONASS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
@@ -1485,6 +1591,21 @@ at reference time ‘tlam’ [s/period]</Comment>
           <Comment>Correction to inclination
 at reference time ‘tlam’[semi-circles]</Comment>
         </Variable>
+        <Variable GreisType="u1" Name="n4" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Number of 4-year period []
+--- Optional data block ---</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="navType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Signal type nav. data was decoded from</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="gammaN" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of coarse satellite clock correction to
+GLONASS time scale [s/s]
+--- End of optional data block ---</Comment>
+        </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Checksum</Comment>
@@ -1494,15 +1615,15 @@ at reference time ‘tlam’[semi-circles]</Comment>
         <Code>NA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="WAASAlmanac" Size="51" Title="[WA] WAAS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="SBASAlmanac" Size="51" Title="[WA] WAAS/EGNOS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS SV PRN number within [120…138]</Comment>
+          <Comment>SBAS SV PRN number within [120…138]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="gpsPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>GPS SV PRN associated with WAAS SV</Comment>
+          <Comment>GPS SV PRN associated with SBAS SV</Comment>
         </Variable>
         <Variable GreisType="u1" Name="id" RequiredValue="">
           <SizeOfDimensions />
@@ -1562,143 +1683,49 @@ at reference time ‘tlam’[semi-circles]</Comment>
         <Code>WA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GPSEphemeris0" Size="123" Title="[GE] GPS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="GPSEphemeris0" Size="-3" Title="[GE] GPS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
-        <Variable GreisType="u1" Name="sv" RequiredValue="">
+        <Variable GreisType="GpsEphReqData" Name="req" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>SV PRN number within the range [1…37]</Comment>
+          <Comment>Required data
+--- Optional data block ---</Comment>
         </Variable>
-        <Variable GreisType="u4" Name="tow" RequiredValue="">
+        <Variable GreisType="u1" Name="cNavType" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Time of week [s]</Comment>
+          <Comment>Signal type nav. data was decoded from</Comment>
         </Variable>
-        <Variable GreisType="u1" Name="flags" RequiredValue="">
+        <Variable GreisType="i4" Name="lTope" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Flags (see GPS ICD for details)[bitfield]:
-0 - curve fit interval
-1 - data flag for L2 P-code
-2,3 - code on L2 channel
-4 - anti-spoof (A-S) flag (from HOW)
-5 - ‘Alert’ flag (from HOW)
-6 - ephemeris was retrieved from non-volatile memory
-7 - reserved
-===== Clock data (Subframe 1) =====</Comment>
+          <Comment>Time of prediction for ephemeris data</Comment>
         </Variable>
-        <Variable GreisType="i2" Name="iodc" RequiredValue="">
+        <Variable GreisType="i4" Name="lTopc" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Issue of data, clock []</Comment>
+          <Comment>Time of prediction for clock data</Comment>
         </Variable>
-        <Variable GreisType="i4" Name="toc" RequiredValue="">
+        <Variable GreisType="f8" Name="dADot" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Clock data reference time [s]</Comment>
+          <Comment>Change rate in semi-major axis</Comment>
         </Variable>
-        <Variable GreisType="i1" Name="ura" RequiredValue="">
+        <Variable GreisType="f4" Name="fDelnDot" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>User range accuracy []</Comment>
+          <Comment>Rate of mean motion</Comment>
         </Variable>
-        <Variable GreisType="u1" Name="healthS" RequiredValue="">
+        <Variable GreisType="i1" Name="cURAoe" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Satellite health []</Comment>
+          <Comment>SV ephemeris URA index</Comment>
         </Variable>
-        <Variable GreisType="i2" Name="wn" RequiredValue="">
+        <Variable GreisType="i1" Name="cURAoc" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Week number []</Comment>
+          <Comment>SV clock URA index</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="tgd" RequiredValue="">
+        <Variable GreisType="i1" Name="cURAoc1" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Estimated group delay differential [s]</Comment>
+          <Comment>SV clock URA change index</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="af2" RequiredValue="">
+        <Variable GreisType="i1" Name="cURAoc2" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s/(s^2)]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="af1" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="af0" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s]
-===== Ephemeris data (Subframes 2 and 3) =====</Comment>
-        </Variable>
-        <Variable GreisType="i4" Name="toe" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Ephemeris reference time [s]</Comment>
-        </Variable>
-        <Variable GreisType="i2" Name="iode" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Issue of data, ephemeris []
---- Keplerian orbital parameters ---</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="rootA" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="ecc" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Eccentricity []</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="m0" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Mean Anomaly at reference time (wn,toe)
-[semi-circles]</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="omega0" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Longitude of ascending node of orbit plane at the
-start of week ‘wn’ [semi-circles]</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="inc0" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Inclination angle at reference time [semi-circles]</Comment>
-        </Variable>
-        <Variable GreisType="f8" Name="argPer" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Argument of perigee [semi-circles]
---- Corrections to orbital parameters ---</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="deln" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Mean motion difference from computed value
-[semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="omegaDot" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Rate of right ascension [semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="incDot" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Rate of inclination angle [semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="crc" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the orbit radius [m]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="crs" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the orbit radius [m]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cuc" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the argument of latitude [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cus" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the argument of latitude [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cic" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the angle of inclination [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cis" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the sine harmonic correction term
-to the angle of inclination [rad]</Comment>
+          <Comment>SV clock URA change rate index
+--- End of optional data block ---</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
@@ -1709,7 +1736,71 @@ to the angle of inclination [rad]</Comment>
         <Code>GE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GLOEphemeris" Size="88" Title="[NE] GLONASS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+      <Variables>
+        <Variable GreisType="GpsEphReqData" Name="req" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>GPS required data, ‘req.sv’ within the range [1…30]
+--- GALILEO-specific data block ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="bgdE1E5a" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>broacast group delay E1 - E5A [s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="bgdE1E5b" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>broacast group delay E1 - E5B [s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="ai0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Effective ionisation level 1-st order parameter []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="ai1" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Effective ionisation level 2-nd order parameter []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="ai2" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Effective ionisation level 3-rd order parameter []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="sfi" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Ionospheric disturbance flags [bitfield]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="navType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Type of navigation data:
+0 - GALILEO E1B(INAV)
+1 - GALILEO E5A(FNAV)
+3 - GIOVE E1B
+4 - GIOVE E5A
+--- End of GALILEO-specific data block ---</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>EN</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QZSSEphemeris" Size="-1" Title="[QE] QZSS Ephemeris" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GPSEphemeris1" Name="gps" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Without ‘cs’, ‘gps.sv’ within the range[193…197]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QE</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="GLOEphemeris" Size="-3" Title="[NE] GLONASS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
@@ -1822,7 +1913,40 @@ tau = TGLN - TSV [s]</Comment>
 3 - GLONASS-M P4
 4…5 - GLONASS-M M
 6 - GLONASS-M ln (fifth string)
-7…15 - reserved</Comment>
+7…15 - reserved
+--- Optional data block ---</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="navType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Signal type nav. data was been decoded from</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="beta" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Derivation of rate of satellite clock offset [s/s/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="tauSysDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Derivation of ‘tauSys’ [s/s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="ec" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Age of clock information (days)</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="ee" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Age of ephemeris information (days)</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="fc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Clock accuracy index</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="fe" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Ephemeris accuracy index</Comment>
+        </Variable>
+        <Variable GreisType="u2" Name="reserv" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>--- End of optional data block ---</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
@@ -1833,15 +1957,15 @@ tau = TGLN - TSV [s]</Comment>
         <Code>NE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="WAASEhemeris" Size="71" Title="[WE] WAAS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="SBASEhemeris" Size="73" Title="[WE] WAAS/EGNOS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS SV PRN number within [120…138]</Comment>
+          <Comment>SBAS SV PRN number within [120…138]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="gpsPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>GPS SV PRN associated with WAAS SV</Comment>
+          <Comment>GPS SV PRN associated with SBAS SV</Comment>
         </Variable>
         <Variable GreisType="u1" Name="iod" RequiredValue="">
           <SizeOfDimensions />
@@ -1849,7 +1973,7 @@ tau = TGLN - TSV [s]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="acc" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS SV accuracy9</Comment>
+          <Comment>SBAS SV accuracy10</Comment>
         </Variable>
         <Variable GreisType="u4" Name="tod" RequiredValue="">
           <SizeOfDimensions />
@@ -1893,11 +2017,11 @@ tau = TGLN - TSV [s]</Comment>
         </Variable>
         <Variable GreisType="f4" Name="agf0" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS SV clock offset factor ‘ao’ [s]</Comment>
+          <Comment>SBAS SV clock offset factor ‘ao’ [s]</Comment>
         </Variable>
         <Variable GreisType="f4" Name="agf1" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>WAAS SV clock offset factor ‘a1’ [s/s]</Comment>
+          <Comment>SBAS SV clock offset factor ‘a1’ [s/s]</Comment>
         </Variable>
         <Variable GreisType="u4" Name="tow" RequiredValue="">
           <SizeOfDimensions />
@@ -1908,6 +2032,13 @@ received at</Comment>
           <SizeOfDimensions />
           <Comment>GPS week this ephemeris was received at</Comment>
         </Variable>
+        <Variable GreisType="u2" Name="flags" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Flags [bitfield]:
+0…5 - reserved
+6 - ephemeris was retrieved from NV-memory
+7…15 - reserved</Comment>
+        </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Checksum</Comment>
@@ -1917,53 +2048,7 @@ received at</Comment>
         <Code>WE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GALEphemeris" Size="145" Title="[EN] GALILEO Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
-      <Variables>
-        <Variable GreisType="GPSEphemeris1" Name="gps" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Without ‘cs’ field, gps.sv within the range [1…30]
-GALILEO-specific data</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="bgdE1E5a" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>broacast group delay E1 - E5A [s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="bgdE1E5b" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>broacast group delay E1 - E5B [s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="ai0" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Effective ionisation level 1-st order parameter []</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="ai1" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Effective ionisation level 2-nd order parameter []</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="ai2" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Effective ionisation level 3-rd order parameter []</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="sfi" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Ionospheric disturbance flags [bitfield]</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="navType" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Type of navigation data:
-0 - GALILEO E1B(INAV)
-3 - GIOVE E1B</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="cs" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Checksum</Comment>
-        </Variable>
-      </Variables>
-      <Codes>
-        <Code>EN</Code>
-      </Codes>
-    </StandardMessage>
-    <StandardMessage Name="GpsNavData" Size="-2" Title="[GD] GPS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="GpsNavData0" Size="-2" Title="[GD] GPS Raw Navigation Data (obsolete)" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="recSize" RequiredValue="">
           <SizeOfDimensions />
@@ -1986,7 +2071,66 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>GD</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GloNavData" Size="-2" Title="[LD] GLONASS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="GpsRawNavData0" Size="-2" Title="[gd] GPS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="u1" Name="prn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Pseudo-Range Number (PRN)</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="time" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Time of receiving of message [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="type" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Type of data:
+0 - GPS L1 NAV
+1 - GPS L2C CNAV
+2 - GPS L5 CNAV
+3 - GPS L1C CNAV2</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="len" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Length of the navigation data block ‘data’</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="data" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Navigation data block</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>gd</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QzssNavData" Size="-1" Title="[QD] QZSS Raw Navigation Data (obsolete)" Validation="None" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GpsNavData1" Name="data" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment />
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QD</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QzssRawNavData" Size="-1" Title="[qd] QZSS Raw Navigation Data" Validation="None" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GpsRawNavData1" Name="data" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment />
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>qd</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="GloNavData" Size="-2" Title="[LD] GLONASS Raw Navigation Data (obsolete)" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="recSize" RequiredValue="">
           <SizeOfDimensions />
@@ -2009,7 +2153,46 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>LD</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="WAASRawMessage" Size="40" Title="[WD] WAAS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="GloRawNavData" Size="-2" Title="[lD] GLONASS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="u1" Name="num" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV number</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="fcn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV frequency code number</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="time" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>GLONASS time of receiving of message [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="type" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Type of data:
+0 - L1
+1 - L3</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="len" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Length of the navigation data block ‘data’</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="data" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Navigation data block</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>lD</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="SbasRawNavData" Size="40" Title="[WD] WAAS/EGNOS Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="prn" RequiredValue="">
           <SizeOfDimensions />
@@ -2038,7 +2221,7 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>WD</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GALRawMessage" Size="-2" Title="[ED] GALILEO Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="GalRawNavData" Size="-2" Title="[ED] GALILEO Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="prn" RequiredValue="">
           <SizeOfDimensions />
@@ -2052,7 +2235,9 @@ N=([Message Length] - 2) / recSize)</Comment>
           <SizeOfDimensions />
           <Comment>Type of data:
 0 - GALILEO E1B(INAV)
-3 - GIOVE E1B</Comment>
+1 - GALILEO E5A(FNAV)
+3 - GIOVE E1B
+4 - GIOVE E5A</Comment>
         </Variable>
         <Variable GreisType="u1" Name="len" RequiredValue="">
           <SizeOfDimensions />
@@ -2071,6 +2256,105 @@ N=([Message Length] - 2) / recSize)</Comment>
       </Variables>
       <Codes>
         <Code>ED</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="CompRawNavData" Size="-2" Title="[cd] COMPASS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="u1" Name="prn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV PRN number</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="time" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>COMPASS Time of receiving of message [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="type" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Type of data: TBD</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="len" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Length of the navigation data block ‘data’</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="data" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Navigation data block</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>cd</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="Spectrum0" Size="-1" Title="[sp] Spectrum" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="i2" Name="currFrq" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Current frequency [Hz*104]</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="finalFrq" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Frequency of the last message [Hz*104]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="n" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Number of spectrums in this</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="m" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Number of spectrum blocks in this message</Comment>
+        </Variable>
+        <Variable GreisType="SpecData" Name="s" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Spectrum data</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>sp</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="Spectrum1" Size="-1" Title="[sP] Extended Spectrum" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="i2" Name="currFrq" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Current frequency [Hz*104]</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="finalFrq" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Frequency of the last message [Hz*104]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="n" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Number of spectrums in this message</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="m" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Number of spectrum blocks in this message</Comment>
+        </Variable>
+        <Variable GreisType="ExtSpecData" Name="s" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Extended spectrum data</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>sP</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="GloPhaseDelay" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Phase Delays" Validation="Checksum" Type="Unknown">
@@ -2137,7 +2421,7 @@ N=([Message Length] - 2) / recSize)</Comment>
           <SizeOfDimensions>
             <Dimension>3</Dimension>
           </SizeOfDimensions>
-          <Comment>solution type10 for three baseline vectors</Comment>
+          <Comment>solution type11 for three baseline vectors</Comment>
         </Variable>
         <Variable GreisType="u1" Name="flag" RequiredValue="">
           <SizeOfDimensions />
@@ -2184,7 +2468,7 @@ N=([Message Length] - 2) / recSize)</Comment>
           <SizeOfDimensions>
             <Dimension>3</Dimension>
           </SizeOfDimensions>
-          <Comment>solution type10 for three baseline vectors</Comment>
+          <Comment>solution type11 for three baseline vectors</Comment>
         </Variable>
         <Variable GreisType="u1" Name="flag" RequiredValue="">
           <SizeOfDimensions />
@@ -2521,9 +2805,9 @@ coordinates
 14…13: reserved
 12…8: Number of GLONASS SVs used in computation;
 7…4: Position computation mode
-(see Table 4-3 on page 306);
+(see Table 4-3 on page 324);
 3…0: Velocity computation mode
-(see Table 4-3 on page 306);</Comment>
+(see Table 4-3 on page 324);</Comment>
         </Variable>
         <Variable GreisType="u4" Name="word3" RequiredValue="">
           <SizeOfDimensions />
@@ -2642,7 +2926,7 @@ length taken from message header</Comment>
         <Code>ER</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="IonoParams" Size="39" Title="[IO] Ionospheric Parameters" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="IonoParams0" Size="39" Title="[IO] GPS Ionospheric Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u4" Name="tot" RequiredValue="">
           <SizeOfDimensions />
@@ -2695,6 +2979,17 @@ the period of the model</Comment>
       </Variables>
       <Codes>
         <Code>IO</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="QzssIonoParams" Size="39" Title="[QI] QZSS Ionospheric Parameters" Validation="None" Type="Unknown">
+      <Variables>
+        <Variable GreisType="IonoParams1" Name="par" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment />
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>QI</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="Event" Size="-2" Title="[==](EV) Event" Validation="Checksum" Type="Unknown">
@@ -2862,7 +3157,7 @@ the period of the model</Comment>
         <Code>BI</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="Security" Size="6" Title="[SE] Security" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="Security0" Size="6" Title="[SE] Security" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="data" RequiredValue="">
           <SizeOfDimensions>
@@ -2879,7 +3174,7 @@ the period of the model</Comment>
         <Code>SE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="Security" Size="8" Title="[SM] Security for [rM]" Validation="Crc16" Type="Unknown">
+    <StandardMessage Name="Security1" Size="8" Title="[SM] Security for [rM]" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="data" RequiredValue="">
           <SizeOfDimensions>
@@ -2987,6 +3282,146 @@ the period of the model</Comment>
         </Variable>
       </Variables>
     </CustomType>
+    <CustomType Name="GpsEphReqData" Size="122">
+      <Variables>
+        <Variable GreisType="u1" Name="sv" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV PRN number within the range [1…37]</Comment>
+        </Variable>
+        <Variable GreisType="u4" Name="tow" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Time of week [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="flags" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Flags (see GPS ICD for details)[bitfield]:
+0 - curve fit interval
+1 - data flag for L2 P-code
+2,3 - code on L2 channel
+4 - anti-spoof (A-S) flag (from HOW)
+5 - ‘Alert’ flag (from HOW)
+6 - ephemeris was retrieved from non-volatile memory
+7 - reserved
+===== Clock data (Subframe 1) =====</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="iodc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Issue of data, clock []</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="toc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Clock data reference time [s]</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="ura" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>User range accuracy []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="healthS" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Satellite health []</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="wn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Week number []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="tgd" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Estimated group delay differential [s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af2" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s/(s^2)]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af1" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="af0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Polynomial coefficient [s]
+===== Ephemeris data (Subframes 2 and 3) =====</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="toe" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Ephemeris reference time [s]</Comment>
+        </Variable>
+        <Variable GreisType="i2" Name="iode" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Issue of data, ephemeris []
+--- Keplerian orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="rootA" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="ecc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Eccentricity []</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="m0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Mean Anomaly at reference time (wn,toe)
+[semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="omega0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Longitude of ascending node of orbit plane at the
+start of week ‘wn’ [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="inc0" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Inclination angle at reference time [semi-circles]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="argPer" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Argument of perigee [semi-circles]
+--- Corrections to orbital parameters ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="deln" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Mean motion difference from computed value
+[semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="omegaDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of right ascension [semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="incDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of inclination angle [semi-circle/s]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="crc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="crs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the orbit radius [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cuc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cus" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the argument of latitude [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cic" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the cosine harmonic correction term
+to the angle of inclination [rad]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="cis" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Amplitude of the sine harmonic correction term
+to the angle of inclination [rad]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
     <CustomType Name="SvData0" Size="42">
       <Variables>
         <Variable GreisType="i1" Name="prn" RequiredValue="">
@@ -3024,6 +3459,38 @@ string of a GLONASS sub-frame for given FCN.</Comment>
           </SizeOfDimensions>
           <Comment>GLONASS string contents. Every 4-bytes word contains
 25 LSB of the string of GLONASS sub-frame.</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="SpecData" Size="-1">
+      <Variables>
+        <Variable GreisType="i2" Name="spec" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Spectrum values for n spectrums [dB*0.1]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="ExtSpecData" Size="-1">
+      <Variables>
+        <Variable GreisType="i2" Name="spec" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Spectrum values for n spectrums [dB*0.1]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="agcmin" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Min AGC values []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="agcmax" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Max AGC values []</Comment>
         </Variable>
       </Variables>
     </CustomType>
@@ -3069,7 +3536,7 @@ SV status [bitfield]:
 15…11: GLONASS slot number (for GPS SV the field
 is undefined), [0…24], 0 - unknown
 10…6: Channel number [0…31], 31 - unavailable
-5…0: SV navigation status
+5…0: Satellite navigation status
 Delta pseudo-range [0.02 meters]:
 [full pseudo-range for given slot]-[refrange]</Comment>
         </Variable>
@@ -3207,143 +3674,155 @@ at the start of week ‘wna’ [semi-circles]</Comment>
         </Variable>
       </Variables>
     </CustomType>
-    <CustomType Name="GPSEphemeris1" Size="122">
+    <CustomType Name="GPSEphemeris1" Size="-4">
       <Variables>
-        <Variable GreisType="u1" Name="sv" RequiredValue="">
+        <Variable GreisType="GpsEphReqData" Name="req" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>SV PRN number within the range [1…37]</Comment>
+          <Comment>Required data
+--- Optional data block ---</Comment>
         </Variable>
-        <Variable GreisType="u4" Name="tow" RequiredValue="">
+        <Variable GreisType="u1" Name="cNavType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Signal type nav. data was decoded from</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="lTope" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Time of prediction for ephemeris data</Comment>
+        </Variable>
+        <Variable GreisType="i4" Name="lTopc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Time of prediction for clock data</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="dADot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Change rate in semi-major axis</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="fDelnDot" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Rate of mean motion</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="cURAoe" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV ephemeris URA index</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="cURAoc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV clock URA index</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="cURAoc1" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV clock URA change index</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="cURAoc2" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>SV clock URA change rate index
+--- End of optional data block ---</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="IonoParams1" Size="39">
+      <Variables>
+        <Variable GreisType="u4" Name="tot" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Time of week [s]</Comment>
         </Variable>
-        <Variable GreisType="u1" Name="flags" RequiredValue="">
+        <Variable GreisType="u2" Name="wn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Flags (see GPS ICD for details)[bitfield]:
-0 - curve fit interval
-1 - data flag for L2 P-code
-2,3 - code on L2 channel
-4 - anti-spoof (A-S) flag (from HOW)
-5 - ‘Alert’ flag (from HOW)
-6 - ephemeris was retrieved from non-volatile memory
-7 - reserved
-===== Clock data (Subframe 1) =====</Comment>
+          <Comment>Week number (taken from the first subframe)
+The coefficients of a cubic equation representing
+the amplitude of the vertical delay</Comment>
         </Variable>
-        <Variable GreisType="i2" Name="iodc" RequiredValue="">
+        <Variable GreisType="f4" Name="alpha0" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Issue of data, clock []</Comment>
+          <Comment>[s]</Comment>
         </Variable>
-        <Variable GreisType="i4" Name="toc" RequiredValue="">
+        <Variable GreisType="f4" Name="alpha1" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Clock data reference time [s]</Comment>
+          <Comment>[s/semicircles]</Comment>
         </Variable>
-        <Variable GreisType="i1" Name="ura" RequiredValue="">
+        <Variable GreisType="f4" Name="alpha2" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>User range accuracy []</Comment>
+          <Comment>[s/semicircles2]</Comment>
         </Variable>
-        <Variable GreisType="u1" Name="healthS" RequiredValue="">
+        <Variable GreisType="f4" Name="alpha3" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Satellite health []</Comment>
+          <Comment>[s/semicircles3]
+The coefficients of a cubic equation representing
+the period of the model</Comment>
         </Variable>
-        <Variable GreisType="i2" Name="wn" RequiredValue="">
+        <Variable GreisType="f4" Name="beta0" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Week number []</Comment>
+          <Comment>[s]</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="tgd" RequiredValue="">
+        <Variable GreisType="f4" Name="beta1" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Estimated group delay differential [s]</Comment>
+          <Comment>[s/semicircles]</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="af2" RequiredValue="">
+        <Variable GreisType="f4" Name="beta2" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s/(s^2)]</Comment>
+          <Comment>[s/semicircles2]</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="af1" RequiredValue="">
+        <Variable GreisType="f4" Name="beta3" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s/s]</Comment>
+          <Comment>[s/semicircles3]</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="af0" RequiredValue="">
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Polynomial coefficient [s]
-===== Ephemeris data (Subframes 2 and 3) =====</Comment>
+          <Comment>Checksum</Comment>
         </Variable>
-        <Variable GreisType="i4" Name="toe" RequiredValue="">
+      </Variables>
+    </CustomType>
+    <CustomType Name="GpsNavData1" Size="-2">
+      <Variables>
+        <Variable GreisType="u1" Name="recSize" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Ephemeris reference time [s]</Comment>
+          <Comment>Size of satellite data record (currently 42)</Comment>
         </Variable>
-        <Variable GreisType="i2" Name="iode" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Issue of data, ephemeris []
---- Keplerian orbital parameters ---</Comment>
+        <Variable GreisType="SvData0" Name="dat" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Satellite data. “N” can be derived from the
+following expression:
+N=([Message Length] - 2) / recSize)</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="rootA" RequiredValue="">
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Square root of the semi-major axis [m^0.5]</Comment>
+          <Comment>Checksum</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="ecc" RequiredValue="">
+      </Variables>
+    </CustomType>
+    <CustomType Name="GpsRawNavData1" Size="-2">
+      <Variables>
+        <Variable GreisType="u1" Name="prn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Eccentricity []</Comment>
+          <Comment>Pseudo-Range Number (PRN)</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="m0" RequiredValue="">
+        <Variable GreisType="u4" Name="time" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Mean Anomaly at reference time (wn,toe)
-[semi-circles]</Comment>
+          <Comment>Time of receiving of message [s]</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="omega0" RequiredValue="">
+        <Variable GreisType="u1" Name="type" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Longitude of ascending node of orbit plane at the
-start of week ‘wn’ [semi-circles]</Comment>
+          <Comment>Type of data:
+0 - GPS L1 NAV
+1 - GPS L2C CNAV
+2 - GPS L5 CNAV
+3 - GPS L1C CNAV2</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="inc0" RequiredValue="">
+        <Variable GreisType="u1" Name="len" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Inclination angle at reference time [semi-circles]</Comment>
+          <Comment>Length of the navigation data block ‘data’</Comment>
         </Variable>
-        <Variable GreisType="f8" Name="argPer" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Argument of perigee [semi-circles]
---- Corrections to orbital parameters ---</Comment>
+        <Variable GreisType="u4" Name="data" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Navigation data block</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="deln" RequiredValue="">
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Mean motion difference from computed value
-[semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="omegaDot" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Rate of right ascension [semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="incDot" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Rate of inclination angle [semi-circle/s]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="crc" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the orbit radius [m]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="crs" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the orbit radius [m]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cuc" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the argument of latitude [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cus" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the argument of latitude [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cic" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the cosine harmonic correction term
-to the angle of inclination [rad]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="cis" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Amplitude of the sine harmonic correction term
-to the angle of inclination [rad]</Comment>
+          <Comment>Checksum</Comment>
         </Variable>
       </Variables>
     </CustomType>

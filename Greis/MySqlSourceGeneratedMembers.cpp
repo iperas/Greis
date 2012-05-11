@@ -39,6 +39,42 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Interval());
             };
         
+        auto queryGpsEphReqDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis` FROM `ct_GpsEphReqData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerGpsEphReqDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new GpsEphReqDataCustomType(size);
+                auto c = dynamic_cast<GpsEphReqDataCustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Sv());
+                serializer.Deserialize(q.value(5), c->Tow());
+                serializer.Deserialize(q.value(6), c->Flags());
+                serializer.Deserialize(q.value(7), c->Iodc());
+                serializer.Deserialize(q.value(8), c->Toc());
+                serializer.Deserialize(q.value(9), c->Ura());
+                serializer.Deserialize(q.value(10), c->HealthS());
+                serializer.Deserialize(q.value(11), c->Wn());
+                serializer.Deserialize(q.value(12), c->Tgd());
+                serializer.Deserialize(q.value(13), c->Af2());
+                serializer.Deserialize(q.value(14), c->Af1());
+                serializer.Deserialize(q.value(15), c->Af0());
+                serializer.Deserialize(q.value(16), c->Toe());
+                serializer.Deserialize(q.value(17), c->Iode());
+                serializer.Deserialize(q.value(18), c->RootA());
+                serializer.Deserialize(q.value(19), c->Ecc());
+                serializer.Deserialize(q.value(20), c->M0());
+                serializer.Deserialize(q.value(21), c->Omega0());
+                serializer.Deserialize(q.value(22), c->Inc0());
+                serializer.Deserialize(q.value(23), c->ArgPer());
+                serializer.Deserialize(q.value(24), c->Deln());
+                serializer.Deserialize(q.value(25), c->OmegaDot());
+                serializer.Deserialize(q.value(26), c->IncDot());
+                serializer.Deserialize(q.value(27), c->Crc());
+                serializer.Deserialize(q.value(28), c->Crs());
+                serializer.Deserialize(q.value(29), c->Cuc());
+                serializer.Deserialize(q.value(30), c->Cus());
+                serializer.Deserialize(q.value(31), c->Cic());
+                serializer.Deserialize(q.value(32), c->Cis());
+            };
+        
         auto querySvData0CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data` FROM `ct_SvData0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
         auto handlerSvData0CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
@@ -57,6 +93,24 @@ namespace Greis
                 serializer.Deserialize(q.value(4), c->Fcn1());
                 serializer.Deserialize(q.value(5), c->Cnt());
                 serializer.Deserialize(q.value(6), c->Data());
+            };
+        
+        auto querySpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec` FROM `ct_SpecData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerSpecDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new SpecDataCustomType(size);
+                auto c = dynamic_cast<SpecDataCustomType*>(ct);
+                
+                throw ProjectBase::NotImplementedException();
+            };
+        
+        auto queryExtSpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax` FROM `ct_ExtSpecData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerExtSpecDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new ExtSpecDataCustomType(size);
+                auto c = dynamic_cast<ExtSpecDataCustomType*>(ct);
+                
+                throw ProjectBase::NotImplementedException();
             };
         
         auto querySvData2CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `header`, `slot` FROM `ct_SvData2` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
@@ -121,50 +175,78 @@ namespace Greis
                 serializer.Deserialize(q.value(18), c->OmegaDot());
             };
         
-        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis` FROM `ct_GPSEphemeris1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2` FROM `ct_GPSEphemeris1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
         auto handlerGPSEphemeris1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSEphemeris1CustomType(size);
                 auto c = dynamic_cast<GPSEphemeris1CustomType*>(ct);
-                serializer.Deserialize(q.value(4), c->Sv());
-                serializer.Deserialize(q.value(5), c->Tow());
-                serializer.Deserialize(q.value(6), c->Flags());
-                serializer.Deserialize(q.value(7), c->Iodc());
-                serializer.Deserialize(q.value(8), c->Toc());
-                serializer.Deserialize(q.value(9), c->Ura());
-                serializer.Deserialize(q.value(10), c->HealthS());
-                serializer.Deserialize(q.value(11), c->Wn());
-                serializer.Deserialize(q.value(12), c->Tgd());
-                serializer.Deserialize(q.value(13), c->Af2());
-                serializer.Deserialize(q.value(14), c->Af1());
-                serializer.Deserialize(q.value(15), c->Af0());
-                serializer.Deserialize(q.value(16), c->Toe());
-                serializer.Deserialize(q.value(17), c->Iode());
-                serializer.Deserialize(q.value(18), c->RootA());
-                serializer.Deserialize(q.value(19), c->Ecc());
-                serializer.Deserialize(q.value(20), c->M0());
-                serializer.Deserialize(q.value(21), c->Omega0());
-                serializer.Deserialize(q.value(22), c->Inc0());
-                serializer.Deserialize(q.value(23), c->ArgPer());
-                serializer.Deserialize(q.value(24), c->Deln());
-                serializer.Deserialize(q.value(25), c->OmegaDot());
-                serializer.Deserialize(q.value(26), c->IncDot());
-                serializer.Deserialize(q.value(27), c->Crc());
-                serializer.Deserialize(q.value(28), c->Crs());
-                serializer.Deserialize(q.value(29), c->Cuc());
-                serializer.Deserialize(q.value(30), c->Cus());
-                serializer.Deserialize(q.value(31), c->Cic());
-                serializer.Deserialize(q.value(32), c->Cis());
+                c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(4).toInt());
+                serializer.Deserialize(q.value(5), c->CNavType());
+                serializer.Deserialize(q.value(6), c->LTope());
+                serializer.Deserialize(q.value(7), c->LTopc());
+                serializer.Deserialize(q.value(8), c->DADot());
+                serializer.Deserialize(q.value(9), c->FDelnDot());
+                serializer.Deserialize(q.value(10), c->CURAoe());
+                serializer.Deserialize(q.value(11), c->CURAoc());
+                serializer.Deserialize(q.value(12), c->CURAoc1());
+                serializer.Deserialize(q.value(13), c->CURAoc2());
+            };
+        
+        auto queryIonoParams1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `ct_IonoParams1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerIonoParams1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new IonoParams1CustomType(size);
+                auto c = dynamic_cast<IonoParams1CustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Tot());
+                serializer.Deserialize(q.value(5), c->Wn());
+                serializer.Deserialize(q.value(6), c->Alpha0());
+                serializer.Deserialize(q.value(7), c->Alpha1());
+                serializer.Deserialize(q.value(8), c->Alpha2());
+                serializer.Deserialize(q.value(9), c->Alpha3());
+                serializer.Deserialize(q.value(10), c->Beta0());
+                serializer.Deserialize(q.value(11), c->Beta1());
+                serializer.Deserialize(q.value(12), c->Beta2());
+                serializer.Deserialize(q.value(13), c->Beta3());
+                serializer.Deserialize(q.value(14), c->Cs());
+            };
+        
+        auto queryGpsNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `recSize`, `dat`, `cs` FROM `ct_GpsNavData1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerGpsNavData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new GpsNavData1CustomType(size);
+                auto c = dynamic_cast<GpsNavData1CustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->RecSize());
+                c->Dat() = this->deserializeAndGetCustomTypes<SvData0CustomType>(ECustomTypeId::SvData0, q.value(5));
+                serializer.Deserialize(q.value(6), c->Cs());
+            };
+        
+        auto queryGpsRawNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `ct_GpsRawNavData1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto handlerGpsRawNavData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new GpsRawNavData1CustomType(size);
+                auto c = dynamic_cast<GpsRawNavData1CustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Prn());
+                serializer.Deserialize(q.value(5), c->Time());
+                serializer.Deserialize(q.value(6), c->Type());
+                serializer.Deserialize(q.value(7), c->Len());
+                serializer.Deserialize(q.value(8), c->Data());
+                serializer.Deserialize(q.value(9), c->Cs());
             };
         
         _ctQueries.insert(ECustomTypeId::UtcOffs, queryUtcOffsCustomType);
         _ctHandlers.insert(ECustomTypeId::UtcOffs, handlerUtcOffsCustomType);
         _ctQueries.insert(ECustomTypeId::Smooth, querySmoothCustomType);
         _ctHandlers.insert(ECustomTypeId::Smooth, handlerSmoothCustomType);
+        _ctQueries.insert(ECustomTypeId::GpsEphReqData, queryGpsEphReqDataCustomType);
+        _ctHandlers.insert(ECustomTypeId::GpsEphReqData, handlerGpsEphReqDataCustomType);
         _ctQueries.insert(ECustomTypeId::SvData0, querySvData0CustomType);
         _ctHandlers.insert(ECustomTypeId::SvData0, handlerSvData0CustomType);
         _ctQueries.insert(ECustomTypeId::SvData1, querySvData1CustomType);
         _ctHandlers.insert(ECustomTypeId::SvData1, handlerSvData1CustomType);
+        _ctQueries.insert(ECustomTypeId::SpecData, querySpecDataCustomType);
+        _ctHandlers.insert(ECustomTypeId::SpecData, handlerSpecDataCustomType);
+        _ctQueries.insert(ECustomTypeId::ExtSpecData, queryExtSpecDataCustomType);
+        _ctHandlers.insert(ECustomTypeId::ExtSpecData, handlerExtSpecDataCustomType);
         _ctQueries.insert(ECustomTypeId::SvData2, querySvData2CustomType);
         _ctHandlers.insert(ECustomTypeId::SvData2, handlerSvData2CustomType);
         _ctQueries.insert(ECustomTypeId::Header, queryHeaderCustomType);
@@ -177,6 +259,12 @@ namespace Greis
         _ctHandlers.insert(ECustomTypeId::GPSAlm1, handlerGPSAlm1CustomType);
         _ctQueries.insert(ECustomTypeId::GPSEphemeris1, queryGPSEphemeris1CustomType);
         _ctHandlers.insert(ECustomTypeId::GPSEphemeris1, handlerGPSEphemeris1CustomType);
+        _ctQueries.insert(ECustomTypeId::IonoParams1, queryIonoParams1CustomType);
+        _ctHandlers.insert(ECustomTypeId::IonoParams1, handlerIonoParams1CustomType);
+        _ctQueries.insert(ECustomTypeId::GpsNavData1, queryGpsNavData1CustomType);
+        _ctHandlers.insert(ECustomTypeId::GpsNavData1, handlerGpsNavData1CustomType);
+        _ctQueries.insert(ECustomTypeId::GpsRawNavData1, queryGpsRawNavData1CustomType);
+        _ctHandlers.insert(ECustomTypeId::GpsRawNavData1, handlerGpsRawNavData1CustomType);
     }
     
     JpsFile::UniquePtr_t MySqlSource::ReadRange( const QDateTime& from, const QDateTime& to )
@@ -351,13 +439,25 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvWAASTimeOffset` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvSBASTimeOffset` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<RcvWAASTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvWAASTimeOffsetStdMessage*>(msg.get());
+                msg = make_unique<RcvSBASTimeOffsetStdMessage>(id, bodySize);
+                auto c = dynamic_cast<RcvSBASTimeOffsetStdMessage*>(msg.get());
+                serializer.Deserialize(q.value(5), c->Val());
+                serializer.Deserialize(q.value(6), c->Sval());
+                serializer.Deserialize(q.value(7), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvQZSSTimeOffset` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<RcvQZSSTimeOffsetStdMessage>(id, bodySize);
+                auto c = dynamic_cast<RcvQZSSTimeOffsetStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->Val());
                 serializer.Deserialize(q.value(6), c->Sval());
                 serializer.Deserialize(q.value(7), c->Cs());
@@ -374,13 +474,13 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `utcsi`, `tow`, `wn`, `flags`, `cs` FROM `msg_WaasUtcParam` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `utcsi`, `tow`, `wn`, `flags`, `cs` FROM `msg_SbasUtcParam` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<WaasUtcParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<WaasUtcParamStdMessage*>(msg.get());
+                msg = make_unique<SbasUtcParamStdMessage>(id, bodySize);
+                auto c = dynamic_cast<SbasUtcParamStdMessage*>(msg.get());
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(5).toInt());
                 serializer.Deserialize(q.value(6), c->Utcsi());
                 serializer.Deserialize(q.value(7), c->Tow());
@@ -403,6 +503,17 @@ namespace Greis
                 serializer.Deserialize(q.value(9), c->Wn0g());
                 serializer.Deserialize(q.value(10), c->Flags());
                 serializer.Deserialize(q.value(11), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_QzssUtcParam` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QzssUtcParamStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QzssUtcParamStdMessage*>(msg.get());
+                c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(5).toInt());
+                serializer.Deserialize(q.value(6), c->Cs());
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tauSys`, `tauGps`, `B1`, `B2`, `KP`, `N4`, `Dn`, `cs` FROM `msg_GloUtcGpsParam` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -584,13 +695,13 @@ namespace Greis
                 serializer.Deserialize(q.value(16), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `time`, `cs` FROM `msg_BaseLine` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `time`, `cs` FROM `msg_Baseline` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<BaseLineStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BaseLineStdMessage*>(msg.get());
+                msg = make_unique<BaselineStdMessage>(id, bodySize);
+                auto c = dynamic_cast<BaselineStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->X());
                 serializer.Deserialize(q.value(6), c->Y());
                 serializer.Deserialize(q.value(7), c->Z());
@@ -849,6 +960,28 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Cs());
             }, 
             epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs` FROM `msg_IAmp` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<IAmpStdMessage>(id, bodySize);
+                auto c = dynamic_cast<IAmpStdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs` FROM `msg_QAmp` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QAmpStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QAmpStdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
+            }, 
+            epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tt`, `cs` FROM `msg_TrackingTimeCA` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
@@ -920,7 +1053,18 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `cs` FROM `msg_GLOAlmanac` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `cs` FROM `msg_QZSSAlm` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QZSSAlmStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QZSSAlmStdMessage*>(msg.get());
+                c->Gps() = this->extractCustomType<GPSAlm1CustomType>(ECustomTypeId::GPSAlm1, q.value(5).toInt());
+                serializer.Deserialize(q.value(6), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `n4`, `navType`, `gammaN`, `cs` FROM `msg_GLOAlmanac` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
@@ -940,16 +1084,23 @@ namespace Greis
                 serializer.Deserialize(q.value(15), c->DelT());
                 serializer.Deserialize(q.value(16), c->DelTdt());
                 serializer.Deserialize(q.value(17), c->Deli());
-                serializer.Deserialize(q.value(18), c->Cs());
+                serializer.Deserialize(q.value(18), c->N4());
+                if (bodySize == 52)
+                {
+                    // Optional Data Block
+                    serializer.Deserialize(q.value(19), c->NavType());
+                    serializer.Deserialize(q.value(20), c->GammaN());
+                }
+                serializer.Deserialize(q.value(21), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs` FROM `msg_WAASAlmanac` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs` FROM `msg_SBASAlmanac` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<WAASAlmanacStdMessage>(id, bodySize);
-                auto c = dynamic_cast<WAASAlmanacStdMessage*>(msg.get());
+                msg = make_unique<SBASAlmanacStdMessage>(id, bodySize);
+                auto c = dynamic_cast<SBASAlmanacStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->WaasPrn());
                 serializer.Deserialize(q.value(6), c->GpsPrn());
                 serializer.Deserialize(q.value(7), c->IdField());
@@ -966,46 +1117,60 @@ namespace Greis
                 serializer.Deserialize(q.value(18), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis`, `cs` FROM `msg_GPSEphemeris0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `cs` FROM `msg_GPSEphemeris0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
                 msg = make_unique<GPSEphemeris0StdMessage>(id, bodySize);
                 auto c = dynamic_cast<GPSEphemeris0StdMessage*>(msg.get());
-                serializer.Deserialize(q.value(5), c->Sv());
-                serializer.Deserialize(q.value(6), c->Tow());
-                serializer.Deserialize(q.value(7), c->Flags());
-                serializer.Deserialize(q.value(8), c->Iodc());
-                serializer.Deserialize(q.value(9), c->Toc());
-                serializer.Deserialize(q.value(10), c->Ura());
-                serializer.Deserialize(q.value(11), c->HealthS());
-                serializer.Deserialize(q.value(12), c->Wn());
-                serializer.Deserialize(q.value(13), c->Tgd());
-                serializer.Deserialize(q.value(14), c->Af2());
-                serializer.Deserialize(q.value(15), c->Af1());
-                serializer.Deserialize(q.value(16), c->Af0());
-                serializer.Deserialize(q.value(17), c->Toe());
-                serializer.Deserialize(q.value(18), c->Iode());
-                serializer.Deserialize(q.value(19), c->RootA());
-                serializer.Deserialize(q.value(20), c->Ecc());
-                serializer.Deserialize(q.value(21), c->M0());
-                serializer.Deserialize(q.value(22), c->Omega0());
-                serializer.Deserialize(q.value(23), c->Inc0());
-                serializer.Deserialize(q.value(24), c->ArgPer());
-                serializer.Deserialize(q.value(25), c->Deln());
-                serializer.Deserialize(q.value(26), c->OmegaDot());
-                serializer.Deserialize(q.value(27), c->IncDot());
-                serializer.Deserialize(q.value(28), c->Crc());
-                serializer.Deserialize(q.value(29), c->Crs());
-                serializer.Deserialize(q.value(30), c->Cuc());
-                serializer.Deserialize(q.value(31), c->Cus());
-                serializer.Deserialize(q.value(32), c->Cic());
-                serializer.Deserialize(q.value(33), c->Cis());
-                serializer.Deserialize(q.value(34), c->Cs());
+                c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(5).toInt());
+                if (bodySize == 148)
+                {
+                    // Optional Data Block
+                    serializer.Deserialize(q.value(6), c->CNavType());
+                    serializer.Deserialize(q.value(7), c->LTope());
+                    serializer.Deserialize(q.value(8), c->LTopc());
+                    serializer.Deserialize(q.value(9), c->DADot());
+                    serializer.Deserialize(q.value(10), c->FDelnDot());
+                    serializer.Deserialize(q.value(11), c->CURAoe());
+                    serializer.Deserialize(q.value(12), c->CURAoc());
+                    serializer.Deserialize(q.value(13), c->CURAoc1());
+                    serializer.Deserialize(q.value(14), c->CURAoc2());
+                }
+                serializer.Deserialize(q.value(15), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `cs` FROM `msg_GLOEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs` FROM `msg_GALEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<GALEphemerisStdMessage>(id, bodySize);
+                auto c = dynamic_cast<GALEphemerisStdMessage*>(msg.get());
+                c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(5).toInt());
+                serializer.Deserialize(q.value(6), c->BgdE1E5a());
+                serializer.Deserialize(q.value(7), c->BgdE1E5b());
+                serializer.Deserialize(q.value(8), c->Ai0());
+                serializer.Deserialize(q.value(9), c->Ai1());
+                serializer.Deserialize(q.value(10), c->Ai2());
+                serializer.Deserialize(q.value(11), c->Sfi());
+                serializer.Deserialize(q.value(12), c->NavType());
+                serializer.Deserialize(q.value(13), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `cs` FROM `msg_QZSSEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QZSSEphemerisStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `navType`, `beta`, `tauSysDot`, `ec`, `ee`, `fc`, `fe`, `reserv`, `cs` FROM `msg_GLOEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
@@ -1030,16 +1195,28 @@ namespace Greis
                 serializer.Deserialize(q.value(20), c->NFt());
                 serializer.Deserialize(q.value(21), c->NN4());
                 serializer.Deserialize(q.value(22), c->Flags2());
-                serializer.Deserialize(q.value(23), c->Cs());
+                if (bodySize == 103)
+                {
+                    // Optional Data Block
+                    serializer.Deserialize(q.value(23), c->NavType());
+                    serializer.Deserialize(q.value(24), c->Beta());
+                    serializer.Deserialize(q.value(25), c->TauSysDot());
+                    serializer.Deserialize(q.value(26), c->Ec());
+                    serializer.Deserialize(q.value(27), c->Ee());
+                    serializer.Deserialize(q.value(28), c->Fc());
+                    serializer.Deserialize(q.value(29), c->Fe());
+                    serializer.Deserialize(q.value(30), c->Reserv());
+                }
+                serializer.Deserialize(q.value(31), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `cs` FROM `msg_WAASEhemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `flags`, `cs` FROM `msg_SBASEhemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<WAASEhemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<WAASEhemerisStdMessage*>(msg.get());
+                msg = make_unique<SBASEhemerisStdMessage>(id, bodySize);
+                auto c = dynamic_cast<SBASEhemerisStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->WaasPrn());
                 serializer.Deserialize(q.value(6), c->GpsPrn());
                 serializer.Deserialize(q.value(7), c->Iod());
@@ -1058,37 +1235,57 @@ namespace Greis
                 serializer.Deserialize(q.value(20), c->Agf1());
                 serializer.Deserialize(q.value(21), c->Tow());
                 serializer.Deserialize(q.value(22), c->Wn());
-                serializer.Deserialize(q.value(23), c->Cs());
+                serializer.Deserialize(q.value(23), c->Flags());
+                serializer.Deserialize(q.value(24), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs` FROM `msg_GALEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<GALEphemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GALEphemerisStdMessage*>(msg.get());
-                c->Gps() = this->extractCustomType<GPSEphemeris1CustomType>(ECustomTypeId::GPSEphemeris1, q.value(5).toInt());
-                serializer.Deserialize(q.value(6), c->BgdE1E5a());
-                serializer.Deserialize(q.value(7), c->BgdE1E5b());
-                serializer.Deserialize(q.value(8), c->Ai0());
-                serializer.Deserialize(q.value(9), c->Ai1());
-                serializer.Deserialize(q.value(10), c->Ai2());
-                serializer.Deserialize(q.value(11), c->Sfi());
-                serializer.Deserialize(q.value(12), c->NavType());
-                serializer.Deserialize(q.value(13), c->Cs());
-            }, 
-            epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
-            .arg(_from.toMSecsSinceEpoch())
-            .arg(_to.toMSecsSinceEpoch()), 
-            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
-            {
-                msg = make_unique<GpsNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GpsNavDataStdMessage*>(msg.get());
+                msg = make_unique<GpsNavData0StdMessage>(id, bodySize);
+                auto c = dynamic_cast<GpsNavData0StdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->RecSize());
                 c->Dat() = this->deserializeAndGetCustomTypes<SvData0CustomType>(ECustomTypeId::SvData0, q.value(6));
                 serializer.Deserialize(q.value(7), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GpsRawNavData0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<GpsRawNavData0StdMessage>(id, bodySize);
+                auto c = dynamic_cast<GpsRawNavData0StdMessage*>(msg.get());
+                serializer.Deserialize(q.value(5), c->Prn());
+                serializer.Deserialize(q.value(6), c->Time());
+                serializer.Deserialize(q.value(7), c->Type());
+                serializer.Deserialize(q.value(8), c->Len());
+                serializer.Deserialize(q.value(9), c->Data());
+                serializer.Deserialize(q.value(10), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QzssNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QzssNavDataStdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QzssRawNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GloNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1103,13 +1300,29 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs` FROM `msg_WAASRawMessage` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `num`, `fcn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GloRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<WAASRawMessageStdMessage>(id, bodySize);
-                auto c = dynamic_cast<WAASRawMessageStdMessage*>(msg.get());
+                msg = make_unique<GloRawNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<GloRawNavDataStdMessage*>(msg.get());
+                serializer.Deserialize(q.value(5), c->Num());
+                serializer.Deserialize(q.value(6), c->Fcn());
+                serializer.Deserialize(q.value(7), c->Time());
+                serializer.Deserialize(q.value(8), c->Type());
+                serializer.Deserialize(q.value(9), c->Len());
+                serializer.Deserialize(q.value(10), c->Data());
+                serializer.Deserialize(q.value(11), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs` FROM `msg_SbasRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<SbasRawNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<SbasRawNavDataStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->Prn());
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Reserv());
@@ -1117,19 +1330,56 @@ namespace Greis
                 serializer.Deserialize(q.value(9), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GALRawMessage` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GalRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<GALRawMessageStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GALRawMessageStdMessage*>(msg.get());
+                msg = make_unique<GalRawNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<GalRawNavDataStdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->Prn());
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Type());
                 serializer.Deserialize(q.value(8), c->Len());
                 serializer.Deserialize(q.value(9), c->Data());
                 serializer.Deserialize(q.value(10), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_CompRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<CompRawNavDataStdMessage>(id, bodySize);
+                auto c = dynamic_cast<CompRawNavDataStdMessage*>(msg.get());
+                serializer.Deserialize(q.value(5), c->Prn());
+                serializer.Deserialize(q.value(6), c->Time());
+                serializer.Deserialize(q.value(7), c->Type());
+                serializer.Deserialize(q.value(8), c->Len());
+                serializer.Deserialize(q.value(9), c->Data());
+                serializer.Deserialize(q.value(10), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs` FROM `msg_Spectrum0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<Spectrum0StdMessage>(id, bodySize);
+                auto c = dynamic_cast<Spectrum0StdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs` FROM `msg_Spectrum1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<Spectrum1StdMessage>(id, bodySize);
+                auto c = dynamic_cast<Spectrum1StdMessage*>(msg.get());
+                
+                throw ProjectBase::NotImplementedException();
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `fcn`, `phase`, `range`, `cs` FROM `msg_GloPhaseDelay` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1345,13 +1595,13 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Error());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `msg_IonoParams` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `msg_IonoParams0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
             {
-                msg = make_unique<IonoParamsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<IonoParamsStdMessage*>(msg.get());
+                msg = make_unique<IonoParams0StdMessage>(id, bodySize);
+                auto c = dynamic_cast<IonoParams0StdMessage*>(msg.get());
                 serializer.Deserialize(q.value(5), c->Tot());
                 serializer.Deserialize(q.value(6), c->Wn());
                 serializer.Deserialize(q.value(7), c->Alpha0());
@@ -1363,6 +1613,16 @@ namespace Greis
                 serializer.Deserialize(q.value(13), c->Beta2());
                 serializer.Deserialize(q.value(14), c->Beta3());
                 serializer.Deserialize(q.value(15), c->Cs());
+            }, 
+            epochsByDateTime);
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `par` FROM `msg_QzssIonoParams` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            .arg(_from.toMSecsSinceEpoch())
+            .arg(_to.toMSecsSinceEpoch()), 
+            [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+            {
+                msg = make_unique<QzssIonoParamsStdMessage>(id, bodySize);
+                auto c = dynamic_cast<QzssIonoParamsStdMessage*>(msg.get());
+                c->Par() = this->extractCustomType<IonoParams1CustomType>(ECustomTypeId::IonoParams1, q.value(5).toInt());
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `type`, `data`, `cs` FROM `msg_Event` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")

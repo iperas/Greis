@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (dp - dpCA1)[Hz*10-4]
+        // (dp * FL1/FLn - dpCA1)[Hz*10-4]
         const std::vector<Types::i2>& Srdp() const { return _srdp; }
         std::vector<Types::i2>& Srdp() { return _srdp; }
 

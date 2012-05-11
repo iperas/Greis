@@ -127,8 +127,41 @@ namespace Greis
         // 4…5 - GLONASS-M M
         // 6 - GLONASS-M ln (fifth string)
         // 7…15 - reserved
+        // --- Optional data block ---
         const Types::u2& Flags2() const { return _flags2; }
         Types::u2& Flags2() { return _flags2; }
+
+        // Signal type nav. data was been decoded from
+        const Types::u1& NavType() const { return _navType; }
+        Types::u1& NavType() { return _navType; }
+
+        // Derivation of rate of satellite clock offset [s/s/s]
+        const Types::f4& Beta() const { return _beta; }
+        Types::f4& Beta() { return _beta; }
+
+        // Derivation of ‘tauSys’ [s/s]
+        const Types::f4& TauSysDot() const { return _tauSysDot; }
+        Types::f4& TauSysDot() { return _tauSysDot; }
+
+        // Age of clock information (days)
+        const Types::u1& Ec() const { return _ec; }
+        Types::u1& Ec() { return _ec; }
+
+        // Age of ephemeris information (days)
+        const Types::u1& Ee() const { return _ee; }
+        Types::u1& Ee() { return _ee; }
+
+        // Clock accuracy index
+        const Types::i1& Fc() const { return _fc; }
+        Types::i1& Fc() { return _fc; }
+
+        // Ephemeris accuracy index
+        const Types::i1& Fe() const { return _fe; }
+        Types::i1& Fe() { return _fe; }
+
+        // --- End of optional data block ---
+        const Types::u2& Reserv() const { return _reserv; }
+        Types::u2& Reserv() { return _reserv; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -155,6 +188,14 @@ namespace Greis
         Types::u1 _nFt;
         Types::u1 _nN4;
         Types::u2 _flags2;
+        Types::u1 _navType;
+        Types::f4 _beta;
+        Types::f4 _tauSysDot;
+        Types::u1 _ec;
+        Types::u1 _ee;
+        Types::i1 _fc;
+        Types::i1 _fe;
+        Types::u2 _reserv;
         Types::u1 _cs;
     };
 }

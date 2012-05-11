@@ -23,9 +23,9 @@ namespace Greis
         auto baseInfoInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_BaseInfo` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `id_sugar`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             10, _connection, "msg_BaseInfo", _inserterBatchSize);
-        auto baseLineInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_BaseLine` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `time`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            11, _connection, "msg_BaseLine", _inserterBatchSize);
+        auto baselineInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_Baseline` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `time`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            11, _connection, "msg_Baseline", _inserterBatchSize);
         auto clockOffsetsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_ClockOffsets` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `reserved`, `recSize`, `Offs`, `crc16`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             9, _connection, "msg_ClockOffsets", _inserterBatchSize);
@@ -35,6 +35,9 @@ namespace Greis
         auto cNR4Inserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_CNR_4` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cnrX4`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_CNR_4", _inserterBatchSize);
+        auto compRawNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_CompRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_CompRawNavData", _inserterBatchSize);
         auto cPInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_CP` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cp`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_CP", _inserterBatchSize);
@@ -69,11 +72,11 @@ namespace Greis
             "INSERT INTO `msg_GALAlm` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `iod`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_GALAlm", _inserterBatchSize);
         auto gALEphemerisInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GALEphemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            "INSERT INTO `msg_GALEphemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             13, _connection, "msg_GALEphemeris", _inserterBatchSize);
-        auto gALRawMessageInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GALRawMessage` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            10, _connection, "msg_GALRawMessage", _inserterBatchSize);
+        auto galRawNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_GalRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_GalRawNavData", _inserterBatchSize);
         auto galUtcGpsParamInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GalUtcGpsParam` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `a0g`, `a1g`, `t0g`, `wn0g`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             11, _connection, "msg_GalUtcGpsParam", _inserterBatchSize);
@@ -84,17 +87,20 @@ namespace Greis
             "INSERT INTO `msg_GeoVel` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `pSigma`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             10, _connection, "msg_GeoVel", _inserterBatchSize);
         auto gLOAlmanacInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GLOAlmanac` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            18, _connection, "msg_GLOAlmanac", _inserterBatchSize);
+            "INSERT INTO `msg_GLOAlmanac` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `n4`, `navType`, `gammaN`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            21, _connection, "msg_GLOAlmanac", _inserterBatchSize);
         auto gLOEphemerisInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GLOEphemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            23, _connection, "msg_GLOEphemeris", _inserterBatchSize);
+            "INSERT INTO `msg_GLOEphemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `navType`, `beta`, `tauSysDot`, `ec`, `ee`, `fc`, `fe`, `reserv`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            31, _connection, "msg_GLOEphemeris", _inserterBatchSize);
         auto gloNavDataInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GloNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_GloNavData", _inserterBatchSize);
         auto gloPhaseDelayInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GloPhaseDelay` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `fcn`, `phase`, `range`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             8, _connection, "msg_GloPhaseDelay", _inserterBatchSize);
+        auto gloRawNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_GloRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `num`, `fcn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            11, _connection, "msg_GloRawNavData", _inserterBatchSize);
         auto gLOTimeInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GLOTime` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `dn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_GLOTime", _inserterBatchSize);
@@ -105,26 +111,32 @@ namespace Greis
             "INSERT INTO `msg_GPSAlm0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             20, _connection, "msg_GPSAlm0", _inserterBatchSize);
         auto gPSEphemeris0Inserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GPSEphemeris0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            34, _connection, "msg_GPSEphemeris0", _inserterBatchSize);
-        auto gpsNavDataInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GpsNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-            7, _connection, "msg_GpsNavData", _inserterBatchSize);
+            "INSERT INTO `msg_GPSEphemeris0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            15, _connection, "msg_GPSEphemeris0", _inserterBatchSize);
+        auto gpsNavData0Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_GpsNavData0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_GpsNavData0", _inserterBatchSize);
+        auto gpsRawNavData0Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_GpsRawNavData0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_GpsRawNavData0", _inserterBatchSize);
         auto gPSTimeInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GPSTime` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_GPSTime", _inserterBatchSize);
         auto gpsUtcParamInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GpsUtcParam` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_GpsUtcParam", _inserterBatchSize);
+        auto iAmpInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_IAmp` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "msg_IAmp", _inserterBatchSize);
         auto inertialMeasurementsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_InertialMeasurements` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `accelerations`, `angularVelocities`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_InertialMeasurements", _inserterBatchSize);
         auto ionoDelayInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_IonoDelay` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `delay`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_IonoDelay", _inserterBatchSize);
-        auto ionoParamsInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_IonoParams` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            15, _connection, "msg_IonoParams", _inserterBatchSize);
+        auto ionoParams0Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_IonoParams0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            15, _connection, "msg_IonoParams0", _inserterBatchSize);
         auto latencyInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_Latency` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lt`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_Latency", _inserterBatchSize);
@@ -164,6 +176,27 @@ namespace Greis
         auto pRInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_PR` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `pr`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_PR", _inserterBatchSize);
+        auto qAmpInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QAmp` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "msg_QAmp", _inserterBatchSize);
+        auto qZSSAlmInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QZSSAlm` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "msg_QZSSAlm", _inserterBatchSize);
+        auto qZSSEphemerisInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QZSSEphemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "msg_QZSSEphemeris", _inserterBatchSize);
+        auto qzssIonoParamsInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QzssIonoParams` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `par`) VALUES (?, ?, ?, ?, ?)", 
+            5, _connection, "msg_QzssIonoParams", _inserterBatchSize);
+        auto qzssNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QzssNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data`) VALUES (?, ?, ?, ?, ?)", 
+            5, _connection, "msg_QzssNavData", _inserterBatchSize);
+        auto qzssRawNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QzssRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data`) VALUES (?, ?, ?, ?, ?)", 
+            5, _connection, "msg_QzssRawNavData", _inserterBatchSize);
+        auto qzssUtcParamInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_QzssUtcParam` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "msg_QzssUtcParam", _inserterBatchSize);
         auto rawMeasInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_RawMeas` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `scale`, `reftime`, `clock`, `flags`, `svd`, `crc16`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             11, _connection, "msg_RawMeas", _inserterBatchSize);
@@ -188,6 +221,12 @@ namespace Greis
         auto rcvOscOffsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_RcvOscOffs` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_RcvOscOffs", _inserterBatchSize);
+        auto rcvQZSSTimeOffsetInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_RcvQZSSTimeOffset` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_RcvQZSSTimeOffset", _inserterBatchSize);
+        auto rcvSBASTimeOffsetInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_RcvSBASTimeOffset` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_RcvSBASTimeOffset", _inserterBatchSize);
         auto rcvTimeInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_RcvTime` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_RcvTime", _inserterBatchSize);
@@ -203,9 +242,6 @@ namespace Greis
         auto rcvTimeOffsetDotInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_RcvTimeOffsetDot` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_RcvTimeOffsetDot", _inserterBatchSize);
-        auto rcvWAASTimeOffsetInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_RcvWAASTimeOffset` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-            7, _connection, "msg_RcvWAASTimeOffset", _inserterBatchSize);
         auto rEInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_RE` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `reply`) VALUES (?, ?, ?, ?, ?)", 
             5, _connection, "msg_RE", _inserterBatchSize);
@@ -239,6 +275,18 @@ namespace Greis
         auto satNumbersInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_SatNumbers` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `osn`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_SatNumbers", _inserterBatchSize);
+        auto sBASAlmanacInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_SBASAlmanac` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            18, _connection, "msg_SBASAlmanac", _inserterBatchSize);
+        auto sBASEhemerisInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_SBASEhemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            24, _connection, "msg_SBASEhemeris", _inserterBatchSize);
+        auto sbasRawNavDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_SbasRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            9, _connection, "msg_SbasRawNavData", _inserterBatchSize);
+        auto sbasUtcParamInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_SbasUtcParam` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `utcsi`, `tow`, `wn`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_SbasUtcParam", _inserterBatchSize);
         auto sCInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_SC` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `smooth`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_SC", _inserterBatchSize);
@@ -254,6 +302,12 @@ namespace Greis
         auto solutionTimeInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_SolutionTime` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_SolutionTime", _inserterBatchSize);
+        auto spectrum0Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_Spectrum0` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_Spectrum0", _inserterBatchSize);
+        auto spectrum1Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_Spectrum1` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "msg_Spectrum1", _inserterBatchSize);
         auto sPRInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_SPR` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `spr`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_SPR", _inserterBatchSize);
@@ -278,39 +332,45 @@ namespace Greis
         auto velCovInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_VelCov` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `xx`, `yy`, `zz`, `tt`, `xy`, `xz`, `xt`, `yz`, `yt`, `zt`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             16, _connection, "msg_VelCov", _inserterBatchSize);
-        auto wAASAlmanacInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_WAASAlmanac` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            18, _connection, "msg_WAASAlmanac", _inserterBatchSize);
-        auto wAASEhemerisInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_WAASEhemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            23, _connection, "msg_WAASEhemeris", _inserterBatchSize);
-        auto wAASRawMessageInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_WAASRawMessage` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            9, _connection, "msg_WAASRawMessage", _inserterBatchSize);
-        auto waasUtcParamInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_WaasUtcParam` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `utcsi`, `tow`, `wn`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            10, _connection, "msg_WaasUtcParam", _inserterBatchSize);
         auto wrapperInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_Wrapper` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_Wrapper", _inserterBatchSize);
         auto clkOffsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_ClkOffs` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `word1`, `word2`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "ct_ClkOffs", _inserterBatchSize);
+        auto extSpecDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_ExtSpecData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "ct_ExtSpecData", _inserterBatchSize);
         auto gPSAlm1Inserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_GPSAlm1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             19, _connection, "ct_GPSAlm1", _inserterBatchSize);
         auto gPSEphemeris1Inserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `ct_GPSEphemeris1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            33, _connection, "ct_GPSEphemeris1", _inserterBatchSize);
+            "INSERT INTO `ct_GPSEphemeris1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            14, _connection, "ct_GPSEphemeris1", _inserterBatchSize);
+        auto gpsEphReqDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_GpsEphReqData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            33, _connection, "ct_GpsEphReqData", _inserterBatchSize);
+        auto gpsNavData1Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_GpsNavData1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `recSize`, `dat`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "ct_GpsNavData1", _inserterBatchSize);
+        auto gpsRawNavData1Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_GpsRawNavData1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            10, _connection, "ct_GpsRawNavData1", _inserterBatchSize);
         auto headerInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_Header` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `refrange`, `usi`, `num`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "ct_Header", _inserterBatchSize);
+        auto ionoParams1Inserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_IonoParams1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            15, _connection, "ct_IonoParams1", _inserterBatchSize);
         auto slotRecInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_SlotRec` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `svstOrDelrange`, `word1`, `flags`, `lock`, `word2`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             9, _connection, "ct_SlotRec", _inserterBatchSize);
         auto smoothInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_Smooth` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `value`, `interval`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "ct_Smooth", _inserterBatchSize);
+        auto specDataInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_SpecData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`) VALUES (?, ?, ?, ?, ?)", 
+            5, _connection, "ct_SpecData", _inserterBatchSize);
         auto svData0Inserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_SvData0` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "ct_SvData0", _inserterBatchSize);
@@ -327,11 +387,12 @@ namespace Greis
         angularVelocityInserter->AddChild(_epochInserter);
         antNameInserter->AddChild(_epochInserter);
         baseInfoInserter->AddChild(_epochInserter);
-        baseLineInserter->AddChild(_epochInserter);
+        baselineInserter->AddChild(_epochInserter);
         clockOffsetsInserter->AddChild(clkOffsInserter);
         clockOffsetsInserter->AddChild(_epochInserter);
         cNRInserter->AddChild(_epochInserter);
         cNR4Inserter->AddChild(_epochInserter);
+        compRawNavDataInserter->AddChild(_epochInserter);
         cPInserter->AddChild(_epochInserter);
         dopsInserter->AddChild(_epochInserter);
         dPInserter->AddChild(_epochInserter);
@@ -344,9 +405,9 @@ namespace Greis
         flagsInserter->AddChild(_epochInserter);
         gALAlmInserter->AddChild(gPSAlm1Inserter);
         gALAlmInserter->AddChild(_epochInserter);
-        gALEphemerisInserter->AddChild(gPSEphemeris1Inserter);
+        gALEphemerisInserter->AddChild(gpsEphReqDataInserter);
         gALEphemerisInserter->AddChild(_epochInserter);
-        gALRawMessageInserter->AddChild(_epochInserter);
+        galRawNavDataInserter->AddChild(_epochInserter);
         galUtcGpsParamInserter->AddChild(utcOffsInserter);
         galUtcGpsParamInserter->AddChild(_epochInserter);
         geoPosInserter->AddChild(_epochInserter);
@@ -356,18 +417,22 @@ namespace Greis
         gloNavDataInserter->AddChild(svData1Inserter);
         gloNavDataInserter->AddChild(_epochInserter);
         gloPhaseDelayInserter->AddChild(_epochInserter);
+        gloRawNavDataInserter->AddChild(_epochInserter);
         gLOTimeInserter->AddChild(_epochInserter);
         gloUtcGpsParamInserter->AddChild(_epochInserter);
         gPSAlm0Inserter->AddChild(_epochInserter);
+        gPSEphemeris0Inserter->AddChild(gpsEphReqDataInserter);
         gPSEphemeris0Inserter->AddChild(_epochInserter);
-        gpsNavDataInserter->AddChild(svData0Inserter);
-        gpsNavDataInserter->AddChild(_epochInserter);
+        gpsNavData0Inserter->AddChild(svData0Inserter);
+        gpsNavData0Inserter->AddChild(_epochInserter);
+        gpsRawNavData0Inserter->AddChild(_epochInserter);
         gPSTimeInserter->AddChild(_epochInserter);
         gpsUtcParamInserter->AddChild(utcOffsInserter);
         gpsUtcParamInserter->AddChild(_epochInserter);
+        iAmpInserter->AddChild(_epochInserter);
         inertialMeasurementsInserter->AddChild(_epochInserter);
         ionoDelayInserter->AddChild(_epochInserter);
-        ionoParamsInserter->AddChild(_epochInserter);
+        ionoParams0Inserter->AddChild(_epochInserter);
         latencyInserter->AddChild(_epochInserter);
         loggingHistoryInserter->AddChild(_epochInserter);
         msgFmtInserter->AddChild(_epochInserter);
@@ -381,6 +446,19 @@ namespace Greis
         posVelVectorInserter->AddChild(_epochInserter);
         pPSOffsetInserter->AddChild(_epochInserter);
         pRInserter->AddChild(_epochInserter);
+        qAmpInserter->AddChild(_epochInserter);
+        qZSSAlmInserter->AddChild(gPSAlm1Inserter);
+        qZSSAlmInserter->AddChild(_epochInserter);
+        qZSSEphemerisInserter->AddChild(gPSEphemeris1Inserter);
+        qZSSEphemerisInserter->AddChild(_epochInserter);
+        qzssIonoParamsInserter->AddChild(ionoParams1Inserter);
+        qzssIonoParamsInserter->AddChild(_epochInserter);
+        qzssNavDataInserter->AddChild(gpsNavData1Inserter);
+        qzssNavDataInserter->AddChild(_epochInserter);
+        qzssRawNavDataInserter->AddChild(gpsRawNavData1Inserter);
+        qzssRawNavDataInserter->AddChild(_epochInserter);
+        qzssUtcParamInserter->AddChild(utcOffsInserter);
+        qzssUtcParamInserter->AddChild(_epochInserter);
         rawMeasInserter->AddChild(svData2Inserter);
         rawMeasInserter->AddChild(_epochInserter);
         rCPRc1Inserter->AddChild(_epochInserter);
@@ -390,12 +468,13 @@ namespace Greis
         rcvGLOTimeOffsetInserter->AddChild(_epochInserter);
         rcvGPSTimeOffsetInserter->AddChild(_epochInserter);
         rcvOscOffsInserter->AddChild(_epochInserter);
+        rcvQZSSTimeOffsetInserter->AddChild(_epochInserter);
+        rcvSBASTimeOffsetInserter->AddChild(_epochInserter);
         rcvTimeInserter->AddChild(_epochInserter);
         rcvTimeAccuracyInserter->AddChild(_epochInserter);
         rcvTimeOffsAtPPSInserter->AddChild(_epochInserter);
         rcvTimeOffsetInserter->AddChild(_epochInserter);
         rcvTimeOffsetDotInserter->AddChild(_epochInserter);
-        rcvWAASTimeOffsetInserter->AddChild(_epochInserter);
         rEInserter->AddChild(_epochInserter);
         refEpochInserter->AddChild(_epochInserter);
         rmsInserter->AddChild(_epochInserter);
@@ -407,12 +486,21 @@ namespace Greis
         satElevationInserter->AddChild(_epochInserter);
         satIndexInserter->AddChild(_epochInserter);
         satNumbersInserter->AddChild(_epochInserter);
+        sBASAlmanacInserter->AddChild(_epochInserter);
+        sBASEhemerisInserter->AddChild(_epochInserter);
+        sbasRawNavDataInserter->AddChild(_epochInserter);
+        sbasUtcParamInserter->AddChild(utcOffsInserter);
+        sbasUtcParamInserter->AddChild(_epochInserter);
         sCInserter->AddChild(smoothInserter);
         sCInserter->AddChild(_epochInserter);
         sCPInserter->AddChild(_epochInserter);
         security0Inserter->AddChild(_epochInserter);
         security1Inserter->AddChild(_epochInserter);
         solutionTimeInserter->AddChild(_epochInserter);
+        spectrum0Inserter->AddChild(specDataInserter);
+        spectrum0Inserter->AddChild(_epochInserter);
+        spectrum1Inserter->AddChild(extSpecDataInserter);
+        spectrum1Inserter->AddChild(_epochInserter);
         sPRInserter->AddChild(_epochInserter);
         sRDPInserter->AddChild(_epochInserter);
         sRPRInserter->AddChild(_epochInserter);
@@ -421,18 +509,21 @@ namespace Greis
         trackingTimeCAInserter->AddChild(_epochInserter);
         velInserter->AddChild(_epochInserter);
         velCovInserter->AddChild(_epochInserter);
-        wAASAlmanacInserter->AddChild(_epochInserter);
-        wAASEhemerisInserter->AddChild(_epochInserter);
-        wAASRawMessageInserter->AddChild(_epochInserter);
-        waasUtcParamInserter->AddChild(utcOffsInserter);
-        waasUtcParamInserter->AddChild(_epochInserter);
         wrapperInserter->AddChild(_epochInserter);
         clkOffsInserter->AddChild(_epochInserter);
+        extSpecDataInserter->AddChild(_epochInserter);
         gPSAlm1Inserter->AddChild(_epochInserter);
+        gPSEphemeris1Inserter->AddChild(gpsEphReqDataInserter);
         gPSEphemeris1Inserter->AddChild(_epochInserter);
+        gpsEphReqDataInserter->AddChild(_epochInserter);
+        gpsNavData1Inserter->AddChild(svData0Inserter);
+        gpsNavData1Inserter->AddChild(_epochInserter);
+        gpsRawNavData1Inserter->AddChild(_epochInserter);
         headerInserter->AddChild(_epochInserter);
+        ionoParams1Inserter->AddChild(_epochInserter);
         slotRecInserter->AddChild(_epochInserter);
         smoothInserter->AddChild(_epochInserter);
+        specDataInserter->AddChild(_epochInserter);
         svData0Inserter->AddChild(_epochInserter);
         svData1Inserter->AddChild(_epochInserter);
         svData2Inserter->AddChild(headerInserter);
@@ -443,10 +534,11 @@ namespace Greis
         _msgInserters[EMessageId::AngularVelocity] = angularVelocityInserter;
         _msgInserters[EMessageId::AntName] = antNameInserter;
         _msgInserters[EMessageId::BaseInfo] = baseInfoInserter;
-        _msgInserters[EMessageId::BaseLine] = baseLineInserter;
+        _msgInserters[EMessageId::Baseline] = baselineInserter;
         _msgInserters[EMessageId::ClockOffsets] = clockOffsetsInserter;
         _msgInserters[EMessageId::CNR] = cNRInserter;
         _msgInserters[EMessageId::CNR4] = cNR4Inserter;
+        _msgInserters[EMessageId::CompRawNavData] = compRawNavDataInserter;
         _msgInserters[EMessageId::CP] = cPInserter;
         _msgInserters[EMessageId::Dops] = dopsInserter;
         _msgInserters[EMessageId::DP] = dPInserter;
@@ -459,7 +551,7 @@ namespace Greis
         _msgInserters[EMessageId::Flags] = flagsInserter;
         _msgInserters[EMessageId::GALAlm] = gALAlmInserter;
         _msgInserters[EMessageId::GALEphemeris] = gALEphemerisInserter;
-        _msgInserters[EMessageId::GALRawMessage] = gALRawMessageInserter;
+        _msgInserters[EMessageId::GalRawNavData] = galRawNavDataInserter;
         _msgInserters[EMessageId::GalUtcGpsParam] = galUtcGpsParamInserter;
         _msgInserters[EMessageId::GeoPos] = geoPosInserter;
         _msgInserters[EMessageId::GeoVel] = geoVelInserter;
@@ -467,16 +559,19 @@ namespace Greis
         _msgInserters[EMessageId::GLOEphemeris] = gLOEphemerisInserter;
         _msgInserters[EMessageId::GloNavData] = gloNavDataInserter;
         _msgInserters[EMessageId::GloPhaseDelay] = gloPhaseDelayInserter;
+        _msgInserters[EMessageId::GloRawNavData] = gloRawNavDataInserter;
         _msgInserters[EMessageId::GLOTime] = gLOTimeInserter;
         _msgInserters[EMessageId::GloUtcGpsParam] = gloUtcGpsParamInserter;
         _msgInserters[EMessageId::GPSAlm0] = gPSAlm0Inserter;
         _msgInserters[EMessageId::GPSEphemeris0] = gPSEphemeris0Inserter;
-        _msgInserters[EMessageId::GpsNavData] = gpsNavDataInserter;
+        _msgInserters[EMessageId::GpsNavData0] = gpsNavData0Inserter;
+        _msgInserters[EMessageId::GpsRawNavData0] = gpsRawNavData0Inserter;
         _msgInserters[EMessageId::GPSTime] = gPSTimeInserter;
         _msgInserters[EMessageId::GpsUtcParam] = gpsUtcParamInserter;
+        _msgInserters[EMessageId::IAmp] = iAmpInserter;
         _msgInserters[EMessageId::InertialMeasurements] = inertialMeasurementsInserter;
         _msgInserters[EMessageId::IonoDelay] = ionoDelayInserter;
-        _msgInserters[EMessageId::IonoParams] = ionoParamsInserter;
+        _msgInserters[EMessageId::IonoParams0] = ionoParams0Inserter;
         _msgInserters[EMessageId::Latency] = latencyInserter;
         _msgInserters[EMessageId::LoggingHistory] = loggingHistoryInserter;
         _msgInserters[EMessageId::MsgFmt] = msgFmtInserter;
@@ -490,6 +585,13 @@ namespace Greis
         _msgInserters[EMessageId::PosVelVector] = posVelVectorInserter;
         _msgInserters[EMessageId::PPSOffset] = pPSOffsetInserter;
         _msgInserters[EMessageId::PR] = pRInserter;
+        _msgInserters[EMessageId::QAmp] = qAmpInserter;
+        _msgInserters[EMessageId::QZSSAlm] = qZSSAlmInserter;
+        _msgInserters[EMessageId::QZSSEphemeris] = qZSSEphemerisInserter;
+        _msgInserters[EMessageId::QzssIonoParams] = qzssIonoParamsInserter;
+        _msgInserters[EMessageId::QzssNavData] = qzssNavDataInserter;
+        _msgInserters[EMessageId::QzssRawNavData] = qzssRawNavDataInserter;
+        _msgInserters[EMessageId::QzssUtcParam] = qzssUtcParamInserter;
         _msgInserters[EMessageId::RawMeas] = rawMeasInserter;
         _msgInserters[EMessageId::RCPRc1] = rCPRc1Inserter;
         _msgInserters[EMessageId::RCPRC0] = rCPRC0Inserter;
@@ -498,12 +600,13 @@ namespace Greis
         _msgInserters[EMessageId::RcvGLOTimeOffset] = rcvGLOTimeOffsetInserter;
         _msgInserters[EMessageId::RcvGPSTimeOffset] = rcvGPSTimeOffsetInserter;
         _msgInserters[EMessageId::RcvOscOffs] = rcvOscOffsInserter;
+        _msgInserters[EMessageId::RcvQZSSTimeOffset] = rcvQZSSTimeOffsetInserter;
+        _msgInserters[EMessageId::RcvSBASTimeOffset] = rcvSBASTimeOffsetInserter;
         _msgInserters[EMessageId::RcvTime] = rcvTimeInserter;
         _msgInserters[EMessageId::RcvTimeAccuracy] = rcvTimeAccuracyInserter;
         _msgInserters[EMessageId::RcvTimeOffsAtPPS] = rcvTimeOffsAtPPSInserter;
         _msgInserters[EMessageId::RcvTimeOffset] = rcvTimeOffsetInserter;
         _msgInserters[EMessageId::RcvTimeOffsetDot] = rcvTimeOffsetDotInserter;
-        _msgInserters[EMessageId::RcvWAASTimeOffset] = rcvWAASTimeOffsetInserter;
         _msgInserters[EMessageId::RE] = rEInserter;
         _msgInserters[EMessageId::RefEpoch] = refEpochInserter;
         _msgInserters[EMessageId::Rms] = rmsInserter;
@@ -515,11 +618,17 @@ namespace Greis
         _msgInserters[EMessageId::SatElevation] = satElevationInserter;
         _msgInserters[EMessageId::SatIndex] = satIndexInserter;
         _msgInserters[EMessageId::SatNumbers] = satNumbersInserter;
+        _msgInserters[EMessageId::SBASAlmanac] = sBASAlmanacInserter;
+        _msgInserters[EMessageId::SBASEhemeris] = sBASEhemerisInserter;
+        _msgInserters[EMessageId::SbasRawNavData] = sbasRawNavDataInserter;
+        _msgInserters[EMessageId::SbasUtcParam] = sbasUtcParamInserter;
         _msgInserters[EMessageId::SC] = sCInserter;
         _msgInserters[EMessageId::SCP] = sCPInserter;
         _msgInserters[EMessageId::Security0] = security0Inserter;
         _msgInserters[EMessageId::Security1] = security1Inserter;
         _msgInserters[EMessageId::SolutionTime] = solutionTimeInserter;
+        _msgInserters[EMessageId::Spectrum0] = spectrum0Inserter;
+        _msgInserters[EMessageId::Spectrum1] = spectrum1Inserter;
         _msgInserters[EMessageId::SPR] = sPRInserter;
         _msgInserters[EMessageId::SRDP] = sRDPInserter;
         _msgInserters[EMessageId::SRPR] = sRPRInserter;
@@ -528,17 +637,19 @@ namespace Greis
         _msgInserters[EMessageId::TrackingTimeCA] = trackingTimeCAInserter;
         _msgInserters[EMessageId::Vel] = velInserter;
         _msgInserters[EMessageId::VelCov] = velCovInserter;
-        _msgInserters[EMessageId::WAASAlmanac] = wAASAlmanacInserter;
-        _msgInserters[EMessageId::WAASEhemeris] = wAASEhemerisInserter;
-        _msgInserters[EMessageId::WAASRawMessage] = wAASRawMessageInserter;
-        _msgInserters[EMessageId::WaasUtcParam] = waasUtcParamInserter;
         _msgInserters[EMessageId::Wrapper] = wrapperInserter;
         _ctInserters[ECustomTypeId::ClkOffs] = clkOffsInserter;
+        _ctInserters[ECustomTypeId::ExtSpecData] = extSpecDataInserter;
         _ctInserters[ECustomTypeId::GPSAlm1] = gPSAlm1Inserter;
         _ctInserters[ECustomTypeId::GPSEphemeris1] = gPSEphemeris1Inserter;
+        _ctInserters[ECustomTypeId::GpsEphReqData] = gpsEphReqDataInserter;
+        _ctInserters[ECustomTypeId::GpsNavData1] = gpsNavData1Inserter;
+        _ctInserters[ECustomTypeId::GpsRawNavData1] = gpsRawNavData1Inserter;
         _ctInserters[ECustomTypeId::Header] = headerInserter;
+        _ctInserters[ECustomTypeId::IonoParams1] = ionoParams1Inserter;
         _ctInserters[ECustomTypeId::SlotRec] = slotRecInserter;
         _ctInserters[ECustomTypeId::Smooth] = smoothInserter;
+        _ctInserters[ECustomTypeId::SpecData] = specDataInserter;
         _ctInserters[ECustomTypeId::SvData0] = svData0Inserter;
         _ctInserters[ECustomTypeId::SvData1] = svData1Inserter;
         _ctInserters[ECustomTypeId::SvData2] = svData2Inserter;
@@ -546,16 +657,28 @@ namespace Greis
 
         int maxIdForClkOffs = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_ClkOffs`").toInt();
         _ctCurrentMaxId[ECustomTypeId::ClkOffs] = maxIdForClkOffs;
+        int maxIdForExtSpecData = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_ExtSpecData`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::ExtSpecData] = maxIdForExtSpecData;
         int maxIdForGPSAlm1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GPSAlm1`").toInt();
         _ctCurrentMaxId[ECustomTypeId::GPSAlm1] = maxIdForGPSAlm1;
         int maxIdForGPSEphemeris1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GPSEphemeris1`").toInt();
         _ctCurrentMaxId[ECustomTypeId::GPSEphemeris1] = maxIdForGPSEphemeris1;
+        int maxIdForGpsEphReqData = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GpsEphReqData`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::GpsEphReqData] = maxIdForGpsEphReqData;
+        int maxIdForGpsNavData1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GpsNavData1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::GpsNavData1] = maxIdForGpsNavData1;
+        int maxIdForGpsRawNavData1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_GpsRawNavData1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::GpsRawNavData1] = maxIdForGpsRawNavData1;
         int maxIdForHeader = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_Header`").toInt();
         _ctCurrentMaxId[ECustomTypeId::Header] = maxIdForHeader;
+        int maxIdForIonoParams1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_IonoParams1`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::IonoParams1] = maxIdForIonoParams1;
         int maxIdForSlotRec = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SlotRec`").toInt();
         _ctCurrentMaxId[ECustomTypeId::SlotRec] = maxIdForSlotRec;
         int maxIdForSmooth = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_Smooth`").toInt();
         _ctCurrentMaxId[ECustomTypeId::Smooth] = maxIdForSmooth;
+        int maxIdForSpecData = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SpecData`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::SpecData] = maxIdForSpecData;
         int maxIdForSvData0 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SvData0`").toInt();
         _ctCurrentMaxId[ECustomTypeId::SvData0] = maxIdForSvData0;
         int maxIdForSvData1 = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_SvData1`").toInt();
@@ -600,9 +723,9 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::BaseLine:
+        case EMessageId::Baseline:
             {
-                auto c = dynamic_cast<BaseLineStdMessage*>(msg);
+                auto c = dynamic_cast<BaselineStdMessage*>(msg);
                 out << _serializer.Serialize(c->X());
                 out << _serializer.Serialize(c->Y());
                 out << _serializer.Serialize(c->Z());
@@ -633,6 +756,17 @@ namespace Greis
             {
                 auto c = dynamic_cast<CNR4StdMessage*>(msg);
                 out << _serializer.Serialize(c->CnrX4());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::CompRawNavData:
+            {
+                auto c = dynamic_cast<CompRawNavDataStdMessage*>(msg);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Len());
+                out << _serializer.Serialize(c->Data());
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -722,7 +856,7 @@ namespace Greis
         case EMessageId::GALEphemeris:
             {
                 auto c = dynamic_cast<GALEphemerisStdMessage*>(msg);
-                out << addCustomType(c->Gps().get());
+                out << addCustomType(c->Req().get());
                 out << _serializer.Serialize(c->BgdE1E5a());
                 out << _serializer.Serialize(c->BgdE1E5b());
                 out << _serializer.Serialize(c->Ai0());
@@ -733,9 +867,9 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::GALRawMessage:
+        case EMessageId::GalRawNavData:
             {
-                auto c = dynamic_cast<GALRawMessageStdMessage*>(msg);
+                auto c = dynamic_cast<GalRawNavDataStdMessage*>(msg);
                 out << _serializer.Serialize(c->Prn());
                 out << _serializer.Serialize(c->Time());
                 out << _serializer.Serialize(c->Type());
@@ -794,6 +928,16 @@ namespace Greis
                 out << _serializer.Serialize(c->DelT());
                 out << _serializer.Serialize(c->DelTdt());
                 out << _serializer.Serialize(c->Deli());
+                out << _serializer.Serialize(c->N4());
+                if (c->BodySize() == 52)
+                {
+                    // Optional Data Block
+                    out << _serializer.Serialize(c->NavType());
+                    out << _serializer.Serialize(c->GammaN());
+                } else {
+                    out << QVariant(QVariant::UInt);
+                    out << QVariant(QVariant::Double);
+                }
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -818,6 +962,27 @@ namespace Greis
                 out << _serializer.Serialize(c->NFt());
                 out << _serializer.Serialize(c->NN4());
                 out << _serializer.Serialize(c->Flags2());
+                if (c->BodySize() == 103)
+                {
+                    // Optional Data Block
+                    out << _serializer.Serialize(c->NavType());
+                    out << _serializer.Serialize(c->Beta());
+                    out << _serializer.Serialize(c->TauSysDot());
+                    out << _serializer.Serialize(c->Ec());
+                    out << _serializer.Serialize(c->Ee());
+                    out << _serializer.Serialize(c->Fc());
+                    out << _serializer.Serialize(c->Fe());
+                    out << _serializer.Serialize(c->Reserv());
+                } else {
+                    out << QVariant(QVariant::UInt);
+                    out << QVariant(QVariant::Double);
+                    out << QVariant(QVariant::Double);
+                    out << QVariant(QVariant::UInt);
+                    out << QVariant(QVariant::UInt);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::UInt);
+                }
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -835,6 +1000,18 @@ namespace Greis
                 out << _serializer.Serialize(c->Fcn());
                 out << _serializer.Serialize(c->Phase());
                 out << _serializer.Serialize(c->Range());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::GloRawNavData:
+            {
+                auto c = dynamic_cast<GloRawNavDataStdMessage*>(msg);
+                out << _serializer.Serialize(c->Num());
+                out << _serializer.Serialize(c->Fcn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Len());
+                out << _serializer.Serialize(c->Data());
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -883,43 +1060,49 @@ namespace Greis
         case EMessageId::GPSEphemeris0:
             {
                 auto c = dynamic_cast<GPSEphemeris0StdMessage*>(msg);
-                out << _serializer.Serialize(c->Sv());
-                out << _serializer.Serialize(c->Tow());
-                out << _serializer.Serialize(c->Flags());
-                out << _serializer.Serialize(c->Iodc());
-                out << _serializer.Serialize(c->Toc());
-                out << _serializer.Serialize(c->Ura());
-                out << _serializer.Serialize(c->HealthS());
-                out << _serializer.Serialize(c->Wn());
-                out << _serializer.Serialize(c->Tgd());
-                out << _serializer.Serialize(c->Af2());
-                out << _serializer.Serialize(c->Af1());
-                out << _serializer.Serialize(c->Af0());
-                out << _serializer.Serialize(c->Toe());
-                out << _serializer.Serialize(c->Iode());
-                out << _serializer.Serialize(c->RootA());
-                out << _serializer.Serialize(c->Ecc());
-                out << _serializer.Serialize(c->M0());
-                out << _serializer.Serialize(c->Omega0());
-                out << _serializer.Serialize(c->Inc0());
-                out << _serializer.Serialize(c->ArgPer());
-                out << _serializer.Serialize(c->Deln());
-                out << _serializer.Serialize(c->OmegaDot());
-                out << _serializer.Serialize(c->IncDot());
-                out << _serializer.Serialize(c->Crc());
-                out << _serializer.Serialize(c->Crs());
-                out << _serializer.Serialize(c->Cuc());
-                out << _serializer.Serialize(c->Cus());
-                out << _serializer.Serialize(c->Cic());
-                out << _serializer.Serialize(c->Cis());
+                out << addCustomType(c->Req().get());
+                if (c->BodySize() == 148)
+                {
+                    // Optional Data Block
+                    out << _serializer.Serialize(c->CNavType());
+                    out << _serializer.Serialize(c->LTope());
+                    out << _serializer.Serialize(c->LTopc());
+                    out << _serializer.Serialize(c->DADot());
+                    out << _serializer.Serialize(c->FDelnDot());
+                    out << _serializer.Serialize(c->CURAoe());
+                    out << _serializer.Serialize(c->CURAoc());
+                    out << _serializer.Serialize(c->CURAoc1());
+                    out << _serializer.Serialize(c->CURAoc2());
+                } else {
+                    out << QVariant(QVariant::UInt);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Double);
+                    out << QVariant(QVariant::Double);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Int);
+                    out << QVariant(QVariant::Int);
+                }
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::GpsNavData:
+        case EMessageId::GpsNavData0:
             {
-                auto c = dynamic_cast<GpsNavDataStdMessage*>(msg);
+                auto c = dynamic_cast<GpsNavData0StdMessage*>(msg);
                 out << _serializer.Serialize(c->RecSize());
                 out << addCustomTypesAndSerialize(c->Dat());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::GpsRawNavData0:
+            {
+                auto c = dynamic_cast<GpsRawNavData0StdMessage*>(msg);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Len());
+                out << _serializer.Serialize(c->Data());
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -938,6 +1121,13 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
+        case EMessageId::IAmp:
+            {
+                auto c = dynamic_cast<IAmpStdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
         case EMessageId::InertialMeasurements:
             {
                 auto c = dynamic_cast<InertialMeasurementsStdMessage*>(msg);
@@ -953,9 +1143,9 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::IonoParams:
+        case EMessageId::IonoParams0:
             {
-                auto c = dynamic_cast<IonoParamsStdMessage*>(msg);
+                auto c = dynamic_cast<IonoParams0StdMessage*>(msg);
                 out << _serializer.Serialize(c->Tot());
                 out << _serializer.Serialize(c->Wn());
                 out << _serializer.Serialize(c->Alpha0());
@@ -1104,6 +1294,54 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
+        case EMessageId::QAmp:
+            {
+                auto c = dynamic_cast<QAmpStdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case EMessageId::QZSSAlm:
+            {
+                auto c = dynamic_cast<QZSSAlmStdMessage*>(msg);
+                out << addCustomType(c->Gps().get());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::QZSSEphemeris:
+            {
+                auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case EMessageId::QzssIonoParams:
+            {
+                auto c = dynamic_cast<QzssIonoParamsStdMessage*>(msg);
+                out << addCustomType(c->Par().get());
+            }
+            break;
+        case EMessageId::QzssNavData:
+            {
+                auto c = dynamic_cast<QzssNavDataStdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case EMessageId::QzssRawNavData:
+            {
+                auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case EMessageId::QzssUtcParam:
+            {
+                auto c = dynamic_cast<QzssUtcParamStdMessage*>(msg);
+                out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
         case EMessageId::RawMeas:
             {
                 auto c = dynamic_cast<RawMeasStdMessage*>(msg);
@@ -1166,6 +1404,22 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
+        case EMessageId::RcvQZSSTimeOffset:
+            {
+                auto c = dynamic_cast<RcvQZSSTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::RcvSBASTimeOffset:
+            {
+                auto c = dynamic_cast<RcvSBASTimeOffsetStdMessage*>(msg);
+                out << _serializer.Serialize(c->Val());
+                out << _serializer.Serialize(c->Sval());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
         case EMessageId::RcvTime:
             {
                 auto c = dynamic_cast<RcvTimeStdMessage*>(msg);
@@ -1199,14 +1453,6 @@ namespace Greis
         case EMessageId::RcvTimeOffsetDot:
             {
                 auto c = dynamic_cast<RcvTimeOffsetDotStdMessage*>(msg);
-                out << _serializer.Serialize(c->Val());
-                out << _serializer.Serialize(c->Sval());
-                out << _serializer.Serialize(c->Cs());
-            }
-            break;
-        case EMessageId::RcvWAASTimeOffset:
-            {
-                auto c = dynamic_cast<RcvWAASTimeOffsetStdMessage*>(msg);
                 out << _serializer.Serialize(c->Val());
                 out << _serializer.Serialize(c->Sval());
                 out << _serializer.Serialize(c->Cs());
@@ -1318,6 +1564,71 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
+        case EMessageId::SBASAlmanac:
+            {
+                auto c = dynamic_cast<SBASAlmanacStdMessage*>(msg);
+                out << _serializer.Serialize(c->WaasPrn());
+                out << _serializer.Serialize(c->GpsPrn());
+                out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->HealthS());
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Xg());
+                out << _serializer.Serialize(c->Yg());
+                out << _serializer.Serialize(c->Zg());
+                out << _serializer.Serialize(c->Vxg());
+                out << _serializer.Serialize(c->Vyg());
+                out << _serializer.Serialize(c->Vzg());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::SBASEhemeris:
+            {
+                auto c = dynamic_cast<SBASEhemerisStdMessage*>(msg);
+                out << _serializer.Serialize(c->WaasPrn());
+                out << _serializer.Serialize(c->GpsPrn());
+                out << _serializer.Serialize(c->Iod());
+                out << _serializer.Serialize(c->Acc());
+                out << _serializer.Serialize(c->Tod());
+                out << _serializer.Serialize(c->Xg());
+                out << _serializer.Serialize(c->Yg());
+                out << _serializer.Serialize(c->Zg());
+                out << _serializer.Serialize(c->Vxg());
+                out << _serializer.Serialize(c->Vyg());
+                out << _serializer.Serialize(c->Vzg());
+                out << _serializer.Serialize(c->Vvxg());
+                out << _serializer.Serialize(c->Vvyg());
+                out << _serializer.Serialize(c->Vvzg());
+                out << _serializer.Serialize(c->Agf0());
+                out << _serializer.Serialize(c->Agf1());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::SbasRawNavData:
+            {
+                auto c = dynamic_cast<SbasRawNavDataStdMessage*>(msg);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Reserv());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::SbasUtcParam:
+            {
+                auto c = dynamic_cast<SbasUtcParamStdMessage*>(msg);
+                out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->Utcsi());
+                out << _serializer.Serialize(c->Tow());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Flags());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
         case EMessageId::SC:
             {
                 auto c = dynamic_cast<SCStdMessage*>(msg);
@@ -1352,6 +1663,20 @@ namespace Greis
                 out << _serializer.Serialize(c->Time());
                 out << _serializer.Serialize(c->SolType());
                 out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case EMessageId::Spectrum0:
+            {
+                auto c = dynamic_cast<Spectrum0StdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
+            }
+            break;
+        case EMessageId::Spectrum1:
+            {
+                auto c = dynamic_cast<Spectrum1StdMessage*>(msg);
+                
+                throw ProjectBase::NotImplementedException();
             }
             break;
         case EMessageId::SPR:
@@ -1424,70 +1749,6 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::WAASAlmanac:
-            {
-                auto c = dynamic_cast<WAASAlmanacStdMessage*>(msg);
-                out << _serializer.Serialize(c->WaasPrn());
-                out << _serializer.Serialize(c->GpsPrn());
-                out << _serializer.Serialize(c->IdField());
-                out << _serializer.Serialize(c->HealthS());
-                out << _serializer.Serialize(c->Tod());
-                out << _serializer.Serialize(c->Xg());
-                out << _serializer.Serialize(c->Yg());
-                out << _serializer.Serialize(c->Zg());
-                out << _serializer.Serialize(c->Vxg());
-                out << _serializer.Serialize(c->Vyg());
-                out << _serializer.Serialize(c->Vzg());
-                out << _serializer.Serialize(c->Tow());
-                out << _serializer.Serialize(c->Wn());
-                out << _serializer.Serialize(c->Cs());
-            }
-            break;
-        case EMessageId::WAASEhemeris:
-            {
-                auto c = dynamic_cast<WAASEhemerisStdMessage*>(msg);
-                out << _serializer.Serialize(c->WaasPrn());
-                out << _serializer.Serialize(c->GpsPrn());
-                out << _serializer.Serialize(c->Iod());
-                out << _serializer.Serialize(c->Acc());
-                out << _serializer.Serialize(c->Tod());
-                out << _serializer.Serialize(c->Xg());
-                out << _serializer.Serialize(c->Yg());
-                out << _serializer.Serialize(c->Zg());
-                out << _serializer.Serialize(c->Vxg());
-                out << _serializer.Serialize(c->Vyg());
-                out << _serializer.Serialize(c->Vzg());
-                out << _serializer.Serialize(c->Vvxg());
-                out << _serializer.Serialize(c->Vvyg());
-                out << _serializer.Serialize(c->Vvzg());
-                out << _serializer.Serialize(c->Agf0());
-                out << _serializer.Serialize(c->Agf1());
-                out << _serializer.Serialize(c->Tow());
-                out << _serializer.Serialize(c->Wn());
-                out << _serializer.Serialize(c->Cs());
-            }
-            break;
-        case EMessageId::WAASRawMessage:
-            {
-                auto c = dynamic_cast<WAASRawMessageStdMessage*>(msg);
-                out << _serializer.Serialize(c->Prn());
-                out << _serializer.Serialize(c->Time());
-                out << _serializer.Serialize(c->Reserv());
-                out << _serializer.Serialize(c->Data());
-                out << _serializer.Serialize(c->Cs());
-            }
-            break;
-        case EMessageId::WaasUtcParam:
-            {
-                auto c = dynamic_cast<WaasUtcParamStdMessage*>(msg);
-                out << addCustomType(c->Utc().get());
-                out << _serializer.Serialize(c->Utcsi());
-                out << _serializer.Serialize(c->Tow());
-                out << _serializer.Serialize(c->Wn());
-                out << _serializer.Serialize(c->Flags());
-                out << _serializer.Serialize(c->Cs());
-            }
-            break;
         case EMessageId::Wrapper:
             {
                 auto c = dynamic_cast<WrapperStdMessage*>(msg);
@@ -1510,6 +1771,13 @@ namespace Greis
                 auto c = dynamic_cast<ClkOffsCustomType*>(ct);
                 out << _serializer.Serialize(c->Word1());
                 out << _serializer.Serialize(c->Word2());
+            }
+            break;
+        case ECustomTypeId::ExtSpecData:
+            {
+                auto c = dynamic_cast<ExtSpecDataCustomType*>(ct);
+                
+                throw ProjectBase::NotImplementedException();
             }
             break;
         case ECustomTypeId::GPSAlm1:
@@ -1535,6 +1803,21 @@ namespace Greis
         case ECustomTypeId::GPSEphemeris1:
             {
                 auto c = dynamic_cast<GPSEphemeris1CustomType*>(ct);
+                out << addCustomType(c->Req().get());
+                out << _serializer.Serialize(c->CNavType());
+                out << _serializer.Serialize(c->LTope());
+                out << _serializer.Serialize(c->LTopc());
+                out << _serializer.Serialize(c->DADot());
+                out << _serializer.Serialize(c->FDelnDot());
+                out << _serializer.Serialize(c->CURAoe());
+                out << _serializer.Serialize(c->CURAoc());
+                out << _serializer.Serialize(c->CURAoc1());
+                out << _serializer.Serialize(c->CURAoc2());
+            }
+            break;
+        case ECustomTypeId::GpsEphReqData:
+            {
+                auto c = dynamic_cast<GpsEphReqDataCustomType*>(ct);
                 out << _serializer.Serialize(c->Sv());
                 out << _serializer.Serialize(c->Tow());
                 out << _serializer.Serialize(c->Flags());
@@ -1566,12 +1849,47 @@ namespace Greis
                 out << _serializer.Serialize(c->Cis());
             }
             break;
+        case ECustomTypeId::GpsNavData1:
+            {
+                auto c = dynamic_cast<GpsNavData1CustomType*>(ct);
+                out << _serializer.Serialize(c->RecSize());
+                out << addCustomTypesAndSerialize(c->Dat());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
+        case ECustomTypeId::GpsRawNavData1:
+            {
+                auto c = dynamic_cast<GpsRawNavData1CustomType*>(ct);
+                out << _serializer.Serialize(c->Prn());
+                out << _serializer.Serialize(c->Time());
+                out << _serializer.Serialize(c->Type());
+                out << _serializer.Serialize(c->Len());
+                out << _serializer.Serialize(c->Data());
+                out << _serializer.Serialize(c->Cs());
+            }
+            break;
         case ECustomTypeId::Header:
             {
                 auto c = dynamic_cast<HeaderCustomType*>(ct);
                 out << _serializer.Serialize(c->Refrange());
                 out << _serializer.Serialize(c->Usi());
                 out << _serializer.Serialize(c->Num());
+            }
+            break;
+        case ECustomTypeId::IonoParams1:
+            {
+                auto c = dynamic_cast<IonoParams1CustomType*>(ct);
+                out << _serializer.Serialize(c->Tot());
+                out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Alpha0());
+                out << _serializer.Serialize(c->Alpha1());
+                out << _serializer.Serialize(c->Alpha2());
+                out << _serializer.Serialize(c->Alpha3());
+                out << _serializer.Serialize(c->Beta0());
+                out << _serializer.Serialize(c->Beta1());
+                out << _serializer.Serialize(c->Beta2());
+                out << _serializer.Serialize(c->Beta3());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case ECustomTypeId::SlotRec:
@@ -1589,6 +1907,13 @@ namespace Greis
                 auto c = dynamic_cast<SmoothCustomType*>(ct);
                 out << _serializer.Serialize(c->Value());
                 out << _serializer.Serialize(c->Interval());
+            }
+            break;
+        case ECustomTypeId::SpecData:
+            {
+                auto c = dynamic_cast<SpecDataCustomType*>(ct);
+                
+                throw ProjectBase::NotImplementedException();
             }
             break;
         case ECustomTypeId::SvData0:

@@ -47,6 +47,26 @@ namespace Greis
         p_message += sizeof(_nN4);
         _serializer.Deserialize(p_message, _flags2);
         p_message += sizeof(_flags2);
+        if (BodySize() == 103)
+        {
+            // Optional Data Block
+            _serializer.Deserialize(p_message, _navType);
+            p_message += sizeof(_navType);
+            _serializer.Deserialize(p_message, _beta);
+            p_message += sizeof(_beta);
+            _serializer.Deserialize(p_message, _tauSysDot);
+            p_message += sizeof(_tauSysDot);
+            _serializer.Deserialize(p_message, _ec);
+            p_message += sizeof(_ec);
+            _serializer.Deserialize(p_message, _ee);
+            p_message += sizeof(_ee);
+            _serializer.Deserialize(p_message, _fc);
+            p_message += sizeof(_fc);
+            _serializer.Deserialize(p_message, _fe);
+            p_message += sizeof(_fe);
+            _serializer.Deserialize(p_message, _reserv);
+            p_message += sizeof(_reserv);
+        }
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -103,6 +123,18 @@ namespace Greis
         _serializer.Serialize(_nFt, result);
         _serializer.Serialize(_nN4, result);
         _serializer.Serialize(_flags2, result);
+        if (BodySize() == 103)
+        {
+            // Optional Data Block
+            _serializer.Serialize(_navType, result);
+            _serializer.Serialize(_beta, result);
+            _serializer.Serialize(_tauSysDot, result);
+            _serializer.Serialize(_ec, result);
+            _serializer.Serialize(_ee, result);
+            _serializer.Serialize(_fc, result);
+            _serializer.Serialize(_fe, result);
+            _serializer.Serialize(_reserv, result);
+        }
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

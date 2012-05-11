@@ -1,10 +1,10 @@
-#include "BaseLineStdMessage.h"
+#include "BaselineStdMessage.h"
 #include <cassert>
 #include "ChecksumComputer.h"
 
 namespace Greis
 {
-    BaseLineStdMessage::BaseLineStdMessage( const char* pc_message, int p_length ) 
+    BaselineStdMessage::BaselineStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
@@ -29,17 +29,17 @@ namespace Greis
         assert(p_message - pc_message == p_length);
     }
     
-    BaseLineStdMessage::BaseLineStdMessage( const std::string& p_id, int p_size ) 
+    BaselineStdMessage::BaselineStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
     }
 
-    std::string BaseLineStdMessage::ToString() const
+    std::string BaselineStdMessage::ToString() const
     {
-        return toString("BaseLineStdMessage");
+        return toString("BaselineStdMessage");
     }
     
-    bool BaseLineStdMessage::Validate() const
+    bool BaselineStdMessage::Validate() const
     {
         if (!StdMessage::Validate())
         {
@@ -50,13 +50,13 @@ namespace Greis
         return validateChecksum8Bin(message.data(), message.size());
     }
     
-    void BaseLineStdMessage::RecalculateChecksum()
+    void BaselineStdMessage::RecalculateChecksum()
     {
         auto message = ToByteArray();
         _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
-    QByteArray BaseLineStdMessage::ToByteArray() const
+    QByteArray BaselineStdMessage::ToByteArray() const
     {
         QByteArray result;
         result.append(headToByteArray());

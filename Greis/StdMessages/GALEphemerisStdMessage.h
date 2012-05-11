@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/GPSEphemeris1CustomType.h"
+#include "CustomTypes/GpsEphReqDataCustomType.h"
 
 namespace Greis
 {
@@ -25,10 +25,10 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Without ‘cs’ field, gps.sv within the range [1…30]
-        // GALILEO-specific data
-        const GPSEphemeris1CustomType::UniquePtr_t& Gps() const { return _gps; }
-        GPSEphemeris1CustomType::UniquePtr_t& Gps() { return _gps; }
+        // GPS required data, ‘req.sv’ within the range [1…30]
+        // --- GALILEO-specific data block ---
+        const GpsEphReqDataCustomType::UniquePtr_t& Req() const { return _req; }
+        GpsEphReqDataCustomType::UniquePtr_t& Req() { return _req; }
 
         // broacast group delay E1 - E5A [s]
         const Types::f4& BgdE1E5a() const { return _bgdE1E5a; }
@@ -56,7 +56,10 @@ namespace Greis
 
         // Type of navigation data:
         // 0 - GALILEO E1B(INAV)
+        // 1 - GALILEO E5A(FNAV)
         // 3 - GIOVE E1B
+        // 4 - GIOVE E5A
+        // --- End of GALILEO-specific data block ---
         const Types::u1& NavType() const { return _navType; }
         Types::u1& NavType() { return _navType; }
 
@@ -67,7 +70,7 @@ namespace Greis
         std::string _id;
         int _bodySize;
 
-        GPSEphemeris1CustomType::UniquePtr_t _gps;
+        GpsEphReqDataCustomType::UniquePtr_t _req;
         Types::f4 _bgdE1E5a;
         Types::f4 _bgdE1E5b;
         Types::f4 _ai0;

@@ -47,7 +47,7 @@ namespace Greis
         const std::vector<Types::f4>& Rms() const { return _rms; }
         std::vector<Types::f4>& Rms() { return _rms; }
 
-        // solution type10 for three baseline vectors
+        // solution type11 for three baseline vectors
         const std::vector<Types::u1>& SolType() const { return _solType; }
         std::vector<Types::u1>& SolType() { return _solType; }
 

@@ -10,7 +10,8 @@ namespace GreisDocParser
     /// </summary>
     public enum SizeSpecialValue
     {
-        Dynamic = -1,   // Size is computing according unknown special logic
-        Fill = -2,      // Size is computing by formula: (struct size) - (other fields size)
+        Dynamic = -1,   // Size is computing according to unknown special logic
+        Fill = -2,      // Size is computing with formula: (struct size) - (other fields size)
+        FixedWithOptionalDataBlock = -3, // Size value is one of fixed values (with or without optional block)
     }
 }

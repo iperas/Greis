@@ -11,7 +11,7 @@ namespace Greis
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, 122, _gps);
+        _serializer.Deserialize(p_message, 122, _req);
         p_message += 122;
         _serializer.Deserialize(p_message, _bgdE1E5a);
         p_message += sizeof(_bgdE1E5a);
@@ -65,7 +65,7 @@ namespace Greis
         QByteArray result;
         result.append(headToByteArray());
 
-        _serializer.Serialize(_gps, result);
+        _serializer.Serialize(_req, result);
         _serializer.Serialize(_bgdE1E5a, result);
         _serializer.Serialize(_bgdE1E5b, result);
         _serializer.Serialize(_ai0, result);

@@ -25,7 +25,7 @@ namespace Greis
         // 15…11: GLONASS slot number (for GPS SV the field
         // is undefined), [0…24], 0 - unknown
         // 10…6: Channel number [0…31], 31 - unavailable
-        // 5…0: SV navigation status
+        // 5…0: Satellite navigation status
         // Delta pseudo-range [0.02 meters]:
         // [full pseudo-range for given slot]-[refrange]
         const Types::i2& SvstOrDelrange() const { return _svstOrDelrange; }

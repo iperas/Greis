@@ -89,6 +89,21 @@ namespace Greis
         const Types::f4& Deli() const { return _deli; }
         Types::f4& Deli() { return _deli; }
 
+        // Number of 4-year period []
+        // --- Optional data block ---
+        const Types::u1& N4() const { return _n4; }
+        Types::u1& N4() { return _n4; }
+
+        // Signal type nav. data was decoded from
+        const Types::u1& NavType() const { return _navType; }
+        Types::u1& NavType() { return _navType; }
+
+        // Rate of coarse satellite clock correction to
+        // GLONASS time scale [s/s]
+        // --- End of optional data block ---
+        const Types::f4& GammaN() const { return _gammaN; }
+        Types::f4& GammaN() { return _gammaN; }
+
         // Checksum
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
@@ -109,6 +124,9 @@ namespace Greis
         Types::f4 _delT;
         Types::f4 _delTdt;
         Types::f4 _deli;
+        Types::u1 _n4;
+        Types::u1 _navType;
+        Types::f4 _gammaN;
         Types::u1 _cs;
     };
 }

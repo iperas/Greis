@@ -54,9 +54,6 @@
     <ClInclude Include="EMessageId.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StdMessages\ExampleStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
     <ClInclude Include="StdMessages\AngularVelocityStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
@@ -114,9 +111,6 @@
     <ClInclude Include="StdMessages\GALEphemerisStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
-    <ClInclude Include="StdMessages\GALRawMessageStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
     <ClInclude Include="StdMessages\GalUtcGpsParamStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
@@ -150,9 +144,6 @@
     <ClInclude Include="StdMessages\GPSEphemeris0StdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
-    <ClInclude Include="StdMessages\GpsNavDataStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
     <ClInclude Include="StdMessages\GPSTimeStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
@@ -163,9 +154,6 @@
       <Filter>StdMessages</Filter>
     </ClInclude>
     <ClInclude Include="StdMessages\IonoDelayStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
-    <ClInclude Include="StdMessages\IonoParamsStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
     <ClInclude Include="StdMessages\LatencyStdMessage.h">
@@ -246,9 +234,6 @@
     <ClInclude Include="StdMessages\RcvTimeStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
-    <ClInclude Include="StdMessages\RcvWAASTimeOffsetStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
     <ClInclude Include="StdMessages\RefEpochStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
@@ -321,18 +306,6 @@
     <ClInclude Include="StdMessages\VelStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
-    <ClInclude Include="StdMessages\WAASAlmanacStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
-    <ClInclude Include="StdMessages\WAASEhemerisStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
-    <ClInclude Include="StdMessages\WAASRawMessageStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
-    <ClInclude Include="StdMessages\WaasUtcParamStdMessage.h">
-      <Filter>StdMessages</Filter>
-    </ClInclude>
     <ClInclude Include="StdMessages\WrapperStdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
@@ -399,6 +372,90 @@
     <ClInclude Include="AllCustomTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CustomTypes\IonoParams1CustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTypes\SpecDataCustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTypes\ExtSpecDataCustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTypes\GpsEphReqDataCustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\CompRawNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\IonoParams0StdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\GalRawNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\GloRawNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\IAmpStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QzssIonoParamsStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QzssNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QzssRawNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QzssUtcParamStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QAmpStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QZSSAlmStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\QZSSEphemerisStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\RcvQZSSTimeOffsetStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\RcvSBASTimeOffsetStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\SBASEhemerisStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\SbasRawNavDataStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\SbasUtcParamStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\SBASAlmanacStdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\Spectrum1StdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\Spectrum0StdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTypes\GpsNavData1CustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTypes\GpsRawNavData1CustomType.h">
+      <Filter>CustomTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\GpsNavData0StdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
+    <ClInclude Include="StdMessages\GpsRawNavData0StdMessage.h">
+      <Filter>StdMessages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NonStdTextMessage.cpp">
@@ -421,9 +478,6 @@
     </ClCompile>
     <ClCompile Include="StdMessageFactory.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StdMessages\ExampleStdMessage.cpp">
-      <Filter>StdMessages</Filter>
     </ClCompile>
     <ClCompile Include="StdMessages\AngularVelocityStdMessage.cpp">
       <Filter>StdMessages</Filter>
@@ -482,9 +536,6 @@
     <ClCompile Include="StdMessages\GALEphemerisStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
-    <ClCompile Include="StdMessages\GALRawMessageStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
     <ClCompile Include="StdMessages\GalUtcGpsParamStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
@@ -518,9 +569,6 @@
     <ClCompile Include="StdMessages\GPSEphemeris0StdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
-    <ClCompile Include="StdMessages\GpsNavDataStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
     <ClCompile Include="StdMessages\GPSTimeStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
@@ -531,9 +579,6 @@
       <Filter>StdMessages</Filter>
     </ClCompile>
     <ClCompile Include="StdMessages\IonoDelayStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
-    <ClCompile Include="StdMessages\IonoParamsStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
     <ClCompile Include="StdMessages\LatencyStdMessage.cpp">
@@ -614,9 +659,6 @@
     <ClCompile Include="StdMessages\RcvTimeStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
-    <ClCompile Include="StdMessages\RcvWAASTimeOffsetStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
     <ClCompile Include="StdMessages\RefEpochStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
@@ -689,18 +731,6 @@
     <ClCompile Include="StdMessages\VelStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
-    <ClCompile Include="StdMessages\WAASAlmanacStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
-    <ClCompile Include="StdMessages\WAASEhemerisStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
-    <ClCompile Include="StdMessages\WAASRawMessageStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
-    <ClCompile Include="StdMessages\WaasUtcParamStdMessage.cpp">
-      <Filter>StdMessages</Filter>
-    </ClCompile>
     <ClCompile Include="StdMessages\WrapperStdMessage.cpp">
       <Filter>StdMessages</Filter>
     </ClCompile>
@@ -754,6 +784,90 @@
     </ClCompile>
     <ClCompile Include="MySqlSourceGeneratedMembers.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\IonoParams1CustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\SpecDataCustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\ExtSpecDataCustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\GpsEphReqDataCustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\CompRawNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\IonoParams0StdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\GalRawNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\GloRawNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\IAmpStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QzssNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QzssRawNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QzssUtcParamStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QAmpStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QZSSAlmStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QZSSEphemerisStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\QzssIonoParamsStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\RcvQZSSTimeOffsetStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\RcvSBASTimeOffsetStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\SBASEhemerisStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\SbasRawNavDataStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\SbasUtcParamStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\SBASAlmanacStdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\Spectrum1StdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\Spectrum0StdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\GpsNavData1CustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTypes\GpsRawNavData1CustomType.cpp">
+      <Filter>CustomTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\GpsRawNavData0StdMessage.cpp">
+      <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="StdMessages\GpsNavData0StdMessage.cpp">
+      <Filter>StdMessages</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

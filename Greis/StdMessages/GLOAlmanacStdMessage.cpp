@@ -37,6 +37,16 @@ namespace Greis
         p_message += sizeof(_delTdt);
         _serializer.Deserialize(p_message, _deli);
         p_message += sizeof(_deli);
+        _serializer.Deserialize(p_message, _n4);
+        p_message += sizeof(_n4);
+        if (BodySize() == 52)
+        {
+            // Optional Data Block
+            _serializer.Deserialize(p_message, _navType);
+            p_message += sizeof(_navType);
+            _serializer.Deserialize(p_message, _gammaN);
+            p_message += sizeof(_gammaN);
+        }
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -88,6 +98,13 @@ namespace Greis
         _serializer.Serialize(_delT, result);
         _serializer.Serialize(_delTdt, result);
         _serializer.Serialize(_deli, result);
+        _serializer.Serialize(_n4, result);
+        if (BodySize() == 52)
+        {
+            // Optional Data Block
+            _serializer.Serialize(_navType, result);
+            _serializer.Serialize(_gammaN, result);
+        }
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

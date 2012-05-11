@@ -181,12 +181,43 @@ namespace GreisDocParser
             string linesStr;
             if (ct.Size != (int) SizeSpecialValue.Dynamic)
             {
+                // optional data block
+                Variable firstOptionalDataBlock = null;
+                Variable lastOptionalDataBlock = null;
+                int fullSize = 0;
+                bool insideOptionalDataBlock = false;
+                if (ct.Size == (int) SizeSpecialValue.FixedWithOptionalDataBlock)
+                {
+                    firstOptionalDataBlock = ct.FirstOptionalDataBlockVariable;
+                    lastOptionalDataBlock = ct.LastOptionalDataBlockVariable;
+                    fullSize = ct.Variables.Sum(v =>
+                                                {
+                                                    if (v.IsScalar)
+                                                    {
+                                                        return getItemSizeForVariable(v);
+                                                    }
+                                                    int itemsCount = v.SizeOfDimensions.
+                                                        Aggregate(1, (current, dSize) => current*dSize);
+                                                    return itemsCount * getItemSizeForVariable(v);
+                                                });
+                }
+                // end of optional data block
+
                 var lines = new List<string>();
                 var indexInQuery = ct is StandardMessage 
                                    ? CountOfCommonFieldsInMsgTable 
                                    : CountOfCommonFieldsInCtTable;
                 foreach (var variable in ct.Variables)
                 {
+                    // Optional Data Block begins
+                    if (variable == firstOptionalDataBlock)
+                    {
+                        lines.Add(string.Format("if (bodySize == {0})\r\n        {1}" +
+                                                "{{\r\n        {1}" +
+                                                "    // Optional Data Block", fullSize, codeIntend));
+                        insideOptionalDataBlock = true;
+                    }
+
                     string line;
                     if (variable.IsScalar)
                     {
@@ -242,7 +273,21 @@ namespace GreisDocParser
                         throw new NotSupportedException("Multi-dim arrays are not supported.");
                     }
                     indexInQuery++;
+
+                    // Optional Data Block intendation
+                    if (insideOptionalDataBlock)
+                    {
+                        line = "    " + line;
+                    }
+
                     lines.Add(line);
+                    
+                    // Closing optional data block 'if' statement
+                    if (variable == lastOptionalDataBlock)
+                    {
+                        insideOptionalDataBlock = false;
+                        lines.Add("}");
+                    }
                 }
                 linesStr = string.Join("\r\n        " + codeIntend, lines);
             }
@@ -251,6 +296,22 @@ namespace GreisDocParser
                 linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
             }
             return linesStr;
+        }
+
+        private int getItemSizeForVariable(Variable variable)
+        {
+            if (_simpleTypes.Contains(variable.GreisType))
+            {
+                // Simple type
+                var size = int.Parse(variable.GreisType.Substring(1));
+                return size;
+            }
+            else
+            {
+                var ct = getCustomTypeForVariable(variable);
+                Debug.Assert(ct.Size > 0);
+                return ct.Size;
+            }
         }
 
         private CustomType getCustomTypeForVariable(Variable variable)
@@ -328,10 +389,42 @@ namespace GreisDocParser
             string linesStr;
             if (msg.Size != (int) SizeSpecialValue.Dynamic)
             {
+                // optional data block
+                Variable firstOptionalDataBlock = null;
+                Variable lastOptionalDataBlock = null;
+                int fullSize = 0;
+                bool insideOptionalDataBlock = false;
+                var nullValueODBLines = new List<string>();
+                if (msg.Size == (int)SizeSpecialValue.FixedWithOptionalDataBlock)
+                {
+                    firstOptionalDataBlock = msg.FirstOptionalDataBlockVariable;
+                    lastOptionalDataBlock = msg.LastOptionalDataBlockVariable;
+                    fullSize = msg.Variables.Sum(v =>
+                    {
+                        if (v.IsScalar)
+                        {
+                            return getItemSizeForVariable(v);
+                        }
+                        int itemsCount = v.SizeOfDimensions.
+                            Aggregate(1, (current, dSize) => current * dSize);
+                        return itemsCount * getItemSizeForVariable(v);
+                    });
+                }
+                // end of optional data block
                 var lines = new List<string>();
                 foreach (var variable in msg.Variables)
                 {
+                    // Optional Data Block begins
+                    if (variable == firstOptionalDataBlock)
+                    {
+                        lines.Add(string.Format("if (c->BodySize() == {0})\r\n        {1}" +
+                                                "{{\r\n        {1}" +
+                                                "    // Optional Data Block", fullSize, codeIntend));
+                        insideOptionalDataBlock = true;
+                    }
+
                     string line;
+                    string nullValueLine;
                     if (variable.IsScalar)
                     {
                         if (variable.GreisType == GreisTypes.a1.ToString())
@@ -339,22 +432,54 @@ namespace GreisDocParser
                             // Types::a1
                             line = string.Format("out << _serializer.SerializeChar(c->{0}());",
                                                  getAccessorNameForVariable(variable));
+                            nullValueLine = "out << QVariant(QVariant::Char);";
                         }
                         else if (_simpleTypes.Contains(variable.GreisType))
                         {
                             // other Greis types
                             line = string.Format("out << _serializer.Serialize(c->{0}());",
                                                  getAccessorNameForVariable(variable));
+                            switch ((GreisTypes) Enum.Parse(typeof(GreisTypes), variable.GreisType))
+                            {
+                            case GreisTypes.a1:
+                                nullValueLine = "out << QVariant(QVariant::Char);";
+                                break;
+                            case GreisTypes.i1:
+                            case GreisTypes.i2:
+                            case GreisTypes.i4:
+                                nullValueLine = "out << QVariant(QVariant::Int);";
+                                break;
+                            case GreisTypes.u1:
+                            case GreisTypes.u2:
+                            case GreisTypes.u4:
+                                nullValueLine = "out << QVariant(QVariant::UInt);";
+                                break;
+                            case GreisTypes.f4:
+                            case GreisTypes.f8:
+                                nullValueLine = "out << QVariant(QVariant::Double);";
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                            }
                         }
                         else
                         {
                             // custom type
                             line = string.Format("out << addCustomType(c->{0}().get());",
                                                  getAccessorNameForVariable(variable));
+                            nullValueLine = "out << QVariant(QVariant::Int);";
                         }
                     }
                     else if (variable.IsLinearArray)
                     {
+                        if (variable.GreisType == GreisTypes.a1.ToString())
+                        {
+                            nullValueLine = "out << QVariant(QVariant::String);";
+                        } else
+                        {
+                            nullValueLine = "out << QVariant(QVariant::ByteArray);";
+                        }
+
                         if (_simpleTypes.Contains(variable.GreisType))
                         {
                             // string and other Greis types
@@ -372,7 +497,24 @@ namespace GreisDocParser
                     {
                         throw new NotSupportedException("Multi-dim arrays are not supported.");
                     }
+
+                    // Optional Data Block intendation
+                    if (insideOptionalDataBlock)
+                    {
+                        line = "    " + line;
+                        nullValueODBLines.Add(nullValueLine);
+                    }
+
                     lines.Add(line);
+
+                    // Closing optional data block 'if' statement
+                    if (variable == lastOptionalDataBlock)
+                    {
+                        insideOptionalDataBlock = false;
+                        lines.Add("} else {");
+                        lines.AddRange(nullValueODBLines.Select(odbLine => string.Format("    {0}", odbLine)));
+                        lines.Add("}");
+                    }
                 }
                 linesStr = string.Join("\r\n        " + codeIntend, lines);
             }
@@ -644,35 +786,124 @@ namespace GreisDocParser
             content.ClassFieldsAccessors = string.Join("\r\n" + fieldsAccessorsListIntendation,
                                                 fieldsAccessors.ToArray()).TrimEnd();
 
-            // ToByteArrayStubToken
-            var serializationLines = new List<string>();
-            foreach (var variable in msg.Variables)
+            //### ToByteArrayStubToken ###
             {
-                var line = string.Format("_serializer.Serialize({0}, result);", getFieldNameForVariable(variable));
+                // optional data block
+                Variable firstOptionalDataBlock = null;
+                Variable lastOptionalDataBlock = null;
+                int fullSize = 0;
+                bool insideOptionalDataBlock = false;
+                if (msg.Size == (int) SizeSpecialValue.FixedWithOptionalDataBlock)
+                {
+                    firstOptionalDataBlock = msg.FirstOptionalDataBlockVariable;
+                    lastOptionalDataBlock = msg.LastOptionalDataBlockVariable;
+                    fullSize = msg.Variables.Sum(v =>
+                                                 {
+                                                     if (v.IsScalar)
+                                                     {
+                                                         return getItemSizeForVariable(v);
+                                                     }
+                                                     int itemsCount = v.SizeOfDimensions.
+                                                         Aggregate(1, (current, dSize) => current*dSize);
+                                                     return itemsCount*getItemSizeForVariable(v);
+                                                 });
+                }
+                // end of optional data block
+                var serializationLines = new List<string>();
+                foreach (var variable in msg.Variables)
+                {
+                    // Optional Data Block begins
+                    if (variable == firstOptionalDataBlock)
+                    {
+                        serializationLines.Add(string.Format("if (BodySize() == {0})\r\n{1}" +
+                                                             "{{\r\n{1}" +
+                                                             "    // Optional Data Block", fullSize, codeIntendation));
+                        insideOptionalDataBlock = true;
+                    }
 
-                serializationLines.Add(line);
+                    var line = string.Format("_serializer.Serialize({0}, result);", getFieldNameForVariable(variable));
+
+                    // Optional Data Block intendation
+                    if (insideOptionalDataBlock)
+                    {
+                        line = "    " + line;
+                    }
+
+                    serializationLines.Add(line);
+
+                    // Closing optional data block 'if' statement
+                    if (variable == lastOptionalDataBlock)
+                    {
+                        insideOptionalDataBlock = false;
+                        serializationLines.Add("}");
+                    }
+                }
+                content.ToByteArrayCode = string.Join("\r\n" + codeIntendation, serializationLines.ToArray());
             }
-            content.ToByteArrayCode = string.Join("\r\n" + codeIntendation, serializationLines.ToArray());
 
             // DeserializationConstructorStubToken
             if (msg.Size != (int)SizeSpecialValue.Dynamic)
             {
-                var arraySizeInUniformFillFields = getArraySizeInUniformFillFieldsLine(msg, codeIntendation);
+                // optional data block
+                Variable firstOptionalDataBlock = null;
+                Variable lastOptionalDataBlock = null;
+                int fullSize = 0;
+                bool insideOptionalDataBlock = false;
+                if (msg.Size == (int)SizeSpecialValue.FixedWithOptionalDataBlock)
+                {
+                    firstOptionalDataBlock = msg.FirstOptionalDataBlockVariable;
+                    lastOptionalDataBlock = msg.LastOptionalDataBlockVariable;
+                    fullSize = msg.Variables.Sum(v =>
+                    {
+                        if (v.IsScalar)
+                        {
+                            return getItemSizeForVariable(v);
+                        }
+                        int itemsCount = v.SizeOfDimensions.
+                            Aggregate(1, (current, dSize) => current * dSize);
+                        return itemsCount * getItemSizeForVariable(v);
+                    });
+                }
+                // end of optional data block
 
+                var arraySizeInUniformFillFields = getArraySizeInUniformFillFieldsLine(msg, codeIntendation);
                 var deserializationLines = new List<string>();
                 foreach (var variable in msg.Variables)
                 {
+                    // Optional Data Block begins
+                    if (variable == firstOptionalDataBlock)
+                    {
+                        deserializationLines.Add(string.Format("if (BodySize() == {0})\r\n{1}" +
+                                                             "{{\r\n{1}" +
+                                                             "    // Optional Data Block", fullSize, codeIntendation));
+                        insideOptionalDataBlock = true;
+                    }
+
                     string line = generateDeserializationLine(codeIntendation, variable);
 
+                    // Optional Data Block intendation
+                    if (insideOptionalDataBlock)
+                    {
+                        line = "    " + line.Replace("\r\n", "\r\n    ");
+                    }
+
                     deserializationLines.Add(line);
+
+                    // Closing optional data block 'if' statement
+                    if (variable == lastOptionalDataBlock)
+                    {
+                        insideOptionalDataBlock = false;
+                        deserializationLines.Add("}");
+                    }
                 }
-                content.DeserializationConstructorCode = arraySizeInUniformFillFields + 
+                content.DeserializationConstructorCode = arraySizeInUniformFillFields +
                     string.Join("\r\n" + codeIntendation, deserializationLines.ToArray());
-            } else
+            }
+            else
             {
                 content.DeserializationConstructorCode = "throw ProjectBase::NotImplementedException();";
             }
-            
+
             return content;
         }
 
@@ -742,9 +973,12 @@ namespace GreisDocParser
                 return "";
             }
 
+            var sizeVal = msg is StandardMessage
+                              ? "BodySize()"
+                              : "Size()";
             var arraySizeInUniformFillFields = 
-                string.Format("int arraySizeInUniformFillFields = (BodySize() - {0}) / {1};\r\n\r\n{2}",
-                    sizeOfFieldsWithKnownSize, summarySizeOfFillFields, codeIntendation);
+                string.Format("int arraySizeInUniformFillFields = ({3} - {0}) / {1};\r\n\r\n{2}",
+                    sizeOfFieldsWithKnownSize, summarySizeOfFillFields, codeIntendation, sizeVal);
             return arraySizeInUniformFillFields;
         }
 

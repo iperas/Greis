@@ -12,7 +12,8 @@ namespace GreisDocParser
                                                                              {
                                                                                  "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", 
                                                                                  "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", 
-                                                                                 "ID", "GD", "LD", "ED", "rT", "RE", "ER", "==", ">>", "PM"
+                                                                                 "ID", "GD", "gd", "LD", "lD", "ED", "rT", "RE", "ER", "==", ">>", 
+                                                                                 "PM", "cd"
                                                                              };
 
         private static readonly List<string> _almanacsAndEphemerisMessages = new List<string>() { "GA", "EA", "NA", "WA", "GE", "NE", "WE", "EN" };
@@ -93,7 +94,7 @@ namespace GreisDocParser
                 ct.Variables.AddRange(parseContent(content));
                 customTypes.Add(ct);
             }
-            // correcting CustomType names for duplicates (with updating usages)
+            // correcting CustomType names with duplicates (with updating usages)
             customTypes = customTypes.Where(t => !metaInfo.StandardMessages.Any(m => m.Name == t.Name)).ToList();
             var customTypesByName = customTypes.GroupBy(t => t.Name).ToList();
             var varsWithCustomTypes = metaInfo.StandardMessages.SelectMany(m => m.Variables).
@@ -122,6 +123,15 @@ namespace GreisDocParser
                 }
             }
             metaInfo.CustomTypes = customTypes.Where(t => !String.IsNullOrEmpty(t.Name)).ToList();
+            // correcting StandardMessage names with duplicates
+            foreach (var grp in metaInfo.StandardMessages.GroupBy(msg => msg.Name).Where(grp => grp.Count() > 1))
+            {
+                int index = 0;
+                foreach (var stdMsg in grp)
+                {
+                    stdMsg.Name += index++;
+                }
+            }
 
             resolveFixedSizeFields(metaInfo);
             addGpsAlmsAndEphemerisTypes(metaInfo);
@@ -132,39 +142,52 @@ namespace GreisDocParser
 
         private static void fixDocumentationBugs(MetaInfo metaInfo)
         {
-            var waasEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "WAASEhemeris");
-
-            waasEphemeris.Size = 71;
+            // fixed in 03-2012 version
+            //var waasEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "WAASEhemeris");
+            //waasEphemeris.Size = 71;
         }
 
         private static void addGpsAlmsAndEphemerisTypes(MetaInfo metaInfo)
         {
-            var gpsAlm = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "GPSAlm");
-            var gpsEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "GPSEphemeris");
-            var galAlm = (CustomType)metaInfo.StandardMessages.First(m => m.Name == "GALAlm");
-            var galEphemeris = (CustomType)metaInfo.StandardMessages.First(m => m.Name == "GALEphemeris");
+            addCustomTypeFromStdMessage(metaInfo, "GPSAlm", true);
+            addCustomTypeFromStdMessage(metaInfo, "GPSEphemeris", true);
+            addCustomTypeFromStdMessage(metaInfo, "IonoParams", false);
+            addCustomTypeFromStdMessage(metaInfo, "GpsNavData", false);
+            addCustomTypeFromStdMessage(metaInfo, "GpsRawNavData", false);
+        }
 
-            var ctGpsAlm = new CustomType
-                               {
-                                   Name = gpsAlm.Name,
-                                   Size = gpsAlm.Size - 1,
-                                   Variables = gpsAlm.Variables.Where(v => v.Name != "cs").ToList()
-                               };
-            var ctGpsEphemeris = new CustomType
-                                     {
-                                         Name = gpsEphemeris.Name,
-                                         Size = gpsEphemeris.Size - 1,
-                                         Variables = gpsEphemeris.Variables.Where(v => v.Name != "cs").ToList()
-                                     };
-            metaInfo.CustomTypes.Add(ctGpsAlm);
-            metaInfo.CustomTypes.Add(ctGpsEphemeris);
+        private static void addCustomTypeFromStdMessage(MetaInfo metaInfo, string msgName, bool removeCs)
+        {
+            var stdMsg = (CustomType) metaInfo.StandardMessages.First(m => m.Name == msgName);
 
-            gpsAlm.Name += "0";
-            gpsEphemeris.Name += "0";
-            ctGpsAlm.Name += "1";
-            ctGpsEphemeris.Name += "1";
-            galAlm.Variables.First(v => v.GreisType == "GPSAlm").GreisType += "1";
-            galEphemeris.Variables.First(v => v.GreisType == "GPSEphemeris").GreisType += "1";
+            CustomType customType;
+            if (removeCs)
+            {
+                customType = new CustomType
+                {
+                    Name = stdMsg.Name,
+                    Size = stdMsg.Size - 1,
+                    Variables = stdMsg.Variables.Where(v => v.Name != "cs").ToList()
+                };
+            } else
+            {
+                customType = new CustomType
+                {
+                    Name = stdMsg.Name,
+                    Size = stdMsg.Size,
+                    Variables = stdMsg.Variables.ToList()
+                };
+            }
+            metaInfo.CustomTypes.Add(customType);
+
+            stdMsg.Name += "0";
+            customType.Name += "1";
+
+            foreach (var variable in metaInfo.StandardMessages.SelectMany(m => m.Variables).
+                Where(v => v.GreisType == msgName))
+            {
+                variable.GreisType += "1";
+            }
         }
 
         private static void resolveFixedSizeFields(MetaInfo metaInfo)
@@ -188,7 +211,7 @@ namespace GreisDocParser
             {
                 resolvingPointsCountPrevIter = resolvingPointsCount;
 
-                var resolvingPoints = types.Where(ct => ct.Size < 0 && 
+                var resolvingPoints = types.Where(ct => ct.Size < 0 && !ct.ContainsOptionalDataBlock && 
                     ct.Variables.All(v => nameToSizeCache.ContainsKey(v.GreisType) && v.SizeOfDimensions.All(s => s >= 0))).ToList();
 
                 resolvingPointsCount = resolvingPoints.Count;
@@ -200,6 +223,11 @@ namespace GreisDocParser
                     customType.Size = size;
                     nameToSizeCache[customType.Name] = size;
                 }
+            }
+
+            foreach (var ct in types.Where(ct => ct.ContainsOptionalDataBlock))
+            {
+                ct.Size = (int) SizeSpecialValue.FixedWithOptionalDataBlock;
             }
         }
 

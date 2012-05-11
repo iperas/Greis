@@ -56,9 +56,9 @@ namespace Greis
         // 14…13: reserved
         // 12…8: Number of GLONASS SVs used in computation;
         // 7…4: Position computation mode
-        // (see Table 4-3 on page 306);
+        // (see Table 4-3 on page 324);
         // 3…0: Velocity computation mode
-        // (see Table 4-3 on page 306);
+        // (see Table 4-3 on page 324);
         const Types::u4& Word2() const { return _word2; }
         Types::u4& Word2() { return _word2; }
 
