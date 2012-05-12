@@ -74,8 +74,8 @@ $(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generat
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate cppEnv
-$(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generate sqlBaseline</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
