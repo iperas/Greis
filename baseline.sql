@@ -1946,7 +1946,6 @@ CREATE TABLE `msg_SBASEhemeris` (
     `agf1` FLOAT, 
     `tow` INT UNSIGNED, 
     `wn` SMALLINT UNSIGNED, 
-    `flags` SMALLINT UNSIGNED, 
     `cs` TINYINT UNSIGNED, 
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_msg_SBASEhemeris_idEpoch` (`idEpoch`), 
@@ -2880,7 +2879,7 @@ INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKin
            (65, 'GALEphemeris', '[EN] GALILEO Ephemeris', 145, 1, 3, 2, 'msg_GALEphemeris'), 
            (66, 'QZSSEphemeris', '[QE] QZSS Ephemeris', -1, 1, 3, 1, 'msg_QZSSEphemeris'), 
            (67, 'GLOEphemeris', '[NE] GLONASS Ephemeris', -3, 1, 3, 2, 'msg_GLOEphemeris'), 
-           (68, 'SBASEhemeris', '[WE] WAAS/EGNOS Ephemeris', 73, 1, 3, 2, 'msg_SBASEhemeris'), 
+           (68, 'SBASEhemeris', '[WE] WAAS/EGNOS Ephemeris', 71, 1, 3, 2, 'msg_SBASEhemeris'), 
            (69, 'GpsNavData0', '[GD] GPS Raw Navigation Data (obsolete)', -2, 1, 3, 1, 'msg_GpsNavData0'), 
            (70, 'GpsRawNavData0', '[gd] GPS Raw Navigation Data', -2, 1, 3, 1, 'msg_GpsRawNavData0'), 
            (71, 'QzssNavData', '[QD] QZSS Raw Navigation Data (obsolete)', -1, 0, 3, 1, 'msg_QzssNavData'), 
@@ -3447,188 +3446,187 @@ INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `
            (328, 'agf1', 'f4', '', 68), 
            (329, 'tow', 'u4', '', 68), 
            (330, 'wn', 'u2', '', 68), 
-           (331, 'flags', 'u2', '', 68), 
-           (332, 'cs', 'u1', '', 68), 
-           (333, 'recSize', 'u1', '', 69), 
-           (334, 'dat', 'SvData0', '', 69), 
-           (335, 'cs', 'u1', '', 69), 
-           (336, 'prn', 'u1', '', 70), 
-           (337, 'time', 'u4', '', 70), 
-           (338, 'type', 'u1', '', 70), 
-           (339, 'len', 'u1', '', 70), 
-           (340, 'data', 'u4', '', 70), 
-           (341, 'cs', 'u1', '', 70), 
-           (342, 'data', 'GpsNavData1', '', 71), 
-           (343, 'data', 'GpsRawNavData1', '', 72), 
-           (344, 'recSize', 'u1', '', 73), 
-           (345, 'dat', 'SvData1', '', 73), 
-           (346, 'cs', 'u1', '', 73), 
-           (347, 'num', 'u1', '', 74), 
-           (348, 'fcn', 'i1', '', 74), 
-           (349, 'time', 'u4', '', 74), 
-           (350, 'type', 'u1', '', 74), 
-           (351, 'len', 'u1', '', 74), 
-           (352, 'data', 'u1', '', 74), 
-           (353, 'cs', 'u1', '', 74), 
-           (354, 'prn', 'u1', '', 75), 
-           (355, 'time', 'u4', '', 75), 
-           (356, 'reserv', 'u2', '', 75), 
-           (357, 'data', 'u1', '', 75), 
-           (358, 'cs', 'u1', '', 75), 
-           (359, 'prn', 'u1', '', 76), 
-           (360, 'time', 'u4', '', 76), 
-           (361, 'type', 'u1', '', 76), 
-           (362, 'len', 'u1', '', 76), 
-           (363, 'data', 'u1', '', 76), 
-           (364, 'cs', 'u1', '', 76), 
-           (365, 'prn', 'u1', '', 77), 
-           (366, 'time', 'u4', '', 77), 
-           (367, 'type', 'u1', '', 77), 
-           (368, 'len', 'u1', '', 77), 
-           (369, 'data', 'u4', '', 77), 
-           (370, 'cs', 'u1', '', 77), 
-           (371, 'currFrq', 'i2', '', 78), 
-           (372, 'finalFrq', 'i2', '', 78), 
-           (373, 'n', 'u1', '', 78), 
-           (374, 'm', 'u1', '', 78), 
-           (375, 's', 'SpecData', '', 78), 
-           (376, 'cs', 'u1', '', 78), 
-           (377, 'currFrq', 'i2', '', 79), 
-           (378, 'finalFrq', 'i2', '', 79), 
-           (379, 'n', 'u1', '', 79), 
-           (380, 'm', 'u1', '', 79), 
-           (381, 's', 'ExtSpecData', '', 79), 
-           (382, 'cs', 'u1', '', 79), 
-           (383, 'fcn', 'i1', '', 80), 
-           (384, 'phase', 'f4', '', 80), 
-           (385, 'range', 'f4', '', 80), 
-           (386, 'cs', 'u1', '', 80), 
-           (387, 'time', 'u4', '', 81), 
-           (388, 'q00', 'f4', '', 81), 
-           (389, 'q01', 'f4', '', 81), 
-           (390, 'q02', 'f4', '', 81), 
-           (391, 'q12', 'f4', '', 81), 
-           (392, 'rms', 'f4', '', 81), 
-           (393, 'solType', 'u1', '', 81), 
-           (394, 'flag', 'u1', '', 81), 
-           (395, 'cs', 'u1', '', 81), 
-           (396, 'time', 'u4', '', 82), 
-           (397, 'q00', 'f4', '', 82), 
-           (398, 'q01', 'f4', '', 82), 
-           (399, 'q02', 'f4', '', 82), 
-           (400, 'q12', 'f4', '', 82), 
-           (401, 'rms', 'f4', '', 82), 
-           (402, 'solType', 'u1', '', 82), 
-           (403, 'flag', 'u1', '', 82), 
-           (404, 'bl0', 'f4', '', 82), 
-           (405, 'bl1', 'f4', '', 82), 
-           (406, 'bl2', 'f4', '', 82), 
-           (407, 'cs', 'u1', '', 82), 
-           (408, 'time', 'u4', '', 83), 
-           (409, 'pitch', 'f4', '', 83), 
-           (410, 'roll', 'f4', '', 83), 
-           (411, 'heading', 'f4', '', 83), 
-           (412, 'pitchRms', 'f4', '', 83), 
-           (413, 'rollRms', 'f4', '', 83), 
-           (414, 'headingRms', 'f4', '', 83), 
-           (415, 'flags', 'u1', '', 83), 
-           (416, 'cs', 'u1', '', 83), 
-           (417, 'time', 'u4', '', 84), 
-           (418, 'x', 'f4', '', 84), 
-           (419, 'y', 'f4', '', 84), 
-           (420, 'z', 'f4', '', 84), 
-           (421, 'rms', 'f4', '', 84), 
-           (422, 'flags', 'u1', '', 84), 
-           (423, 'cs', 'u1', '', 84), 
-           (424, 'accelerations', 'f4', '', 85), 
-           (425, 'angularVelocities', 'f4', '', 85), 
-           (426, 'cs', 'u1', '', 85), 
-           (427, 'ms', 'i4', '', 86), 
-           (428, 'ns', 'i4', '', 86), 
-           (429, 'timeScale', 'u1', '', 86), 
-           (430, 'cs', 'u1', '', 86), 
-           (431, 'offs', 'f4', '', 87), 
-           (432, 'cs', 'u1', '', 87), 
-           (433, 'offs', 'f8', '', 88), 
-           (434, 'timeScale', 'u1', '', 88), 
-           (435, 'cs', 'u1', '', 88), 
-           (436, 'sample', 'u2', '', 89), 
-           (437, 'scale', 'u2', '', 89), 
-           (438, 'reftime', 'u4', '', 89), 
-           (439, 'crc16', 'u2', '', 89), 
-           (440, 'sample', 'u2', '', 90), 
-           (441, 'scale', 'u2', '', 90), 
-           (442, 'reftime', 'u4', '', 90), 
-           (443, 'clock', 'i2', '', 90), 
-           (444, 'flags', 'u2', '', 90), 
-           (445, 'svd', 'SvData2', '', 90), 
-           (446, 'crc16', 'u2', '', 90), 
-           (447, 'sample', 'u2', '', 91), 
-           (448, 'delta', 'u2', '', 91), 
-           (449, 'word1', 'u4', '', 91), 
-           (450, 'word2', 'u4', '', 91), 
-           (451, 'word3', 'u4', '', 91), 
-           (452, 'word4', 'u4', '', 91), 
-           (453, 'word5', 'u4', '', 91), 
-           (454, 'word6', 'u4', '', 91), 
-           (455, 'word7', 'u4', '', 91), 
-           (456, 'word8', 'u4', '', 91), 
-           (457, 'word9', 'u4', '', 91), 
-           (458, 'crc16', 'u2', '', 91), 
-           (459, 'sample', 'u2', '', 92), 
-           (460, 'reserved', 'u2', '', 92), 
-           (461, 'recSize', 'u1', '', 92), 
-           (462, 'Offs', 'ClkOffs', '', 92), 
-           (463, 'crc16', 'u2', '', 92), 
-           (464, 'reply', 'a1', '', 93), 
-           (465, 'error', 'a1', '', 94), 
-           (466, 'tot', 'u4', '', 95), 
-           (467, 'wn', 'u2', '', 95), 
-           (468, 'alpha0', 'f4', '', 95), 
-           (469, 'alpha1', 'f4', '', 95), 
-           (470, 'alpha2', 'f4', '', 95), 
-           (471, 'alpha3', 'f4', '', 95), 
-           (472, 'beta0', 'f4', '', 95), 
-           (473, 'beta1', 'f4', '', 95), 
-           (474, 'beta2', 'f4', '', 95), 
-           (475, 'beta3', 'f4', '', 95), 
-           (476, 'cs', 'u1', '', 95), 
-           (477, 'par', 'IonoParams1', '', 96), 
-           (478, 'time', 'u4', '', 97), 
-           (479, 'type', 'u1', '', 97), 
-           (480, 'data', 'u1', '', 97), 
-           (481, 'cs', 'u1', '', 97), 
-           (482, 'lt', 'u1', '', 98), 
-           (483, 'cs', 'u1', '', 98), 
-           (484, 'id', 'u1', '', 99), 
-           (485, 'data', 'u1', '', 99), 
-           (486, 'cs', 'a1', '', 99), 
-           (487, 'params', 'a1', '', 100), 
-           (488, 'delim', 'a1', ',@', 100), 
-           (489, 'cs', 'a1', '', 100), 
-           (490, 'svsCount', 'u1', '', 101), 
-           (491, 'targetStream', 'u1', '', 101), 
-           (492, 'issue', 'u2', '', 101), 
-           (493, 'bitsCount', 'u2', '', 101), 
-           (494, 'lastBitTime', 'u4', '', 101), 
-           (495, 'uids', 'u1', '', 101), 
-           (496, 'pad', 'u1', '', 101), 
-           (497, 'hist', 'u4', '', 101), 
-           (498, 'x', 'f8', '', 102), 
-           (499, 'y', 'f8', '', 102), 
-           (500, 'z', 'f8', '', 102), 
-           (501, 'id', 'u2', '', 102), 
-           (502, 'solType', 'u1', '', 102), 
-           (503, 'cs', 'u1', '', 102), 
-           (504, 'data', 'u1', '', 103), 
-           (505, 'cs', 'u1', '', 103), 
-           (506, 'data', 'u1', '', 104), 
-           (507, 'crc16', 'u2', '', 104), 
-           (508, 'tt', 'u4', '', 105), 
-           (509, 'cs', 'u1', '', 105), 
-           (510, 'val', 'f4', '', 106), 
-           (511, 'cs', 'u1', '', 106), 
-           (512, 'cs', 'u1', '', 107);
+           (331, 'cs', 'u1', '', 68), 
+           (332, 'recSize', 'u1', '', 69), 
+           (333, 'dat', 'SvData0', '', 69), 
+           (334, 'cs', 'u1', '', 69), 
+           (335, 'prn', 'u1', '', 70), 
+           (336, 'time', 'u4', '', 70), 
+           (337, 'type', 'u1', '', 70), 
+           (338, 'len', 'u1', '', 70), 
+           (339, 'data', 'u4', '', 70), 
+           (340, 'cs', 'u1', '', 70), 
+           (341, 'data', 'GpsNavData1', '', 71), 
+           (342, 'data', 'GpsRawNavData1', '', 72), 
+           (343, 'recSize', 'u1', '', 73), 
+           (344, 'dat', 'SvData1', '', 73), 
+           (345, 'cs', 'u1', '', 73), 
+           (346, 'num', 'u1', '', 74), 
+           (347, 'fcn', 'i1', '', 74), 
+           (348, 'time', 'u4', '', 74), 
+           (349, 'type', 'u1', '', 74), 
+           (350, 'len', 'u1', '', 74), 
+           (351, 'data', 'u1', '', 74), 
+           (352, 'cs', 'u1', '', 74), 
+           (353, 'prn', 'u1', '', 75), 
+           (354, 'time', 'u4', '', 75), 
+           (355, 'reserv', 'u2', '', 75), 
+           (356, 'data', 'u1', '', 75), 
+           (357, 'cs', 'u1', '', 75), 
+           (358, 'prn', 'u1', '', 76), 
+           (359, 'time', 'u4', '', 76), 
+           (360, 'type', 'u1', '', 76), 
+           (361, 'len', 'u1', '', 76), 
+           (362, 'data', 'u1', '', 76), 
+           (363, 'cs', 'u1', '', 76), 
+           (364, 'prn', 'u1', '', 77), 
+           (365, 'time', 'u4', '', 77), 
+           (366, 'type', 'u1', '', 77), 
+           (367, 'len', 'u1', '', 77), 
+           (368, 'data', 'u4', '', 77), 
+           (369, 'cs', 'u1', '', 77), 
+           (370, 'currFrq', 'i2', '', 78), 
+           (371, 'finalFrq', 'i2', '', 78), 
+           (372, 'n', 'u1', '', 78), 
+           (373, 'm', 'u1', '', 78), 
+           (374, 's', 'SpecData', '', 78), 
+           (375, 'cs', 'u1', '', 78), 
+           (376, 'currFrq', 'i2', '', 79), 
+           (377, 'finalFrq', 'i2', '', 79), 
+           (378, 'n', 'u1', '', 79), 
+           (379, 'm', 'u1', '', 79), 
+           (380, 's', 'ExtSpecData', '', 79), 
+           (381, 'cs', 'u1', '', 79), 
+           (382, 'fcn', 'i1', '', 80), 
+           (383, 'phase', 'f4', '', 80), 
+           (384, 'range', 'f4', '', 80), 
+           (385, 'cs', 'u1', '', 80), 
+           (386, 'time', 'u4', '', 81), 
+           (387, 'q00', 'f4', '', 81), 
+           (388, 'q01', 'f4', '', 81), 
+           (389, 'q02', 'f4', '', 81), 
+           (390, 'q12', 'f4', '', 81), 
+           (391, 'rms', 'f4', '', 81), 
+           (392, 'solType', 'u1', '', 81), 
+           (393, 'flag', 'u1', '', 81), 
+           (394, 'cs', 'u1', '', 81), 
+           (395, 'time', 'u4', '', 82), 
+           (396, 'q00', 'f4', '', 82), 
+           (397, 'q01', 'f4', '', 82), 
+           (398, 'q02', 'f4', '', 82), 
+           (399, 'q12', 'f4', '', 82), 
+           (400, 'rms', 'f4', '', 82), 
+           (401, 'solType', 'u1', '', 82), 
+           (402, 'flag', 'u1', '', 82), 
+           (403, 'bl0', 'f4', '', 82), 
+           (404, 'bl1', 'f4', '', 82), 
+           (405, 'bl2', 'f4', '', 82), 
+           (406, 'cs', 'u1', '', 82), 
+           (407, 'time', 'u4', '', 83), 
+           (408, 'pitch', 'f4', '', 83), 
+           (409, 'roll', 'f4', '', 83), 
+           (410, 'heading', 'f4', '', 83), 
+           (411, 'pitchRms', 'f4', '', 83), 
+           (412, 'rollRms', 'f4', '', 83), 
+           (413, 'headingRms', 'f4', '', 83), 
+           (414, 'flags', 'u1', '', 83), 
+           (415, 'cs', 'u1', '', 83), 
+           (416, 'time', 'u4', '', 84), 
+           (417, 'x', 'f4', '', 84), 
+           (418, 'y', 'f4', '', 84), 
+           (419, 'z', 'f4', '', 84), 
+           (420, 'rms', 'f4', '', 84), 
+           (421, 'flags', 'u1', '', 84), 
+           (422, 'cs', 'u1', '', 84), 
+           (423, 'accelerations', 'f4', '', 85), 
+           (424, 'angularVelocities', 'f4', '', 85), 
+           (425, 'cs', 'u1', '', 85), 
+           (426, 'ms', 'i4', '', 86), 
+           (427, 'ns', 'i4', '', 86), 
+           (428, 'timeScale', 'u1', '', 86), 
+           (429, 'cs', 'u1', '', 86), 
+           (430, 'offs', 'f4', '', 87), 
+           (431, 'cs', 'u1', '', 87), 
+           (432, 'offs', 'f8', '', 88), 
+           (433, 'timeScale', 'u1', '', 88), 
+           (434, 'cs', 'u1', '', 88), 
+           (435, 'sample', 'u2', '', 89), 
+           (436, 'scale', 'u2', '', 89), 
+           (437, 'reftime', 'u4', '', 89), 
+           (438, 'crc16', 'u2', '', 89), 
+           (439, 'sample', 'u2', '', 90), 
+           (440, 'scale', 'u2', '', 90), 
+           (441, 'reftime', 'u4', '', 90), 
+           (442, 'clock', 'i2', '', 90), 
+           (443, 'flags', 'u2', '', 90), 
+           (444, 'svd', 'SvData2', '', 90), 
+           (445, 'crc16', 'u2', '', 90), 
+           (446, 'sample', 'u2', '', 91), 
+           (447, 'delta', 'u2', '', 91), 
+           (448, 'word1', 'u4', '', 91), 
+           (449, 'word2', 'u4', '', 91), 
+           (450, 'word3', 'u4', '', 91), 
+           (451, 'word4', 'u4', '', 91), 
+           (452, 'word5', 'u4', '', 91), 
+           (453, 'word6', 'u4', '', 91), 
+           (454, 'word7', 'u4', '', 91), 
+           (455, 'word8', 'u4', '', 91), 
+           (456, 'word9', 'u4', '', 91), 
+           (457, 'crc16', 'u2', '', 91), 
+           (458, 'sample', 'u2', '', 92), 
+           (459, 'reserved', 'u2', '', 92), 
+           (460, 'recSize', 'u1', '', 92), 
+           (461, 'Offs', 'ClkOffs', '', 92), 
+           (462, 'crc16', 'u2', '', 92), 
+           (463, 'reply', 'a1', '', 93), 
+           (464, 'error', 'a1', '', 94), 
+           (465, 'tot', 'u4', '', 95), 
+           (466, 'wn', 'u2', '', 95), 
+           (467, 'alpha0', 'f4', '', 95), 
+           (468, 'alpha1', 'f4', '', 95), 
+           (469, 'alpha2', 'f4', '', 95), 
+           (470, 'alpha3', 'f4', '', 95), 
+           (471, 'beta0', 'f4', '', 95), 
+           (472, 'beta1', 'f4', '', 95), 
+           (473, 'beta2', 'f4', '', 95), 
+           (474, 'beta3', 'f4', '', 95), 
+           (475, 'cs', 'u1', '', 95), 
+           (476, 'par', 'IonoParams1', '', 96), 
+           (477, 'time', 'u4', '', 97), 
+           (478, 'type', 'u1', '', 97), 
+           (479, 'data', 'u1', '', 97), 
+           (480, 'cs', 'u1', '', 97), 
+           (481, 'lt', 'u1', '', 98), 
+           (482, 'cs', 'u1', '', 98), 
+           (483, 'id', 'u1', '', 99), 
+           (484, 'data', 'u1', '', 99), 
+           (485, 'cs', 'a1', '', 99), 
+           (486, 'params', 'a1', '', 100), 
+           (487, 'delim', 'a1', ',@', 100), 
+           (488, 'cs', 'a1', '', 100), 
+           (489, 'svsCount', 'u1', '', 101), 
+           (490, 'targetStream', 'u1', '', 101), 
+           (491, 'issue', 'u2', '', 101), 
+           (492, 'bitsCount', 'u2', '', 101), 
+           (493, 'lastBitTime', 'u4', '', 101), 
+           (494, 'uids', 'u1', '', 101), 
+           (495, 'pad', 'u1', '', 101), 
+           (496, 'hist', 'u4', '', 101), 
+           (497, 'x', 'f8', '', 102), 
+           (498, 'y', 'f8', '', 102), 
+           (499, 'z', 'f8', '', 102), 
+           (500, 'id', 'u2', '', 102), 
+           (501, 'solType', 'u1', '', 102), 
+           (502, 'cs', 'u1', '', 102), 
+           (503, 'data', 'u1', '', 103), 
+           (504, 'cs', 'u1', '', 103), 
+           (505, 'data', 'u1', '', 104), 
+           (506, 'crc16', 'u2', '', 104), 
+           (507, 'tt', 'u4', '', 105), 
+           (508, 'cs', 'u1', '', 105), 
+           (509, 'val', 'f4', '', 106), 
+           (510, 'cs', 'u1', '', 106), 
+           (511, 'cs', 'u1', '', 107);
 
 INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idCustomTypeMeta`) 
     VALUES (1, 'a0', 'f8', '', 1), 
@@ -3888,109 +3886,109 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 
 -- Наполнение информации о размерностях для сообщения `GpsNavData0`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (334, 1, -2);
+    VALUES (333, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GpsRawNavData0`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (340, 1, -2);
+    VALUES (339, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GloNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (345, 1, -2);
+    VALUES (344, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GloRawNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (352, 1, -2);
+    VALUES (351, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `SbasRawNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (357, 1, 32);
+    VALUES (356, 1, 32);
 
 -- Наполнение информации о размерностях для сообщения `GalRawNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (363, 1, -2);
+    VALUES (362, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `CompRawNavData`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (369, 1, -2);
+    VALUES (368, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Spectrum0`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (375, 1, -2);
+    VALUES (374, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Spectrum1`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (381, 1, -2);
+    VALUES (380, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `GloPhaseDelay`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (383, 1, -2), 
-           (384, 1, -2), 
-           (385, 1, -2);
+    VALUES (382, 1, -2), 
+           (383, 1, -2), 
+           (384, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RotationMatrix`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (392, 1, 3), 
-           (393, 1, 3);
+    VALUES (391, 1, 3), 
+           (392, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `RotationMatrixAndVectors`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (401, 1, 3), 
-           (402, 1, 3), 
+    VALUES (400, 1, 3), 
+           (401, 1, 3), 
+           (403, 1, 3), 
            (404, 1, 3), 
-           (405, 1, 3), 
-           (406, 1, 3);
+           (405, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `InertialMeasurements`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (424, 1, 3), 
-           (425, 1, 3);
+    VALUES (423, 1, 3), 
+           (424, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `RawMeas`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (445, 1, -2);
+    VALUES (444, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ClockOffsets`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (462, 1, -2);
+    VALUES (461, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RE`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (464, 1, -2);
+    VALUES (463, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ER`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (465, 1, -2);
+    VALUES (464, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Event`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (480, 1, -2);
+    VALUES (479, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Wrapper`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (485, 1, -2), 
-           (486, 1, 2);
+    VALUES (484, 1, -2), 
+           (485, 1, 2);
 
 -- Наполнение информации о размерностях для сообщения `Params`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (487, 1, -2), 
-           (488, 1, 2), 
-           (489, 1, 2);
+    VALUES (486, 1, -2), 
+           (487, 1, 2), 
+           (488, 1, 2);
 
 -- Наполнение информации о размерностях для сообщения `LoggingHistory`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (495, 1, -2), 
+    VALUES (494, 1, -2), 
+           (495, 1, -2), 
            (496, 1, -2), 
-           (497, 1, -2), 
-           (497, 2, -2);
+           (496, 2, -2);
 
 -- Наполнение информации о размерностях для сообщения `Security0`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (504, 1, 5);
+    VALUES (503, 1, 5);
 
 -- Наполнение информации о размерностях для сообщения `Security1`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (506, 1, 6);
+    VALUES (505, 1, 6);
 
 
 

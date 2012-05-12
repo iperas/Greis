@@ -1957,7 +1957,7 @@ tau = TGLN - TSV [s]</Comment>
         <Code>NE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SBASEhemeris" Size="71" Title="[WE] WAAS/EGNOS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="SBASEhemeris" Size="73" Title="[WE] WAAS/EGNOS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
@@ -2031,6 +2031,13 @@ received at</Comment>
         <Variable GreisType="u2" Name="wn" RequiredValue="">
           <SizeOfDimensions />
           <Comment>GPS week this ephemeris was received at</Comment>
+        </Variable>
+        <Variable GreisType="u2" Name="flags" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Flags [bitfield]:
+0…5 - reserved
+6 - ephemeris was retrieved from NV-memory
+7…15 - reserved</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />

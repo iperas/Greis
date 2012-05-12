@@ -47,8 +47,6 @@ namespace Greis
         p_message += sizeof(_tow);
         _serializer.Deserialize(p_message, _wn);
         p_message += sizeof(_wn);
-        _serializer.Deserialize(p_message, _flags);
-        p_message += sizeof(_flags);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
         
@@ -105,7 +103,6 @@ namespace Greis
         _serializer.Serialize(_agf1, result);
         _serializer.Serialize(_tow, result);
         _serializer.Serialize(_wn, result);
-        _serializer.Serialize(_flags, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
