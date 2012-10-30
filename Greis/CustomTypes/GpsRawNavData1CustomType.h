@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GpsRawNavData1; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Pseudo-Range Number (PRN)
         const Types::u1& Prn() const { return _prn; }
@@ -48,6 +49,7 @@ namespace Greis
         Types::u1& Cs() { return _cs; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u1 _prn;
         Types::u4 _time;

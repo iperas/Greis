@@ -103,10 +103,12 @@ $(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generat
     <ClInclude Include="EMessageKind.h" />
     <ClInclude Include="ChecksumComputer.h" />
     <ClInclude Include="Epoch.h" />
+    <ClInclude Include="FileBinaryStream.h" />
     <ClInclude Include="GreisBinarySerializer.h" />
     <ClInclude Include="GreisException.h" />
     <ClInclude Include="GreisMessageStream.h" />
     <ClInclude Include="GreisMysqlSerializer.h" />
+    <ClInclude Include="IBinaryStream.h" />
     <ClInclude Include="JpsFile.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MySqlSink.h" />
@@ -114,6 +116,7 @@ $(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generat
     <ClInclude Include="NonStdTextMessage.h" />
     <ClInclude Include="RawCustomType.h" />
     <ClInclude Include="RawStdMessage.h" />
+    <ClInclude Include="SerialPortBinaryStream.h" />
     <ClInclude Include="StdMessage.h" />
     <ClInclude Include="StdMessageFactory.h" />
     <ClInclude Include="StdMessages\AngularVelocityStdMessage.h" />

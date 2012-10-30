@@ -1,9 +1,10 @@
 #include "HeaderCustomType.h"
+#include "ProjectBase/Logger.h"
 #include <cassert>
 
 namespace Greis
 {
-    HeaderCustomType::HeaderCustomType( const char* pc_message, int p_length ) 
+    HeaderCustomType::HeaderCustomType( const char* pc_message, int p_length )
         : _size(p_length)
     {
         char* p_message = const_cast<char*>(pc_message);
@@ -14,8 +15,13 @@ namespace Greis
         p_message += sizeof(_usi);
         _serializer.Deserialize(p_message, _num);
         p_message += sizeof(_num);
-        
-        assert(p_message - pc_message == p_length);
+
+        _isCorrect = (p_message - pc_message == p_length);
+        if (!_isCorrect)
+        {
+            sLogger.Debug(QString("The custom type %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+                .arg(IdNumber()).arg(p_length).arg(p_message - pc_message));
+        }
     }
     
     HeaderCustomType::HeaderCustomType( int p_size ) 
@@ -26,6 +32,10 @@ namespace Greis
     QByteArray HeaderCustomType::ToByteArray() const
     {
         QByteArray result;
+        if (!_isCorrect)
+        {
+            return result;
+        }
 
         _serializer.Serialize(_refrange, result);
         _serializer.Serialize(_usi, result);

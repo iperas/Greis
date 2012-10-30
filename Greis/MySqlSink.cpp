@@ -2,6 +2,7 @@
 #include "ProjectBase\Connection.h"
 #include "AllStdMessages.h"
 #include <string>
+#include "RawStdMessage.h"
 
 using namespace ProjectBase;
 
@@ -75,7 +76,7 @@ namespace Greis
         //sLogger.Info(QString("MySqlSink::AddMessage: Id : `%1`, Size : `%2`").arg(stdMsg->Id().c_str()).
         //    arg(stdMsg->Size()));
 #endif
-        if (!_codeIds.contains(stdMsg->Id()))
+        if (!_codeIds.contains(stdMsg->Id()) || dynamic_cast<RawStdMessage*>(msg) != nullptr)
         {
             QVariantList fields;
             fields << _lastEpochId;
@@ -84,6 +85,11 @@ namespace Greis
             fields << stdMsg->BodySize();
             fields << stdMsg->ToByteArray();
             _rawMessageInserter->AddRow(fields);
+            return;
+        }
+
+        if (!stdMsg->IsCorrect())
+        {
             return;
         }
 

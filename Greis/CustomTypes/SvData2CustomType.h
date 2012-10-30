@@ -21,6 +21,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SvData2; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Header (see below)
         const HeaderCustomType::UniquePtr_t& Header() const { return _header; }
@@ -31,6 +32,7 @@ namespace Greis
         std::vector<SlotRecCustomType::UniquePtr_t>& Slot() { return _slot; }
     private:
         int _size;
+        bool _isCorrect;
 
         HeaderCustomType::UniquePtr_t _header;
         std::vector<SlotRecCustomType::UniquePtr_t> _slot;

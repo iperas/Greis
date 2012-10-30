@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::Smooth; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Smoothing correction [s]
         const Types::f4& Value() const { return _value; }
@@ -28,6 +29,7 @@ namespace Greis
         Types::u2& Interval() { return _interval; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::f4 _value;
         Types::u2 _interval;

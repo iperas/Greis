@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::Header; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Reference pseudo-range [0.02 meters]
         const Types::u4& Refrange() const { return _refrange; }
@@ -34,6 +35,7 @@ namespace Greis
         Types::u1& Num() { return _num; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u4 _refrange;
         Types::u1 _usi;

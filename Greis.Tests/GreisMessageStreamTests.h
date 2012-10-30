@@ -7,6 +7,7 @@
 #include <boost/thread.hpp>
 #include "ProjectBase/SmartPtr.h"
 #include "GreisMessageStream.h"
+#include "FileBinaryStream.h"
 
 using namespace Greis;
 using namespace ProjectBase;
@@ -42,7 +43,7 @@ namespace
             expected = file->readAll();
         }
 
-        GreisMessageStream stream(filename, false, false);
+        GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
         std::vector<Message::UniquePtr_t> messages;
         {
             messages.reserve(100000);

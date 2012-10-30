@@ -1,6 +1,7 @@
 #include "${ClassName}.h"
 #include <cassert>
 #include "ChecksumComputer.h"
+#include "ProjectBase/Logger.h"
 
 namespace Greis
 {
@@ -12,8 +13,13 @@ namespace Greis
         p_message += HeadSize();
     
         // ${DeserializationConstructorStub}
-        
-        assert(p_message - pc_message == p_length);
+
+        _isCorrect = (p_message - pc_message == p_length);
+        if (!_isCorrect)
+        {
+            sLogger.Debug(QString("The message %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+                .arg(QString::fromStdString(ToString())).arg(p_length).arg(p_message - pc_message));
+        }
     }
     
     ${ClassName}::${ClassName}( const std::string& p_id, int p_size ) 
@@ -28,7 +34,7 @@ namespace Greis
     
     bool ${ClassName}::Validate() const
     {
-        if (!StdMessage::Validate())
+        if (!_isCorrect || !StdMessage::Validate())
         {
             return false;
         }// ${ValidateStub}
@@ -36,12 +42,21 @@ namespace Greis
     
     void ${ClassName}::RecalculateChecksum()
     {
+        if (!_isCorrect)
+        {
+            return;
+        }
         // ${RecalculateChecksumStub}
     }
 
     QByteArray ${ClassName}::ToByteArray() const
     {
         QByteArray result;
+        if (!_isCorrect)
+        {
+            return result;
+        }
+
         result.append(headToByteArray());
 
         // ${ToByteArrayStub}

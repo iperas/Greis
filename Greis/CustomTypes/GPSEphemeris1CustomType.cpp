@@ -1,9 +1,10 @@
 #include "GPSEphemeris1CustomType.h"
+#include "ProjectBase/Logger.h"
 #include <cassert>
 
 namespace Greis
 {
-    GPSEphemeris1CustomType::GPSEphemeris1CustomType( const char* pc_message, int p_length ) 
+    GPSEphemeris1CustomType::GPSEphemeris1CustomType( const char* pc_message, int p_length )
         : _size(p_length)
     {
         char* p_message = const_cast<char*>(pc_message);
@@ -28,8 +29,13 @@ namespace Greis
         p_message += sizeof(_cURAoc1);
         _serializer.Deserialize(p_message, _cURAoc2);
         p_message += sizeof(_cURAoc2);
-        
-        assert(p_message - pc_message == p_length);
+
+        _isCorrect = (p_message - pc_message == p_length);
+        if (!_isCorrect)
+        {
+            sLogger.Debug(QString("The custom type %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+                .arg(IdNumber()).arg(p_length).arg(p_message - pc_message));
+        }
     }
     
     GPSEphemeris1CustomType::GPSEphemeris1CustomType( int p_size ) 
@@ -40,6 +46,10 @@ namespace Greis
     QByteArray GPSEphemeris1CustomType::ToByteArray() const
     {
         QByteArray result;
+        if (!_isCorrect)
+        {
+            return result;
+        }
 
         _serializer.Serialize(_req, result);
         _serializer.Serialize(_cNavType, result);

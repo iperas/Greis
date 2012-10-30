@@ -20,6 +20,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GPSEphemeris1; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Required data
         // --- Optional data block ---
@@ -64,6 +65,7 @@ namespace Greis
         Types::i1& CURAoc2() { return _cURAoc2; }
     private:
         int _size;
+        bool _isCorrect;
 
         GpsEphReqDataCustomType::UniquePtr_t _req;
         Types::u1 _cNavType;

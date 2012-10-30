@@ -1,4 +1,6 @@
 #include "JpsFile.h"
+#include "FileBinaryStream.h"
+#include "ProjectBase/SmartPtr.h"
 
 using namespace ProjectBase;
 
@@ -9,7 +11,7 @@ namespace Greis
         auto jpsFile = JpsFile::UniquePtr_t(new JpsFile());
 
         int epochCounter = 0;
-        GreisMessageStream stream(filename, false, false);
+        GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
         QDateTime dateTime;
         dateTime.setTimeSpec(Qt::UTC);
 

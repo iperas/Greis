@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::ClkOffs; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // [bitfield]:
         // 31: reserved;
@@ -38,6 +39,7 @@ namespace Greis
         Types::u4& Word2() { return _word2; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u4 _word1;
         Types::u4 _word2;

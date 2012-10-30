@@ -20,6 +20,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const = 0;
         virtual QByteArray ToByteArray() const = 0;
         virtual int Size() const = 0;
+        virtual bool IsCorrect() const { return true; }
     protected:
         static GreisBinarySerializer _serializer;
     };

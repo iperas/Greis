@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::IonoParams1; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Time of week [s]
         const Types::u4& Tot() const { return _tot; }
@@ -68,6 +69,7 @@ namespace Greis
         Types::u1& Cs() { return _cs; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u4 _tot;
         Types::u2 _wn;

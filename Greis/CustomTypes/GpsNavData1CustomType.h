@@ -20,6 +20,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GpsNavData1; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Size of satellite data record (currently 42)
         const Types::u1& RecSize() const { return _recSize; }
@@ -36,6 +37,7 @@ namespace Greis
         Types::u1& Cs() { return _cs; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u1 _recSize;
         std::vector<SvData0CustomType::UniquePtr_t> _dat;

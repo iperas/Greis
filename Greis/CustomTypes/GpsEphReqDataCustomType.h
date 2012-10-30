@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::GpsEphReqData; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // SV PRN number within the range [1…37]
         const Types::u1& Sv() const { return _sv; }
@@ -156,6 +157,7 @@ namespace Greis
         Types::f4& Cis() { return _cis; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::u1 _sv;
         Types::u4 _tow;

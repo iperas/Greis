@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SlotRec; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // SV status [bitfield], or
         // Delta pseudo-range [0.02 meters].
@@ -67,6 +68,7 @@ namespace Greis
         Types::u4& Word2() { return _word2; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::i2 _svstOrDelrange;
         Types::u4 _word1;

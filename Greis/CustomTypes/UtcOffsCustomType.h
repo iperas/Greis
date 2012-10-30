@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::UtcOffs; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Constant term of polynomial [s]
         const Types::f8& A0() const { return _a0; }
@@ -52,6 +53,7 @@ namespace Greis
         Types::i1& Dtlsf() { return _dtlsf; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::f8 _a0;
         Types::f4 _a1;

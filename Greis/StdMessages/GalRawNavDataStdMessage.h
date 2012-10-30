@@ -19,6 +19,7 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual EMessageId::Type IdNumber() const { return EMessageId::GalRawNavData; }
         virtual bool Validate() const;
+        virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
@@ -53,6 +54,7 @@ namespace Greis
     private:
         std::string _id;
         int _bodySize;
+        bool _isCorrect;
 
         Types::u1 _prn;
         Types::u4 _time;

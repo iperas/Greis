@@ -2,9 +2,9 @@
 #include <clocale>
 #include <locale>
 #include <gtest/gtest.h>
-#include "MySqlSourceTests.h"
-#include "JpsFileTests.h"
 #include "MySqlSinkTests.h"
+#include "JpsFileTests.h"
+#include "MySqlSourceTests.h"
 #include "GreisBinarySerializerTests.h"
 #include "GreisMessageStreamTests.h"
 #include "ProjectBase/Logger.h"

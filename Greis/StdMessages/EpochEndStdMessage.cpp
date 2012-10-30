@@ -1,6 +1,7 @@
 #include "EpochEndStdMessage.h"
 #include <cassert>
 #include "ChecksumComputer.h"
+#include "ProjectBase/Logger.h"
 
 namespace Greis
 {
@@ -13,8 +14,13 @@ namespace Greis
     
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
-        
-        assert(p_message - pc_message == p_length);
+
+        _isCorrect = (p_message - pc_message == p_length);
+        if (!_isCorrect)
+        {
+            sLogger.Debug(QString("The message %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+                .arg(QString::fromStdString(ToString())).arg(p_length).arg(p_message - pc_message));
+        }
     }
     
     EpochEndStdMessage::EpochEndStdMessage( const std::string& p_id, int p_size ) 
@@ -29,7 +35,7 @@ namespace Greis
     
     bool EpochEndStdMessage::Validate() const
     {
-        if (!StdMessage::Validate())
+        if (!_isCorrect || !StdMessage::Validate())
         {
             return false;
         }
@@ -40,6 +46,10 @@ namespace Greis
     
     void EpochEndStdMessage::RecalculateChecksum()
     {
+        if (!_isCorrect)
+        {
+            return;
+        }
         auto message = ToByteArray();
         _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
@@ -47,6 +57,11 @@ namespace Greis
     QByteArray EpochEndStdMessage::ToByteArray() const
     {
         QByteArray result;
+        if (!_isCorrect)
+        {
+            return result;
+        }
+
         result.append(headToByteArray());
 
         _serializer.Serialize(_cs, result);

@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SvData0; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Pseudo-Range Number (PRN)
         const Types::i1& Prn() const { return _prn; }
@@ -34,6 +35,7 @@ namespace Greis
         std::vector<Types::u4>& Data() { return _data; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::i1 _prn;
         Types::u1 _cnt;

@@ -101,7 +101,7 @@ namespace Greis
                 ct = new SpecDataCustomType(size);
                 auto c = dynamic_cast<SpecDataCustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             };
         
         auto queryExtSpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax` FROM `ct_ExtSpecData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
@@ -110,7 +110,7 @@ namespace Greis
                 ct = new ExtSpecDataCustomType(size);
                 auto c = dynamic_cast<ExtSpecDataCustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             };
         
         auto querySvData2CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `header`, `slot` FROM `ct_SvData2` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
@@ -119,7 +119,7 @@ namespace Greis
                 ct = new SvData2CustomType(size);
                 auto c = dynamic_cast<SvData2CustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             };
         
         auto queryHeaderCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `refrange`, `usi`, `num` FROM `ct_Header` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
@@ -968,7 +968,7 @@ namespace Greis
                 msg = make_unique<IAmpStdMessage>(id, bodySize);
                 auto c = dynamic_cast<IAmpStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs` FROM `msg_QAmp` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -979,7 +979,7 @@ namespace Greis
                 msg = make_unique<QAmpStdMessage>(id, bodySize);
                 auto c = dynamic_cast<QAmpStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tt`, `cs` FROM `msg_TrackingTimeCA` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1167,7 +1167,7 @@ namespace Greis
                 msg = make_unique<QZSSEphemerisStdMessage>(id, bodySize);
                 auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `navType`, `beta`, `tauSysDot`, `ec`, `ee`, `fc`, `fe`, `reserv`, `cs` FROM `msg_GLOEphemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1273,7 +1273,7 @@ namespace Greis
                 msg = make_unique<QzssNavDataStdMessage>(id, bodySize);
                 auto c = dynamic_cast<QzssNavDataStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssRawNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1284,7 +1284,7 @@ namespace Greis
                 msg = make_unique<QzssRawNavDataStdMessage>(id, bodySize);
                 auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GloNavData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1367,7 +1367,7 @@ namespace Greis
                 msg = make_unique<Spectrum0StdMessage>(id, bodySize);
                 auto c = dynamic_cast<Spectrum0StdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs` FROM `msg_Spectrum1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1378,7 +1378,7 @@ namespace Greis
                 msg = make_unique<Spectrum1StdMessage>(id, bodySize);
                 auto c = dynamic_cast<Spectrum1StdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `fcn`, `phase`, `range`, `cs` FROM `msg_GloPhaseDelay` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1536,7 +1536,7 @@ namespace Greis
                 msg = make_unique<RawMeasStdMessage>(id, bodySize);
                 auto c = dynamic_cast<RawMeasStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `delta`, `word1`, `word2`, `word3`, `word4`, `word5`, `word6`, `word7`, `word8`, `word9`, `crc16` FROM `msg_PosVelVector` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
@@ -1680,7 +1680,7 @@ namespace Greis
                 msg = make_unique<LoggingHistoryStdMessage>(id, bodySize);
                 auto c = dynamic_cast<LoggingHistoryStdMessage*>(msg.get());
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `id_sugar`, `solType`, `cs` FROM `msg_BaseInfo` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")

@@ -456,6 +456,15 @@
     <ClInclude Include="StdMessages\GpsRawNavData0StdMessage.h">
       <Filter>StdMessages</Filter>
     </ClInclude>
+    <ClInclude Include="SerialPortBinaryStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IBinaryStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileBinaryStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NonStdTextMessage.cpp">

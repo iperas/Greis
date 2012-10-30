@@ -21,6 +21,7 @@ namespace Greis
         virtual std::string Id() const { return _id; }
         virtual EMessageId::Type IdNumber() const { return EMessageId::GPSEphemeris0; }
         virtual bool Validate() const;
+        virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
@@ -73,6 +74,7 @@ namespace Greis
     private:
         std::string _id;
         int _bodySize;
+        bool _isCorrect;
 
         GpsEphReqDataCustomType::UniquePtr_t _req;
         Types::u1 _cNavType;

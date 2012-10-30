@@ -293,7 +293,7 @@ namespace GreisDocParser
             }
             else
             {
-                linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
+                linesStr = string.Format("\r\n        {0}/*throw ProjectBase::NotImplementedException();*/", codeIntend);
             }
             return linesStr;
         }
@@ -520,7 +520,7 @@ namespace GreisDocParser
             }
             else
             {
-                linesStr = string.Format("\r\n        {0}throw ProjectBase::NotImplementedException();", codeIntend);
+                linesStr = string.Format("\r\n        {0}/*throw ProjectBase::NotImplementedException();*/", codeIntend);
             }
             return linesStr;
         }
@@ -591,6 +591,18 @@ namespace GreisDocParser
                 }
                 insertionsIntoMaps.Add(insertionIntoMaps);
             }
+            /*// inserting raw data
+            var rawDataInserterVar = string.Format(
+                "auto {0} = std::make_shared<DataBatchInserter>(\r\n{1}    " +
+                "\"{2}\", \r\n{1}    " +
+                "{4}, _connection, \"{3}\", _inserterBatchSize);",
+                getInserterVarName(ct),
+                codeIntend,
+                string.Format("INSERT INTO `rawBinaryMessages` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, {0}) VALUES ({1})", columns, valuesSb),
+                "rawBinaryMessages",
+                fieldsCount);
+            inserterVars.Add(rawDataInserterVar);*/
+
             var ctCurrentMaxIds = new List<string>();
             foreach (var ct in _metaInfo.CustomTypes.OrderBy(c => c.Name))
             {
@@ -901,7 +913,7 @@ namespace GreisDocParser
             }
             else
             {
-                content.DeserializationConstructorCode = "throw ProjectBase::NotImplementedException();";
+                content.DeserializationConstructorCode = "/*throw ProjectBase::NotImplementedException();*/";
             }
 
             return content;

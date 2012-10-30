@@ -1,5 +1,4 @@
-#ifndef SharedPtr_h__
-#define SharedPtr_h__
+#pragma once
 
 #include <memory>
 
@@ -56,5 +55,3 @@ namespace ProjectBase
         return std::unique_ptr<Y>(dynamic_cast<Y*>(obj.release()));
     }
 }
-
-#endif // SharedPtr_h__

@@ -1,6 +1,7 @@
 #include "RefEpochStdMessage.h"
 #include <cassert>
 #include "ChecksumComputer.h"
+#include "ProjectBase/Logger.h"
 
 namespace Greis
 {
@@ -19,8 +20,13 @@ namespace Greis
         p_message += sizeof(_reftime);
         _serializer.Deserialize(p_message, _crc16);
         p_message += sizeof(_crc16);
-        
-        assert(p_message - pc_message == p_length);
+
+        _isCorrect = (p_message - pc_message == p_length);
+        if (!_isCorrect)
+        {
+            sLogger.Debug(QString("The message %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+                .arg(QString::fromStdString(ToString())).arg(p_length).arg(p_message - pc_message));
+        }
     }
     
     RefEpochStdMessage::RefEpochStdMessage( const std::string& p_id, int p_size ) 
@@ -35,7 +41,7 @@ namespace Greis
     
     bool RefEpochStdMessage::Validate() const
     {
-        if (!StdMessage::Validate())
+        if (!_isCorrect || !StdMessage::Validate())
         {
             return false;
         }
@@ -45,12 +51,21 @@ namespace Greis
     
     void RefEpochStdMessage::RecalculateChecksum()
     {
+        if (!_isCorrect)
+        {
+            return;
+        }
         
     }
 
     QByteArray RefEpochStdMessage::ToByteArray() const
     {
         QByteArray result;
+        if (!_isCorrect)
+        {
+            return result;
+        }
+
         result.append(headToByteArray());
 
         _serializer.Serialize(_sample, result);

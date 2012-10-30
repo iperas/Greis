@@ -18,6 +18,7 @@ namespace Greis
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::SvData1; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
+        virtual bool IsCorrect() const { return _isCorrect; }
 
         // Frequency Channel Number plus 1(FCN+1)
         const Types::i1& Fcn1() const { return _fcn1; }
@@ -34,6 +35,7 @@ namespace Greis
         std::vector<Types::u4>& Data() { return _data; }
     private:
         int _size;
+        bool _isCorrect;
 
         Types::i1 _fcn1;
         Types::u1 _cnt;

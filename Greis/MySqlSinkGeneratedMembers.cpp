@@ -1,5 +1,6 @@
 #include "MySqlSink.h"
-#include "ProjectBase\Connection.h"
+#include "ProjectBase/Connection.h"
+#include "ProjectBase/Logger.h"
 #include "AllStdMessages.h"
 
 using namespace ProjectBase;
@@ -691,6 +692,11 @@ namespace Greis
 
     void MySqlSink::serializeMessage( StdMessage* msg, QVariantList& out )
     {
+        if (!msg->IsCorrect())
+        {
+            return;
+        }
+
         switch (msg->IdNumber())
         {
         case EMessageId::AngularVelocity:
@@ -1125,7 +1131,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<IAmpStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::InertialMeasurements:
@@ -1170,7 +1176,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<LoggingHistoryStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::MsgFmt:
@@ -1298,7 +1304,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<QAmpStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::QZSSAlm:
@@ -1312,7 +1318,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssIonoParams:
@@ -1325,14 +1331,14 @@ namespace Greis
             {
                 auto c = dynamic_cast<QzssNavDataStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssRawNavData:
             {
                 auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssUtcParam:
@@ -1346,7 +1352,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<RawMeasStdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::RCPRc1:
@@ -1668,14 +1674,14 @@ namespace Greis
             {
                 auto c = dynamic_cast<Spectrum0StdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::Spectrum1:
             {
                 auto c = dynamic_cast<Spectrum1StdMessage*>(msg);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case EMessageId::SPR:
@@ -1757,12 +1763,19 @@ namespace Greis
             }
             break;
         default:
-            throw InvalidOperationException();
+            sLogger.Debug(QString("Skipping serialization for the %1 message.").arg(QString::fromStdString(msg->ToString())));
+            break;
+            //throw InvalidOperationException();
         }
     }
 
     void MySqlSink::serializeCustomType( CustomType* ct, QVariantList& out )
     {
+        if (!ct->IsCorrect())
+        {
+            return;
+        }
+
         switch (ct->IdNumber())
         {
         case ECustomTypeId::ClkOffs:
@@ -1776,7 +1789,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<ExtSpecDataCustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::GPSAlm1:
@@ -1912,7 +1925,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<SpecDataCustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::SvData0:
@@ -1935,7 +1948,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<SvData2CustomType*>(ct);
                 
-                throw ProjectBase::NotImplementedException();
+                /*throw ProjectBase::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::UtcOffs:
@@ -1952,7 +1965,9 @@ namespace Greis
             }
             break;
         default:
-            throw InvalidOperationException();
+            sLogger.Debug(QString("Skipping serialization for the %1 custom type.").arg(ct->IdNumber()));
+            break;
+            //throw InvalidOperationException();
         }
     }
 }

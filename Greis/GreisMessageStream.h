@@ -9,13 +9,27 @@
 #include "GreisException.h"
 #include "StdMessage.h"
 #include "NonStdTextMessage.h"
+#include "IBinaryStream.h"
 
 namespace Greis
 {
     class GreisMessageStream
     {
     public:
-        GreisMessageStream(QString filename, bool skipInvalid = false, bool handleStdOnly = true);
+        GreisMessageStream(IBinaryStream::SharedPtr_t openedBinaryStream, bool skipInvalid = false, bool handleStdOnly = true);
+        bool HasNext();
+        Message::UniquePtr_t Next();
+
+    private:
+        IBinaryStream::SharedPtr_t _binaryStream;
+        bool _skipInvalid;
+        bool _handleStdOnly;
+    };
+
+    class GreisMessageStream2
+    {
+    public:
+        GreisMessageStream2(QString filename, bool skipInvalid = false, bool handleStdOnly = true);
         bool HasNext();
         Message::UniquePtr_t Next();
 
