@@ -12,7 +12,7 @@
 #include "ProjectBase/DataBatchInserter.h"
 #include "EMessageId.h"
 #include "ECustomTypeId.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "GreisMysqlSerializer.h"
 #include "CustomType.h"
 
@@ -28,7 +28,7 @@ namespace Greis
         MySqlSink(Connection* connection, int inserterBatchSize = 10000);
         ~MySqlSink();
 
-        void AddJpsFile(JpsFile* file);
+        void AddJpsFile(DataChunk* file);
 
         void AddEpoch(QDateTime dateTime);
         void AddMessage(Message* msg);

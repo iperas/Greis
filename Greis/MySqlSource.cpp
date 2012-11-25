@@ -3,7 +3,7 @@
 #include "ProjectBase\SmartPtr.h"
 #include "ProjectBase\Connection.h"
 #include "ECustomTypeId.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "AllStdMessages.h"
 #include "RawStdMessage.h"
 
@@ -52,7 +52,7 @@ namespace Greis
         }
     }
 
-    void MySqlSource::pushStandardJpsHeader( JpsFile* jpsFile )
+    void MySqlSource::pushStandardJpsHeader( DataChunk* jpsFile )
     {
         auto fileId = make_unique<FileIdStdMessage>(
             "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);

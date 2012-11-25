@@ -348,9 +348,6 @@
     <ClInclude Include="RawCustomType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JpsFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Epoch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -463,6 +460,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileBinaryStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataChunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -779,9 +779,6 @@
     <ClCompile Include="CustomType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JpsFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MySqlSinkGeneratedMembers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -877,6 +874,9 @@
     </ClCompile>
     <ClCompile Include="StdMessages\GpsNavData0StdMessage.cpp">
       <Filter>StdMessages</Filter>
+    </ClCompile>
+    <ClCompile Include="DataChunk.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

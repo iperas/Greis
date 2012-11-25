@@ -1,26 +1,26 @@
-#ifndef JpsFileTests_h__
-#define JpsFileTests_h__
+#ifndef DataChunkTests_h__
+#define DataChunkTests_h__
 
 #include <gtest/gtest.h>
 #include <vector>
 #include <cmath>
 #include <boost/thread.hpp>
 #include "ProjectBase/SmartPtr.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 
 using namespace Greis;
 using namespace ProjectBase;
 
 namespace
 {
-    class JpsFileTests : public ::testing::Test
+    class DataChunkTests : public ::testing::Test
     {
     protected:
-        JpsFileTests()
+        DataChunkTests()
         {
         }
 
-        virtual ~JpsFileTests()
+        virtual ~DataChunkTests()
         {
         }
 
@@ -33,11 +33,11 @@ namespace
         }
     };
 
-    TEST_F(JpsFileTests, TestData_ipg_2011_03_28_cropped_jps_DeserializationTest)
+    TEST_F(DataChunkTests, TestData_ipg_2011_03_28_cropped_jps_DeserializationTest)
     {
         QString filename("TestData/ipg_2011_03_28_00.00.00_cropped.jps");
 
-        auto file = JpsFile::FromFile(filename);
+        auto file = DataChunk::FromFile(filename);
 
         for (auto e = file->Body().begin(); e != file->Body().end(); ++e)
         {
@@ -55,4 +55,4 @@ namespace
     }
 }
 
-#endif // JpsFileTests_h__
+#endif // DataChunkTests_h__

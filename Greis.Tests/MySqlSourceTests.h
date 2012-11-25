@@ -7,7 +7,7 @@
 #include <cmath>
 #include <boost/thread.hpp>
 #include "ProjectBase/SmartPtr.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "ProjectBase/Path.h"
 #include "ProjectBase/IniSettings.h"
 #include "ProjectBase/Connection.h"

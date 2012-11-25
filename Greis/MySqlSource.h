@@ -12,7 +12,7 @@
 #include "ProjectBase/DataConsistencyException.h"
 #include "EMessageId.h"
 #include "ECustomTypeId.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "GreisMysqlSerializer.h"
 #include "CustomType.h"
 
@@ -33,7 +33,7 @@ namespace Greis
         MySqlSource(Connection* connection);
         ~MySqlSource();
 
-        JpsFile::UniquePtr_t ReadRange(const QDateTime& from, const QDateTime& to);
+        DataChunk::UniquePtr_t ReadRange(const QDateTime& from, const QDateTime& to);
     private:
         template<typename Func>
         void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, Epoch*>& epochsByDateTime);
@@ -47,7 +47,7 @@ namespace Greis
         template<typename T>
         std::vector<typename T::UniquePtr_t> deserializeAndGetCustomTypes(ECustomTypeId::Type ctId, const QVariant& encodedIds);
 
-        void pushStandardJpsHeader(JpsFile* jpsFile);
+        void pushStandardJpsHeader(DataChunk* jpsFile);
         void readRawStdMessages();
         // Moving messages with specified id from _rawMsgBuffer into epochsByDateTime
         void insertRawMessage(const char* msgId, QMap<qulonglong, Epoch*>& epochsByDateTime);

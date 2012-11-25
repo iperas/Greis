@@ -8,15 +8,16 @@
 #include "ProjectBase/SmartPtr.h"
 #include "StdMessages/RcvTimeStdMessage.h"
 #include "StdMessages/RcvDateStdMessage.h"
+#include <QtCore/QtCore>
 
 namespace Greis
 {
-    class JpsFile : private boost::noncopyable
+    class DataChunk : private boost::noncopyable
     {
     public:
-        SMART_PTR_T(JpsFile);
+        SMART_PTR_T(DataChunk);
 
-        static JpsFile::UniquePtr_t FromFile(QString filename);
+        static DataChunk::UniquePtr_t FromFile(QString filename);
 
         inline const std::vector<Message::UniquePtr_t>& Head() const { return _head; }
         inline std::vector<Message::UniquePtr_t>& Head() { return _head; }
@@ -25,23 +26,32 @@ namespace Greis
 
         QByteArray ToByteArray() const;
 
-        JpsFile()
-        {
-        }
+        void AddMessage(Message::UniquePtr_t msg);
+
+        DataChunk();
     private:
 
-        inline static void updateTimePart( RcvTimeStdMessage* msg, QDateTime &dateTime )
+        inline void updateTimePart( RcvTimeStdMessage* msg )
         {
-            dateTime.setTime(QTime().addMSecs(msg->Tod()));
+            _dateTime.setTime(QTime().addMSecs(msg->Tod()));
+            _timeIsSet = true;
         }
 
-        inline static void updateDatePart( RcvDateStdMessage* msg, QDateTime &dateTime ) 
+        inline void updateDatePart( RcvDateStdMessage* msg ) 
         {
-            dateTime.setDate(QDate(msg->Year(), msg->Month(), msg->Day()));
+            _dateTime.setDate(QDate(msg->Year(), msg->Month(), msg->Day()));
+            _dateIsSet = true;
         }
+
+        inline bool dateTimeIsSet() const { return _dateIsSet && _timeIsSet; }
 
         std::vector<Message::UniquePtr_t> _head;
         std::vector<Epoch::UniquePtr_t> _body;
+        Epoch::UniquePtr_t _lastEpoch;
+        QDateTime _dateTime;
+        int _epochCounter;
+        bool _dateIsSet;
+        bool _timeIsSet;
     };
 }
 

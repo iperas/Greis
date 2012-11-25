@@ -109,7 +109,7 @@ $(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generat
     <ClInclude Include="GreisMessageStream.h" />
     <ClInclude Include="GreisMysqlSerializer.h" />
     <ClInclude Include="IBinaryStream.h" />
-    <ClInclude Include="JpsFile.h" />
+    <ClInclude Include="DataChunk.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MySqlSink.h" />
     <ClInclude Include="MySqlSource.h" />
@@ -249,7 +249,7 @@ $(SolutionDir)GreisDocParser\bin\$(ConfigurationName)\GreisDocParser.exe generat
     <ClCompile Include="CustomTypes\UtcOffsCustomType.cpp" />
     <ClCompile Include="GreisBinarySerializer.cpp" />
     <ClCompile Include="GreisMessageStream.cpp" />
-    <ClCompile Include="JpsFile.cpp" />
+    <ClCompile Include="DataChunk.cpp" />
     <ClCompile Include="MySqlSink.cpp" />
     <ClCompile Include="MySqlSinkGeneratedMembers.cpp" />
     <ClCompile Include="MySqlSource.cpp" />

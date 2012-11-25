@@ -6,7 +6,7 @@
 #include <cmath>
 #include <boost/thread.hpp>
 #include "ProjectBase/SmartPtr.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "ProjectBase/Path.h"
 #include "ProjectBase/IniSettings.h"
 #include "ProjectBase/Connection.h"
@@ -40,7 +40,7 @@ namespace
     TEST_F(MySqlSinkTests, mainTest)
     {
         QString filename("TestData/ipg_2011_03_28_00.00.00_cropped.jps");
-        auto file = JpsFile::FromFile(filename);
+        auto file = DataChunk::FromFile(filename);
 
         sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
 

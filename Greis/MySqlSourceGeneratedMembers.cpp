@@ -3,7 +3,7 @@
 #include "ProjectBase\SmartPtr.h"
 #include "ProjectBase\Connection.h"
 #include "ECustomTypeId.h"
-#include "JpsFile.h"
+#include "DataChunk.h"
 #include "AllStdMessages.h"
 #include "AllCustomTypes.h"
 
@@ -267,14 +267,14 @@ namespace Greis
         _ctHandlers.insert(ECustomTypeId::GpsRawNavData1, handlerGpsRawNavData1CustomType);
     }
     
-    JpsFile::UniquePtr_t MySqlSource::ReadRange( const QDateTime& from, const QDateTime& to )
+    DataChunk::UniquePtr_t MySqlSource::ReadRange( const QDateTime& from, const QDateTime& to )
     {
         _ctBuffer.clear();
 
         _from = from;
         _to = to;
 
-        auto jpsFile = make_unique<JpsFile>();
+        auto jpsFile = make_unique<DataChunk>();
         pushStandardJpsHeader(jpsFile.get());
         
         QMap<qulonglong, Epoch*> epochsByDateTime;

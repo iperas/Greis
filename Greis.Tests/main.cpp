@@ -3,7 +3,7 @@
 #include <locale>
 #include <gtest/gtest.h>
 #include "MySqlSinkTests.h"
-#include "JpsFileTests.h"
+#include "DataChunkTests.h"
 #include "MySqlSourceTests.h"
 #include "GreisBinarySerializerTests.h"
 #include "GreisMessageStreamTests.h"

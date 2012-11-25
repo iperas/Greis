@@ -51,7 +51,7 @@ namespace Greis
         }
     }
 
-    void MySqlSink::AddJpsFile( JpsFile* file )
+    void MySqlSink::AddJpsFile( DataChunk* file )
     {
         for (auto epochIt = file->Body().cbegin(); epochIt != file->Body().cend(); ++epochIt)
         {

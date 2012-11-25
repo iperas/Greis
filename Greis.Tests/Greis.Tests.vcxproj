@@ -99,7 +99,7 @@
   <ItemGroup>
     <ClInclude Include="GreisBinarySerializerTests.h" />
     <ClInclude Include="GreisMessageStreamTests.h" />
-    <ClInclude Include="JpsFileTests.h" />
+    <ClInclude Include="DataChunkTests.h" />
     <ClInclude Include="MySqlSinkTests.h" />
     <ClInclude Include="MySqlSourceTests.h" />
   </ItemGroup>
