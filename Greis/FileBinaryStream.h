@@ -17,6 +17,8 @@ namespace Greis
             _file = ProjectBase::File::OpenReadBinary(filename);
         }
 
+		int pos() const { return _file->pos(); }
+
         void write(QByteArray data)
         {
             _file->write(data);

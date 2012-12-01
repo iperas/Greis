@@ -13,15 +13,46 @@ private:
     Greis::MySqlSink::UniquePtr_t _sink;
     std::unique_ptr<ChainedSink> _nextChainedSink;
     Connection::SharedPtr_t _connection;
+	int _inserterBatchSize;
+	bool _isValid;
 public:
     SMART_PTR_T(ChainedSink);
 
     ChainedSink(Connection::SharedPtr_t connection, int inserterBatchSize, ChainedSink::UniquePtr_t nextSink)
-        : _nextChainedSink(std::move(nextSink)), _connection(connection)
+        : _nextChainedSink(std::move(nextSink)), _connection(connection), _inserterBatchSize(inserterBatchSize)
     {
-        _connection->Connect();
-        _sink = make_unique<Greis::MySqlSink>(connection.get(), inserterBatchSize);
+		Connect();
     }
+
+	bool Connect()
+	{
+		try
+		{
+			if (IsValid())
+			{
+				return _isValid = true;
+			}
+
+			_connection->Connect();
+			_sink = make_unique<Greis::MySqlSink>(_connection.get(), _inserterBatchSize);
+			return _isValid = true;
+		}
+		catch (DatabaseException& ex)
+		{
+			sLogger.Warn("An error occurred while connecting to a database: " + ex.what());
+			return _isValid = false;
+		}
+		catch (...)
+		{
+			_isValid = false;
+			throw;
+		}
+	}
+
+	bool IsValid() const
+	{
+		return _isValid && _connection->Database().isOpen();
+	}
 
     bool Handle(Greis::DataChunk::UniquePtr_t dataChunk)
     {
@@ -52,12 +83,44 @@ public:
             return false;
         }
 
-        return _nextChainedSink->Handle(std::move(dataChunk));
+		if (_nextChainedSink.get())
+		{
+			try
+			{
+				if (_nextChainedSink->Connect())
+				{
+					_nextChainedSink->Handle(std::move(dataChunk));
+				}
+			}
+			catch (DatabaseException& ex)
+			{
+				sLogger.Warn("An error occurred while adding a data chunk into the data center database: " + ex.what());
+			}
+		}
+
+		return true;
     }
 
     void Flush()
-    {
+	{
+		_connection->Database().transaction();
+
         _sink->Flush();
-        _nextChainedSink->Flush();
+		if (_nextChainedSink.get())
+		{
+			try
+			{
+				if (_nextChainedSink->Connect())
+				{
+					_nextChainedSink->Flush();
+				}
+			}
+			catch (DatabaseException& ex)
+			{
+				sLogger.Warn("An error occurred while flushing the data into the data center database: " + ex.what());
+			}
+		}
+
+		_connection->Database().commit();
     }
 };

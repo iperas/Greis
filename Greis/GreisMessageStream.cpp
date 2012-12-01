@@ -102,7 +102,20 @@ NextLabel: // avoiding stack overflow in recursive call
                 int msgLen = msgLenStr.toUInt(&good, 16);
                 if (!good)
                 {
-                    throw GreisException(QString("Invalid Length field in StdMessage header: '%1'.").arg(msgLenStr));
+					// looking for the next message
+					const int maxCharsToSkip = 100;
+					int i = 0;
+					char c;
+					while (_binaryStream->read(&c, 1) > 0 && c != '\n' && i++ < maxCharsToSkip)
+					{
+					}
+
+					if (c == '\n')
+					{
+						goto NextLabel;
+					}
+                    
+					throw GreisException(QString("Invalid Length field in StdMessage header: '%1'.").arg(msgLenStr));
                 }
                 // message data
                 QByteArray data = _binaryStream->read(msgLen + StdMessage::HeadSize());
