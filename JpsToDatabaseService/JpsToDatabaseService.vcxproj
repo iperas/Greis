@@ -95,6 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChainedSink.h" />
+    <ClInclude Include="EControlCommand.h" />
+    <ClInclude Include="EServiceLogSeverity.h" />
+    <ClInclude Include="ServiceManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="databaseupdate.sql" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

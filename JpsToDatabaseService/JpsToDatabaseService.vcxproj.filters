@@ -23,5 +23,17 @@
     <ClInclude Include="ChainedSink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EControlCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EServiceLogSeverity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="databaseupdate.sql" />
   </ItemGroup>
 </Project>
