@@ -73,8 +73,8 @@ namespace Greis
         auto stdMsg = dynamic_cast<StdMessage*>(msg);
 
 #ifdef _DEBUG
-        //sLogger.Info(QString("MySqlSink::AddMessage: Id : `%1`, Size : `%2`").arg(stdMsg->Id().c_str()).
-        //    arg(stdMsg->Size()));
+       sLogger.Info(QString("MySqlSink::AddMessage: Id : `%1`, Size : `%2`").arg(stdMsg->Id().c_str()).
+            arg(stdMsg->Size()));
 #endif
         if (!_codeIds.contains(stdMsg->Id()) || dynamic_cast<RawStdMessage*>(msg) != nullptr)
         {

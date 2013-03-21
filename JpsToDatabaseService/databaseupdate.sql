@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS `commandqueue`;
 DROP TABLE IF EXISTS `servicelog`;
 DROP TABLE IF EXISTS `commandclassifier`;
 DROP TABLE IF EXISTS `servicelogseverityclassifier`;
+DROP TABLE IF EXISTS `configinfo`;
 
 CREATE TABLE `commandclassifier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -24,6 +25,15 @@ CREATE TABLE `commandqueue` (
   CONSTRAINT `commandfk` FOREIGN KEY (`command_id`) REFERENCES `commandclassifier` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8$$
 
+
+delimiter $$
+
+CREATE TABLE `configinfo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `value` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
 
 delimiter $$
 
