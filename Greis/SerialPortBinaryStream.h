@@ -41,6 +41,7 @@ namespace Greis
             boost::asio::write(_serial, boost::asio::buffer(data.data(), data.size()));
         }
 
+
 		QByteArray read(qint64 maxlen)
 		{
 			QByteArray data(maxlen, 0);
