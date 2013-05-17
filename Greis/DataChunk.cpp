@@ -26,6 +26,7 @@ namespace Greis
                 }
                 if (stdMsg->IdNumber() == EMessageId::RcvDate)
                 {
+		
                     jpsFile->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
                 }
             }
