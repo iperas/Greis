@@ -45,6 +45,7 @@ namespace Greis
     
     bool MsgFmtStdMessage::Validate() const
     {
+		std::cout << "Validate: " << std::boolalpha << !StdMessage::Validate() << std::endl;
         if (!_isCorrect || !StdMessage::Validate())
         {
 			std::cout << "Trivial check failed! isCorrect:" << std::boolalpha << _isCorrect << std::endl;
