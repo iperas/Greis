@@ -4,6 +4,7 @@
 #include "boost/format.hpp"
 #include "ProjectBase/BitConverter.h"
 #include "RawStdMessage.h"
+#include <iostream>
 
 using std::string;
 using std::vector;
@@ -59,8 +60,10 @@ namespace Greis
             return true;
         }
         Types::u1 expected = ((Types::u1*)p_message)[p_length - 1];
+		std::cout << "Expected checksum: " << expected << std::endl;
         // actual
         Types::u1 actual = ChecksumComputer::ComputeCs8(p_message, p_length - 1);
+		std::cout << "Actual checksum: " << actual << std::endl;
         // check
         return expected == actual;
     }
