@@ -38,12 +38,14 @@ namespace Greis
         }
         bool bOk;
         Types::u1 expected = QString::fromAscii(p_message + p_length - 2, 2).toUInt(&bOk, 16);
+				std::cout << "Expected checksum: " << expected << std::endl;
         if (!bOk)
         {
             return false;
         }
         // actual
         Types::u1 actual = ChecksumComputer::ComputeCs8(p_message, p_length - 2);
+				std::cout << "Actual checksum: " << actual << std::endl;
         // check
         return expected == actual;
     }
