@@ -47,7 +47,7 @@ namespace Greis
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
-			std::cout << "Trivial check failed! isCorrect:" << (int)_isCorrect << std::endl;
+			std::cout << "Trivial check failed! isCorrect:" << std::boolalpha << _isCorrect << std::endl;
             return false;
         }
 
