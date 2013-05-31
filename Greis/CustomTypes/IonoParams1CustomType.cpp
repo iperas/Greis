@@ -43,6 +43,7 @@ namespace Greis
     IonoParams1CustomType::IonoParams1CustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray IonoParams1CustomType::ToByteArray() const

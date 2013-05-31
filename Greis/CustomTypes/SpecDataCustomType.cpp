@@ -22,6 +22,7 @@ namespace Greis
     SpecDataCustomType::SpecDataCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray SpecDataCustomType::ToByteArray() const

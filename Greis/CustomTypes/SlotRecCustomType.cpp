@@ -31,6 +31,7 @@ namespace Greis
     SlotRecCustomType::SlotRecCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray SlotRecCustomType::ToByteArray() const

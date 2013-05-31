@@ -51,6 +51,7 @@ namespace Greis
     GPSAlm1CustomType::GPSAlm1CustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray GPSAlm1CustomType::ToByteArray() const

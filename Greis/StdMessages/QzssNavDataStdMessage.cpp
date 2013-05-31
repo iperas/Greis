@@ -25,6 +25,7 @@ namespace Greis
     QzssNavDataStdMessage::QzssNavDataStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
+        _isCorrect = true;
     }
 
     std::string QzssNavDataStdMessage::ToString() const

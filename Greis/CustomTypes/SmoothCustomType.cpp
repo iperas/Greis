@@ -25,6 +25,7 @@ namespace Greis
     SmoothCustomType::SmoothCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray SmoothCustomType::ToByteArray() const

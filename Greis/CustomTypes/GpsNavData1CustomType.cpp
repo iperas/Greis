@@ -29,6 +29,7 @@ namespace Greis
     GpsNavData1CustomType::GpsNavData1CustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray GpsNavData1CustomType::ToByteArray() const

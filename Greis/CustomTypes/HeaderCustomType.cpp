@@ -27,6 +27,7 @@ namespace Greis
     HeaderCustomType::HeaderCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray HeaderCustomType::ToByteArray() const

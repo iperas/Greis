@@ -22,6 +22,7 @@ namespace Greis
     ${ClassName}::${ClassName}( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray ${ClassName}::ToByteArray() const

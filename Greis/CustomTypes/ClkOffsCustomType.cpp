@@ -25,6 +25,7 @@ namespace Greis
     ClkOffsCustomType::ClkOffsCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray ClkOffsCustomType::ToByteArray() const

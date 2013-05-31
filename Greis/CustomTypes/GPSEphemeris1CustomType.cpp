@@ -41,6 +41,7 @@ namespace Greis
     GPSEphemeris1CustomType::GPSEphemeris1CustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray GPSEphemeris1CustomType::ToByteArray() const

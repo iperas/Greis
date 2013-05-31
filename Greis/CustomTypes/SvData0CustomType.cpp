@@ -27,6 +27,7 @@ namespace Greis
     SvData0CustomType::SvData0CustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray SvData0CustomType::ToByteArray() const

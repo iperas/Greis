@@ -37,6 +37,7 @@ namespace Greis
     UtcOffsCustomType::UtcOffsCustomType( int p_size ) 
         : _size(p_size)
     {
+        _isCorrect = true;
     }
 
     QByteArray UtcOffsCustomType::ToByteArray() const

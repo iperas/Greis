@@ -32,6 +32,7 @@ namespace Greis
     GpsNavData0StdMessage::GpsNavData0StdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
+        _isCorrect = true;
     }
 
     std::string GpsNavData0StdMessage::ToString() const

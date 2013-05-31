@@ -25,6 +25,7 @@ namespace Greis
     Spectrum1StdMessage::Spectrum1StdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
+        _isCorrect = true;
     }
 
     std::string Spectrum1StdMessage::ToString() const
