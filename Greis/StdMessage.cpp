@@ -19,6 +19,7 @@ namespace Greis
     bool StdMessage::Validate() const
     {
         string aId = Id();
+		std::cout << "ID: " << Id() << std::endl;
         if (aId[0] < MinIdValue || aId[0] > MaxIdValue || 
             aId[1] < MinIdValue || aId[1] > MaxIdValue)
             return false;
