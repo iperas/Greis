@@ -25,6 +25,7 @@ namespace Greis
         p_message += 2;
 
         _isCorrect = (p_message - pc_message == p_length);
+
         if (!_isCorrect)
         {
             sLogger.Debug(QString("The message %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
@@ -46,7 +47,7 @@ namespace Greis
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
-			std::cout << "Trivial check failed! isCorrect:" << _isCorrect << std::endl;
+			std::cout << "Trivial check failed! isCorrect:" << (int)_isCorrect << std::endl;
             return false;
         }
 
