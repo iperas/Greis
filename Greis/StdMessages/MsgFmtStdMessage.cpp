@@ -2,6 +2,7 @@
 #include <cassert>
 #include "ChecksumComputer.h"
 #include "ProjectBase/Logger.h"
+#include <iostream>
 
 namespace Greis
 {
@@ -45,6 +46,7 @@ namespace Greis
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
+			std::cout << "Trivial check failed!" << std::endl;
             return false;
         }
 
