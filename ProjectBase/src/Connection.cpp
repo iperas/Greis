@@ -1,5 +1,5 @@
-#include "Connection.h"
-#include "SmartPtr.h"
+#include "ProjectBase/Connection.h"
+#include "ProjectBase/SmartPtr.h"
 
 namespace ProjectBase
 {

@@ -1,7 +1,7 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "ProjectBase\SmartPtr.h"
-#include "ProjectBase\Connection.h"
+#include "ProjectBase/SmartPtr.h"
+#include "ProjectBase/Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"
@@ -307,7 +307,6 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->MinorVer());
                 serializer.DeserializeChar(q.value(8), c->Order());
                 serializer.Deserialize(q.value(9), c->Cs());
-				std::cout << "MF: " << c->IdField() << " " << c->MajorVer() << " " << c->MinorVer() << " " << c->Order() << " " << c->Cs() << std::endl;
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `cs` FROM `msg_RcvTime` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")

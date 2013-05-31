@@ -102,7 +102,7 @@ namespace Greis
         inline void Deserialize(const QVariant& val, std::string& out)
         {
             auto qs = val.toString().toAscii();
-            out = std::string(qs, qs.size());
+            out = std::string(qs.constData(), qs.size());
         }
 
         inline void Deserialize(const QVariant& val, unsigned char& out)

@@ -8,6 +8,7 @@
 #ifdef MT_SUPPORT_BOOST
 #include <boost/thread/thread.hpp>
 #endif
+#include "ProjectBase/SmartPtr.h"
 
 namespace ProjectBase
 {

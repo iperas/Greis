@@ -3,8 +3,8 @@
 #include <memory>
 
 #define SMART_PTR_T(t) \
-    typedef std::shared_ptr<##t> SharedPtr_t; \
-    typedef std::unique_ptr<##t> UniquePtr_t;
+    typedef std::shared_ptr<t> SharedPtr_t; \
+    typedef std::unique_ptr<t> UniquePtr_t;
 
 #define NULL_PTR_DECL \
     static const SharedPtr_t sharedNullPtr; \

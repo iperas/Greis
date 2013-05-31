@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 #include <cassert>
-#include "ProjectBase\BitConverter.h"
+#include "ProjectBase/BitConverter.h"
+#include "ProjectBase/SmartPtr.h"
 
 namespace Greis
 {

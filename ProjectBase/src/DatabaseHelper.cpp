@@ -1,5 +1,5 @@
-#include "DatabaseHelper.h"
-#include "DatabaseException.h"
+#include "ProjectBase/DatabaseHelper.h"
+#include "ProjectBase/DatabaseException.h"
 
 namespace ProjectBase
 {

@@ -1,5 +1,5 @@
 #include "MySqlSink.h"
-#include "ProjectBase\Connection.h"
+#include "ProjectBase/Connection.h"
 #include "AllStdMessages.h"
 #include <string>
 #include "RawStdMessage.h"
@@ -24,7 +24,7 @@ namespace Greis
         {
             auto id = query.value(0).toInt();
             auto code = query.value(1).toString();
-            std::string codeStr(code.toAscii(), code.size());
+            std::string codeStr(code.toAscii().constData(), code.size());
             _codeIds[codeStr] = id;
         }
     }

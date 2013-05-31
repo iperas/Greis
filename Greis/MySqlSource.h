@@ -143,7 +143,7 @@ namespace Greis
         auto val = buffer.take(dbId);
         if (val != nullptr)
         {
-            return T::UniquePtr_t(dynamic_cast<T*>(val));
+            return typename T::UniquePtr_t(dynamic_cast<T*>(val));
         }
 
         QString queryStr = _ctQueries.value(ctId);
@@ -153,7 +153,7 @@ namespace Greis
         queryStr = queryStr.arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch());
 
         int ctCount = 0;
-        T::UniquePtr_t retVal;
+        typename T::UniquePtr_t retVal;
         QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);
         while (query.next())
         {
@@ -171,7 +171,7 @@ namespace Greis
 
             if (id == dbId)
             {
-                retVal = T::UniquePtr_t(dynamic_cast<T*>(ct));
+                retVal = typename T::UniquePtr_t(dynamic_cast<T*>(ct));
             }
             buffer[id] = ct;
             ++ctCount;

@@ -36,7 +36,7 @@ namespace Greis
     MsgFmtStdMessage::MsgFmtStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
-        _isCorrect = true;
+    	_isCorrect = true;
     }
 
     std::string MsgFmtStdMessage::ToString() const
@@ -46,7 +46,6 @@ namespace Greis
     
     bool MsgFmtStdMessage::Validate() const
     {
-		std::cout << "Validate: " << std::boolalpha << !StdMessage::Validate() << std::endl;
         if (!_isCorrect || !StdMessage::Validate())
         {
 			std::cout << "Trivial check failed! isCorrect:" << std::boolalpha << _isCorrect << std::endl;

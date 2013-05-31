@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IBinaryStream.h"
-#include "ProjectBase\File.h"
+#include "ProjectBase/File.h"
 
 namespace Greis
 {

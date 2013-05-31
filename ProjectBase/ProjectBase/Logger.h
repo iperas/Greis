@@ -4,6 +4,7 @@
 #include "Singleton.h"
 #include <boost/utility.hpp>
 #include <log4cxx/logger.h>
+#include <log4cxx/log4cxx.h>
 #include <QtCore/QString>
 
 namespace ProjectBase

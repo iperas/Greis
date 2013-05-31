@@ -1,10 +1,11 @@
 #ifndef MetaInfoReader_h__
 #define MetaInfoReader_h__
 
-#include "ProjectBase\Connection.h"
+#include "ProjectBase/Connection.h"
 #include "MetaInfo.h"
-#include "ProjectBase\SmartPtr.h"
+#include "ProjectBase/SmartPtr.h"
 #include "JpsFile.h"
+#include <boost/assert.hpp>
 
 using namespace ProjectBase;
 
