@@ -1,12 +1,11 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "ProjectBase/SmartPtr.h"
-#include "ProjectBase/Connection.h"
+#include "ProjectBase\SmartPtr.h"
+#include "ProjectBase\Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"
 #include "AllCustomTypes.h"
-#include <iostream>
 
 using namespace ProjectBase;
 

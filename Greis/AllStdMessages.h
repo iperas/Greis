@@ -4,7 +4,7 @@
 #include "StdMessages/AngularVelocityStdMessage.h"
 #include "StdMessages/AntNameStdMessage.h"
 #include "StdMessages/BaseInfoStdMessage.h"
-#include "StdMessages/BaseLineStdMessage.h"
+#include "StdMessages/BaselineStdMessage.h"
 #include "StdMessages/ClockOffsetsStdMessage.h"
 #include "StdMessages/CNRStdMessage.h"
 #include "StdMessages/CNR4StdMessage.h"

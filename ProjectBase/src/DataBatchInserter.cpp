@@ -53,15 +53,38 @@ namespace ProjectBase
             {
                 child->Flush();
             }
-            QSqlQuery query = _dbHelper->ExecuteQuery("");
-            sLogger.Debug(_insertQuery);
-            query.prepare(_insertQuery);
-            DatabaseHelper::ThrowIfError(query);
-            foreach (QVariantList boundValue, _boundValues)
+
+            auto insertQueryTmp = _insertQuery;
+            auto valuesTmp = QString(",(?");
+            for (int i = 1; i < _boundValues.size(); i++)
             {
-                query.addBindValue(boundValue);
+                valuesTmp.append(",?");
             }
-            query.execBatch();
+            valuesTmp.append(")");
+
+            for (int i = 1; i < _rowsAdded; i++)
+            {
+                insertQueryTmp.append(valuesTmp);
+            }
+
+            QSqlQuery query = _dbHelper->ExecuteQuery("");
+            //sLogger.Debug(insertQueryTmp);
+            query.prepare(insertQueryTmp);
+            DatabaseHelper::ThrowIfError(query);
+            int varsCount = 0;
+
+            auto colSize = _boundValues.size();
+            for (int i = 0; i < _rowsAdded; i++)
+            {
+                for (int j = 0; j < colSize; j++)
+                {
+                    query.addBindValue(_boundValues[j][i]);
+                    varsCount++;
+                }
+            }
+
+            auto valid = varsCount == _boundValues.size() * _rowsAdded;
+            query.exec();
             DatabaseHelper::ThrowIfError(query);
 
             if (_tableName.isEmpty() || _tableName.isNull())

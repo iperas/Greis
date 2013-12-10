@@ -19,6 +19,7 @@ namespace ProjectBase
         _db.setUserName(Username);
         _db.setPassword(Password);
         _db.setConnectOptions(QString("CLIENT_COMPRESS=1"));
+        //_db.setConnectOptions(QString("useCompression=true"));
         if (!_db.open())
         {
             throw DatabaseException(_db.lastError().text());

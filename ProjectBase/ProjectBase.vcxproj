@@ -50,7 +50,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;QT_LARGEFILE_SUPPORT;QT_NO_DEBUG;QT_CORE_LIB;QT_SQL_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(LOG4CXX)\include;$(BOOST_DIR);$(QTDIR)\include;ProjectBase</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LOG4CXX)\include;$(BOOST_DIR);$(QTDIR)\include;ProjectBase;$(ProjectDir)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
