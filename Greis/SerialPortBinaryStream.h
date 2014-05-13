@@ -4,6 +4,24 @@
 #include <vector>
 #include <QtCore/QtCore>
 
+#include <termio.h>
+#include <fcntl.h>
+#include <err.h>
+#include <linux/serial.h>
+
+static int rate_to_constant(int baudrate) {
+#define B(x) case x: return B##x
+	switch(baudrate) {
+		B(50);     B(75);     B(110);    B(134);    B(150);
+		B(200);    B(300);    B(600);    B(1200);   B(1800);
+		B(2400);   B(4800);   B(9600);   B(19200);  B(38400);
+		B(57600);  B(115200); B(230400); B(460800); B(500000); 
+		B(576000); B(921600); B(1000000);B(1152000);B(1500000); 
+	default: return 0;
+	}
+#undef B
+}
+
 #include "IBinaryStream.h"
 #include "ProjectBase/Exception.h"
 
@@ -28,6 +46,25 @@ namespace Greis
          */
         SerialPortBinaryStream(std::string portName, unsigned int baudRate) : _io(), _serial(_io, portName)
         {
+            auto fd = _serial.native_native();
+            struct serial_struct serinfo;
+            struct termios options;
+            
+            //if (ioctl(fd, TIOCGSERIAL, &serinfo) < 0)
+            //    return -1;
+            //if (ioctl(fd, TIOCSSERIAL, &serinfo) < 0)
+            //    return -1;
+            tcgetattr(fd, &options);
+            cfsetispeed(&options, B1500000);
+            cfsetospeed(&options, B1500000);
+            //cfmakeraw(&options);
+            //options.c_cflag |= (CLOCAL | CREAD);
+            //options.c_cflag &= ~CRTSCTS;
+            if (tcsetattr(fd, TCSANOW, &options) != 0) {
+                std::cerr << "Failed to set attr";
+                return;
+            }
+            
             _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
             _serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
             _serial.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
