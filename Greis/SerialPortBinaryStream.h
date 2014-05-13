@@ -46,7 +46,7 @@ namespace Greis
          */
         SerialPortBinaryStream(std::string portName, unsigned int baudRate) : _io(), _serial(_io, portName)
         {
-            auto fd = _serial.native_native();
+            auto fd = _serial.native();
             struct serial_struct serinfo;
             struct termios options;
             
@@ -65,7 +65,7 @@ namespace Greis
                 return;
             }
             
-            _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
+//            _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
             _serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
             _serial.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
             _serial.set_option(boost::asio::serial_port_base::character_size(8));
