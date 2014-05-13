@@ -17,7 +17,9 @@ namespace ProjectBase
     public:
         Logger() {}
 
-        void Initialize(const QString& configFile);
+		int LogLevel;
+
+        void Initialize(int);
 
         void Debug(const QString& message);
         void Trace(const QString& message);

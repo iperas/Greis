@@ -54,7 +54,7 @@ namespace Greis
             jpsFile->_body.push_back(std::move(jpsFile->_lastEpoch));
         }
 
-        sLogger.Info(QString("%1 epochs have been totally deserialized.").arg(jpsFile->_epochCounter));
+        sLogger.Trace(QString("%1 epochs have been totally deserialized.").arg(jpsFile->_epochCounter));
         return jpsFile;
     }
 
@@ -91,7 +91,7 @@ namespace Greis
                     // push in the previous epoch
                     if (++_epochCounter % 3000 == 0)
                     {
-                        sLogger.Info(QString("3000 epochs deserialized. %1 total.").arg(_epochCounter));
+                        sLogger.Trace(QString("3000 epochs deserialized. %1 total.").arg(_epochCounter));
                     }
                     _lastEpoch = make_unique<Epoch>();
                 }

@@ -39,7 +39,6 @@ namespace ProjectBase
         // rowValueInBrackets: "(<value for col1>[, <value for col #>])"
         void AddRow(const QString& rowValueInBrackets)
         {
-            // Выполнение запроса если необходимо
             int resultLength = _resultInsertQuery.count() + rowValueInBrackets.count() + 10;
             if (resultLength > _connection->MaxAllowedPacket())
             {
@@ -73,7 +72,7 @@ namespace ProjectBase
                 DatabaseHelper::ThrowIfError(query);
 
                 _resultInsertQuery = _insertTemplate;
-                sLogger.Info(QString("Добавлено %1 записей...").arg(_rowsAdded));
+                sLogger.Trace(QString("Inserted %1 rows...").arg(_rowsAdded));
                 _rowsAdded = 0;
                 _boundValues.clear();
             }
@@ -84,7 +83,7 @@ namespace ProjectBase
         {
             if (_rowsAdded == 0)
             {
-                throw Exception(QString("Невозможно построить запрос для шаблона %1. Не вставлено ниодной строки.").arg(_resultInsertQuery));
+                throw Exception(QString("Failed to insert, error: %1.").arg(_resultInsertQuery));
             }
 
             return _resultInsertQuery;

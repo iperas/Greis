@@ -89,9 +89,9 @@ namespace ProjectBase
 
             if (_tableName.isEmpty() || _tableName.isNull())
             {
-                sLogger.Info(QString("%1 records has been added.").arg(_rowsAdded));
+                sLogger.Trace(QString("%1 records has been added.").arg(_rowsAdded));
             } else {
-                sLogger.Info(QString("%1 records has been added into `%2`.").arg(_rowsAdded).arg(_tableName));
+                sLogger.Trace(QString("%1 records has been added into `%2`.").arg(_rowsAdded).arg(_tableName));
             }
             _rowsAdded = 0;
             int size = _boundValues.size();
