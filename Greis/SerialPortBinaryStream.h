@@ -55,8 +55,8 @@ namespace Greis
             //if (ioctl(fd, TIOCSSERIAL, &serinfo) < 0)
             //    return -1;
             tcgetattr(fd, &options);
-            cfsetispeed(&options, B1500000);
-            cfsetospeed(&options, B1500000);
+            cfsetispeed(&options, rate_to_constant(baudRate));
+            cfsetospeed(&options, rate_to_constant(baudRate));
             //cfmakeraw(&options);
             //options.c_cflag |= (CLOCAL | CREAD);
             //options.c_cflag &= ~CRTSCTS;
