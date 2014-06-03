@@ -4,7 +4,7 @@
 #include <vector>
 #include <QtCore/QtCore>
 
-#ifdef LINUX
+#ifndef Q_OS_WIN
 #include <termio.h>
 #include <fcntl.h>
 #include <err.h>
@@ -48,7 +48,7 @@ namespace Greis
          */
         SerialPortBinaryStream(std::string portName, unsigned int baudRate) : _io(), _serial(_io, portName)
         {
-#ifdef LINUX
+#ifndef Q_OS_WIN
             auto fd = _serial.native();
             struct serial_struct serinfo;
             struct termios options;
@@ -61,7 +61,7 @@ namespace Greis
                 return;
             }
 #endif
-#ifdef WINDOWS
+#ifdef Q_OS_WIN
             _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
 #endif
             _serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
