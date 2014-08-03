@@ -1,0 +1,13 @@
+/*.sdf
+/ipch
+/*.opensdf
+/*.psess
+/[Bb]in
+/obj
+/[Dd]ebug
+/[Rr]elease
+/*.ReSharper.user
+/*.user
+/*.aps
+/*.eto
+/*.sln.DotSettings
