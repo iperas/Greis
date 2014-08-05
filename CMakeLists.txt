@@ -47,6 +47,11 @@ INCLUDE(CMakeGTest.txt)
 
 add_subdirectory(Common)
 add_subdirectory(Common.Tests)
+add_subdirectory(Greis)
+add_subdirectory(Greis.Tests)
+add_subdirectory(DatabaseToJps)
+add_subdirectory(JpsToDatabase)
+add_subdirectory(jpslogd)
 
 # Tests
 
