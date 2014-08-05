@@ -4,19 +4,19 @@
 #include <boost/noncopyable.hpp>
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include "ProjectBase/Connection.h"
-#include "ProjectBase/SmartPtr.h"
-#include "ProjectBase/NotSupportedException.h"
-#include "ProjectBase/NotImplementedException.h"
-#include "ProjectBase/DataInserter.h"
-#include "ProjectBase/DataBatchInserter.h"
+#include "Common/Connection.h"
+#include "Common/SmartPtr.h"
+#include "Common/NotSupportedException.h"
+#include "Common/NotImplementedException.h"
+#include "Common/DataInserter.h"
+#include "Common/DataBatchInserter.h"
 #include "EMessageId.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "GreisMysqlSerializer.h"
 #include "CustomType.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {

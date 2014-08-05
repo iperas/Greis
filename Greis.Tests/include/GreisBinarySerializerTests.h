@@ -2,14 +2,14 @@
 #define GreisBinarySerializerTests_h__
 
 #include "gtest/gtest.h"
-#include "GreisBinarySerializer.h"
-#include "GreisTypes.h"
-#include "RawCustomType.h"
-#include "ProjectBase/BitConverter.h"
-#include "ProjectBase/SmartPtr.h"
+#include "Common/BitConverter.h"
+#include "Common/SmartPtr.h"
+#include "Greis/GreisBinarySerializer.h"
+#include "Greis/GreisTypes.h"
+#include "Greis/RawCustomType.h"
 
 using namespace Greis;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace
 {

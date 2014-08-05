@@ -1,16 +1,16 @@
-#include <QtCore/QtCore>
 #include <clocale>
 #include <locale>
+#include <QtCore/QtCore>
 #include <gtest/gtest.h>
+#include "Common/Logger.h"
+#include "Common/Path.h"
 #include "MySqlSinkTests.h"
 #include "DataChunkTests.h"
 #include "MySqlSourceTests.h"
 #include "GreisBinarySerializerTests.h"
 #include "GreisMessageStreamTests.h"
-#include "ProjectBase/Logger.h"
-#include "ProjectBase/Path.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 int main(int argc, char **argv)
 {
@@ -20,12 +20,10 @@ int main(int argc, char **argv)
     QCoreApplication a(argc, argv);
 
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
-    QTextCodec* codecMs = QTextCodec::codecForName("Windows-1251");
-    QTextCodec::setCodecForCStrings(codecMs);
     QTextCodec::setCodecForLocale(codec);
-    QTextCodec::setCodecForTr(codec);
 
-    sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
+    //sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
+    sLogger.Initialize(5);
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

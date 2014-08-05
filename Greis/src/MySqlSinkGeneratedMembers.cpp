@@ -1,9 +1,9 @@
 #include "MySqlSink.h"
-#include "ProjectBase/Connection.h"
-#include "ProjectBase/Logger.h"
+#include "Common/Connection.h"
+#include "Common/Logger.h"
 #include "AllStdMessages.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -1131,7 +1131,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<IAmpStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::InertialMeasurements:
@@ -1176,7 +1176,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<LoggingHistoryStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::MsgFmt:
@@ -1304,7 +1304,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<QAmpStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::QZSSAlm:
@@ -1318,7 +1318,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssIonoParams:
@@ -1331,14 +1331,14 @@ namespace Greis
             {
                 auto c = dynamic_cast<QzssNavDataStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssRawNavData:
             {
                 auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssUtcParam:
@@ -1352,7 +1352,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<RawMeasStdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::RCPRc1:
@@ -1674,14 +1674,14 @@ namespace Greis
             {
                 auto c = dynamic_cast<Spectrum0StdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::Spectrum1:
             {
                 auto c = dynamic_cast<Spectrum1StdMessage*>(msg);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::SPR:
@@ -1789,7 +1789,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<ExtSpecDataCustomType*>(ct);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::GPSAlm1:
@@ -1925,7 +1925,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<SpecDataCustomType*>(ct);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::SvData0:
@@ -1948,7 +1948,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<SvData2CustomType*>(ct);
                 
-                /*throw ProjectBase::NotImplementedException();*/
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case ECustomTypeId::UtcOffs:

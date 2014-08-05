@@ -5,7 +5,7 @@
 #include <QtCore/QByteArray>
 #include "ECustomTypeId.h"
 
-#include "CustomTypes/GpsEphReqDataCustomType.h"
+#include "CustomType/GpsEphReqDataCustomType.h"
 
 namespace Greis
 {

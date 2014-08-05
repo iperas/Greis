@@ -1,8 +1,8 @@
 #include "DataChunk.h"
 #include "FileBinaryStream.h"
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -26,7 +26,7 @@ namespace Greis
                 }
                 if (stdMsg->IdNumber() == EMessageId::RcvDate)
                 {
-		
+        
                     jpsFile->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
                 }
             }

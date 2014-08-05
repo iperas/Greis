@@ -1,15 +1,15 @@
 #ifndef DataChunkTests_h__
 #define DataChunkTests_h__
 
-#include <gtest/gtest.h>
 #include <vector>
 #include <cmath>
+#include <gtest/gtest.h>
 #include <boost/thread.hpp>
-#include "ProjectBase/SmartPtr.h"
-#include "DataChunk.h"
+#include "Common/SmartPtr.h"
+#include "Greis/DataChunk.h"
 
 using namespace Greis;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace
 {

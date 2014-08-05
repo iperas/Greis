@@ -5,7 +5,7 @@
 
 using std::string;
 using std::vector;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {

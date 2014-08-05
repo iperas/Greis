@@ -3,8 +3,8 @@
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
-#include "ProjectBase/File.h"
-#include "ProjectBase/Logger.h"
+#include "Common/File.h"
+#include "Common/Logger.h"
 #include <string>
 #include "GreisException.h"
 #include "StdMessage.h"
@@ -34,7 +34,7 @@ namespace Greis
         Message::UniquePtr_t Next();
 
     private:
-        ProjectBase::QFilePtr _file;
+        Common::QFilePtr _file;
         bool _skipInvalid;
         bool _handleStdOnly;
     };

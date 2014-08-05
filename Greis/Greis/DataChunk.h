@@ -5,9 +5,9 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include "Epoch.h"
-#include "ProjectBase/SmartPtr.h"
-#include "StdMessages/RcvTimeStdMessage.h"
-#include "StdMessages/RcvDateStdMessage.h"
+#include "Common/SmartPtr.h"
+#include "StdMessage/RcvTimeStdMessage.h"
+#include "StdMessage/RcvDateStdMessage.h"
 #include <QtCore/QtCore>
 
 namespace Greis

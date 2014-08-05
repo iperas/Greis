@@ -5,9 +5,9 @@
 #include <QtCore/QByteArray>
 #include <boost/noncopyable.hpp>
 #include "GreisTypes.h"
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 #include "GreisBinarySerializer.h"
-#include "ProjectBase/NotImplementedException.h"
+#include "Common/NotImplementedException.h"
 #include "ECustomTypeId.h"
 
 namespace Greis

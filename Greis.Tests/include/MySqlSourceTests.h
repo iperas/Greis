@@ -1,21 +1,21 @@
 #ifndef MySqlSourceTests_h__
 #define MySqlSourceTests_h__
 
-#include <gtest/gtest.h>
-#include <QtCore/QtCore>
 #include <vector>
 #include <cmath>
 #include <boost/thread.hpp>
-#include "ProjectBase/SmartPtr.h"
-#include "DataChunk.h"
-#include "ProjectBase/Path.h"
-#include "ProjectBase/IniSettings.h"
-#include "ProjectBase/Connection.h"
-#include "MySqlSink.h"
-#include "MySqlSource.h"
+#include <gtest/gtest.h>
+#include <QtCore/QtCore>
+#include "Common/SmartPtr.h"
+#include "Common/Path.h"
+#include "Common/IniSettings.h"
+#include "Common/Connection.h"
+#include "Greis/DataChunk.h"
+#include "Greis/MySqlSink.h"
+#include "Greis/MySqlSource.h"
 
 using namespace Greis;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace
 {

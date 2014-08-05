@@ -1,10 +1,10 @@
 #include "GreisMessageStream.h"
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 #include "StdMessageFactory.h"
 #include <string>
 
 using std::string;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -97,25 +97,25 @@ NextLabel: // avoiding stack overflow in recursive call
                     goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
                 }
                 // message len
-                QString msgLenStr = QString::fromAscii(header.data() + 2, 3);
+                QString msgLenStr = QString::fromLatin1(header.data() + 2, 3);
                 bool good;
                 int msgLen = msgLenStr.toUInt(&good, 16);
                 if (!good)
                 {
-					// looking for the next message
-					const int maxCharsToSkip = 100;
-					int i = 0;
-					char c;
-					while (_binaryStream->read(&c, 1) > 0 && c != '\n' && i++ < maxCharsToSkip)
-					{
-					}
+                    // looking for the next message
+                    const int maxCharsToSkip = 100;
+                    int i = 0;
+                    char c;
+                    while (_binaryStream->read(&c, 1) > 0 && c != '\n' && i++ < maxCharsToSkip)
+                    {
+                    }
 
-					if (c == '\n')
-					{
-						goto NextLabel;
-					}
+                    if (c == '\n')
+                    {
+                        goto NextLabel;
+                    }
                     
-					throw GreisException(QString("Invalid Length field in StdMessage header: '%1'.").arg(msgLenStr));
+                    throw GreisException(QString("Invalid Length field in StdMessage header: '%1'.").arg(msgLenStr));
                 }
                 // message data
                 QByteArray data = _binaryStream->read(msgLen + StdMessage::HeadSize());
@@ -238,7 +238,7 @@ NextLabel: // avoiding stack overflow in recursive call
                     goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
                 }
                 // message len
-                QString msgLenStr = QString::fromAscii(header.data() + 2, 3);
+                QString msgLenStr = QString::fromLatin1(header.data() + 2, 3);
                 bool good;
                 int msgLen = msgLenStr.toUInt(&good, 16);
                 if (!good)

@@ -1,19 +1,19 @@
 #ifndef MySqlSinkTests_h__
 #define MySqlSinkTests_h__
 
-#include <gtest/gtest.h>
 #include <vector>
 #include <cmath>
+#include <gtest/gtest.h>
 #include <boost/thread.hpp>
-#include "ProjectBase/SmartPtr.h"
-#include "DataChunk.h"
-#include "ProjectBase/Path.h"
-#include "ProjectBase/IniSettings.h"
-#include "ProjectBase/Connection.h"
-#include "MySqlSink.h"
+#include "Common/SmartPtr.h"
+#include "Common/Path.h"
+#include "Common/IniSettings.h"
+#include "Common/Connection.h"
+#include "Greis/DataChunk.h"
+#include "Greis/MySqlSink.h"
 
 using namespace Greis;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace
 {

@@ -1,10 +1,10 @@
 #include "MySqlSink.h"
-#include "ProjectBase/Connection.h"
+#include "Common/Connection.h"
 #include "AllStdMessages.h"
 #include <string>
 #include "RawStdMessage.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -24,7 +24,7 @@ namespace Greis
         {
             auto id = query.value(0).toInt();
             auto code = query.value(1).toString();
-            std::string codeStr(code.toAscii().constData(), code.size());
+            std::string codeStr(code.toLatin1().constData(), code.size());
             _codeIds[codeStr] = id;
         }
     }
@@ -81,7 +81,7 @@ namespace Greis
             QVariantList fields;
             fields << _lastEpochId;
             fields << _lastEpochDateTime.toMSecsSinceEpoch();
-            fields << QString::fromAscii(stdMsg->Id().c_str(), 2);
+            fields << QString::fromLatin1(stdMsg->Id().c_str(), 2);
             fields << stdMsg->BodySize();
             fields << stdMsg->ToByteArray();
             _rawMessageInserter->AddRow(fields);

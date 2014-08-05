@@ -2,7 +2,7 @@
 
 #include <QtCore/QtCore>
 
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 
 namespace Greis
 {

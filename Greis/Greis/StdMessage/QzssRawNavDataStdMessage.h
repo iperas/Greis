@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/GpsRawNavData1CustomType.h"
+#include "CustomType/GpsRawNavData1CustomType.h"
 
 namespace Greis
 {

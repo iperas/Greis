@@ -2,14 +2,14 @@
 #define GreisException_h__
 
 #include <QtCore/QString>
-#include "ProjectBase/Exception.h"
+#include "Common/Exception.h"
 
 namespace Greis
 {
-    class GreisException : public ProjectBase::Exception
+    class GreisException : public Common::Exception
     {
     public:
-        GreisException(const QString& message) : ProjectBase::Exception(message)
+        GreisException(const QString& message) : Common::Exception(message)
         {
         }
     };

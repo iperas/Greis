@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/SmoothCustomType.h"
+#include "CustomType/SmoothCustomType.h"
 
 namespace Greis
 {

@@ -1,9 +1,9 @@
 #include "NonStdTextMessage.h"
 #include <boost/format.hpp>
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 
 using std::string;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {

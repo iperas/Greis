@@ -1,23 +1,23 @@
 #pragma once
 
 #include "IBinaryStream.h"
-#include "ProjectBase/File.h"
+#include "Common/File.h"
 
 namespace Greis
 {
     class FileBinaryStream : public IBinaryStream
     {
     private:
-        ProjectBase::QFilePtr _file;
+        Common::QFilePtr _file;
     public:
         SMART_PTR_T(FileBinaryStream);
 
         FileBinaryStream(QString filename)
         {
-            _file = ProjectBase::File::OpenReadBinary(filename);
+            _file = Common::File::OpenReadBinary(filename);
         }
 
-		int pos() const { return _file->pos(); }
+        int pos() const { return _file->pos(); }
 
         void write(QByteArray data)
         {

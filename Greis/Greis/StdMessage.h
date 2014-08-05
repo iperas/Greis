@@ -3,11 +3,11 @@
 
 #include <vector>
 #include "Message.h"
-#include "ProjectBase/InvalidOperationException.h"
+#include "Common/InvalidOperationException.h"
 #include "EMessageId.h"
 #include "GreisTypes.h"
 #include "GreisBinarySerializer.h"
-#include "ProjectBase/NotImplementedException.h"
+#include "Common/NotImplementedException.h"
 
 namespace Greis
 {

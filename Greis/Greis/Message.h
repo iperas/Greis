@@ -4,7 +4,7 @@
 #include <string>
 #include <boost/utility.hpp>
 #include <QtCore/QByteArray>
-#include "ProjectBase/SmartPtr.h"
+#include "Common/SmartPtr.h"
 #include "EMessageKind.h"
 
 namespace Greis

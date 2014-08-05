@@ -5,16 +5,16 @@
 #include <string>
 #include <vector>
 #include <cassert>
-#include "ProjectBase/BitConverter.h"
-#include "ProjectBase/SmartPtr.h"
+#include "Common/BitConverter.h"
+#include "Common/SmartPtr.h"
 
 namespace Greis
 {
     class GreisBinarySerializer
     {
     public:
-        GreisBinarySerializer(ProjectBase::BitConverter::EByteOrder byteOrder = 
-            ProjectBase::BitConverter::LeastSignificantByte);
+        GreisBinarySerializer(Common::BitConverter::EByteOrder byteOrder = 
+            Common::BitConverter::LeastSignificantByte);
 
         // Serialization
 
@@ -108,7 +108,7 @@ namespace Greis
         template<typename T>
         void Deserialize(const char* data, int length, std::unique_ptr<T>& retVal)
         {
-            retVal = ProjectBase::make_unique<T>(data, length);
+            retVal = Common::make_unique<T>(data, length);
         }
 
         // Deserialization for std::vector<Greis::Type>
@@ -144,7 +144,7 @@ namespace Greis
             }
         }
     private:
-        ProjectBase::BitConverter _bitConverter;
+        Common::BitConverter _bitConverter;
     };
 }
 

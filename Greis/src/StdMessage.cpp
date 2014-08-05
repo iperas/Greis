@@ -2,13 +2,13 @@
 #include "GreisTypes.h"
 #include "ChecksumComputer.h"
 #include "boost/format.hpp"
-#include "ProjectBase/BitConverter.h"
+#include "Common/BitConverter.h"
 #include "RawStdMessage.h"
 #include <iostream>
 
 using std::string;
 using std::vector;
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -40,7 +40,7 @@ namespace Greis
             return true;
         }
         bool bOk;
-        Types::u1 expected = QString::fromAscii(p_message + p_length - 2, 2).toUInt(&bOk, 16);
+        Types::u1 expected = QString::fromLatin1(p_message + p_length - 2, 2).toUInt(&bOk, 16);
         if (!bOk)
         {
             return false;
@@ -101,7 +101,7 @@ namespace Greis
         QByteArray head;
         head.append(Id().c_str(), 2);
         auto bodySizeStr = QString::number(BodySize(), 16).toUpper().rightJustified(3, '0', true);
-        head.append(bodySizeStr.toAscii(), 3);
+        head.append(bodySizeStr.toLatin1(), 3);
         return head;
     }
 

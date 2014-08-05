@@ -5,18 +5,18 @@
 #include <boost/noncopyable.hpp>
 #include <QtCore/QMap>
 #include <QtCore/QDateTime>
-#include "ProjectBase/Connection.h"
-#include "ProjectBase/SmartPtr.h"
-#include "ProjectBase/NotSupportedException.h"
-#include "ProjectBase/NotImplementedException.h"
-#include "ProjectBase/DataConsistencyException.h"
+#include "Common/Connection.h"
+#include "Common/SmartPtr.h"
+#include "Common/NotSupportedException.h"
+#include "Common/NotImplementedException.h"
+#include "Common/DataConsistencyException.h"
 #include "EMessageId.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "GreisMysqlSerializer.h"
 #include "CustomType.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -99,7 +99,7 @@ namespace Greis
                 if (first)
                 {
                     sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
-                        arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                        arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
                     first = false;
                 }
                 if (msg->Kind() == EMessageKind::StdMessage)
@@ -108,11 +108,11 @@ namespace Greis
                     if (!msg->Validate())
                     {
                         throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
-                            arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                            arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
                     }
                 }
                 //throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
-                //    arg(QString::fromAscii(messageCode.c_str(), 2)).arg(id));
+                //    arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
             }
             assert(msg->Size() == bodySize + StdMessage::HeadSize());
 

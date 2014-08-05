@@ -26,7 +26,7 @@ namespace Greis
 
         inline QVariant SerializeChar(Types::a1 val)
         {
-            return QVariant(QChar::fromAscii(val));
+            return QVariant(QChar::fromLatin1(val));
         }
 
         inline QVariant Serialize(Types::u1 val)
@@ -71,7 +71,7 @@ namespace Greis
 
         inline QVariant Serialize(std::string val)
         {
-            return QVariant(QString::fromAscii(val.c_str(), val.size()));
+            return QVariant(QString::fromLatin1(val.c_str(), val.size()));
         }
 
         // vector of Greis types
@@ -96,12 +96,12 @@ namespace Greis
 
         inline void DeserializeChar(const QVariant& val, char& out)
         {
-            out = val.toString().at(0).toAscii();
+            out = val.toString().at(0).toLatin1();
         }
 
         inline void Deserialize(const QVariant& val, std::string& out)
         {
-            auto qs = val.toString().toAscii();
+            auto qs = val.toString().toLatin1();
             out = std::string(qs.constData(), qs.size());
         }
 

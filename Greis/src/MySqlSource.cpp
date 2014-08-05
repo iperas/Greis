@@ -1,13 +1,13 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "ProjectBase/SmartPtr.h"
-#include "ProjectBase/Connection.h"
+#include "Common/SmartPtr.h"
+#include "Common/Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"
 #include "RawStdMessage.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {
@@ -21,7 +21,7 @@ namespace Greis
         {
             auto id = query.value(0).toInt();
             auto code = query.value(1).toString();
-            std::string codeStr(code.toAscii().constData(), code.size());
+            std::string codeStr(code.toLatin1().constData(), code.size());
             _codes[id] = codeStr;
         }
 
@@ -77,7 +77,7 @@ namespace Greis
             int id = query.value(0).toInt();
             //int idEpoch = query.value(1).toInt();
             qulonglong unixTime = query.value(2).toULongLong();
-            //auto messageCodeBa = query.value(3).toString().toAscii();
+            //auto messageCodeBa = query.value(3).toString().toLatin1();
             //std::string messageCode(messageCodeBa, 2);
             int bodySize = query.value(4).toInt();
             auto data = query.value(5).toByteArray();

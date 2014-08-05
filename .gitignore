@@ -11,3 +11,17 @@
 /*.aps
 /*.eto
 /*.sln.DotSettings
+CMakeFiles/
+Common.Tests/Common.Tests.dir/
+Common/Common.dir/
+DatabaseToJps/DatabaseToJps.dir/
+Greis.Tests/Greis.Tests.dir/
+Greis/Greis.dir/
+JpsToDatabase/JpsToDatabase.dir/
+ThirdParty/
+jpslogd/jpslogd.dir/
+ALL_BUILD.vcxproj
+ALL_BUILD.vcxproj.filters
+CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake

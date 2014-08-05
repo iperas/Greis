@@ -5,8 +5,8 @@
 #include <QtCore/QByteArray>
 #include "ECustomTypeId.h"
 
-#include "CustomTypes/HeaderCustomType.h"
-#include "CustomTypes/SlotRecCustomType.h"
+#include "CustomType/HeaderCustomType.h"
+#include "CustomType/SlotRecCustomType.h"
 
 namespace Greis
 {

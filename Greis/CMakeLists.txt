@@ -21,12 +21,12 @@ FILE(GLOB_RECURSE MOC_SOURCES "*_automoc.cpp")
 # source grouping
 
 source_group ("Header Files" FILES ${ROOT_HEADERS})
-source_group ("Header Files/StdMessage" FILES ${STDMESSAGE_HEADERS})
-source_group ("Header Files/CustomType" FILES ${CUSTOMTYPE_HEADERS})
+source_group ("Header Files\\StdMessage" FILES ${STDMESSAGE_HEADERS})
+source_group ("Header Files\\CustomType" FILES ${CUSTOMTYPE_HEADERS})
 
 source_group ("Source Files" FILES ${ROOT_SOURCES})
-source_group ("Source Files/StdMessage" FILES ${STDMESSAGE_SOURCES})
-source_group ("Source Files/CustomType" FILES ${CUSTOMTYPE_SOURCES})
+source_group ("Source Files\\StdMessage" FILES ${STDMESSAGE_SOURCES})
+source_group ("Source Files\\CustomType" FILES ${CUSTOMTYPE_SOURCES})
 
 source_group ("Generated Files" FILES ${MOC_SOURCES})
 
@@ -42,6 +42,8 @@ endforeach()
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/StdMessage")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/CustomType")
 
 # linking
 

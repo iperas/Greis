@@ -5,7 +5,7 @@
 #include <QtCore/QByteArray>
 #include "ECustomTypeId.h"
 
-#include "CustomTypes/SvData0CustomType.h"
+#include "CustomType/SvData0CustomType.h"
 
 namespace Greis
 {

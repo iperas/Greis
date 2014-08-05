@@ -2,7 +2,7 @@
 
 namespace Greis
 {
-    GreisBinarySerializer::GreisBinarySerializer( ProjectBase::BitConverter::EByteOrder byteOrder ) 
+    GreisBinarySerializer::GreisBinarySerializer( Common::BitConverter::EByteOrder byteOrder ) 
         : _bitConverter(byteOrder)
     {
     }
