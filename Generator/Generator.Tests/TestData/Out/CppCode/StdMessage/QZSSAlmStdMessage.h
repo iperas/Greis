@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/GPSAlm1CustomType.h"
+#include "CustomType/GPSAlm1CustomType.h"
 
 namespace Greis
 {

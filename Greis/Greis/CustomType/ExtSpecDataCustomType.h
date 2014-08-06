@@ -1,8 +1,8 @@
 #ifndef ExtSpecDataCustomType_h__
 #define ExtSpecDataCustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
 namespace Greis

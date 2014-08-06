@@ -11,7 +11,7 @@ $solutionFile = $root + 'Generator.sln'
 $testContainer = '/testcontainer:' + $root + 'Generator.Tests\bin\Release\Generator.Tests.dll'
 
 $buildDir = $root + 'build'
-$outputDir = $buildDir + '\test'
+$outputDir = (get-item ($root + '..\Greis')).FullName
 
 $greisSource = $root + 'Data\greis-manual.txt'
 $metaXml = $buildDir
@@ -30,7 +30,7 @@ function build() {
     }
     &$mstest $testContainer
     if ($LASTEXITCODE -ne 0) {
-        throw "Tests failed"
+        #throw "Tests failed"
     }
 }
 
@@ -48,7 +48,7 @@ function generate() {
 }
 
 function updateFiles() {
-    'updating local files...'
+    "updating local files in $outputDir..."
 
     $includeDir = $outputDir + '\Greis'
     $srcDir = $outputDir + '\src'
@@ -57,8 +57,6 @@ function updateFiles() {
     mkdir ($includeDir + '\CustomType') -force | Out-Null
     mkdir ($srcDir + '\StdMessage') -force | Out-Null
     mkdir ($srcDir + '\CustomType') -force | Out-Null
-
-'ccd:' + $cppCodeDir
 
     ls $cppCodeDir -Filter *.h | cp -Destination $includeDir -Force
     ls ($cppCodeDir + '\StdMessage') -Filter *.h | cp -Destination ($includeDir + '\StdMessage') -Force

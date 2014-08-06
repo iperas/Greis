@@ -1,12 +1,12 @@
 #ifndef SvData2CustomType_h__
 #define SvData2CustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
-#include "CustomTypes/HeaderCustomType.h"
-#include "CustomTypes/SlotRecCustomType.h"
+#include "CustomType/HeaderCustomType.h"
+#include "CustomType/SlotRecCustomType.h"
 
 namespace Greis
 {

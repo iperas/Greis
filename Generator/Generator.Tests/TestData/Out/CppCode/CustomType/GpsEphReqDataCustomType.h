@@ -1,8 +1,8 @@
 #ifndef GpsEphReqDataCustomType_h__
 #define GpsEphReqDataCustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
 namespace Greis

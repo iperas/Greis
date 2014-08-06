@@ -1,8 +1,8 @@
 #ifndef IonoParams1CustomType_h__
 #define IonoParams1CustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
 namespace Greis

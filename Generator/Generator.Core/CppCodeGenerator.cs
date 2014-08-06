@@ -296,7 +296,7 @@ namespace Generator.Core
             }
             else
             {
-                linesStr = string.Format("\r\n        {0}/*throw ProjectBase::NotImplementedException();*/", codeIntend);
+                linesStr = string.Format("\r\n        {0}/*throw Common::NotImplementedException();*/", codeIntend);
             }
             return linesStr;
         }
@@ -523,7 +523,7 @@ namespace Generator.Core
             }
             else
             {
-                linesStr = string.Format("\r\n        {0}/*throw ProjectBase::NotImplementedException();*/", codeIntend);
+                linesStr = string.Format("\r\n        {0}/*throw Common::NotImplementedException();*/", codeIntend);
             }
             return linesStr;
         }
@@ -686,7 +686,7 @@ namespace Generator.Core
                     recalculateChecksumCode =
                         string.Format("auto message = ToByteArray();\r\n{1}" +
                                       "auto cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);\r\n{1}" +
-                                      "auto ba = QString::number(cs, 16).toAscii();\r\n{1}" +
+                                      "auto ba = QString::number(cs, 16).toLatin1();\r\n{1}" +
                                       "{0}[0] = ba[0]; {0}[1] = ba[1];",
                                       this.GetFieldNameForVariable(msg.Variables.Last()), codeIntendation);
                 } else
@@ -760,7 +760,7 @@ namespace Generator.Core
 
             // IncludesStubToken
             var includeLines = msg.Variables.Where(v => !this.simpleTypes.Contains(v.GreisType)).
-                Select(v => string.Format("#include \"CustomTypes/{0}CustomType.h\"", GetLowerCamelCase(v.GreisType))
+                Select(v => string.Format("#include \"{1}/{0}CustomType.h\"", GetLowerCamelCase(v.GreisType), CustomTypesDir)
                 ).ToArray();
             var contentIncludes = string.Join("\r\n", includeLines);
             if (includeLines.Length > 0)
@@ -916,7 +916,7 @@ namespace Generator.Core
             }
             else
             {
-                content.DeserializationConstructorCode = "/*throw ProjectBase::NotImplementedException();*/";
+                content.DeserializationConstructorCode = "/*throw Common::NotImplementedException();*/";
             }
 
             return content;

@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/IonoParams1CustomType.h"
+#include "CustomType/IonoParams1CustomType.h"
 
 namespace Greis
 {

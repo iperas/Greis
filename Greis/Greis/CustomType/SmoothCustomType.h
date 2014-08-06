@@ -1,8 +1,8 @@
 #ifndef SmoothCustomType_h__
 #define SmoothCustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
 namespace Greis

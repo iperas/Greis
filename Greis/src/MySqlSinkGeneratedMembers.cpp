@@ -280,8 +280,8 @@ namespace Greis
             "INSERT INTO `msg_SBASAlmanac` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             18, _connection, "msg_SBASAlmanac", _inserterBatchSize);
         auto sBASEhemerisInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_SBASEhemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            23, _connection, "msg_SBASEhemeris", _inserterBatchSize);
+            "INSERT INTO `msg_SBASEhemeris` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            24, _connection, "msg_SBASEhemeris", _inserterBatchSize);
         auto sbasRawNavDataInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_SbasRawNavData` (`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             9, _connection, "msg_SbasRawNavData", _inserterBatchSize);
@@ -1610,6 +1610,7 @@ namespace Greis
                 out << _serializer.Serialize(c->Agf1());
                 out << _serializer.Serialize(c->Tow());
                 out << _serializer.Serialize(c->Wn());
+                out << _serializer.Serialize(c->Flags());
                 out << _serializer.Serialize(c->Cs());
             }
             break;

@@ -5,7 +5,7 @@
 #include "StdMessage.h"
 #include "EMessageId.h"
 
-#include "CustomTypes/UtcOffsCustomType.h"
+#include "CustomType/UtcOffsCustomType.h"
 
 namespace Greis
 {

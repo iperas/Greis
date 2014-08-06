@@ -1,7 +1,7 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "Common/SmartPtr.h"
-#include "Common/Connection.h"
+#include "Common\SmartPtr.h"
+#include "Common\Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"
@@ -1210,7 +1210,7 @@ namespace Greis
                 serializer.Deserialize(q.value(31), c->Cs());
             }, 
             epochsByDateTime);
-        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `cs` FROM `msg_SBASEhemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+        handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `flags`, `cs` FROM `msg_SBASEhemeris` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch())
             .arg(_to.toMSecsSinceEpoch()), 
             [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
@@ -1235,7 +1235,8 @@ namespace Greis
                 serializer.Deserialize(q.value(20), c->Agf1());
                 serializer.Deserialize(q.value(21), c->Tow());
                 serializer.Deserialize(q.value(22), c->Wn());
-                serializer.Deserialize(q.value(23), c->Cs());
+                serializer.Deserialize(q.value(23), c->Flags());
+                serializer.Deserialize(q.value(24), c->Cs());
             }, 
             epochsByDateTime);
         handleMessage(QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")

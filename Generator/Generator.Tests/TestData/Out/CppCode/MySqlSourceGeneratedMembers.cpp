@@ -1,13 +1,13 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "ProjectBase\SmartPtr.h"
-#include "ProjectBase\Connection.h"
+#include "Common\SmartPtr.h"
+#include "Common\Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"
 #include "AllCustomTypes.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {

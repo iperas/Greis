@@ -1,8 +1,8 @@
 #ifndef SvData2CustomType_h__
 #define SvData2CustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
 #include "CustomType/HeaderCustomType.h"

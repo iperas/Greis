@@ -1,11 +1,11 @@
 #ifndef GpsNavData1CustomType_h__
 #define GpsNavData1CustomType_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"
 
-#include "CustomTypes/SvData0CustomType.h"
+#include "CustomType/SvData0CustomType.h"
 
 namespace Greis
 {

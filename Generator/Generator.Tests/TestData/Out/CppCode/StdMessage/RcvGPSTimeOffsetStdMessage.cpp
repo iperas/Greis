@@ -1,7 +1,7 @@
 #include "RcvGPSTimeOffsetStdMessage.h"
 #include <cassert>
 #include "ChecksumComputer.h"
-#include "ProjectBase/Logger.h"
+#include "Common/Logger.h"
 
 namespace Greis
 {

@@ -97,6 +97,13 @@ namespace Greis
         const Types::u2& Wn() const { return _wn; }
         Types::u2& Wn() { return _wn; }
 
+        // Flags [bitfield]:
+        // 0…5 - reserved
+        // 6 - ephemeris was retrieved from NV-memory
+        // 7…15 - reserved
+        const Types::u2& Flags() const { return _flags; }
+        Types::u2& Flags() { return _flags; }
+
         // Checksum
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
@@ -123,6 +130,7 @@ namespace Greis
         Types::f4 _agf1;
         Types::u4 _tow;
         Types::u2 _wn;
+        Types::u2 _flags;
         Types::u1 _cs;
     };
 }

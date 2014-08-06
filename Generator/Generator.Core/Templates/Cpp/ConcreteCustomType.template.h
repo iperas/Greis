@@ -1,8 +1,8 @@
 #ifndef ${ClassName}_h__
 #define ${ClassName}_h__
 
-#include "CustomType.h"
 #include <QtCore/QByteArray>
+#include "CustomType.h"
 #include "ECustomTypeId.h"// ${includes}
 
 namespace Greis

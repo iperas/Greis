@@ -1,9 +1,9 @@
 #include "MySqlSink.h"
-#include "ProjectBase/Connection.h"
-#include "ProjectBase/Logger.h"
+#include "Common/Connection.h"
+#include "Common/Logger.h"
 #include "AllStdMessages.h"
 
-using namespace ProjectBase;
+using namespace Common;
 
 namespace Greis
 {

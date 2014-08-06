@@ -9,7 +9,7 @@ namespace Greis
     {
 #ifdef _DEBUG
         /*sLogger.Debug(QString("StdMessageFactory::Create: creating standard message with id `%1`...").
-            arg(QString::fromLatin1(p_message, 2)));*/
+            arg(QString::fromAscii(p_message, 2)));*/
 #endif
         auto id = StdMessage::MapIdStrToEnum(p_message);
         auto msg = createById(id, p_message, p_length);
