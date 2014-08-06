@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,10 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Generator.Tests
 {
     [DeploymentItem("TestData", "TestData")]
-    [DeploymentItem(@"Templates\Sql", @"Templates\Sql")]
-    [DeploymentItem(@"Templates\Cpp", @"Templates\Cpp")]
-    [DeploymentItem(@"Templates\Cpp\StdMessage", @"Templates\Cpp\StdMessage")]
-    [DeploymentItem(@"Templates\Cpp\CustomType", @"Templates\Cpp\CustomType")]
+    [DeploymentItem(@"Templates", @"Templates")]
     [TestClass]
     public class IntegrationTests
     {

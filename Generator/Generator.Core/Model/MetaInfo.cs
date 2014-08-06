@@ -6,7 +6,7 @@ namespace Generator.Core.Model
 {
     public class MetaInfo
     {
-        private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(MetaInfo));
+        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(MetaInfo));
 
         public MetaInfo()
         {
@@ -27,7 +27,7 @@ namespace Generator.Core.Model
 
             using (var outFile = File.Create(fileName))
             {
-                _serializer.Serialize(outFile, this);
+                Serializer.Serialize(outFile, this);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Generator.Core.Model
         {
             using (var inFile = File.OpenRead(filename))
             {
-                var metaInfo = (MetaInfo) _serializer.Deserialize(inFile);
+                var metaInfo = (MetaInfo) Serializer.Deserialize(inFile);
                 return metaInfo;
             }
         }

@@ -72,3 +72,4 @@ jpsutils.v12.suo
 build/
 bin
 obj
+*.suo

@@ -42,7 +42,7 @@ namespace Generator.Console
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex);
+                Logger.Instance.Fatal(ex.Message, ex);
                 return 1;
             }
 
@@ -51,9 +51,11 @@ namespace Generator.Console
 
         private static void GenerateCppCode(string metaFile, string targetDir)
         {
+            Logger.Instance.Info("Generating C++ code...");
             var metaInfo = MetaInfo.FromXmlFile(metaFile);
             var cppGen = new CppCodeGenerator(metaInfo);
             cppGen.Generate(targetDir);
+            Logger.Instance.Info("Done into {0}", targetDir);
         }
 
         private static void InitializeLogging()
@@ -63,16 +65,22 @@ namespace Generator.Console
 
         private static void GenerateSqlBaseline(string metaFile, string targetDir, string databaseName)
         {
+            Logger.Instance.Info("Generating sql baseline file...");
             var metaInfo = MetaInfo.FromXmlFile(metaFile);
             var generator = new MySqlBaselineGenerator(metaInfo, databaseName);
-            generator.Generate(Path.Combine(targetDir, DefaultSqlFileName));
+            var fileName = Path.Combine(targetDir, DefaultSqlFileName);
+            generator.Generate(fileName);
+            Logger.Instance.Info("Done into {0}", fileName);
         }
 
         private static void GenerateMetaXml(string sourceFile, string targetDir)
         {
+            Logger.Instance.Info("Generating meta file...");
             var text = File.ReadAllText(sourceFile, Encoding.Default);
             var metaInfo = MetaInfoGenerator.FromUserManual(text);
-            metaInfo.ToXmlFile(Path.Combine(targetDir, DefaultMetaFileName));
+            var fileName = Path.Combine(targetDir, DefaultMetaFileName);
+            metaInfo.ToXmlFile(fileName);
+            Logger.Instance.Info("Done into {0}", fileName);
         }
 
         private static void CheckFile(string fileName)
