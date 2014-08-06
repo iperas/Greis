@@ -66,3 +66,9 @@ jpslogd/jpslogd.vcxproj
 jpslogd/jpslogd.vcxproj.filters
 jpsutils.sln
 Win32/
+Generator/TestResults/
+Generator/packages/
+jpsutils.v12.suo
+build/
+bin
+obj

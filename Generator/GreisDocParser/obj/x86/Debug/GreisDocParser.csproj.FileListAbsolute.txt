@@ -1,2 +1,0 @@
-D:\work\git\ifz\jpsutils\GreisDocParser\bin\Debug\GreisDocParser.exe.config
-D:\work\git\ifz\jpsutils\Generator\GreisDocParser\bin\Debug\GreisDocParser.exe.config
