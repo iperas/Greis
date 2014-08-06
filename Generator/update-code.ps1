@@ -2,8 +2,6 @@ param ($root)
 
 "Root directory is: " + $root
 
-Import-Module pscx
-
 $ErrorActionPreference = "Stop"
 
 $msbuild = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe"
@@ -14,6 +12,14 @@ $testContainer = '/testcontainer:' + $root + 'Generator.Tests\bin\Release\Genera
 
 $buildDir = $root + 'build'
 $outputDir = $buildDir + '\test'
+
+$greisSource = $root + 'Data\greis-manual.txt'
+$metaXml = $buildDir
+$cppCodeDir = $buildDir + '\cppCode'
+$sqlBaselineDir = $buildDir
+
+mkdir $buildDir -force | Out-Null
+mkdir $outputDir -force | Out-Null
 
 function build() {
     'building and testing...'
@@ -35,11 +41,6 @@ function generate() {
 
     $generator = $root + 'Generator.Console\bin\Release\Generator.Console.exe'
 
-    $greisSource = $root + 'Data\greis-manual.txt'
-    $metaXml = $buildDir
-    $cppCodeDir = $buildDir + '\cppCode'
-    $sqlBaselineDir = $buildDir
-
     &$generator --command gen-xml --source $greisSource --target $metaXml
     $metaXml = $metaXml + '\meta-info.xml'
     &$generator --command gen-cpp --source $metaXml --target $cppCodeDir
@@ -52,10 +53,12 @@ function updateFiles() {
     $includeDir = $outputDir + '\Greis'
     $srcDir = $outputDir + '\src'
 
-    mkdir ($includeDir + '\StdMessage') | Out-Null
-    mkdir ($includeDir + '\CustomType') | Out-Null
-    mkdir ($srcDir + '\StdMessage') | Out-Null
-    mkdir ($srcDir + '\CustomType') | Out-Null
+    mkdir ($includeDir + '\StdMessage') -force | Out-Null
+    mkdir ($includeDir + '\CustomType') -force | Out-Null
+    mkdir ($srcDir + '\StdMessage') -force | Out-Null
+    mkdir ($srcDir + '\CustomType') -force | Out-Null
+
+'ccd:' + $cppCodeDir
 
     ls $cppCodeDir -Filter *.h | cp -Destination $includeDir -Force
     ls ($cppCodeDir + '\StdMessage') -Filter *.h | cp -Destination ($includeDir + '\StdMessage') -Force
