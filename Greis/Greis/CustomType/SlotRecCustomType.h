@@ -1,9 +1,8 @@
-#ifndef SlotRecCustomType_h__
-#define SlotRecCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -77,5 +76,3 @@ namespace Greis
         Types::u4 _word2;
     };
 }
-
-#endif // SlotRecCustomType_h__

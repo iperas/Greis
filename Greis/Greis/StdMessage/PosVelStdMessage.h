@@ -1,9 +1,8 @@
-#ifndef PosVelStdMessage_h__
-#define PosVelStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -80,5 +79,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // PosVelStdMessage_h__

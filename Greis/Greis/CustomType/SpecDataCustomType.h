@@ -1,9 +1,8 @@
-#ifndef SpecDataCustomType_h__
-#define SpecDataCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -30,5 +29,3 @@ namespace Greis
         std::vector<Types::i2> _spec;
     };
 }
-
-#endif // SpecDataCustomType_h__

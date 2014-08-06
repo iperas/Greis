@@ -1,9 +1,8 @@
-#ifndef GPSAlm1CustomType_h__
-#define GPSAlm1CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -111,5 +110,3 @@ namespace Greis
         Types::f4 _omegaDot;
     };
 }
-
-#endif // GPSAlm1CustomType_h__

@@ -1,5 +1,4 @@
-#ifndef EMessageId_h__
-#define EMessageId_h__
+#pragma once
 
 namespace Greis
 {
@@ -12,5 +11,3 @@ namespace Greis
         };
     };
 }
-
-#endif // EMessageId_h__

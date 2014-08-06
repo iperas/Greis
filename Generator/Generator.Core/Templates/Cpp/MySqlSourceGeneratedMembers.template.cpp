@@ -1,11 +1,11 @@
-#include "MySqlSource.h"
 #include <vector>
-#include "Common\SmartPtr.h"
-#include "Common\Connection.h"
-#include "ECustomTypeId.h"
-#include "DataChunk.h"
-#include "AllStdMessages.h"
-#include "AllCustomTypes.h"
+#include "Common/SmartPtr.h"
+#include "Common/Connection.h"
+#include "Greis/MySqlSource.h"
+#include "Greis/ECustomTypeId.h"
+#include "Greis/DataChunk.h"
+#include "Greis/AllStdMessages.h"
+#include "Greis/AllCustomTypes.h"
 
 using namespace Common;
 

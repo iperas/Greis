@@ -1,9 +1,8 @@
-#ifndef LoggingHistoryStdMessage_h__
-#define LoggingHistoryStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -70,5 +69,3 @@ namespace Greis
         std::vector<std::vector<Types::u4>> _hist;
     };
 }
-
-#endif // LoggingHistoryStdMessage_h__

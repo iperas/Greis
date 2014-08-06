@@ -1,9 +1,8 @@
-#ifndef ${ClassName}_h__
-#define ${ClassName}_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"// ${includes}
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"// ${includes}
 
 namespace Greis
 {
@@ -33,5 +32,3 @@ namespace Greis
         // ${ClassFieldsStub}
     };
 }
-
-#endif // ${ClassName}_h__

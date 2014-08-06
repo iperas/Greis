@@ -1,9 +1,8 @@
-#ifndef REStdMessage_h__
-#define REStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -35,5 +34,3 @@ namespace Greis
         std::string _reply;
     };
 }
-
-#endif // REStdMessage_h__

@@ -1,5 +1,4 @@
-#ifndef ECustomTypeId_h__
-#define ECustomTypeId_h__
+#pragma once
 
 namespace Greis
 {
@@ -12,5 +11,3 @@ namespace Greis
         };
     };
 }
-
-#endif // ECustomType_h__

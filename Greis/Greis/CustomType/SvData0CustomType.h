@@ -1,9 +1,8 @@
-#ifndef SvData0CustomType_h__
-#define SvData0CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -42,5 +41,3 @@ namespace Greis
         std::vector<Types::u4> _data;
     };
 }
-
-#endif // SvData0CustomType_h__

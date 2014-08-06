@@ -1,11 +1,10 @@
-#ifndef QZSSEphemerisStdMessage_h__
-#define QZSSEphemerisStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GPSEphemeris1CustomType.h"
+#include "Greis/CustomType/GPSEphemeris1CustomType.h"
 
 namespace Greis
 {
@@ -42,5 +41,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // QZSSEphemerisStdMessage_h__

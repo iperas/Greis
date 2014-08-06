@@ -1,9 +1,8 @@
-#ifndef UtcOffsCustomType_h__
-#define UtcOffsCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -65,5 +64,3 @@ namespace Greis
         Types::i1 _dtlsf;
     };
 }
-
-#endif // UtcOffsCustomType_h__

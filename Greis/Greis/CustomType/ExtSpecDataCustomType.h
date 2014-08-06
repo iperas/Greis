@@ -1,9 +1,8 @@
-#ifndef ExtSpecDataCustomType_h__
-#define ExtSpecDataCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -40,5 +39,3 @@ namespace Greis
         std::vector<Types::u1> _agcmax;
     };
 }
-
-#endif // ExtSpecDataCustomType_h__

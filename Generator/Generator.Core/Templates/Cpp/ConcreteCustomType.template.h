@@ -1,9 +1,8 @@
-#ifndef ${ClassName}_h__
-#define ${ClassName}_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"// ${includes}
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"// ${includes}
 
 namespace Greis
 {
@@ -28,5 +27,3 @@ namespace Greis
         // ${ClassFieldsStub}
     };
 }
-
-#endif // ${ClassName}_h__

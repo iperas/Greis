@@ -1,11 +1,10 @@
-#ifndef QZSSAlmStdMessage_h__
-#define QZSSAlmStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GPSAlm1CustomType.h"
+#include "Greis/CustomType/GPSAlm1CustomType.h"
 
 namespace Greis
 {
@@ -42,5 +41,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // QZSSAlmStdMessage_h__

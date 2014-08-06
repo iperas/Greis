@@ -1,6 +1,4 @@
-#ifndef AllCustomTypes_h__
-#define AllCustomTypes_h__
+#pragma once
 
 // ${includes}
 
-#endif // AllCustomTypes_h__

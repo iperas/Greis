@@ -1,6 +1,4 @@
-#ifndef AllStdMessages_h__
-#define AllStdMessages_h__
+#pragma once
 
 // ${includes}
 
-#endif // AllStdMessages_h__

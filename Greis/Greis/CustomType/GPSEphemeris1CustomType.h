@@ -1,11 +1,10 @@
-#ifndef GPSEphemeris1CustomType_h__
-#define GPSEphemeris1CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
-#include "CustomType/GpsEphReqDataCustomType.h"
+#include "Greis/CustomType/GpsEphReqDataCustomType.h"
 
 namespace Greis
 {
@@ -79,5 +78,3 @@ namespace Greis
         Types::i1 _cURAoc2;
     };
 }
-
-#endif // GPSEphemeris1CustomType_h__

@@ -1,11 +1,10 @@
-#ifndef GPSEphemeris0StdMessage_h__
-#define GPSEphemeris0StdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GpsEphReqDataCustomType.h"
+#include "Greis/CustomType/GpsEphReqDataCustomType.h"
 
 namespace Greis
 {
@@ -89,5 +88,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // GPSEphemeris0StdMessage_h__

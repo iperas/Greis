@@ -1,11 +1,10 @@
-#ifndef ClockOffsetsStdMessage_h__
-#define ClockOffsetsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/ClkOffsCustomType.h"
+#include "Greis/CustomType/ClkOffsCustomType.h"
 
 namespace Greis
 {
@@ -61,5 +60,3 @@ namespace Greis
         Types::u2 _crc16;
     };
 }
-
-#endif // ClockOffsetsStdMessage_h__

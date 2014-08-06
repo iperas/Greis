@@ -1,11 +1,10 @@
-#ifndef RawMeasStdMessage_h__
-#define RawMeasStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/SvData2CustomType.h"
+#include "Greis/CustomType/SvData2CustomType.h"
 
 namespace Greis
 {
@@ -81,5 +80,3 @@ namespace Greis
         Types::u2 _crc16;
     };
 }
-
-#endif // RawMeasStdMessage_h__

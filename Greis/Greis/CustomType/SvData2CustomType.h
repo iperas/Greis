@@ -1,12 +1,11 @@
-#ifndef SvData2CustomType_h__
-#define SvData2CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
-#include "CustomType/HeaderCustomType.h"
-#include "CustomType/SlotRecCustomType.h"
+#include "Greis/CustomType/HeaderCustomType.h"
+#include "Greis/CustomType/SlotRecCustomType.h"
 
 namespace Greis
 {
@@ -38,5 +37,3 @@ namespace Greis
         std::vector<SlotRecCustomType::UniquePtr_t> _slot;
     };
 }
-
-#endif // SvData2CustomType_h__

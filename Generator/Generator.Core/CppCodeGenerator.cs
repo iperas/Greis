@@ -30,6 +30,7 @@ namespace Generator.Core
         private const string RecalculateChecksumStubToken = "// ${RecalculateChecksumStub}";
         private const string StdMessagesDir = "StdMessage";
         private const string CustomTypesDir = "CustomType";
+        private const string IncludeDir = "Greis";
         private const int CountOfCommonFieldsInMsgTable = 5;
         private const int CountOfCommonFieldsInCtTable = 4;
         private readonly MetaInfo metaInfo;
@@ -760,7 +761,7 @@ namespace Generator.Core
 
             // IncludesStubToken
             var includeLines = msg.Variables.Where(v => !this.simpleTypes.Contains(v.GreisType)).
-                Select(v => string.Format("#include \"{1}/{0}CustomType.h\"", GetLowerCamelCase(v.GreisType), CustomTypesDir)
+                Select(v => string.Format("#include \"{2}/{1}/{0}CustomType.h\"", GetLowerCamelCase(v.GreisType), CustomTypesDir, IncludeDir)
                 ).ToArray();
             var contentIncludes = string.Join("\r\n", includeLines);
             if (includeLines.Length > 0)
@@ -1133,8 +1134,8 @@ namespace Generator.Core
 
             var includeLines = this.metaInfo.StandardMessages.OrderBy(msg => msg.Name).
                 Select((msg, i) =>
-                       string.Format("#include \"{0}/{1}StdMessage.h\"", StdMessagesDir,
-                                     this.stdMessagesNameProvider.GetName(msg))).ToArray();
+                       string.Format("#include \"{2}/{0}/{1}StdMessage.h\"", StdMessagesDir,
+                                     this.stdMessagesNameProvider.GetName(msg), IncludeDir)).ToArray();
             
             var includesContent = string.Join("\r\n", includeLines);
             var fileContent = templateStr.Replace(IncludesStubToken, includesContent);
@@ -1153,8 +1154,8 @@ namespace Generator.Core
 
             var includeLines = this.metaInfo.CustomTypes.OrderBy(ct => ct.Name).
                 Select((ct, i) =>
-                       string.Format("#include \"{0}/{1}CustomType.h\"", CustomTypesDir,
-                                     this.customTypeNameProvider.GetName(ct))).ToArray();
+                       string.Format("#include \"{2}/{0}/{1}CustomType.h\"", CustomTypesDir,
+                                     this.customTypeNameProvider.GetName(ct), IncludeDir)).ToArray();
             
             var includesContent = string.Join("\r\n", includeLines);
             var fileContent = templateStr.Replace(IncludesStubToken, includesContent);

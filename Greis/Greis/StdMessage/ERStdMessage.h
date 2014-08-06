@@ -1,9 +1,8 @@
-#ifndef ERStdMessage_h__
-#define ERStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -35,5 +34,3 @@ namespace Greis
         std::string _error;
     };
 }
-
-#endif // ERStdMessage_h__

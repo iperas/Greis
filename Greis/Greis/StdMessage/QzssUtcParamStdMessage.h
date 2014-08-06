@@ -1,11 +1,10 @@
-#ifndef QzssUtcParamStdMessage_h__
-#define QzssUtcParamStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/UtcOffsCustomType.h"
+#include "Greis/CustomType/UtcOffsCustomType.h"
 
 namespace Greis
 {
@@ -42,5 +41,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // QzssUtcParamStdMessage_h__

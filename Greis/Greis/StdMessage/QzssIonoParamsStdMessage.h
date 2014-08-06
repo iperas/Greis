@@ -1,11 +1,10 @@
-#ifndef QzssIonoParamsStdMessage_h__
-#define QzssIonoParamsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/IonoParams1CustomType.h"
+#include "Greis/CustomType/IonoParams1CustomType.h"
 
 namespace Greis
 {
@@ -37,5 +36,3 @@ namespace Greis
         IonoParams1CustomType::UniquePtr_t _par;
     };
 }
-
-#endif // QzssIonoParamsStdMessage_h__
