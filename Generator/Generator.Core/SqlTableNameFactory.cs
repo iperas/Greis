@@ -1,17 +1,19 @@
-namespace GreisDocParser
+using Generator.Core.Model;
+
+namespace Generator.Core
 {
     public class SqlTableNameFactory
     {
-        private readonly CustomTypeNameFactory _tableNameProvider;
+        private readonly CustomTypeNameFactory tableNameProvider;
 
         public SqlTableNameFactory(MetaInfo metaInfo)
         {
-            _tableNameProvider = new CustomTypeNameFactory(metaInfo, s => "msg_" + s.Name, s => "ct_" + s.Name);
+            this.tableNameProvider = new CustomTypeNameFactory(metaInfo, s => "msg_" + s.Name, s => "ct_" + s.Name);
         }
 
         public string GetName(CustomType ct)
         {
-            return _tableNameProvider.GetName(ct);
+            return this.tableNameProvider.GetName(ct);
         }
     }
 }

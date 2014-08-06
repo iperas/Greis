@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace GreisDocParser
+namespace Generator.Core.Model
 {
     [Serializable]
     public class Variable
     {
         public Variable()
         {
-            SizeOfDimensions = new List<int>();
+            this.SizeOfDimensions = new List<int>();
         }
 
         [XmlAttribute]
@@ -38,12 +38,12 @@ namespace GreisDocParser
             {
                 throw new FormatException("–азмерность 0 €вл€етс€ скал€ром и не имеет размера.");
             }
-            if (dimensionNumber > DimensionsCount || dimensionNumber < 0)
+            if (dimensionNumber > this.DimensionsCount || dimensionNumber < 0)
             {
                 throw new ArgumentOutOfRangeException("dimensionNumber");
             }
 
-            return SizeOfDimensions[dimensionNumber - 1];
+            return this.SizeOfDimensions[dimensionNumber - 1];
         }
 
         /// <summary>
@@ -57,23 +57,23 @@ namespace GreisDocParser
         [XmlIgnore]
         public int DimensionsCount
         {
-            get { return SizeOfDimensions.Count; }
+            get { return this.SizeOfDimensions.Count; }
         }
 
         [XmlAttribute]
         public string RequiredValue { get; set; }
         public string Comment { get; set; }
         [XmlIgnore]
-        public bool IsScalar { get { return DimensionsCount == 0; } }
+        public bool IsScalar { get { return this.DimensionsCount == 0; } }
         [XmlIgnore]
-        public bool IsLinearArray { get { return DimensionsCount == 1; } }
+        public bool IsLinearArray { get { return this.DimensionsCount == 1; } }
 
         public override string ToString()
         {
-            string dimStr = IsScalar 
+            string dimStr = this.IsScalar 
                 ? "" 
-                : string.Concat(SizeOfDimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValue.Fill ? "" : v.ToString(), "]")));
-            return string.Format(@"{0} {1}{2}", GreisType, Name, dimStr);
+                : string.Concat(this.SizeOfDimensions.Select(v => string.Concat("[", v == (int) SizeSpecialValue.Fill ? "" : v.ToString(), "]")));
+            return string.Format(@"{0} {1}{2}", this.GreisType, this.Name, dimStr);
         }
     }
 }

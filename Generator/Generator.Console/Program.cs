@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Comindware.Localization.Lib.Utils;
 using CommandLine;
-using GreisDocParser;
+using Generator.Core;
+using Generator.Core.Model;
 using NLog;
 using NLog.Config;
 
-namespace Geenrator.Console
+namespace Generator.Console
 {
     class Program
     {
@@ -68,7 +65,7 @@ namespace Geenrator.Console
         {
             var metaInfo = MetaInfo.FromXmlFile(metaFile);
             var generator = new MySqlBaselineGenerator(metaInfo, databaseName);
-            generator.GenerateMysqlBaseline(Path.Combine(targetDir, DefaultSqlFileName));
+            generator.Generate(Path.Combine(targetDir, DefaultSqlFileName));
         }
 
         private static void GenerateMetaXml(string sourceFile, string targetDir)

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace GreisDocParser
+namespace Generator.Core.Model
 {
     [Serializable]
     public class StandardMessage : CustomType
     {
         public StandardMessage()
         {
-            Codes = new List<string>();
-            Type = MessageTypes.Unknown;
+            this.Codes = new List<string>();
+            this.Type = MessageTypes.Unknown;
         }
 
         [XmlAttribute]
@@ -24,7 +24,7 @@ namespace GreisDocParser
 
         public override string ToString()
         {
-            return Title;
+            return this.Title;
         }
     }
 }

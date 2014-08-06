@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace GreisDocParser
+namespace Generator.Core.Model
 {
     public class MetaInfo
     {
@@ -10,8 +10,8 @@ namespace GreisDocParser
 
         public MetaInfo()
         {
-            StandardMessages = new List<StandardMessage>();
-            CustomTypes = new List<CustomType>();
+            this.StandardMessages = new List<StandardMessage>();
+            this.CustomTypes = new List<CustomType>();
         }
 
         public List<StandardMessage> StandardMessages { get; set; }

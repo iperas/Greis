@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Comindware.Localization.Lib.Utils
+namespace Generator.Core
 {
     /// <summary>Provides some useful implements missing in the FCL.</summary>
     public static class PathHelper

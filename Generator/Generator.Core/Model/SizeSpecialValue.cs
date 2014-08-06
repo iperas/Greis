@@ -1,4 +1,4 @@
-namespace GreisDocParser
+namespace Generator.Core.Model
 {
     /// <summary>
     /// Для переменных:

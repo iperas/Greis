@@ -1,7 +1,7 @@
 using CommandLine;
 using CommandLine.Text;
 
-namespace Geenrator.Console
+namespace Generator.Console
 {
     public class Options
     {

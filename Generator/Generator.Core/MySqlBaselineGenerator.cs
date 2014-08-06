@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Comindware.Localization.Lib.Utils;
+using Generator.Core.Model;
 
-namespace GreisDocParser
+namespace Generator.Core
 {
     public class MySqlBaselineGenerator
     {
@@ -35,7 +35,7 @@ namespace GreisDocParser
         /// Создать начальное наполнение
         /// </summary>
         /// <param name="outFileName">Выходной файл.</param>
-        public void GenerateMysqlBaseline(string outFileName)
+        public void Generate(string outFileName)
         {
             var dirName = Path.GetDirectoryName(outFileName);
             if (dirName != null)

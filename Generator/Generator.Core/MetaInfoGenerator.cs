@@ -3,22 +3,67 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Generator.Core.Model;
 
-namespace GreisDocParser
+namespace Generator.Core
 {
     public class MetaInfoGenerator
     {
-        private static readonly List<string> _messagesWithFillBehavior = new List<string>()
-                                                                             {
-                                                                                 "SI", "AN", "NN", "EL", "AZ", "RC", "rc", "1R", "1r", "CC", "cc", 
-                                                                                 "PC", "pc", "CP", "cp", "DC", "1d", "EC", "CE", "FC", "TC", "SS", 
-                                                                                 "ID", "GD", "gd", "LD", "lD", "ED", "rT", "RE", "ER", "==", ">>", 
-                                                                                 "PM", "cd"
-                                                                             };
+        private static readonly List<string> MessagesWithFillBehavior = new List<string>
+            {
+                "SI",
+                "AN",
+                "NN",
+                "EL",
+                "AZ",
+                "RC",
+                "rc",
+                "1R",
+                "1r",
+                "CC",
+                "cc",
+                "PC",
+                "pc",
+                "CP",
+                "cp",
+                "DC",
+                "1d",
+                "EC",
+                "CE",
+                "FC",
+                "TC",
+                "SS",
+                "ID",
+                "GD",
+                "gd",
+                "LD",
+                "lD",
+                "ED",
+                "rT",
+                "RE",
+                "ER",
+                "==",
+                ">>",
+                "PM",
+                "cd"
+            };
 
-        private static readonly List<string> _almanacsAndEphemerisMessages = new List<string>() { "GA", "EA", "NA", "WA", "GE", "NE", "WE", "EN" };
+        private static readonly List<string> AlmanacsAndEphemerisMessages = new List<string>
+            {
+                "GA",
+                "EA",
+                "NA",
+                "WA",
+                "GE",
+                "NE",
+                "WE",
+                "EN"
+            };
 
-        private static readonly List<string> _messagesWithUniformFillBehavior = new List<string>() { "gC" };
+        private static readonly List<string> MessagesWithUniformFillBehavior = new List<string>
+            {
+                "gC"
+            };
         // rM - page 340, smartass rules (dynamic customTypes SvData2 & SlotRec also here)
         // LH - page 346, smartass rules
 
@@ -26,10 +71,10 @@ namespace GreisDocParser
 
         public static MetaInfo FromUserManual(string rawText)
         {
-            return parseText(rawText);
+            return ParseText(rawText);
         }
 
-        private static MetaInfo parseText(string text)
+        private static MetaInfo ParseText(string text)
         {
             // Retrieving standard messages
             var metaInfo = new MetaInfo();
@@ -50,12 +95,12 @@ namespace GreisDocParser
                     msg.Codes.Add(capture.Value);
                 }
                 msg.Name = m.Groups["name"].Value;
-                msg.Size = parseSize(msg.Codes[0], m.Groups["size"].Value);
-                msg.Type = getMessageType(msg.Codes[0]);
+                msg.Size = ParseSize(msg.Codes[0], m.Groups["size"].Value);
+                msg.Type = GetMessageType(msg.Codes[0]);
 
                 // Parsing variables
                 var content = m.Groups["content"].Value;
-                msg.Variables.AddRange(parseContent(content));
+                msg.Variables.AddRange(ParseContent(content));
                 // Checksum or crc16?
                 if (msg.Variables.Count > 0)
                 {
@@ -89,9 +134,9 @@ namespace GreisDocParser
             {
                 var ct = new CustomType();
                 ct.Name = m.Groups["name"].Value;
-                ct.Size = parseSize(ct.Name, m.Groups["size"].Value);
+                ct.Size = ParseSize(ct.Name, m.Groups["size"].Value);
                 var content = m.Groups["content"].Value;
-                ct.Variables.AddRange(parseContent(content));
+                ct.Variables.AddRange(ParseContent(content));
                 customTypes.Add(ct);
             }
             // correcting CustomType names with duplicates (with updating usages)
@@ -117,7 +162,7 @@ namespace GreisDocParser
                         defList[i].Name = typeName + i;
                         if (defList[i].Size == (int) SizeSpecialValue.Fill)
                         {
-                            defList[i].Size = parseSize(defList[i].Name, "");
+                            defList[i].Size = ParseSize(defList[i].Name, "");
                         }
                     }
                 }
@@ -133,30 +178,30 @@ namespace GreisDocParser
                 }
             }
 
-            resolveFixedSizeFields(metaInfo);
-            addGpsAlmsAndEphemerisTypes(metaInfo);
-            fixDocumentationBugs(metaInfo);
+            ResolveFixedSizeFields(metaInfo);
+            AddGpsAlmsAndEphemerisTypes(metaInfo);
+            FixDocumentationBugs(metaInfo);
 
             return metaInfo;
         }
 
-        private static void fixDocumentationBugs(MetaInfo metaInfo)
+        private static void FixDocumentationBugs(MetaInfo metaInfo)
         {
             // fixed in 03-2012 version
             //var waasEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "WAASEhemeris");
             //waasEphemeris.Size = 71;
         }
 
-        private static void addGpsAlmsAndEphemerisTypes(MetaInfo metaInfo)
+        private static void AddGpsAlmsAndEphemerisTypes(MetaInfo metaInfo)
         {
-            addCustomTypeFromStdMessage(metaInfo, "GPSAlm", true);
-            addCustomTypeFromStdMessage(metaInfo, "GPSEphemeris", true);
-            addCustomTypeFromStdMessage(metaInfo, "IonoParams", false);
-            addCustomTypeFromStdMessage(metaInfo, "GpsNavData", false);
-            addCustomTypeFromStdMessage(metaInfo, "GpsRawNavData", false);
+            AddCustomTypeFromStdMessage(metaInfo, "GPSAlm", true);
+            AddCustomTypeFromStdMessage(metaInfo, "GPSEphemeris", true);
+            AddCustomTypeFromStdMessage(metaInfo, "IonoParams", false);
+            AddCustomTypeFromStdMessage(metaInfo, "GpsNavData", false);
+            AddCustomTypeFromStdMessage(metaInfo, "GpsRawNavData", false);
         }
 
-        private static void addCustomTypeFromStdMessage(MetaInfo metaInfo, string msgName, bool removeCs)
+        private static void AddCustomTypeFromStdMessage(MetaInfo metaInfo, string msgName, bool removeCs)
         {
             var stdMsg = (CustomType) metaInfo.StandardMessages.First(m => m.Name == msgName);
 
@@ -190,12 +235,12 @@ namespace GreisDocParser
             }
         }
 
-        private static void resolveFixedSizeFields(MetaInfo metaInfo)
+        private static void ResolveFixedSizeFields(MetaInfo metaInfo)
         {
             var types = metaInfo.CustomTypes.Concat(metaInfo.StandardMessages).ToList();
 
             // size cache
-            Dictionary<string, int> nameToSizeCache = new Dictionary<string, int>();
+            var nameToSizeCache = new Dictionary<string, int>();
             foreach (var simpleType in Enum.GetNames(typeof (GreisTypes)))
             {
                 nameToSizeCache[simpleType] = int.Parse(simpleType[1].ToString(CultureInfo.InvariantCulture));
@@ -231,31 +276,31 @@ namespace GreisDocParser
             }
         }
 
-        private static MessageTypes getMessageType(string code)
+        private static MessageTypes GetMessageType(string code)
         {
-            if (_almanacsAndEphemerisMessages.Contains(code))
+            if (AlmanacsAndEphemerisMessages.Contains(code))
             {
                 return MessageTypes.AlmanacsAndEphemeris;
             }
             return MessageTypes.Unknown;
         }
 
-        private static int parseSize(string codeOrStructName, string sizeStr)
+        private static int ParseSize(string codeOrStructName, string sizeStr)
         {
             int size;
             if (int.TryParse(sizeStr, out size))
             {
                 return size;
             }
-            if (_messagesWithFillBehavior.Contains(codeOrStructName) ||
-                _messagesWithUniformFillBehavior.Contains(codeOrStructName))
+            if (MessagesWithFillBehavior.Contains(codeOrStructName) ||
+                MessagesWithUniformFillBehavior.Contains(codeOrStructName))
             {
                 return (int) SizeSpecialValue.Fill;
             }
             return (int) SizeSpecialValue.Dynamic;
         }
 
-        private static List<Variable> parseContent(string content)
+        private static List<Variable> ParseContent(string content)
         {
             var finalVariables = new List<Variable>();
             var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);

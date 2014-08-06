@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace GreisDocParser
+namespace Generator.Core.Model
 {
     [Serializable]
     public class CustomType
@@ -13,8 +13,8 @@ namespace GreisDocParser
 
         public CustomType()
         {
-            Variables = new List<Variable>();
-            Size = (int)SizeSpecialValue.Dynamic;
+            this.Variables = new List<Variable>();
+            this.Size = (int)SizeSpecialValue.Dynamic;
         }
 
         [XmlAttribute]
@@ -26,7 +26,7 @@ namespace GreisDocParser
         [XmlIgnore]
         public bool ContainsOptionalDataBlock
         {
-            get { return Variables.Any(v => v.Comment.Contains(BeginOfOptionalDataBlockLine)); }
+            get { return this.Variables.Any(v => v.Comment.Contains(BeginOfOptionalDataBlockLine)); }
         }
 
         [XmlIgnore]
@@ -35,7 +35,7 @@ namespace GreisDocParser
             get
             {
                 Variable prevVar = null;
-                foreach (var variable in Variables)
+                foreach (var variable in this.Variables)
                 {
                     if (prevVar != null && prevVar.Comment.Contains(BeginOfOptionalDataBlockLine))
                     {
@@ -45,7 +45,7 @@ namespace GreisDocParser
                 }
                 throw new Exception(
                     string.Format("`Optional data block` mark has not been found in comment of '{0}' Type.", 
-                    ToString()));
+                    this.ToString()));
             }
         }
 
@@ -54,20 +54,20 @@ namespace GreisDocParser
         {
             get
             {
-                var variable = Variables.FirstOrDefault(v => v.Comment.Contains(EndOfOptionalDataBlockLine));
+                var variable = this.Variables.FirstOrDefault(v => v.Comment.Contains(EndOfOptionalDataBlockLine));
                 if (variable != null)
                 {
                     return variable;
                 }
                 throw new Exception(
                     string.Format("`End of optional data block` mark has not been found in comment of '{0}' Type.", 
-                    ToString()));
+                    this.ToString()));
             }
         }
 
         public override string ToString()
         {
-            return string.Format(@"{0} {{{1}}}", Name, Size == (int)SizeSpecialValue.Dynamic ? "?" : Size.ToString());
+            return string.Format(@"{0} {{{1}}}", this.Name, this.Size == (int)SizeSpecialValue.Dynamic ? "?" : this.Size.ToString());
         }
     }
 }
