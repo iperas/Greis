@@ -2,6 +2,7 @@
 
 #include <boost/asio.hpp>
 #include <vector>
+#include <iostream>
 #include <QtCore/QtCore>
 
 #ifndef Q_OS_WIN
@@ -48,11 +49,13 @@ namespace Greis
          */
         SerialPortBinaryStream(std::string portName, unsigned int baudRate) : _io(), _serial(_io, portName)
         {
-#ifndef Q_OS_WIN
+#ifdef Q_OS_WIN
+            _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
+#else
             auto fd = _serial.native();
             struct serial_struct serinfo;
             struct termios options;
-            
+
             tcgetattr(fd, &options);
             cfsetispeed(&options, rate_to_constant(baudRate));
             cfsetospeed(&options, rate_to_constant(baudRate));
@@ -60,9 +63,6 @@ namespace Greis
                 std::cerr << "Failed to set attr";
                 return;
             }
-#endif
-#ifdef Q_OS_WIN
-            _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
 #endif
             _serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
             _serial.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
