@@ -1,4 +1,4 @@
-/* DATE: 30-01-2014 */
+/* DATE: 13-03-2012 */
 
 [JP] File Identifier
 struct FileId {85} {
@@ -33,9 +33,9 @@ always “MF009JP”.
 64…255 Reserved
 1. GLONASS only
 2. GPS only
-Table 3-4. Satellite Navigation Status
+Table 4-4. Satellite Navigation Status
 Value Meaning
-GREIS www.javad.com 69
+GREIS www.javad.com 327
 RECEIVER MESSAGES
 Standard Predefined Messages
 Time Messages
@@ -46,7 +46,7 @@ least significant bytes first order.
 The message format's major version is updated if and only if some backward incompatible
 changes to the existing message format are made. Any other changes to the existing
 messages result in updating only the minor version.
-3.4.4 Time Messages
+4.4.4 Time Messages
 [~~](RT) Receiver Time4
 This message contains the “time of day” part of the full receiver time representation
 (Tr).
@@ -74,7 +74,7 @@ u1 base; // Receiver reference time [enumerated]
 // 1 — UTC_USNO
 4. Use message name /msg/jps/RT to enable/disable the message.
 5. Use message name /msg/jps/ET to enable/disable the message.
-70 www.javad.com GREIS
+328 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Time Messages
@@ -115,7 +115,7 @@ f8 val; // (Tg - Tr) [s]
 f8 sval; // Smoothed (Tg - Tr) [s]
 u1 cs; // Checksum
 };
-GREIS www.javad.com 71
+GREIS www.javad.com 329
 RECEIVER MESSAGES
 Standard Predefined Messages
 Time Messages
@@ -138,7 +138,7 @@ f8 val; // (Te - Tr) [s]
 f8 sval; // Smoothed (Te - Tr) [s]
 u1 cs; // Checksum
 };
-[WO] SBAS to Receiver Time Offset
+[WO] WAAS/EGNOS to Receiver Time Offset
 struct RcvSBASTimeOffset {17} {
 f8 val; // (Tw - Tr) [s]
 f8 sval; // Smoothed (Tw - Tr) [s]
@@ -150,16 +150,6 @@ f8 val; // (Tq - Tr) [s]
 f8 sval; // Smoothed (Tq - Tr) [s]
 u1 cs; // Checksum
 };
-[CO] BeiDou to Receiver Time Offset
-struct RcvBeiDouTimeOffset {17} {
-f8 val; // (Tb - Tr) [s]
-f8 sval; // Smoothed (Tb - Tr) [s]
-u1 cs; // Checksum
-};
-72 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Time Messages
 [UO] GPS UTC Time Parameters
 struct GpsUtcParam {24} {
 UtcOffs utc; // GPS UTC time offset parameters
@@ -171,6 +161,10 @@ f4 a1; // First order term of polynomial [s/s]
 u4 tot; // Reference time of week [s]
 u2 wnt; // Reference week number []
 i1 dtls; // Delta time due to leap seconds [s]
+330 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Time Messages
 u1 dn; // 'Future' reference day number [1…7] []
 u2 wnlsf; // 'Future' reference week number []
 i1 dtlsf; // 'Future' delta time due to leap seconds [s]
@@ -179,7 +173,7 @@ This message describes the relationship between UTC(USNO) and GPS time as specif
 by GPS subframe 4, page 18.
 For how to convert GPS time into UTC(USNO), see ICD-GPS-200C, Revision IRN-
 200C-004 April 12, 2000.
-[WU] SBAS UTC Time Parameters
+[WU] WAAS/EGNOS UTC Time Parameters
 struct SbasUtcParam {32} {
 UtcOffs utc; // SBAS to UTC time offset parameters
 i1 utcsi; // UTC Standard Identifier[]
@@ -190,18 +184,6 @@ u1 cs; // Checksum
 };
 This message has much in common with the [UO] message. The utcsi field may have
 one of the following values:
-Table 3-5. UTC Standard Identifier
-Value Meaning
-0 UTC as operated by the Communications Research Laboratory (CRL), Tokyo,
-Japan
-1 UTC as operated by the National Institute of Standards and Technology (NIST)
-2 UTC as operated by the U. S. Naval Observatory (USNO)
-3 UTC as operated by the International Bureau of Weights and Measures (BIPM)
-[4…7] Reserved
-GREIS www.javad.com 73
-RECEIVER MESSAGES
-Standard Predefined Messages
-Time Messages
 [EU] GALILEO UTC and GPS Time Parameters
 struct GalUtcGpsParam {40} {
 UtcOffs utc; // GALILEO to UTC time offset parameters
@@ -215,14 +197,21 @@ u2 flags; // Flags of data availability [bitfield]
 // 1…15 - reserved
 u1 cs; // Checksum
 };
+Table 4-5. UTC Standard Identifier
+Value Meaning
+0 UTC as operated by the Communications Research Laboratory (CRL), Tokyo,
+Japan
+1 UTC as operated by the National Institute of Standards and Technology (NIST)
+2 UTC as operated by the U. S. Naval Observatory (USNO)
+3 UTC as operated by the International Bureau of Weights and Measures (BIPM)
+[4…7] Reserved
+GREIS www.javad.com 331
+RECEIVER MESSAGES
+Standard Predefined Messages
+Position/Velocity Messages
 [QU] QZSS UTC Time Parameters
 struct QzssUtcParam {24} {
 UtcOffs utc; // QZSS UTC time offset parameters
-u1 cs; // Checksum
-};
-[CU] BeiDou UTC Time Parameters
-struct BeiDouUtcParam {24} {
-UtcOffs utc; // BeiDou UTC time offset parameters
 u1 cs; // Checksum
 };
 [NU] GLONASS UTC and GPS Time Parameters
@@ -237,13 +226,9 @@ u1 N4; // Number of 4-year cycle [1…31]
 i2 Dn; // Day number within 4-year period []
 u1 cs; // Checksum
 };
-This message contains GLONASS UTC and GPS time paramters. Please refer to
-GLONASS ICD for details.
-74 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Position/Velocity Messages
-3.4.5 Position/Velocity Messages
+This message contains GLONASS UTC and GPS time paramters. Please refer to GLONASS
+ICD for details.
+4.4.5 Position/Velocity Messages
 [ST] Solution Time-Tag
 struct SolutionTime {6} {
 u4 time; // Solution time. Tr modulo 1 day (86400000 ms)[ms]
@@ -261,6 +246,11 @@ f4 sigma; // Position SEP6 [m]
 u1 solType; // Solution type
 u1 cs; // Checksum
 };
+6. SEP stands for Spherical Error Probable
+332 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Position/Velocity Messages
 [VE] Cartesian Velocity
 struct Vel {18} {
 f4 x, y, z; // Cartesian velocity vector [m/s]
@@ -277,11 +267,6 @@ struct PosVel {46} {
 u1 solType; // Solution type
 u1 cs; // Checksum
 };
-6. SEP stands for Spherical Error Probable
-GREIS www.javad.com 75
-RECEIVER MESSAGES
-Standard Predefined Messages
-Position/Velocity Messages
 [PG] Geodetic Position
 struct GeoPos {30} {
 f8 lat; // Latitude [rad]
@@ -309,6 +294,10 @@ struct Rms {18} {
 u1 solType; // Solution type
 u1 cs; // Checksum
 };
+GREIS www.javad.com 333
+RECEIVER MESSAGES
+Standard Predefined Messages
+Position/Velocity Messages
 [DP] Dilution of Precision (DOP)
 struct Dops {14} {
 f4 hdop; // Horizontal dilution of precision (HDOP)[]
@@ -328,10 +317,6 @@ f4 xz; // [m^2]
 f4 xt; // [m^2]
 f4 yz; // [m^2]
 f4 yt; // [m^2]
-76 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Position/Velocity Messages
 f4 zt; // [m^2]
 u1 solType; // Solution type
 u1 cs; // Checksum
@@ -359,23 +344,7 @@ u1 solType; // Solution type
 i4 time; // receiver time of the baseline estimate [s]
 u1 cs; // Checksum
 };
-[bL] Attitude Baselines
-struct Baselines {52} {
-f4 bl0[3]; // baseline vector M-S0 [m]
-f4 bl1[3]; // baseline vector M-S1 [m]
-f4 bl2[3]; // baseline vector M-S2 [m]
-f4 rms[3]; // estimated accuracies for baseline vectors [m]
-u1 solType[3]; // solution types for baseline vectors
-u1 cs; // Checksum
-};
-[mR] Attitude Full Rotation Matrix
-struct FullRotationMatrix {37} {
-f4 q00, q01, q02; // components of the rotation matrix Q []
-f4 q10, q11, q12; // components of the rotation matrix Q []
-f4 q20, q21, q22; // components of the rotation matrix Q []
-u1 cs; // Checksum
-};
-GREIS www.javad.com 77
+334 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Position/Velocity Messages
@@ -415,11 +384,11 @@ u1 cs; // Checksum
 Specifies the time interval over which continuous position computation has been possible.
 If the receiver is unable to compute any position at the current epoch, the Time of
 Continuous Position Computation counter is zeroed.
-78 www.javad.com GREIS
+GREIS www.javad.com 335
 RECEIVER MESSAGES
 Standard Predefined Messages
 Satellite Measurements
-3.4.6 Satellite Measurements
+4.4.6 Satellite Measurements
 In this section we will focus on messages containing “satellite specific information”.
 These kinds of messages include satellite measurements (code and carrier phase measurements,
 elevations, azimuths, etc.).
@@ -438,119 +407,28 @@ For multi-antenna receivers, given USI typically appears multiple times in every
 message, indexing observables obtained from different antennas. The [AN] message
 should then be used to determine which antenna the observables are obtained from.
 Note: Most of the measurements messages may contain special values of corresponding types to indicate
-lack of data for particular satellite(s). Refer to Table 3-2, “Special Values for Fields,” on
-page 59 for details.
+lack of data for particular satellite(s). Refer to Table 4-2, “Special Values for Fields,” on
+page 317 for details.
 Universal Satellite Identifier (USI)
 To make it possible to handle data corresponding to satellites of different systems in a
 universal manner, we assign each satellite its Universal Satellite Identifier (USI).
 The following table describes USI allocation:
-Table 3-6. Universal Satellite Identifiers (USI) Allocation
+Table 4-6. Universal Satellite Identifiers (USI) Allocation
 USI Range Assigned Satellites
 0 Unused. Ignore satellites with this USI
 [1…37] GPS PRNs [1…37]
 [38…69] GLONASS FCNs [-7…24]
 70 GLONASS satellite with unknown FCN1
-[71…119] GALILEO PRNs [1…49]
-[120…142] SBAS PRNs [120…142]
-[143…192] Reserved
-GREIS www.javad.com 79
+[71…119] GALILEO [1…49]
+[120…138] SBAS (WAAS/EGNOS) PRNs [120…138]
+[139…192] Reserved
+336 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Satellite Measurements
-Satellite Signals Allocation and Frequencies
-Even though every satellite system has its own set of signals and their names, we formally
-call all the signals CA/L1, P/L1, P/L2, CA/L2, L5, and L1C in GREIS. Standard
-signal names of all supported satellite systems and their carrier frequencies, along with
-corresponding GREIS names, are shown in the following table:
-Alignment of Phase Measurements
-Receiver provides phase measurements "as they are", applying no corrections whatsoever
-(no 1/4 cycle, no 1/2 cycle, no any other), therefore phase relations (e.g., between
-GPS P2 and L2C signals) are exactly as described in corresponding system ICD. For
-complex signals (composed of pilot and data signals) receiver phase always refers to the
-pilot (dataless) signal.
-[193…197] QZSS PRNs [193…197]
-[198…210] Reserved
-[211…240] BeiDou (COMPASS) PRNs [1…30]
-[241…254] Reserved
-255 Unused. Ignore satellites with this USI
-1. Could be useful when converting third-party GLONASS
-measurement file into GREIS format.
-Table 3-7. Satellite Signals Allocation
-GREIS CA/L1 P/L1 P/L2 CA/L2 L5 L1C
-GPS
-MHz
-C/A
-1575.42
-P1
-1575.42
-P2
-1227.60
-L2C(L+M)
-1227.60
-L5(I+Q)
-1176.45
-L1C(I+Q)
-1575.42
-QZSS
-MHz
-C/A
-1575.42
-SAIF
-1575.42
-LEX(P+D)
-1278.75
-L2C(L+M)
-1227.60
-L5(I+Q)
-1176.45
-L1C(I+Q)
-1575.42
-SBAS
-MHz
-L1
-1575.42
-L5
-1176.45
-GALILEO
-MHz
-E1(B+C)
-1575.42
-E5 altboc
-1191.795
-E5B(I+Q)
-1207.14
-E6(B+C)
-1278.75
-E5A(I+Q)
-1176.45
-GLONASS
-MHz
-CA/L1
-L1frq
-1
-1. L1frq = 1602 + FCN * 0.5625
-P1
-L1frq
-P2
-L2frq
-2
-2. L2frq = 1246 + FCN * 0.4375
-CA/L2
-L2frq
-L3(I+Q)
-1202.025
-BeiDou
-MHz
-B1-1
-1561.098
-B2
-1207.14
-Table 3-6. Universal Satellite Identifiers (USI) Allocation
-USI Range Assigned Satellites
-80 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
+Satellite System Frequencies
+Even though every satellite system has its own set of signal frequencies and their names,
+we call frequencies L1, L2, and L5 in GREIS independent of satellite system:
 [SI] Satellite Indices
 struct SatIndex {nSats+1} {
 u1 usi[nSats]; // USI array []
@@ -565,6 +443,26 @@ since it establishes the one-to-one correspondence between the satellite identif
 array index allocated to this satellite. Bear in mind that this correspondence holds true
 until the next [SI] message is issued (note that the new [SI] message may or may not differ
 from the previous one).
+[193…197] QZSS PRNs [193…197]
+[198…210] Reserved
+[211…240] COMPASS
+[241…254] Reserved
+255 Unused. Ignore satellites with this USI
+1. Could be useful when converting third-party GLONASS
+measurement file into GREIS format.
+Table 4-7. Satellite Signal Frequencies
+System L1,MHz L2,MHz L5,MHz
+GPS 1575.42 1227.60 1176.45
+SBAS 1575.42 - 1176.45
+GALILEO 1575.42 - 1176.45 (E5a)
+GLONASS 1602+ FCN*0.5625 1246+FCN*0.4375 -
+7. As specified by /par/out/elm/[port] parameter.
+Table 4-6. Universal Satellite Identifiers (USI) Allocation
+USI Range Assigned Satellites
+GREIS www.javad.com 337
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 [AN] Antenna Names
 struct AntName{nSats+1} {
 a1 name[nSats]; // Antenna names[a…z]
@@ -582,11 +480,6 @@ The [NN] message contains the orbit slot number for every GLONASS satellite from
 latest [SI] message. Here nGloSats designates the number of GLONASS satellites in the
 corresponding [SI] message (remember that GLONASS satellites have USI lying within
 the range [38…70]).
-7. As specified by /par/out/elm/[port] parameter.
-GREIS www.javad.com 81
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
 [EL] Satellite Elevations
 struct SatElevation {nSats+1} {
 ! i1 elev[nSats]; // Elevation angle [degrees] [-90…90)
@@ -606,12 +499,16 @@ struct PR {8*nSats+1} {
 ! f8 pr[nSats]; // Pseudorange, [s]
 u1 cs; // Checksum
 };
+338 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 These messages contain corresponding pseudoranges for all the satellites specified in
 the latest [SI] message. The messages contain CA/L1, P/L1, P/L2, CA/L2, L5, and L1C
 pseudoranges, respectively.
 [rc], [r1], [r2], [r3], [r5], [rl]: Pseudoranges
 struct SPR {4*nSats+1} {
-! i4 spr[nSats]; // (PR[s] - Asys) / Ksys
+! i4 spr[nSats]; // (PR[s] - Asys) * 1011
 u1 cs; // Checksum
 };
 These messages contain corresponding short pseudoranges for all the satellites specified
@@ -620,13 +517,9 @@ and L1C pseudoranges, respectively.
 Use the following formula to restore true pseudoranges in seconds:
 pr = spr * Ksys + Asys
 where:
-Asys is 0.115 for SBAS, 0.09 for GALILEO8, 0.125 for QZSS, 0.105 for BeiDou, and
-0.075 for other systems.
-82 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
-Ksys is 2*10-11 for QZSS and BeiDou, and 10-11 for other systems.
+Asys is 0.115 for WAAS/EGNOS, 0.09 for GALILEO8, 0.125 for QZSS and COMPASS,
+and 0.075 for other systems.
+Ksys is 2*10-11 for QZSS and COMPASS, and 10-11 for other systems.
 [1R], [2R], [3R], [5R], [lR]: Relative Pseudoranges
 struct RPR {4*nSats+1} {
 ! f4 rpr[nSats]; // PR - CA/L1 PR, [s]
@@ -638,6 +531,11 @@ relative P/L1, P/L2, CA/L2, L5, and L1C pseudoranges, respectively.
 Use the following formula to restore true pseudorange in seconds:
 pr = rpr + prCA1
 where prCA1 is corresponding CA/L1 pseudorange.
+8. For firmware versions before April,1,2011, this value was set to 0.075
+GREIS www.javad.com 339
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 [1r], [2r], [3r], [5r], [lr]: Relative Pseudoranges
 struct SRPR {2*nSats+1} {
 ! i2 srpr[nSats]; // (PR[s] - CA/L1 PR[s] - 2*10-7) * 1011
@@ -655,11 +553,6 @@ struct SC {6*nSats+1} {
 u1 cs; // Checksum
 };
 where “Smooth” format is defined as follows:
-8. For firmware versions before April,1,2011, this value was set to 0.075
-GREIS www.javad.com 83
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
 struct Smooth {6} {
 ! f4 value; // Smoothing correction [s]
 ! u2 interval; // Smoothing interval [s]
@@ -677,6 +570,10 @@ u1 cs; // Checksum
 };
 These messages contain corresponding short pseudorange smoothing corrections for all
 the satellites specified in the latest [SI] message. The [cc], [c1], [c2], [c3], [c5], and [cl]
+340 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 messages contain short CA/L1, P/L1, P/L2, CA/L2, L5, and L1C smoothing corrections,
 respectively.
 Use the following formula to compute smoothed pseudoranges in seconds:
@@ -695,11 +592,7 @@ struct SCP {4*nSats+1} {
 u1 cs; // Checksum
 };
 Note: The “scp” field will have discontinuities due to rollovers. Refer to “Compensating for Phase
-Rollovers” on page 447 for details.
-84 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
+Rollovers” on page 415 for details.
 These messages contain corresponding short carrier phases for all the satellites specified
 in the latest [SI] message. The messages contain short CA/L1, P/L1, P/L2, CA/L2, L5,
 and L1C carrier phases, respectively.
@@ -714,6 +607,10 @@ These messages contain differences between the full corresponding carrier phases
 the matching [RC] pseudoranges for all the satellites specified in the latest [SI] message.
 The messages contain CA/L1, P/L1, P/L2, CA/L2, L5, and L1C carrier phases, respectively.
 Use the following formula to compute true carrier phases in cycles:
+GREIS www.javad.com 341
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 cp = (rcp + prRC) * FLn
 where:
 prRC – is the value taken from corresponding [RC] message,
@@ -732,10 +629,6 @@ respectively.
 Use the following formula to retrieve true carrier phases in cycles:
 cp = (rcp * 2-40 + pr_rc) * FLn
 where:
-GREIS www.javad.com 85
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
 pr_rc – is the value taken from corresponding [rc] message, and converted to seconds
 as specified in the description of the [rc] message.
 FLn – is nominal Ln carrier frequency for corresponding satellite, e.g., nominal L2
@@ -751,6 +644,10 @@ in the latest [SI] message. The messages contain CA/L1, P/L1, P/L2, CA/L2, L5, a
 L1C doppler, respectively.
 Use the following formula to compute true doppler:
 doppler = dp * 10-4
+342 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 [1d], [2d], [3d], [5d], [ld]: Relative Doppler
 struct SRDP {2*nSats+1} {
 ! i2 srdp[nSats]; // (dp * FL1/FLn - dpCA1)[Hz*10-4]
@@ -766,10 +663,6 @@ dpDC – is the value dp taken from the [DC] message for given SV,
 FL1 – is the nominal L1 frequency of the corresponding satellite,
 FLn – is the nominal Ln frequency of the corresponding satellite, e.g., nominal L2
 frequency for [2d] and [3d] messages.
-86 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
 [EC], [E1], [E2], [E3], [E5], [El]: SNR
 struct CNR {nSats+1} {
 ! u1 cnr[nSats]; // C/N0 [dB*Hz]
@@ -788,6 +681,10 @@ specified in the latest [SI] message. The messages contain CA/L1, P/L1, P/L2,
 CA/L2, L5, and L1C carrier to noise ratio multiplied by 4, respectively.
 Use the following formula to compute true carrier to noise ratio in dB*Hz:
 cnr = cnrX4 * 0.25
+GREIS www.javad.com 343
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 [FC],[F1],[F2],[F3],[F5],[Fl]: Signal Lock Loop Flags
 struct Flags {2*nSats+1} {
 u2 flags[nSats]; // Lock Loop Flags [bitfield]
@@ -797,18 +694,6 @@ These messages contain an array of corresponding signal lock loop flags for all 
 specified in the latest [SI] message. The messages contain CA/L1, P/L1, P/L2,
 CA/L2, L5, and L1C signal lock loop flags, respectively.
 The following flags are defined:
-bit# Hex Mask Description
-0 0x0001 PLL is in phase lock
-1 0x0002 Satellite signal strength is sufficient
-2…3 0x0004 Unused
-4 0x0010 CLL is in steady state phase lock
-5 0x0020 Loss-of-lock occurred in PLL between the previous and the current epochs
-6 0x0040 Integral indicator: all data are good
-7 0x0080 Not Used
-GREIS www.javad.com 87
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
 Note: bit#5 is not suitable for loss-of-lock detection in applications, – use [TC] message for this purpose
 instead.
 The simplest approach to data validation is keeping track of only bit #6. As long as this
@@ -824,6 +709,21 @@ loop having reached the “steady state” and therefore are considered the least no
 In fact, it is not infrequent that raw data are used even if bit #6 is not set. In such cases,
 however, all responsibility for providing valid results rests with the user.
 Bits ##0…3 are used for internal purposes.
+bit# Hex Mask Description
+0 0x0001 PLL is in phase lock
+1 0x0002 Satellite signal strength is sufficient
+2…3 0x0004 Unused
+4 0x0010 CLL is in steady state phase lock
+5 0x0020 Loss-of-lock occurred in PLL between the previous and the current epochs
+6 0x0040 Integral indicator: all data are good
+7 0x0080 Not Used
+8 0x0100 Preamble detected
+9…15 0xFE00 Reserved for internal purposes
+9. Say, at a level of unmodeled pseudorange errors.
+344 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 [ec], [e1], [e2], [e3], [e5]: Raw Inphases (I)
 struct IAmp {2*nSats+1} {
 ! i2 amp[nSats]; // (I) amplitudes
@@ -831,8 +731,7 @@ u1 cs; // Checksum
 };
 These messages contain signal inphase (I) amplitudes for all the satellites specified in
 the latest [SI] message. The messages contain CA/L1, P/L1, P/L2, CA/L2, and L5
-amplitudes, respectively. The amplitudes are smoothed over the interval specified by the
-/par/raw/iqsmi parameter.
+amplitudes, respectively. The amplitudes are averaged on 5 milliseconds interval.
 [qc], [q1], [q2], [q3], [q5]: Raw Quadratures (Q)
 struct QAmp {2*nSats+1} {
 ! i2 amp[nSats]; // (Q) amplitudes
@@ -840,16 +739,7 @@ u1 cs; // Checksum
 };
 These messages contain signal quadrature (Q) amplitudes for all the satellites specified
 in the latest [SI] message. The messages contain CA/L1, P/L1, P/L2, CA/L2, and L5
-8 0x0100 Preamble detected
-9…15 0xFE00 Reserved for internal purposes
-bit# Hex Mask Description
-9. Say, at a level of unmodeled pseudorange errors.
-88 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Satellite Measurements
-amplitudes, respectively. The amplitudes are smoothed over the interval specified by the
-/par/raw/iqsmi parameter.
+amplitudes, respectively. The amplitudes are averaged on 5 milliseconds interval.
 [TC] CA/L1 Continuous Tracking Time
 struct TrackingTimeCA {2*nSats+1} {
 u2 tt[nSats]; // tracking time [s]
@@ -870,8 +760,12 @@ u1 cs; // Checksum
 };
 This message contains navigation status for all the satellites specified in the latest [SI]
 message. In addition, this message indicates which receiver positioning mode the status
+GREIS www.javad.com 345
+RECEIVER MESSAGES
+Standard Predefined Messages
+Satellite Measurements
 belongs to. For detailed information on the navigation status, see “Satellite Navigation
-Status” on page 66.
+Status” on page 324.
 [ID] Ionospheric Delays
 struct IonoDelay {4*nSats+1} {
 ! f4 delay[nSats]; // Ionospheric delay [s]
@@ -879,21 +773,11 @@ u1 cs; // Checksum
 };
 This message contains estimated ionospheric delays as computed by using the L1 minus
 L2 frequency combination for all the satellites specified in the latest [SI] message.
-[rr] Satellite Range Residuals
-struct RangeResidual {4*nSats+1} {
-! f4 res[nSats]; // Range residual [m]
-u1 cs; // Checksum
-};
-GREIS www.javad.com 89
+346 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
-[vr] Satellite Velocity Residuals
-struct VelocityResidual {4*nSats+1} {
-! f4 res[nSats]; // Radial velocity residual [m]
-u1 cs; // Checksum
-};
-3.4.7 Almanacs and Ephemeris
+4.4.7 Almanacs and Ephemeris
 [GA] GPS Almanac
 struct GPSAlm {47} {
 u1 sv; // SV PRN number within the range [1…37]
@@ -932,27 +816,19 @@ GPSAlm gps; // Without ‘cs’ field, gps.sv within the range [1…30]
 i2 iod; // Issue of almanac data []
 u1 cs; // Checksum
 };
-90 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Almanacs and Ephemeris
 [QA] QZSS Almanac
 struct QZSSAlm {47} {
 // GPS-alike data
-GPSAlm gps; // ‘gps.sv’ within the range [193…197]
+GPSAlm gps; // Without ‘cs’ field, gps.sv within the range [193…197]
+u1 cs; // Checksum
 };
-[CA] BeiDou Almanac
-struct BeiDouAlm {47} {
-// GPS-alike data
-GPSAlm gps; // ‘gps.sv’ within the range [1…30]
-};
-GREIS www.javad.com 91
+GREIS www.javad.com 347
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
 [NA] GLONASS Almanac
 struct GLOAlmanac {47 | 52} {
-u1 sv; // Satellite orbit slot number within [1…32] []
+u1 sv; // Satellite orbit slot number within [1…24] []
 i1 frqNum; // Satellite frequency channel number [-7…24] []
 i2 dna; // Day number within 4-year period starting
 // with the leap year []
@@ -987,9 +863,9 @@ f4 gammaN; // Rate of coarse satellite clock correction to
 // --- End of optional data block ---
 u1 cs; // Checksum
 };
-[WA] SBAS Almanac
+[WA] WAAS/EGNOS Almanac
 struct SBASAlmanac {51} {
-u1 waasPrn; // SBAS SV PRN number within [120…142]
+u1 waasPrn; // SBAS SV PRN number within [120…138]
 u1 gpsPrn; // GPS SV PRN associated with SBAS SV
 u1 id; // Data ID
 u1 healthS; // Satellite health [bitfield]:
@@ -1005,7 +881,7 @@ u4 tow; // time of GPS week almanac was received at
 u2 wn; // GPS week this almanac was received at
 u1 cs; // Checksum
 };
-92 www.javad.com GREIS
+348 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
@@ -1066,7 +942,7 @@ f4 incDot; // Rate of inclination angle [semi-circle/s]
 f4 crc; // Amplitude of the cosine harmonic correction term
 // to the orbit radius [m]
 f4 crs; // Amplitude of the cosine harmonic correction term
-GREIS www.javad.com 93
+GREIS www.javad.com 349
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
@@ -1104,22 +980,13 @@ struct QZSSEphemeris {123 | 148} {
 GPSEphemeris gps; // Without ‘cs’, ‘gps.sv’ within the range[193…197]
 u1 cs; // Checksum
 };
-[CN] BeiDou Ephemeris
-struct BeiDouEphemeris {128} {
-GpsEphReqData req; // GPS required data, ‘req.sv’ within the range [1…30]
-// --- BeiDou-specific data block ---
-f4 tgd2; //
-u1 navType // Type of navigation data
-// --- End of BeiDou-specific data block ---
-u1 cs; // Checksum
-};
-94 www.javad.com GREIS
+350 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
 [NE] GLONASS Ephemeris
 struct GLOEphemeris {88 | 103} {
-! u1 sv; // Satellite orbit slot number [1…32] []
+! u1 sv; // Satellite orbit slot number [1…24] []
 i1 frqNum; // Satellite frequency channel number [-7…24] []
 ! i2 dne; // Day number within 4-year period []
 i4 tk; // Frame start time within current day [s]
@@ -1172,7 +1039,7 @@ u2 flags2; // Flags (for details, see GLONASS ICD) [bitfield]:
 // 4…5 - GLONASS-M M
 // 6 - GLONASS-M ln (fifth string)
 // 7…15 - reserved
-GREIS www.javad.com 95
+GREIS www.javad.com 351
 RECEIVER MESSAGES
 Standard Predefined Messages
 Almanacs and Ephemeris
@@ -1188,9 +1055,9 @@ u2 reserv;
 // --- End of optional data block ---
 u1 cs; // Checksum
 };
-[WE] SBAS Ephemeris
+[WE] WAAS/EGNOS Ephemeris
 struct SBASEhemeris {73} {
-u1 waasPrn; // SBAS SV PRN number within [120…142]
+u1 waasPrn; // SBAS SV PRN number within [120…138]
 u1 gpsPrn; // GPS SV PRN associated with SBAS SV
 u1 iod; // Issue of data
 u1 acc; // SBAS SV accuracy10
@@ -1210,11 +1077,11 @@ u2 flags; // Flags [bitfield]:
 u1 cs; // Checksum
 };
 10. For details, see ICD-GPS-200C, Revision IRN-200C-004 April 12, 2000.
-96 www.javad.com GREIS
+352 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 Raw Navigation Data
-3.4.8 Raw Navigation Data
+4.4.8 Raw Navigation Data
 [GD] GPS Raw Navigation Data (obsolete)
 struct GpsNavData {N*recSize+2} {
 u1 recSize; // Size of satellite data record (currently 42)
@@ -1239,23 +1106,22 @@ struct GpsRawNavData {len*4+8} {
 u1 prn; // Pseudo-Range Number (PRN)
 u4 time; // Time of receiving of message [s]
 u1 type; // Type of data:
-// 0 - L1 NAV
-// 1 - L2C CNAV
-// 2 - L5 CNAV
-// 3 - L1C CNAV2
+// 0 - GPS L1 NAV
+// 1 - GPS L2C CNAV
+// 2 - GPS L5 CNAV
+// 3 - GPS L1C CNAV2
 u1 len; // Length of the navigation data block ‘data’
 u4 data[len]; // Navigation data block
 u1 cs; // Checksum
 };
-In the data field of the message, when type field is set to L1, every element contains 30
-LSBits of navigation data; when type field is set to anything else, all 32 bits are used.
-The most significant bit corresponds to the first broadcast symbol.
+In the data field of the message the most significant bit of the first byte corresponds to
+the first broadcast symbol.
 [QD] QZSS Raw Navigation Data (obsolete)
 struct QzssNavData {N*recSize+2} {
 GpsNavData data;
 };
 This format is obsolete. Use [qd] message instead.
-GREIS www.javad.com 97
+GREIS www.javad.com 353
 RECEIVER MESSAGES
 Standard Predefined Messages
 Raw Navigation Data
@@ -1283,7 +1149,7 @@ When decoding this message it’s essential to remember the value of the cnt field
 last received data block for every satellite and ignore consecutive sub-frames with
 matching value of the cnt field, if any.
 [lD] GLONASS Raw Navigation Data
-struct GloRawNavData {len*4+9} {
+struct GloRawNavData {len+9} {
 ! u1 num; // SV number
 ! i1 fcn; // SV frequency code number
 u4 time; // GLONASS time of receiving of message [s]
@@ -1291,24 +1157,21 @@ u1 type; // Type of data:
 // 0 - L1
 // 1 - L3
 u1 len; // Length of the navigation data block ‘data’
-u4 data[len]; // Navigation data block
+u1 data[len]; // Navigation data block
 u1 cs; // Checksum
 };
-In the data field of the message, when type field is set to L1, every element contains 25
-LSBits of the string of GLONASS sub-frame; when type field is set to L3, all 32 bits are
-used. The most significant bit corresponds to the first broadcast symbol.
-98 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Spectrum Messages
-[WD] SBAS Raw Navigation Data
+[WD] WAAS/EGNOS Raw Navigation Data
 struct SbasRawNavData {40} {
-u1 prn; // SV PRN number within the range [120…142]
+u1 prn; // SV PRN number within the range [120…138]
 u4 time; // Time of receiving of message [s]
 u2 reserv; // Reserved
 u1 data[32]; // Navigation data block
 u1 cs; // Checksum
 };
+354 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Spectrum Messages
 In the data field of the message the most significant bit of the first byte corresponds to
 the first broadcast 4-ms data symbol. The field contains data starting from SBAS preamble
 up to and including SBAS checksum.
@@ -1329,27 +1192,27 @@ In the data field of the message the most significant bit of the first byte corr
 the first broadcast symbol.
 For GIOVE-E1B, the data field of the message contains navigation data starting from
 the “Res-1” field up to and including the “Tail” field.
-[cd] BeiDou Raw Navigation Data
+[cd] COMPASS Raw Navigation Data
 struct CompRawNavData {len*4+8} {
 u1 prn; // SV PRN number
-u4 time; // BeiDou Time of receiving of message [s]
+u4 time; // COMPASS Time of receiving of message [s]
 u1 type; // Type of data: TBD
 u1 len; // Length of the navigation data block ‘data’
 u4 data[len]; // Navigation data block
 u1 cs; // Checksum
 };
-3.4.9 Spectrum Messages
+4.4.9 Spectrum Messages
 In the spectrum messages, ‘n’ denotes the number of spectrums. It depends on receiver
 type and is equal to the number of RF bands implemented in the receiver. The order of
 particular set of spectrums always matches those of the following list:
-GREIS www.javad.com 99
-RECEIVER MESSAGES
-Standard Predefined Messages
-Hardware Calibrator Messages
 GPS L1, GPS L2, GPS L5, GLONASS L1, GLONASS L2, GALILEO E5B
 For example, single-frequency GPS/GLONASS receiver will have 2 spectrums, GPS
 L1, and GLONASS L1, in this particular order.
-Refer to “Spectrum Parameters” on page 424 for more information
+Refer to “Spectrum Parameters” on page 298 for more information
+GREIS www.javad.com 355
+RECEIVER MESSAGES
+Standard Predefined Messages
+GLONASS Hardware Calibrator Messages
 [sp] Spectrum
 struct Spectrum {n*m*2+7} {
 i2 currFrq; // Current frequency [Hz*104]
@@ -1376,37 +1239,23 @@ i2 spec[n]; // Spectrum values for n spectrums [dB*0.1]
 u1 agcmin[n]; // Min AGC values []
 u1 agcmax[n]; // Max AGC values []
 };
-3.4.10 Hardware Calibrator Messages
-Messages described in this section contain measurements obtained by the hardware calibrator
-(refer to “Hardware Calibrator” on page 191).
-[gC], [g1], [g2], [g3]: GLONASS Delays
-struct SvDelays {9} {
-i1 fcn; // GLONASS FCN[-7…6]
-f4 phase; // Phase delay [cycles]
-f4 range; // Range delay [s]
+4.4.10 GLONASS Hardware Calibrator Messages
+Messages described in this section contain measurements obtained by the GLONASS
+hardware calibrator (refer to “GLONASS Hardware Calibrator” on page 87).
+[gC], [g1], [g2], [g3]: GLONASS Phase Delays
+struct GloPhaseDelay {9*nFcn+1} {
+i1 fcn[nFcn]; // GLONASS FCN[-7…6]
+f4 phase[nFcn]; // Phase Delay, [cycles]
+f4 range[nFcn]; // Range (reserved for future use)
+u1 cs; // Checksum
 };
-100 www.javad.com GREIS
+The [gC], [g1], [g2], and [g3] messages contain CA/L1, P/L1, P/L2, and CA/L2 GLONASS
+phase delays, respectively.
+356 www.javad.com GREIS
 RECEIVER MESSAGES
 Standard Predefined Messages
 ADU Messages
-struct GloDelays {9*nFcn+1} {
-SvDelay del[nFcn]; // Delays
-u1 cs; // Checksum
-};
-The [gC], [g1], [g2], and [g3] messages contain CA/L1, P/L1, P/L2, and CA/L2 phase
-and code delays for GLONASS FCNs.
-[gR]: Code Delays of Receiver RF Bands
-struct BandDelay {6} {
-i1 band; // 0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3
-i1 signal; // 0-ca, 1-p
-f4 delay; // Code delay [s]
-};
-struct CalBandsDelay {6*n+1} {
-BandDelay d[n] // ‘n’ may vary depending on receiver model
-// and calibrator data readiness
-u1 cs; // Checksum
-};
-3.4.11 ADU Messages
+4.4.11 ADU Messages
 [MR] Rotation Matrix
 struct RotationMatrix {37} {
 u4 time; // receiver time [ms]
@@ -1428,11 +1277,6 @@ f4 bl1[3]; // baseline vector M-S1 in the current epoch[m]
 f4 bl2[3]; // baseline vector M-S2 in the current epoch[m]
 u1 cs; // Checksum
 };
-11. See Table 3-3, “Solution Types,” on page 66
-GREIS www.javad.com 101
-RECEIVER MESSAGES
-Standard Predefined Messages
-ADU Messages
 [AR] Rotation Angles
 struct RotationAngles {30} {
 u4 time; // receiver time [ms]
@@ -1454,6 +1298,11 @@ u4 time; // receiver time [ms]
 f4 x; // X component of angular velocity [rad/s]
 f4 y; // Y component of angular velocity [rad/s]
 f4 z; // Z component of angular velocity [rad/s]
+11. See Table 4-3, “Solution Types,” on page 324
+GREIS www.javad.com 357
+RECEIVER MESSAGES
+Standard Predefined Messages
+Event Marker and PPS Messages
 f4 rms; // Angular velocity RMS [rad/s]
 u1 flags; // flags [bitfield]:
 // 0: 0 - no data available
@@ -1471,14 +1320,25 @@ u1 cs;
 This meassage contains measurements from the IMU converted into physical units with
 compensated misalignments, scale factors, and temperature drift. The measurements are
 provided in the local coordinate system.
-102 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Event Marker and PPS Messages
-3.4.12 Event Marker and PPS Messages
+4.4.12 Event Marker and PPS Messages
 The event marker and PPS have their own reference time settings governed by corresponding
 parameters12. As a consequence, some of the event marker and PPS messages
 described below utilize the “time scale” field of the following format:
+12. /par/dev/event/[a|b]/time, and /par/dev/pps/[a|b]/time
+Table 4-8. Event Marker and PPS time scale
+Value Description
+0 GPS system time
+1 UTC(USNO). Universal Coordinated Time supported by the U.S. Naval Observatory
+2 GLONASS system time
+3 UTC(SU). Universal Coordinated Time supported by the State Time and Frequency
+Service, Russia
+4…25
+5
+Reserved
+358 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Event Marker and PPS Messages
 [XA], [XB] External Event
 struct ExtEvent {10} {
 i4 ms; // ms part of event time tag
@@ -1488,7 +1348,7 @@ u1 cs; // Checksum
 };
 The event time tag is the time in corresponding time scale modulo one day.
 To make your receiver generate these messages, you additionally need to turn on external
-event processing on corresponding external event input (using
+event processing on corresponding ext e r n a l event inpu t ( u s i ng
 /par/dev/event/[a|b]/in parameters).
 [ZA], [ZB] PPS Offset
 struct PPSOffset {5} {
@@ -1501,21 +1361,6 @@ error by means of utilizing this message. It contains the offset between the
 scheduled PPS time and the actual pulse edge's arrival time. When the pulse edge is earlier
 than the scheduled time, the offset is positive. When the pulse edge is delayed relative
 to the scheduled time, the offset is negative.
-12. /par/dev/event/[a|b]/time, and /par/dev/pps/[a|b]/time
-Table 3-8. Event Marker and PPS time scale
-Value Description
-0 GPS system time
-1 UTC(USNO). Universal Coordinated Time supported by the U.S. Naval Observatory
-2 GLONASS system time
-3 UTC(SU). Universal Coordinated Time supported by the State Time and Frequency
-Service, Russia
-4…25
-5
-Reserved
-GREIS www.javad.com 103
-RECEIVER MESSAGES
-Standard Predefined Messages
-Heading and Pitch Messages
 [YA], [YB] Time Offset at PPS Generation Time
 struct RcvTimeOffsAtPPS {10} {
 f8 offs; // [Tpps-Tr] offset[s]
@@ -1524,41 +1369,45 @@ u1 cs; // Checksum
 };
 This message contains PPS reference time to receiver time offset at the moment of PPS
 generation.
-3.4.13 Heading and Pitch Messages
+GREIS www.javad.com 359
+RECEIVER MESSAGES
+Standard Predefined Messages
+Heading and Pitch Messages
+4.4.13 Heading and Pitch Messages
 [ha] Heading and Pitch
-struct HeadAndPitch {10} {
+struct {
 f4 heading; // Heading of the baseline between the base and the
-// rover receiver [degrees]
+// rover receiver [radians]
 f4 pitch; // Pitch of the baseline between the base and the
-// rover receiver [degrees]
-u1 solType; // Solution type
+// rover receiver [radians]
 u1 cs; // Checksum
 };
 This message contains heading and pitch calculated by the RTK engine.
 [RO] Lever Arm Cartesian Position
 This message contains the position of the master antenna corrected by the rotated lever
-arm vector. It has exactly the same format as the [PO] message described on page 74.
+arm vector. It has exactly the same format as the [PO] message described on page 331.
 [RG] Lever Arm Geodetic Position
 This message contains the position of the master antenna corrected by the rotated lever
-arm vector. It has exactly the same format as the [PG] message described on page 75.
-3.4.14 Integrated Messages
+arm vector. It has exactly the same format as the [PG] message described on page 332.
+4.4.14 Integrated Messages
 Warning: Integrated messages are supported for backward compatibility only. No new features
 (systems, signals, etc.) will be added to these formats due to their limited flexibility.
 Please consider to use generic standard messages instead.
 For the users that prefer to have different yet logically related data in a single message,
 the JAVAD GNSS receiver supports a set of integrated messages. For example, the message
 [rM] may contain all of the code and carrier phase measurements available in the
-receiver for the given epoch, though this is achieved in exchange for much more com104
-www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Integrated Messages
-plex internal message structure. Integrated messages are also somewhat optimized for
+receiver for the given epoch, though this is achieved in exchange for much more complex
+internal message structure. Integrated messages are also somewhat optimized for
 real-time applications, so we also sometimes call them “real-time messages”. The exact
 contents of these messages are defined by corresponding receiver parameters13 that are
 not local to particular output stream. It means that using the integrated messages, one
 can’t have different variants of these messages to be enabled to be output to different
 output streams simultaneously.
+13. See “Parameters of Integrated GREIS Messages” on page 202.
+360 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Integrated Messages
 In the integrated messages, the field “sample” serves two main purposes. First, it allows
 the user to preserve data integrity since messages referenced to a specific epoch will all
 have the same sample number. Second, this field allows the user to keep track of the
@@ -1568,11 +1417,15 @@ Integrated messages can be received by the user in an arbitrary order of precede
 Before decoding a message its CRC16 checksum must be checked. Remember that the
 checksum is computed for all the bytes starting from the first byte of the header of the
 message up to but not including the checksum itself (for more information about CRC16
-algorithm, please refer to “Computing CRC16” on page 443).
+algorithm, please refer to “Computing CRC16” on page 411).
 The following tables, which are given for user reference, will explain the relationships
 between the integrated messages, [rE], [rM], [rV], and the basic JPS messages.
 [rM] can be used in place of the following messages:
-13. See “Parameters of Integrated GREIS Messages” on page 313.
+[rV] can be used in place of the following messages:
+[rE] can be used in place of the following messages:
+You can govern the structure of your [rM] message by means of parameters from section
+“Parameters of Integrated GREIS Messages” on page 202. Also note that the format of
+[rM] allows addition of new fields to the structure if necessary.
 Pseudorange measurements [RC], [rc], [R1], [r1], [1R], [1r],
 [R2], [r2], [2R], [2r]
 Carrier Phase measurements [PC], [pc], [CP], [cp], [P1], [p1],
@@ -1590,15 +1443,13 @@ Time since Last Loss-of-Lock1
 Receiver Reference Time to Receiver Time Offset2
 2. Remember that there is a limitation on the clock offset resolution (125 ns).
 [TO]
-GREIS www.javad.com 105
+Position/Velocity messages [PO], [VE], [PV]
+Solution time tag [ST]
+Receiver Date and Receiver Time [RD], [~~]
+GREIS www.javad.com 361
 RECEIVER MESSAGES
 Standard Predefined Messages
 Integrated Messages
-[rV] can be used in place of the following messages:
-[rE] can be used in place of the following messages:
-You can govern the structure of your [rM] message by means of parameters from section
-“Parameters of Integrated GREIS Messages” on page 313. Also note that the format of
-[rM] allows addition of new fields to the structure if necessary.
 In the event of new fields showing up in the message, its version number is incremented
 of course. Note that lengths of the structures “Header” and “SlotRec” are specified in the
 message explicitly, which makes it possible to maintain backward compatibility with
@@ -1635,13 +1486,6 @@ u4 reftime; // Milliseconds part of epoch representation [ms]:
 // (a) if time scale ID is GPS:
 // milliseconds of GPS week;
 // (b) if time scale ID is GLONASS:
-Position/Velocity messages [PO], [VE], [PV]
-Solution time tag [ST]
-Receiver Date and Receiver Time [RD], [~~]
-106 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Integrated Messages
 // milliseconds of GLONASS day;
 // (c) if time scale ID is UTC,
 // milliseconds of UTC day;
@@ -1655,6 +1499,10 @@ u4 reftime; // See [rE] for description
 i2 clock; // Clock offset:
 // 15…2: Clock offset
 // -213 /+(213-1) [125 nanoseconds]:
+362 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Integrated Messages
 // 1…0: Clock offset ID:
 // 0 – clock offset is unavailable
 // 1 – [GPS - Receiver time]
@@ -1692,13 +1540,9 @@ i2 svstOrDelrange; // SV status [bitfield], or
 // Delta pseudo-range [0.02 meters].
 // SV status [bitfield]:
 // 15…11: GLONASS slot number (for GPS SV the field
-// is undefined), [0…32], 0 - unknown
+// is undefined), [0…24], 0 - unknown
 // 10…6: Channel number [0…31], 31 - unavailable
 // 5…0: Satellite navigation status
-GREIS www.javad.com 107
-RECEIVER MESSAGES
-Standard Predefined Messages
-Integrated Messages
 // Delta pseudo-range [0.02 meters]:
 // [full pseudo-range for given slot]-[refrange]
 u4 word1; // Packed data 1 [bitfield]:
@@ -1715,6 +1559,10 @@ u2 flags; // Signal lock loop flags (see [FC] message)
 u2 lock; // Packed data 2 [bitfield]:
 // 15…12: fractional part of Signal-to-noise
 // ratio [0.1 dB*Hz]
+GREIS www.javad.com 363
+RECEIVER MESSAGES
+Standard Predefined Messages
+Integrated Messages
 // 11…10: reserved
 // 9…0: lock time [0.1 second]. Tracking time since
 // last loss of lock. Varies between 0 and
@@ -1745,10 +1593,6 @@ as deltas referenced to a common reference value. Such an approach
 allows the reduction of message length. The first field in the structure SlotRec
 should be handled depending on whether the structure’s “slot number” is zero or
 not.
-108 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Integrated Messages
 4. Field num from the structure Header shows the total number of slot records (see
 the structure “SlotRec”). For example, if only C/A measurements are enabled in
 the message, the field num will be zero.
@@ -1762,6 +1606,10 @@ u2 delta; // [bitfield]:
 // 4…0: reserved
 u4 word1; // 32 MSB of Position X-component;
 u4 word2; // [bitfield]:
+364 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Integrated Messages
 // 31…24: 8 LSB of Position ECEF X-component [10-4 m]
 // or Latitude [10-11 radians]
 // or Grid (Local) X-component [10-4 m];
@@ -1778,19 +1626,19 @@ u4 word2; // [bitfield]:
 // 14…13: reserved
 // 12…8: Number of GLONASS SVs used in computation;
 // 7…4: Position computation mode
-// (see Table 3-3 on page 66);
+// (see Table 4-3 on page 324);
 // 3…0: Velocity computation mode
-// (see Table 3-3 on page 66);
-u4 word3; // 32 MSB of Position Y-component;
+// (see Table 4-3 on page 324);
+u4 word3; // 31…0: 32 MSB of Position Y-component;
 u4 word4; // 31…24: 8 LSB of Position ECEF Y-component [10-4 m]
 // or Longitude [10-11 radians]
 // or Grid (Local) Y-component [10-4 m];
 // 23…15: PDOP * 10 [];
 // 14…0: RMS velocity error [0.001 meters];
-u4 word5; // 32 MSB of position Z-component;
+u4 word5; // 32 MSB of 40-bit ECEF position Z-component;
 u4 word6; // [bitfield]:
-// 31…24: 8 LSB of position ECEF Z-component
-// or Height above ellipsoid or geoid14 [10-4 m];
+// 31…24: 8 LSB of 40-bit position ECEF Z-component
+// or Height above ellipsoid [10-4 m];
 // 23…20: reserved;
 // 19…0: RMS Position error [0.001 m];
 u4 word7; // [bitfield]:
@@ -1801,23 +1649,22 @@ u4 word7; // [bitfield]:
 // 1…0: 2 MSB of GREIS datum number (see note below);
 u4 word8; // [bitfield]:
 // 31…4: velocity Y-component [10-4 m/s]
-14. Depending on the value of /par/raw/rtm/geoid parameter
-GREIS www.javad.com 109
-RECEIVER MESSAGES
-Standard Predefined Messages
-Interactive Messages
 // or North component (if types 1 and 2 are
 // selected in bits 22…21 of the ‘word2’ field);
 // 3…0: bits 7…4 of datum number;
 u4 word9; // [bitfield]:
 // 31…4: velocity Z-component [10-4 m/s]
-// or Height component (if types 1 and 2 are
+// or North component (if types 1 and 2 are
 // selected in bits 22…21 of the ‘word2’ field);
 // 3…0: 4 LSB of GREIS datum number;
 u2 crc16; // 16-bit CRC;
 };
 Note: For GREIS datum numbers, please refer to “Reference Ellipsoids and Local Datums” available
 from http://www.javad.com. Currently GREIS datum numbers range between zero and 221.
+GREIS www.javad.com 365
+RECEIVER MESSAGES
+Standard Predefined Messages
+Interactive Messages
 [rT] Receiver Clock Offsets
 struct ClockOffsets {var} {
 u2 sample; // Sample number []
@@ -1844,14 +1691,10 @@ u4 word2; // [bitfield]:
 // bit combination 0x2000000 means that clock
 // offset is unavailable or exceeds ±33554431;
 };
-3.4.15 Interactive Messages
+4.4.15 Interactive Messages
 Commands sent to the receiver may generate reply messages from the receiver. These
 human-readable text messages are output immediately as a response to corresponding
 commands. Interactive applications are the target for this class of messages.
-110 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Miscellaneous Messages
 [RE] Reply
 struct RE {var} {
 a1 reply[]; // Reply
@@ -1863,10 +1706,14 @@ and possible replies).
 struct ER {var} {
 a1 error[]; // Error description
 };
+366 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Miscellaneous Messages
 If receiver gets a command that, for some reason, can't be executed, or produce an error
 during execution, then an error message is generated. The contents of the error message
 specifies what is wrong with the issued command.
-3.4.16 Miscellaneous Messages
+4.4.16 Miscellaneous Messages
 [IO] GPS Ionospheric Parameters
 struct IonoParams {39} {
 u4 tot; // Time of week [s]
@@ -1890,10 +1737,6 @@ This message contains ionospheric correction parameters from GPS subframe 4, pag
 GPS receivers.
 For more information about this ionosphere model, please see ICD-GPS-200C, Revision
 IRN-200C-004 April 12, 2000.
-GREIS www.javad.com 111
-RECEIVER MESSAGES
-Standard Predefined Messages
-Miscellaneous Messages
 [QI] QZSS Ionospheric Parameters
 struct QzssIonoParams {39} {
 IonoParams par;
@@ -1901,13 +1744,10 @@ IonoParams par;
 This message contains ionospheric correction parameters from QZSS sub-frame 4, page
 18. These parameters belong to the ionospheric model generally being used by single
 frequency GPS/QZSS receivers and are optimized for Japan area.
-[CI] BeiDou Ionospheric Parameters
-struct BeiDouIonoParams {39} {
-IonoParams par;
-};
-This message contains ionospheric correction parameters from BeiDou sub-frame 1.
-These parameters relate to an ionospheric model mainly used by single frequency Bei-
-Dou receivers.
+GREIS www.javad.com 367
+RECEIVER MESSAGES
+Standard Predefined Messages
+Miscellaneous Messages
 [==](EV) Event
 struct Event {var} {
 u4 time; // Receiver time of event occurrence modulo day, [ms]
@@ -1929,10 +1769,6 @@ This message contains the difference between the actual output time of the first
 messages sent to the output stream at the given epoch, and this epoch's time-tag. Note
 that latency for an output stream may depend on the amount of messages requested to a
 different stream. For example, the more messages are output to port A, the bigger the
-112 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Miscellaneous Messages
 latency of port B; this is because the receiver begins generation of messages for port B
 only after it has finished generating messages for port A.
 [>>] Wrapper
@@ -1946,6 +1782,10 @@ bytes) is equal to the message length from the header less 3 (size=L-3).
 This message is used for two different purposes:
 1. To wrap data from an input stream that has been set to the “wrapped echo
 mode” (see /par/[port]/ewrap and /par/[port]/echo parameters). In this case it
+368 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Miscellaneous Messages
 is generated whenever some data come to the stream. The “id” field then contains
 input stream identifier:
 2. To wrap arbitrary message(s) during periodic messages output, as specified by
@@ -1961,18 +1801,6 @@ a1 params[]; // Parameters description
 a1 delim[2] = “,@”; // Checksum delimiter
 a1 cs[2]; // Checksum formatted as hexadecimal
 };
-id Source Stream
-‘a’…’d’ serial ports A…D, /dev/ser/a…/dev/ser/d
-‘A’…’E’ TCP ports A…E, /dev/tcp/a…/dev/tcp/d
-‘U’ USB port A, /dev/usb/a
-‘H’ Bluetooth port A, /dev/blt/a
-‘N’ CAN port A, /dev/can/a
-‘P’ TCP client port, /dev/tcpcl/a
-‘V’ UDP port
-GREIS www.javad.com 113
-RECEIVER MESSAGES
-Standard Predefined Messages
-Miscellaneous Messages
 This message contains information on (most of) receiver parameters. When enabled, it
 will also be output every time one of the receiver parameters is changed.
 Due to large number of parameters only part of a whole receiver parameter tree is output
@@ -1985,6 +1813,18 @@ NAME=VALUE
 where NAME denotes the parameter name, and VALUE denotes the parameter value.
 The other messages have a slightly different format, specifically:
 {[ITEM[,ITEM…]]}
+id Source Stream
+‘a’…’d’ serial ports A…D, /dev/ser/a…/dev/ser/d
+‘A’…’E’ TCP ports A…E, /dev/tcp/a…/dev/tcp/d
+‘U’ USB port A, /dev/usb/a
+‘H’ Bluetooth port A, /dev/blt/a
+‘N’ CAN port A, /dev/can/a
+‘P’ TCP client port, /dev/tcpcl/a
+‘V’ UDP port
+GREIS www.javad.com 369
+RECEIVER MESSAGES
+Standard Predefined Messages
+Miscellaneous Messages
 where ITEM denotes either the value of a parameter, or a comma-separated list of
 ITEMs surrounded by braces.
 [LH] Logging History
@@ -2000,7 +1840,7 @@ u4 hist[elemsCount][svsCount]; // History bits
 };
 This message contains history of logging of satellites data into particular stream. For a
 description of how logging history works and parameters governing logging history, see
-“Logging History” on page 312.
+“Logging History” on page 201.
 Fields description:
 svsCount – Number of SVs in this history.
 targetStream – The stream ID the history is gathered for (see description of the
@@ -2009,10 +1849,6 @@ issue – The issue of the history. It is incremented every time the history is ch
 bitsCount – Number of bits in this history. This history contains this number of bits
 for every SV specified in the uids field.
 lastBitTime – Time in milliseconds since the last history shift.
-114 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-Miscellaneous Messages
 uids[svsCount] – Array of SVs UIDs
 pad[padCount] – Padding (with zeroes) to align the next field on 4 bytes boundary,
 fillCount = (4 - (svsCount % 4)) % 4
@@ -2025,6 +1861,10 @@ bitsCount bits:
 elemsCount = (bitsCount + 31) / 32
 Exactly svsCount bit arrays are put into the message in the order specified by the
 uids field.
+370 www.javad.com GREIS
+RECEIVER MESSAGES
+Standard Predefined Messages
+Miscellaneous Messages
 [BI] Base Station Information
 struct BaseInfo {28} {
 f8 x, y, z; // ECEF coordinates [m]
@@ -2049,10 +1889,6 @@ struct TrackingTime {5} {
 u4 tt; // tracking time [s]
 u1 cs; // Checksum
 };
-GREIS www.javad.com 115
-RECEIVER MESSAGES
-Standard Predefined Messages
-Text Messages
 This message contains time elapsed since the last loss-of-lock of all CA/L1 signals.
 Time count starts as soon as the first CA/L1 signal is locked on. Should a loss of lock of
 the last CA/L1 signal occur, the time counter is reset to zero.
@@ -2066,9 +1902,14 @@ has nominal value, and the nominal frequency of the oscillator, normalized to th
 frequency of the oscillator. (FUn - Fn)/Fn.
 Note: The contents of this message are not suitable as a parameter for calculations based on receiver
 measurements. Use [DO] message instead.
+GREIS www.javad.com 371
+RECEIVER MESSAGES
+Standard Predefined Messages
+Text Messages
 [||](EE) Epoch End
 struct EpochEnd {1} {
 u1 cs; // Checksum
 };
 This message carries no information. It is intended as an “end of epoch” marker useful
-for real-time applications. This message is not recommended. We suggest
+for real-time applications. This message is not recommended. We suggest to use the
+[::](ET) message instead, see “[::](ET) Epoch Time” on page 327.
