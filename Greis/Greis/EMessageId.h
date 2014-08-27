@@ -11,10 +11,16 @@ namespace Greis
             AntName, // [AN] Antenna Names
             BaseInfo, // [BI] Base Station Information
             Baseline, // [BL] Baseline
+            Baselines, // [bL] Attitude Baselines
+            BeiDouAlm, // [CA] BeiDou Almanac
+            BeiDouEphemeris, // [CN] BeiDou Ephemeris
+            BeiDouIonoParams, // [CI] BeiDou Ionospheric Parameters
+            BeiDouUtcParam, // [CU] BeiDou UTC Time Parameters
+            CalBandsDelay, // [gR] Code Delays of Receiver RF Bands
             ClockOffsets, // [rT] Receiver Clock Offsets
             CNR, // [EC], [E1], [E2], [E3], [E5], [El]: SNR
             CNR4, // [CE], [1E], [2E], [3E], [5E], [lE]: SNR x 
-            CompRawNavData, // [cd] COMPASS Raw Navigation Data
+            CompRawNavData, // [cd] BeiDou Raw Navigation Data
             CP, // [PC], [P1], [P2], [P3], [P5], [Pl]: Carrier Phases
             Dops, // [DP] Dilution of Precision (DOP)
             DP, // [DC], [D1], [D2], [D3], [D5], [Dl]: Doppler
@@ -25,6 +31,7 @@ namespace Greis
             ExtEvent, // [XA], [XB] External Event
             FileId, // [JP] File Identifier
             Flags, // [FC],[F1],[F2],[F3],[F5],[Fl]: Signal Lock Loop Flags
+            FullRotationMatrix, // [mR] Attitude Full Rotation Matrix
             GALAlm, // [EA] GALILEO Almanac
             GALEphemeris, // [EN] GALILEO Ephemeris
             GalRawNavData, // [ED] GALILEO Raw Navigation Data
@@ -32,9 +39,9 @@ namespace Greis
             GeoPos, // [PG] Geodetic Position
             GeoVel, // [VG] Geodetic Velocity
             GLOAlmanac, // [NA] GLONASS Almanac
+            GloDelays, // [gC], [g1], [g2], [g3]: GLONASS Delays
             GLOEphemeris, // [NE] GLONASS Ephemeris
             GloNavData, // [LD] GLONASS Raw Navigation Data (obsolete)
-            GloPhaseDelay, // [gC], [g1], [g2], [g3]: GLONASS Phase Delays
             GloRawNavData, // [lD] GLONASS Raw Navigation Data
             GLOTime, // [NT] GLONASS Time
             GloUtcGpsParam, // [NU] GLONASS UTC and GPS Time Parameters
@@ -44,6 +51,7 @@ namespace Greis
             GpsRawNavData0, // [gd] GPS Raw Navigation Data
             GPSTime, // [GT] GPS Time
             GpsUtcParam, // [UO] GPS UTC Time Parameters
+            HeadAndPitch, // [ha] Heading and Pitch
             IAmp, // [ec], [e1], [e2], [e3], [e5]: Raw Inphases (I)
             InertialMeasurements, // [IM] Inertial Measurements
             IonoDelay, // [ID] Ionospheric Delays
@@ -68,16 +76,18 @@ namespace Greis
             QzssNavData, // [QD] QZSS Raw Navigation Data (obsolete)
             QzssRawNavData, // [qd] QZSS Raw Navigation Data
             QzssUtcParam, // [QU] QZSS UTC Time Parameters
+            RangeResidual, // [rr] Satellite Range Residuals
             RawMeas, // [rM] Raw Measurements
             RCPRc1, // [cp],[1p],[2p],[3p],[5p],[lp]: Relative Carrier Phases
             RCPRC0, // [CP],[1P],[2P],[3P],[5P],[lP]: Relative Carrier Phases
+            RcvBeiDouTimeOffset, // [CO] BeiDou to Receiver Time Offset
             RcvDate, // [RD] Receiver Date
             RcvGALTimeOffset, // [EO] GALILEO to Receiver Time Offset
             RcvGLOTimeOffset, // [NO] GLONASS to Receiver Time Offset
             RcvGPSTimeOffset, // [GO] GPS to Receiver Time Offset
             RcvOscOffs, // [OO] Oscillator Offset
             RcvQZSSTimeOffset, // [QO] QZSS to Receiver Time Offset
-            RcvSBASTimeOffset, // [WO] WAAS/EGNOS to Receiver Time Offset
+            RcvSBASTimeOffset, // [WO] SBAS to Receiver Time Offset
             RcvTime, // [~~](RT) Receiver Time
             RcvTimeAccuracy, // [BP] Rough Accuracy of Time Approximation
             RcvTimeOffsAtPPS, // [YA], [YB] Time Offset at PPS Generation Time
@@ -94,10 +104,10 @@ namespace Greis
             SatElevation, // [EL] Satellite Elevations
             SatIndex, // [SI] Satellite Indices
             SatNumbers, // [NN] GLONASS Satellite System Numbers
-            SBASAlmanac, // [WA] WAAS/EGNOS Almanac
-            SBASEhemeris, // [WE] WAAS/EGNOS Ephemeris
-            SbasRawNavData, // [WD] WAAS/EGNOS Raw Navigation Data
-            SbasUtcParam, // [WU] WAAS/EGNOS UTC Time Parameters
+            SBASAlmanac, // [WA] SBAS Almanac
+            SBASEhemeris, // [WE] SBAS Ephemeris
+            SbasRawNavData, // [WD] SBAS Raw Navigation Data
+            SbasUtcParam, // [WU] SBAS UTC Time Parameters
             SC, // [CC],[C1],[C2],[C3],[C5],[Cl]: Smoothing Corrections
             SCP, // [pc], [p1], [p2], [p3], [p5], [pl]: Carrier Phases
             Security0, // [SE] Security
@@ -113,6 +123,7 @@ namespace Greis
             TrackingTimeCA, // [TC] CA/L1 Continuous Tracking Time
             Vel, // [VE] Cartesian Velocity
             VelCov, // [SV] Velocity Covariance Matrix
+            VelocityResidual, // [vr] Satellite Velocity Residuals
             Wrapper // [>>] Wrapper
         };
     };

@@ -1,11 +1,11 @@
-#include "QZSSAlmStdMessage.h"
+#include "BeiDouAlmStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    QZSSAlmStdMessage::QZSSAlmStdMessage( const char* pc_message, int p_length ) 
+    BeiDouAlmStdMessage::BeiDouAlmStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
@@ -23,18 +23,18 @@ namespace Greis
         }
     }
     
-    QZSSAlmStdMessage::QZSSAlmStdMessage( const std::string& p_id, int p_size ) 
+    BeiDouAlmStdMessage::BeiDouAlmStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string QZSSAlmStdMessage::ToString() const
+    std::string BeiDouAlmStdMessage::ToString() const
     {
-        return toString("QZSSAlmStdMessage");
+        return toString("BeiDouAlmStdMessage");
     }
     
-    bool QZSSAlmStdMessage::Validate() const
+    bool BeiDouAlmStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
@@ -44,7 +44,7 @@ namespace Greis
         return true;
     }
     
-    void QZSSAlmStdMessage::RecalculateChecksum()
+    void BeiDouAlmStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
@@ -53,7 +53,7 @@ namespace Greis
         
     }
 
-    QByteArray QZSSAlmStdMessage::ToByteArray() const
+    QByteArray BeiDouAlmStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)

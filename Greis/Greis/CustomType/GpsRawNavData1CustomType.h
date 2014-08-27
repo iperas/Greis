@@ -28,10 +28,10 @@ namespace Greis
         Types::u4& Time() { return _time; }
 
         // Type of data:
-        // 0 - GPS L1 NAV
-        // 1 - GPS L2C CNAV
-        // 2 - GPS L5 CNAV
-        // 3 - GPS L1C CNAV2
+        // 0 - L1 NAV
+        // 1 - L2C CNAV
+        // 2 - L5 CNAV
+        // 3 - L1C CNAV2
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 

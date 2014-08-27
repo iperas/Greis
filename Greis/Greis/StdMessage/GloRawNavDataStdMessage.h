@@ -46,8 +46,8 @@ namespace Greis
         Types::u1& Len() { return _len; }
 
         // Navigation data block
-        const std::vector<Types::u1>& Data() const { return _data; }
-        std::vector<Types::u1>& Data() { return _data; }
+        const std::vector<Types::u4>& Data() const { return _data; }
+        std::vector<Types::u4>& Data() { return _data; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -62,7 +62,7 @@ namespace Greis
         Types::u4 _time;
         Types::u1 _type;
         Types::u1 _len;
-        std::vector<Types::u1> _data;
+        std::vector<Types::u4> _data;
         Types::u1 _cs;
     };
 }

@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SV PRN number within the range [120…138]
+        // SV PRN number within the range [120…142]
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 

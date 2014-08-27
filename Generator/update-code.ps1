@@ -11,15 +11,18 @@ $solutionFile = $root + 'Generator.sln'
 $testContainer = '/testcontainer:' + $root + 'Generator.Tests\bin\Release\Generator.Tests.dll'
 
 $buildDir = $root + 'build'
+$outputMetaDir = $root + 'Output'
 $outputDir = (get-item ($root + '..\Greis')).FullName
 
 $greisSource = $root + 'Data\greis-manual.txt'
-$metaXml = $buildDir
+$metaXmlDir = $buildDir
+$metaXmlFile = $metaXmlDir + '\meta-info.xml'
 $cppCodeDir = $buildDir + '\cppCode'
 $sqlBaselineDir = $buildDir
 
 mkdir $buildDir -force | Out-Null
 mkdir $outputDir -force | Out-Null
+mkdir $outputMetaDir -force | Out-Null
 
 function build() {
     'building and testing...'
@@ -41,17 +44,23 @@ function generate() {
 
     $generator = $root + 'Generator.Console\bin\Release\Generator.Console.exe'
 
-    &$generator --command gen-xml --source $greisSource --target $metaXml
-    $metaXml = $metaXml + '\meta-info.xml'
-    &$generator --command gen-cpp --source $metaXml --target $cppCodeDir
-    &$generator --command gen-sql --source $metaXml --target $sqlBaselineDir
+    &$generator --command gen-xml --source $greisSource --target $metaXmlDir
+    &$generator --command gen-cpp --source $metaXmlFile --target $cppCodeDir
+    &$generator --command gen-sql --source $metaXmlFile --target $sqlBaselineDir
 }
 
 function updateFiles() {
     "updating local files in $outputDir..."
 
+    cp $metaXmlFile $outputMetaDir -Force
+
     $includeDir = $outputDir + '\Greis'
     $srcDir = $outputDir + '\src'
+
+    rmdir ($includeDir + '\StdMessage') -force -recurse
+    rmdir ($includeDir + '\CustomType') -force -recurse
+    rmdir ($srcDir + '\StdMessage') -force -recurse
+    rmdir ($srcDir + '\CustomType') -force -recurse
 
     mkdir ($includeDir + '\StdMessage') -force | Out-Null
     mkdir ($includeDir + '\CustomType') -force | Out-Null

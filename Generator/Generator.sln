@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator.Core", "Generator.Core\Generator.Core.csproj", "{575F2F2E-B988-4350-85B1-73AF9B702D8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator.Console", "Generator.Console\Generator.Console.csproj", "{15FD2112-152C-4E5A-8049-2393C27D0578}"
@@ -12,6 +14,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0B21FB
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{5C177E45-9ECA-4EF8-AF06-2F3E0064D52D}"
+	ProjectSection(SolutionItems) = preProject
+		Data\greis-manual.txt = Data\greis-manual.txt
+		Data\GREIS_Reference_Guide.pdf = Data\GREIS_Reference_Guide.pdf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{8C5467D6-3860-49D0-B23D-A996C4924056}"
+	ProjectSection(SolutionItems) = preProject
+		update-code.bat = update-code.bat
+		update-code.ps1 = update-code.ps1
 	EndProjectSection
 EndProject
 Global

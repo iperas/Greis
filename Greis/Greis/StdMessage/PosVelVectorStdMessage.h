@@ -56,13 +56,13 @@ namespace Greis
         // 14…13: reserved
         // 12…8: Number of GLONASS SVs used in computation;
         // 7…4: Position computation mode
-        // (see Table 4-3 on page 324);
+        // (see Table 3-3 on page 66);
         // 3…0: Velocity computation mode
-        // (see Table 4-3 on page 324);
+        // (see Table 3-3 on page 66);
         const Types::u4& Word2() const { return _word2; }
         Types::u4& Word2() { return _word2; }
 
-        // 31…0: 32 MSB of Position Y-component;
+        // 32 MSB of Position Y-component;
         const Types::u4& Word3() const { return _word3; }
         Types::u4& Word3() { return _word3; }
 
@@ -74,13 +74,13 @@ namespace Greis
         const Types::u4& Word4() const { return _word4; }
         Types::u4& Word4() { return _word4; }
 
-        // 32 MSB of 40-bit ECEF position Z-component;
+        // 32 MSB of position Z-component;
         const Types::u4& Word5() const { return _word5; }
         Types::u4& Word5() { return _word5; }
 
         // [bitfield]:
-        // 31…24: 8 LSB of 40-bit position ECEF Z-component
-        // or Height above ellipsoid [10-4 m];
+        // 31…24: 8 LSB of position ECEF Z-component
+        // or Height above ellipsoid or geoid14 [10-4 m];
         // 23…20: reserved;
         // 19…0: RMS Position error [0.001 m];
         const Types::u4& Word6() const { return _word6; }
@@ -105,7 +105,7 @@ namespace Greis
 
         // [bitfield]:
         // 31…4: velocity Z-component [10-4 m/s]
-        // or North component (if types 1 and 2 are
+        // or Height component (if types 1 and 2 are
         // selected in bits 22…21 of the ‘word2’ field);
         // 3…0: 4 LSB of GREIS datum number;
         const Types::u4& Word9() const { return _word9; }

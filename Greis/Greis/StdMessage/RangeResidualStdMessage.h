@@ -6,26 +6,26 @@
 
 namespace Greis
 {
-    class SPRStdMessage : public StdMessage
+    class RangeResidualStdMessage : public StdMessage
     {
     public:
-        SMART_PTR_T(SPRStdMessage);
+        SMART_PTR_T(RangeResidualStdMessage);
 
-        SPRStdMessage(const char* p_message, int p_length);
-        SPRStdMessage(const std::string& p_id, int p_size);
+        RangeResidualStdMessage(const char* p_message, int p_length);
+        RangeResidualStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
-        virtual EMessageId::Type IdNumber() const { return EMessageId::SPR; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::RangeResidual; }
         virtual bool Validate() const;
         virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (PR[s] - Asys) / Ksys
-        const std::vector<Types::i4>& Spr() const { return _spr; }
-        std::vector<Types::i4>& Spr() { return _spr; }
+        // Range residual [m]
+        const std::vector<Types::f4>& Res() const { return _res; }
+        std::vector<Types::f4>& Res() { return _res; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -35,7 +35,7 @@ namespace Greis
         int _bodySize;
         bool _isCorrect;
 
-        std::vector<Types::i4> _spr;
+        std::vector<Types::f4> _res;
         Types::u1 _cs;
     };
 }

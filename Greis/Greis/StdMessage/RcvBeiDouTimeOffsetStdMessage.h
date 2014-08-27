@@ -6,26 +6,30 @@
 
 namespace Greis
 {
-    class SPRStdMessage : public StdMessage
+    class RcvBeiDouTimeOffsetStdMessage : public StdMessage
     {
     public:
-        SMART_PTR_T(SPRStdMessage);
+        SMART_PTR_T(RcvBeiDouTimeOffsetStdMessage);
 
-        SPRStdMessage(const char* p_message, int p_length);
-        SPRStdMessage(const std::string& p_id, int p_size);
+        RcvBeiDouTimeOffsetStdMessage(const char* p_message, int p_length);
+        RcvBeiDouTimeOffsetStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
-        virtual EMessageId::Type IdNumber() const { return EMessageId::SPR; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::RcvBeiDouTimeOffset; }
         virtual bool Validate() const;
         virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (PR[s] - Asys) / Ksys
-        const std::vector<Types::i4>& Spr() const { return _spr; }
-        std::vector<Types::i4>& Spr() { return _spr; }
+        // (Tb - Tr) [s]
+        const Types::f8& Val() const { return _val; }
+        Types::f8& Val() { return _val; }
+
+        // Smoothed (Tb - Tr) [s]
+        const Types::f8& Sval() const { return _sval; }
+        Types::f8& Sval() { return _sval; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -35,7 +39,8 @@ namespace Greis
         int _bodySize;
         bool _isCorrect;
 
-        std::vector<Types::i4> _spr;
+        Types::f8 _val;
+        Types::f8 _sval;
         Types::u1 _cs;
     };
 }

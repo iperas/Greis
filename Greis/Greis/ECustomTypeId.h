@@ -7,6 +7,7 @@ namespace Greis
         enum Type
         {
             Unknown,
+            BandDelay,
             ClkOffs,
             ExtSpecData,
             GPSAlm1,
@@ -22,6 +23,7 @@ namespace Greis
             SvData0,
             SvData1,
             SvData2,
+            SvDelay,
             UtcOffs
         };
     };

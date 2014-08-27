@@ -4,28 +4,31 @@
 #include "Greis/StdMessage.h"
 #include "Greis/EMessageId.h"
 
+#include "Greis/CustomType/BandDelayCustomType.h"
+
 namespace Greis
 {
-    class SPRStdMessage : public StdMessage
+    class CalBandsDelayStdMessage : public StdMessage
     {
     public:
-        SMART_PTR_T(SPRStdMessage);
+        SMART_PTR_T(CalBandsDelayStdMessage);
 
-        SPRStdMessage(const char* p_message, int p_length);
-        SPRStdMessage(const std::string& p_id, int p_size);
+        CalBandsDelayStdMessage(const char* p_message, int p_length);
+        CalBandsDelayStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
-        virtual EMessageId::Type IdNumber() const { return EMessageId::SPR; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::CalBandsDelay; }
         virtual bool Validate() const;
         virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (PR[s] - Asys) / Ksys
-        const std::vector<Types::i4>& Spr() const { return _spr; }
-        std::vector<Types::i4>& Spr() { return _spr; }
+        // ‘n’ may vary depending on receiver model
+        // and calibrator data readiness
+        const std::vector<BandDelayCustomType::UniquePtr_t>& D() const { return _d; }
+        std::vector<BandDelayCustomType::UniquePtr_t>& D() { return _d; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -35,7 +38,7 @@ namespace Greis
         int _bodySize;
         bool _isCorrect;
 
-        std::vector<Types::i4> _spr;
+        std::vector<BandDelayCustomType::UniquePtr_t> _d;
         Types::u1 _cs;
     };
 }

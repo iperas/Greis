@@ -23,7 +23,7 @@ namespace Greis
         // Delta pseudo-range [0.02 meters].
         // SV status [bitfield]:
         // 15…11: GLONASS slot number (for GPS SV the field
-        // is undefined), [0…24], 0 - unknown
+        // is undefined), [0…32], 0 - unknown
         // 10…6: Channel number [0…31], 31 - unavailable
         // 5…0: Satellite navigation status
         // Delta pseudo-range [0.02 meters]:

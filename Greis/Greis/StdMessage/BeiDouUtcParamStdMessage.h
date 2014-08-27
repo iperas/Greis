@@ -4,28 +4,30 @@
 #include "Greis/StdMessage.h"
 #include "Greis/EMessageId.h"
 
+#include "Greis/CustomType/UtcOffsCustomType.h"
+
 namespace Greis
 {
-    class SPRStdMessage : public StdMessage
+    class BeiDouUtcParamStdMessage : public StdMessage
     {
     public:
-        SMART_PTR_T(SPRStdMessage);
+        SMART_PTR_T(BeiDouUtcParamStdMessage);
 
-        SPRStdMessage(const char* p_message, int p_length);
-        SPRStdMessage(const std::string& p_id, int p_size);
+        BeiDouUtcParamStdMessage(const char* p_message, int p_length);
+        BeiDouUtcParamStdMessage(const std::string& p_id, int p_size);
 
         virtual std::string ToString() const;
         virtual std::string Id() const { return _id; }
-        virtual EMessageId::Type IdNumber() const { return EMessageId::SPR; }
+        virtual EMessageId::Type IdNumber() const { return EMessageId::BeiDouUtcParam; }
         virtual bool Validate() const;
         virtual bool IsCorrect() const { return _isCorrect; }
         virtual void RecalculateChecksum();
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (PR[s] - Asys) / Ksys
-        const std::vector<Types::i4>& Spr() const { return _spr; }
-        std::vector<Types::i4>& Spr() { return _spr; }
+        // BeiDou UTC time offset parameters
+        const UtcOffsCustomType::UniquePtr_t& Utc() const { return _utc; }
+        UtcOffsCustomType::UniquePtr_t& Utc() { return _utc; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -35,7 +37,7 @@ namespace Greis
         int _bodySize;
         bool _isCorrect;
 
-        std::vector<Types::i4> _spr;
+        UtcOffsCustomType::UniquePtr_t _utc;
         Types::u1 _cs;
     };
 }

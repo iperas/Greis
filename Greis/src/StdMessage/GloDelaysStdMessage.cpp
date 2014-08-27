@@ -1,31 +1,21 @@
-#include "GloRawNavDataStdMessage.h"
+#include "GloDelaysStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    GloRawNavDataStdMessage::GloRawNavDataStdMessage( const char* pc_message, int p_length ) 
+    GloDelaysStdMessage::GloDelaysStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 9) / 4;
+        int arraySizeInUniformFillFields = (BodySize() - 1) / 9;
 
-        _serializer.Deserialize(p_message, _num);
-        p_message += sizeof(_num);
-        _serializer.Deserialize(p_message, _fcn);
-        p_message += sizeof(_fcn);
-        _serializer.Deserialize(p_message, _time);
-        p_message += sizeof(_time);
-        _serializer.Deserialize(p_message, _type);
-        p_message += sizeof(_type);
-        _serializer.Deserialize(p_message, _len);
-        p_message += sizeof(_len);
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields, _data);
-        p_message += sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, 9 * arraySizeInUniformFillFields, 9, _del);
+        p_message += 9 * arraySizeInUniformFillFields;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -37,18 +27,18 @@ namespace Greis
         }
     }
     
-    GloRawNavDataStdMessage::GloRawNavDataStdMessage( const std::string& p_id, int p_size ) 
+    GloDelaysStdMessage::GloDelaysStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string GloRawNavDataStdMessage::ToString() const
+    std::string GloDelaysStdMessage::ToString() const
     {
-        return toString("GloRawNavDataStdMessage");
+        return toString("GloDelaysStdMessage");
     }
     
-    bool GloRawNavDataStdMessage::Validate() const
+    bool GloDelaysStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
@@ -59,7 +49,7 @@ namespace Greis
         return validateChecksum8Bin(message.data(), message.size());
     }
     
-    void GloRawNavDataStdMessage::RecalculateChecksum()
+    void GloDelaysStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
@@ -69,7 +59,7 @@ namespace Greis
         _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
-    QByteArray GloRawNavDataStdMessage::ToByteArray() const
+    QByteArray GloDelaysStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -79,12 +69,7 @@ namespace Greis
 
         result.append(headToByteArray());
 
-        _serializer.Serialize(_num, result);
-        _serializer.Serialize(_fcn, result);
-        _serializer.Serialize(_time, result);
-        _serializer.Serialize(_type, result);
-        _serializer.Serialize(_len, result);
-        _serializer.Serialize(_data, result);
+        _serializer.Serialize(_del, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

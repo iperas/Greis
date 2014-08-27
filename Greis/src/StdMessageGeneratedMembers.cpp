@@ -16,6 +16,12 @@ namespace Greis
             cache[CHAR2_TO_USHORT("AN")] = EMessageId::AntName;
             cache[CHAR2_TO_USHORT("BI")] = EMessageId::BaseInfo;
             cache[CHAR2_TO_USHORT("BL")] = EMessageId::Baseline;
+            cache[CHAR2_TO_USHORT("bL")] = EMessageId::Baselines;
+            cache[CHAR2_TO_USHORT("CA")] = EMessageId::BeiDouAlm;
+            cache[CHAR2_TO_USHORT("CN")] = EMessageId::BeiDouEphemeris;
+            cache[CHAR2_TO_USHORT("CI")] = EMessageId::BeiDouIonoParams;
+            cache[CHAR2_TO_USHORT("CU")] = EMessageId::BeiDouUtcParam;
+            cache[CHAR2_TO_USHORT("gR")] = EMessageId::CalBandsDelay;
             cache[CHAR2_TO_USHORT("rT")] = EMessageId::ClockOffsets;
             cache[CHAR2_TO_USHORT("EC")] = EMessageId::CNR;
             cache[CHAR2_TO_USHORT("E1")] = EMessageId::CNR;
@@ -56,6 +62,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("F3")] = EMessageId::Flags;
             cache[CHAR2_TO_USHORT("F5")] = EMessageId::Flags;
             cache[CHAR2_TO_USHORT("Fl")] = EMessageId::Flags;
+            cache[CHAR2_TO_USHORT("mR")] = EMessageId::FullRotationMatrix;
             cache[CHAR2_TO_USHORT("EA")] = EMessageId::GALAlm;
             cache[CHAR2_TO_USHORT("EN")] = EMessageId::GALEphemeris;
             cache[CHAR2_TO_USHORT("ED")] = EMessageId::GalRawNavData;
@@ -63,12 +70,12 @@ namespace Greis
             cache[CHAR2_TO_USHORT("PG")] = EMessageId::GeoPos;
             cache[CHAR2_TO_USHORT("VG")] = EMessageId::GeoVel;
             cache[CHAR2_TO_USHORT("NA")] = EMessageId::GLOAlmanac;
+            cache[CHAR2_TO_USHORT("gC")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g1")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g2")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g3")] = EMessageId::GloDelays;
             cache[CHAR2_TO_USHORT("NE")] = EMessageId::GLOEphemeris;
             cache[CHAR2_TO_USHORT("LD")] = EMessageId::GloNavData;
-            cache[CHAR2_TO_USHORT("gC")] = EMessageId::GloPhaseDelay;
-            cache[CHAR2_TO_USHORT("g1")] = EMessageId::GloPhaseDelay;
-            cache[CHAR2_TO_USHORT("g2")] = EMessageId::GloPhaseDelay;
-            cache[CHAR2_TO_USHORT("g3")] = EMessageId::GloPhaseDelay;
             cache[CHAR2_TO_USHORT("lD")] = EMessageId::GloRawNavData;
             cache[CHAR2_TO_USHORT("NT")] = EMessageId::GLOTime;
             cache[CHAR2_TO_USHORT("NU")] = EMessageId::GloUtcGpsParam;
@@ -78,6 +85,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("gd")] = EMessageId::GpsRawNavData0;
             cache[CHAR2_TO_USHORT("GT")] = EMessageId::GPSTime;
             cache[CHAR2_TO_USHORT("UO")] = EMessageId::GpsUtcParam;
+            cache[CHAR2_TO_USHORT("ha")] = EMessageId::HeadAndPitch;
             cache[CHAR2_TO_USHORT("ec")] = EMessageId::IAmp;
             cache[CHAR2_TO_USHORT("e1")] = EMessageId::IAmp;
             cache[CHAR2_TO_USHORT("e2")] = EMessageId::IAmp;
@@ -116,6 +124,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("QD")] = EMessageId::QzssNavData;
             cache[CHAR2_TO_USHORT("qd")] = EMessageId::QzssRawNavData;
             cache[CHAR2_TO_USHORT("QU")] = EMessageId::QzssUtcParam;
+            cache[CHAR2_TO_USHORT("rr")] = EMessageId::RangeResidual;
             cache[CHAR2_TO_USHORT("rM")] = EMessageId::RawMeas;
             cache[CHAR2_TO_USHORT("cp")] = EMessageId::RCPRc1;
             cache[CHAR2_TO_USHORT("1p")] = EMessageId::RCPRc1;
@@ -129,6 +138,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("3P")] = EMessageId::RCPRC0;
             cache[CHAR2_TO_USHORT("5P")] = EMessageId::RCPRC0;
             cache[CHAR2_TO_USHORT("lP")] = EMessageId::RCPRC0;
+            cache[CHAR2_TO_USHORT("CO")] = EMessageId::RcvBeiDouTimeOffset;
             cache[CHAR2_TO_USHORT("RD")] = EMessageId::RcvDate;
             cache[CHAR2_TO_USHORT("EO")] = EMessageId::RcvGALTimeOffset;
             cache[CHAR2_TO_USHORT("NO")] = EMessageId::RcvGLOTimeOffset;
@@ -204,6 +214,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("TC")] = EMessageId::TrackingTimeCA;
             cache[CHAR2_TO_USHORT("VE")] = EMessageId::Vel;
             cache[CHAR2_TO_USHORT("SV")] = EMessageId::VelCov;
+            cache[CHAR2_TO_USHORT("vr")] = EMessageId::VelocityResidual;
             cache[CHAR2_TO_USHORT(">>")] = EMessageId::Wrapper;
         }
         auto it = cache.find(CHAR2_TO_USHORT(p_id));

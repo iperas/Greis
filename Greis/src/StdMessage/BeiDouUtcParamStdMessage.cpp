@@ -1,25 +1,19 @@
-#include "GloPhaseDelayStdMessage.h"
+#include "BeiDouUtcParamStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    GloPhaseDelayStdMessage::GloPhaseDelayStdMessage( const char* pc_message, int p_length ) 
+    BeiDouUtcParamStdMessage::BeiDouUtcParamStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 1) / 9;
-
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::i1>::value_type) * arraySizeInUniformFillFields, _fcn);
-        p_message += sizeof(std::vector<Types::i1>::value_type) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _phase);
-        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _range);
-        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, 23, _utc);
+        p_message += 23;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -31,18 +25,18 @@ namespace Greis
         }
     }
     
-    GloPhaseDelayStdMessage::GloPhaseDelayStdMessage( const std::string& p_id, int p_size ) 
+    BeiDouUtcParamStdMessage::BeiDouUtcParamStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string GloPhaseDelayStdMessage::ToString() const
+    std::string BeiDouUtcParamStdMessage::ToString() const
     {
-        return toString("GloPhaseDelayStdMessage");
+        return toString("BeiDouUtcParamStdMessage");
     }
     
-    bool GloPhaseDelayStdMessage::Validate() const
+    bool BeiDouUtcParamStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
@@ -53,7 +47,7 @@ namespace Greis
         return validateChecksum8Bin(message.data(), message.size());
     }
     
-    void GloPhaseDelayStdMessage::RecalculateChecksum()
+    void BeiDouUtcParamStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
@@ -63,7 +57,7 @@ namespace Greis
         _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
-    QByteArray GloPhaseDelayStdMessage::ToByteArray() const
+    QByteArray BeiDouUtcParamStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -73,9 +67,7 @@ namespace Greis
 
         result.append(headToByteArray());
 
-        _serializer.Serialize(_fcn, result);
-        _serializer.Serialize(_phase, result);
-        _serializer.Serialize(_range, result);
+        _serializer.Serialize(_utc, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

@@ -1,5 +1,11 @@
 /* DATE: 30-01-2014 */
 
+/* manual fixed:
+    1. ';' in 2 places
+    2. BandDelay (ct) switched places with 'CalBandDelay' message
+    3. SvDelays & GloDelays - the same
+ */
+
 [JP] File Identifier
 struct FileId {85} {
 a1 id[5]; // File type identifier
@@ -1109,7 +1115,7 @@ struct BeiDouEphemeris {128} {
 GpsEphReqData req; // GPS required data, ‘req.sv’ within the range [1…30]
 // --- BeiDou-specific data block ---
 f4 tgd2; //
-u1 navType // Type of navigation data
+u1 navType; // Type of navigation data
 // --- End of BeiDou-specific data block ---
 u1 cs; // Checksum
 };
@@ -1380,31 +1386,27 @@ u1 agcmax[n]; // Max AGC values []
 Messages described in this section contain measurements obtained by the hardware calibrator
 (refer to “Hardware Calibrator” on page 191).
 [gC], [g1], [g2], [g3]: GLONASS Delays
-struct SvDelays {9} {
-i1 fcn; // GLONASS FCN[-7…6]
-f4 phase; // Phase delay [cycles]
-f4 range; // Range delay [s]
-};
-100 www.javad.com GREIS
-RECEIVER MESSAGES
-Standard Predefined Messages
-ADU Messages
 struct GloDelays {9*nFcn+1} {
 SvDelay del[nFcn]; // Delays
 u1 cs; // Checksum
 };
+struct SvDelay {9} {
+i1 fcn; // GLONASS FCN[-7…6]
+f4 phase; // Phase delay [cycles]
+f4 range; // Range delay [s]
+};
 The [gC], [g1], [g2], and [g3] messages contain CA/L1, P/L1, P/L2, and CA/L2 phase
 and code delays for GLONASS FCNs.
-[gR]: Code Delays of Receiver RF Bands
+[gR] Code Delays of Receiver RF Bands
+struct CalBandsDelay {6*n+1} {
+BandDelay d[n]; // ‘n’ may vary depending on receiver model
+// and calibrator data readiness
+u1 cs; // Checksum
+};
 struct BandDelay {6} {
 i1 band; // 0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3
 i1 signal; // 0-ca, 1-p
 f4 delay; // Code delay [s]
-};
-struct CalBandsDelay {6*n+1} {
-BandDelay d[n] // ‘n’ may vary depending on receiver model
-// and calibrator data readiness
-u1 cs; // Checksum
 };
 3.4.11 ADU Messages
 [MR] Rotation Matrix

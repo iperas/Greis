@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Greis/CustomType/BandDelayCustomType.h"
 #include "Greis/CustomType/ClkOffsCustomType.h"
 #include "Greis/CustomType/ExtSpecDataCustomType.h"
 #include "Greis/CustomType/GPSAlm1CustomType.h"
@@ -15,5 +16,6 @@
 #include "Greis/CustomType/SvData0CustomType.h"
 #include "Greis/CustomType/SvData1CustomType.h"
 #include "Greis/CustomType/SvData2CustomType.h"
+#include "Greis/CustomType/SvDelayCustomType.h"
 #include "Greis/CustomType/UtcOffsCustomType.h"
 

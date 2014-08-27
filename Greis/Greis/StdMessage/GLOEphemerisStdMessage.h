@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Satellite orbit slot number [1…24] []
+        // Satellite orbit slot number [1…32] []
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 

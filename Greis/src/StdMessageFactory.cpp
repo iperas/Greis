@@ -32,6 +32,18 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new BaseInfoStdMessage(p_message, p_length));
             case EMessageId::Baseline:
                 return StdMessage::UniquePtr_t(new BaselineStdMessage(p_message, p_length));
+            case EMessageId::Baselines:
+                return StdMessage::UniquePtr_t(new BaselinesStdMessage(p_message, p_length));
+            case EMessageId::BeiDouAlm:
+                return StdMessage::UniquePtr_t(new BeiDouAlmStdMessage(p_message, p_length));
+            case EMessageId::BeiDouEphemeris:
+                return StdMessage::UniquePtr_t(new BeiDouEphemerisStdMessage(p_message, p_length));
+            case EMessageId::BeiDouIonoParams:
+                return StdMessage::UniquePtr_t(new BeiDouIonoParamsStdMessage(p_message, p_length));
+            case EMessageId::BeiDouUtcParam:
+                return StdMessage::UniquePtr_t(new BeiDouUtcParamStdMessage(p_message, p_length));
+            case EMessageId::CalBandsDelay:
+                return StdMessage::UniquePtr_t(new CalBandsDelayStdMessage(p_message, p_length));
             case EMessageId::ClockOffsets:
                 return StdMessage::UniquePtr_t(new ClockOffsetsStdMessage(p_message, p_length));
             case EMessageId::CNR:
@@ -60,6 +72,8 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new FileIdStdMessage(p_message, p_length));
             case EMessageId::Flags:
                 return StdMessage::UniquePtr_t(new FlagsStdMessage(p_message, p_length));
+            case EMessageId::FullRotationMatrix:
+                return StdMessage::UniquePtr_t(new FullRotationMatrixStdMessage(p_message, p_length));
             case EMessageId::GALAlm:
                 return StdMessage::UniquePtr_t(new GALAlmStdMessage(p_message, p_length));
             case EMessageId::GALEphemeris:
@@ -74,12 +88,12 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new GeoVelStdMessage(p_message, p_length));
             case EMessageId::GLOAlmanac:
                 return StdMessage::UniquePtr_t(new GLOAlmanacStdMessage(p_message, p_length));
+            case EMessageId::GloDelays:
+                return StdMessage::UniquePtr_t(new GloDelaysStdMessage(p_message, p_length));
             case EMessageId::GLOEphemeris:
                 return StdMessage::UniquePtr_t(new GLOEphemerisStdMessage(p_message, p_length));
             case EMessageId::GloNavData:
                 return StdMessage::UniquePtr_t(new GloNavDataStdMessage(p_message, p_length));
-            case EMessageId::GloPhaseDelay:
-                return StdMessage::UniquePtr_t(new GloPhaseDelayStdMessage(p_message, p_length));
             case EMessageId::GloRawNavData:
                 return StdMessage::UniquePtr_t(new GloRawNavDataStdMessage(p_message, p_length));
             case EMessageId::GLOTime:
@@ -98,6 +112,8 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new GPSTimeStdMessage(p_message, p_length));
             case EMessageId::GpsUtcParam:
                 return StdMessage::UniquePtr_t(new GpsUtcParamStdMessage(p_message, p_length));
+            case EMessageId::HeadAndPitch:
+                return StdMessage::UniquePtr_t(new HeadAndPitchStdMessage(p_message, p_length));
             case EMessageId::IAmp:
                 return StdMessage::UniquePtr_t(new IAmpStdMessage(p_message, p_length));
             case EMessageId::InertialMeasurements:
@@ -146,12 +162,16 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new QzssRawNavDataStdMessage(p_message, p_length));
             case EMessageId::QzssUtcParam:
                 return StdMessage::UniquePtr_t(new QzssUtcParamStdMessage(p_message, p_length));
+            case EMessageId::RangeResidual:
+                return StdMessage::UniquePtr_t(new RangeResidualStdMessage(p_message, p_length));
             case EMessageId::RawMeas:
                 return StdMessage::UniquePtr_t(new RawMeasStdMessage(p_message, p_length));
             case EMessageId::RCPRc1:
                 return StdMessage::UniquePtr_t(new RCPRc1StdMessage(p_message, p_length));
             case EMessageId::RCPRC0:
                 return StdMessage::UniquePtr_t(new RCPRC0StdMessage(p_message, p_length));
+            case EMessageId::RcvBeiDouTimeOffset:
+                return StdMessage::UniquePtr_t(new RcvBeiDouTimeOffsetStdMessage(p_message, p_length));
             case EMessageId::RcvDate:
                 return StdMessage::UniquePtr_t(new RcvDateStdMessage(p_message, p_length));
             case EMessageId::RcvGALTimeOffset:
@@ -236,6 +256,8 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new VelStdMessage(p_message, p_length));
             case EMessageId::VelCov:
                 return StdMessage::UniquePtr_t(new VelCovStdMessage(p_message, p_length));
+            case EMessageId::VelocityResidual:
+                return StdMessage::UniquePtr_t(new VelocityResidualStdMessage(p_message, p_length));
             case EMessageId::Wrapper:
                 return StdMessage::UniquePtr_t(new WrapperStdMessage(p_message, p_length));
         default:

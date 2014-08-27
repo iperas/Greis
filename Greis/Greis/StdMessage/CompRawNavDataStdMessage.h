@@ -27,7 +27,7 @@ namespace Greis
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 
-        // COMPASS Time of receiving of message [s]
+        // BeiDou Time of receiving of message [s]
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 

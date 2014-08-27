@@ -268,7 +268,7 @@ starting from 1996) []</Comment>
         <Code>EO</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="RcvSBASTimeOffset" Size="17" Title="[WO] WAAS/EGNOS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="RcvSBASTimeOffset" Size="17" Title="[WO] SBAS to Receiver Time Offset" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="f8" Name="val" RequiredValue="">
           <SizeOfDimensions />
@@ -306,6 +306,25 @@ starting from 1996) []</Comment>
         <Code>QO</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="RcvBeiDouTimeOffset" Size="17" Title="[CO] BeiDou to Receiver Time Offset" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f8" Name="val" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>(Tb - Tr) [s]</Comment>
+        </Variable>
+        <Variable GreisType="f8" Name="sval" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Smoothed (Tb - Tr) [s]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CO</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="GpsUtcParam" Size="24" Title="[UO] GPS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
@@ -321,7 +340,7 @@ starting from 1996) []</Comment>
         <Code>UO</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SbasUtcParam" Size="32" Title="[WU] WAAS/EGNOS UTC Time Parameters" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SbasUtcParam" Size="32" Title="[WU] SBAS UTC Time Parameters" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
           <SizeOfDimensions />
@@ -403,6 +422,21 @@ GALILEO to GPS time offset parameters</Comment>
       </Variables>
       <Codes>
         <Code>QU</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="BeiDouUtcParam" Size="24" Title="[CU] BeiDou UTC Time Parameters" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="UtcOffs" Name="utc" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>BeiDou UTC time offset parameters</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CU</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="GloUtcGpsParam" Size="25" Title="[NU] GLONASS UTC and GPS Time Parameters" Validation="Checksum" Type="Unknown">
@@ -838,6 +872,94 @@ tauSys = Tutc(su) - Tglo [s]</Comment>
         <Code>BL</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="Baselines" Size="52" Title="[bL] Attitude Baselines" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f4" Name="bl0" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>3</Dimension>
+          </SizeOfDimensions>
+          <Comment>baseline vector M-S0 [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="bl1" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>3</Dimension>
+          </SizeOfDimensions>
+          <Comment>baseline vector M-S1 [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="bl2" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>3</Dimension>
+          </SizeOfDimensions>
+          <Comment>baseline vector M-S2 [m]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="rms" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>3</Dimension>
+          </SizeOfDimensions>
+          <Comment>estimated accuracies for baseline vectors [m]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="solType" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>3</Dimension>
+          </SizeOfDimensions>
+          <Comment>solution types for baseline vectors</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>bL</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="FullRotationMatrix" Size="37" Title="[mR] Attitude Full Rotation Matrix" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f4" Name="q00" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q01" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q02" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q10" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q11" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q12" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q20" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q21" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="q22" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>components of the rotation matrix Q []</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>mR</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="PosStat" Size="9" Title="[PS] Position Statistics" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="solType" RequiredValue="">
@@ -1010,7 +1132,7 @@ controllable by RTK engine [%]</Comment>
           <SizeOfDimensions>
             <Dimension>-2</Dimension>
           </SizeOfDimensions>
-          <Comment>(PR[s] - Asys) * 1011</Comment>
+          <Comment>(PR[s] - Asys) / Ksys</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
@@ -1406,6 +1528,40 @@ controllable by RTK engine [%]</Comment>
         <Code>ID</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="RangeResidual" Size="-1" Title="[rr] Satellite Range Residuals" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f4" Name="res" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Range residual [m]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>rr</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="VelocityResidual" Size="-1" Title="[vr] Satellite Velocity Residuals" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f4" Name="res" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Radial velocity residual [m]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>vr</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="GPSAlm0" Size="47" Title="[GA] GPS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
@@ -1508,26 +1664,33 @@ GALILEO-Specific data</Comment>
         <Code>EA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="QZSSAlm" Size="47" Title="[QA] QZSS Almanac" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="QZSSAlm" Size="47" Title="[QA] QZSS Almanac" Validation="None" Type="Unknown">
       <Variables>
         <Variable GreisType="GPSAlm1" Name="gps" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Without ‘cs’ field, gps.sv within the range [193…197]</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="cs" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Checksum</Comment>
+          <Comment>‘gps.sv’ within the range [193…197]</Comment>
         </Variable>
       </Variables>
       <Codes>
         <Code>QA</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="BeiDouAlm" Size="47" Title="[CA] BeiDou Almanac" Validation="None" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GPSAlm1" Name="gps" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>‘gps.sv’ within the range [1…30]</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CA</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="GLOAlmanac" Size="-3" Title="[NA] GLONASS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Satellite orbit slot number within [1…24] []</Comment>
+          <Comment>Satellite orbit slot number within [1…32] []</Comment>
         </Variable>
         <Variable GreisType="i1" Name="frqNum" RequiredValue="">
           <SizeOfDimensions />
@@ -1615,11 +1778,11 @@ GLONASS time scale [s/s]
         <Code>NA</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SBASAlmanac" Size="51" Title="[WA] WAAS/EGNOS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="SBASAlmanac" Size="51" Title="[WA] SBAS Almanac" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>SBAS SV PRN number within [120…138]</Comment>
+          <Comment>SBAS SV PRN number within [120…142]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="gpsPrn" RequiredValue="">
           <SizeOfDimensions />
@@ -1800,11 +1963,36 @@ GLONASS time scale [s/s]
         <Code>QE</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="BeiDouEphemeris" Size="128" Title="[CN] BeiDou Ephemeris" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="GpsEphReqData" Name="req" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>GPS required data, ‘req.sv’ within the range [1…30]
+--- BeiDou-specific data block ---</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="tgd2" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment />
+        </Variable>
+        <Variable GreisType="u1" Name="navType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Type of navigation data
+--- End of BeiDou-specific data block ---</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CN</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="GLOEphemeris" Size="-3" Title="[NE] GLONASS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="sv" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Satellite orbit slot number [1…24] []</Comment>
+          <Comment>Satellite orbit slot number [1…32] []</Comment>
         </Variable>
         <Variable GreisType="i1" Name="frqNum" RequiredValue="">
           <SizeOfDimensions />
@@ -1957,11 +2145,11 @@ tau = TGLN - TSV [s]</Comment>
         <Code>NE</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SBASEhemeris" Size="73" Title="[WE] WAAS/EGNOS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
+    <StandardMessage Name="SBASEhemeris" Size="73" Title="[WE] SBAS Ephemeris" Validation="Checksum" Type="AlmanacsAndEphemeris">
       <Variables>
         <Variable GreisType="u1" Name="waasPrn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>SBAS SV PRN number within [120…138]</Comment>
+          <Comment>SBAS SV PRN number within [120…142]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="gpsPrn" RequiredValue="">
           <SizeOfDimensions />
@@ -2084,10 +2272,10 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Variable GreisType="u1" Name="type" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Type of data:
-0 - GPS L1 NAV
-1 - GPS L2C CNAV
-2 - GPS L5 CNAV
-3 - GPS L1C CNAV2</Comment>
+0 - L1 NAV
+1 - L2C CNAV
+2 - L5 CNAV
+3 - L1C CNAV2</Comment>
         </Variable>
         <Variable GreisType="u1" Name="len" RequiredValue="">
           <SizeOfDimensions />
@@ -2177,7 +2365,7 @@ N=([Message Length] - 2) / recSize)</Comment>
           <SizeOfDimensions />
           <Comment>Length of the navigation data block ‘data’</Comment>
         </Variable>
-        <Variable GreisType="u1" Name="data" RequiredValue="">
+        <Variable GreisType="u4" Name="data" RequiredValue="">
           <SizeOfDimensions>
             <Dimension>-2</Dimension>
           </SizeOfDimensions>
@@ -2192,11 +2380,11 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>lD</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SbasRawNavData" Size="40" Title="[WD] WAAS/EGNOS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="SbasRawNavData" Size="40" Title="[WD] SBAS Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="prn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>SV PRN number within the range [120…138]</Comment>
+          <Comment>SV PRN number within the range [120…142]</Comment>
         </Variable>
         <Variable GreisType="u4" Name="time" RequiredValue="">
           <SizeOfDimensions />
@@ -2258,7 +2446,7 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>ED</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="CompRawNavData" Size="-2" Title="[cd] COMPASS Raw Navigation Data" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="CompRawNavData" Size="-2" Title="[cd] BeiDou Raw Navigation Data" Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="u1" Name="prn" RequiredValue="">
           <SizeOfDimensions />
@@ -2266,7 +2454,7 @@ N=([Message Length] - 2) / recSize)</Comment>
         </Variable>
         <Variable GreisType="u4" Name="time" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>COMPASS Time of receiving of message [s]</Comment>
+          <Comment>BeiDou Time of receiving of message [s]</Comment>
         </Variable>
         <Variable GreisType="u1" Name="type" RequiredValue="">
           <SizeOfDimensions />
@@ -2357,25 +2545,13 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>sP</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="GloPhaseDelay" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Phase Delays" Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="GloDelays" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Delays" Validation="Checksum" Type="Unknown">
       <Variables>
-        <Variable GreisType="i1" Name="fcn" RequiredValue="">
+        <Variable GreisType="SvDelay" Name="del" RequiredValue="">
           <SizeOfDimensions>
             <Dimension>-2</Dimension>
           </SizeOfDimensions>
-          <Comment>GLONASS FCN[-7…6]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="phase" RequiredValue="">
-          <SizeOfDimensions>
-            <Dimension>-2</Dimension>
-          </SizeOfDimensions>
-          <Comment>Phase Delay, [cycles]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="range" RequiredValue="">
-          <SizeOfDimensions>
-            <Dimension>-2</Dimension>
-          </SizeOfDimensions>
-          <Comment>Range (reserved for future use)</Comment>
+          <Comment>Delays</Comment>
         </Variable>
         <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
@@ -2387,6 +2563,24 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>g1</Code>
         <Code>g2</Code>
         <Code>g3</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="CalBandsDelay" Size="-1" Title="[gR] Code Delays of Receiver RF Bands" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="BandDelay" Name="d" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>‘n’ may vary depending on receiver model
+and calibrator data readiness</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>gR</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="RotationMatrix" Size="37" Title="[MR] Rotation Matrix" Validation="Checksum" Type="Unknown">
@@ -2668,6 +2862,31 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Code>YB</Code>
       </Codes>
     </StandardMessage>
+    <StandardMessage Name="HeadAndPitch" Size="10" Title="[ha] Heading and Pitch" Validation="Checksum" Type="Unknown">
+      <Variables>
+        <Variable GreisType="f4" Name="heading" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Heading of the baseline between the base and the
+rover receiver [degrees]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="pitch" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Pitch of the baseline between the base and the
+rover receiver [degrees]</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="solType" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Solution type</Comment>
+        </Variable>
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Checksum</Comment>
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>ha</Code>
+      </Codes>
+    </StandardMessage>
     <StandardMessage Name="RefEpoch" Size="10" Title="[rE] Reference Epoch" Validation="Crc16" Type="Unknown">
       <Variables>
         <Variable GreisType="u2" Name="sample" RequiredValue="">
@@ -2805,13 +3024,13 @@ coordinates
 14…13: reserved
 12…8: Number of GLONASS SVs used in computation;
 7…4: Position computation mode
-(see Table 4-3 on page 324);
+(see Table 3-3 on page 66);
 3…0: Velocity computation mode
-(see Table 4-3 on page 324);</Comment>
+(see Table 3-3 on page 66);</Comment>
         </Variable>
         <Variable GreisType="u4" Name="word3" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>31…0: 32 MSB of Position Y-component;</Comment>
+          <Comment>32 MSB of Position Y-component;</Comment>
         </Variable>
         <Variable GreisType="u4" Name="word4" RequiredValue="">
           <SizeOfDimensions />
@@ -2823,13 +3042,13 @@ or Grid (Local) Y-component [10-4 m];
         </Variable>
         <Variable GreisType="u4" Name="word5" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>32 MSB of 40-bit ECEF position Z-component;</Comment>
+          <Comment>32 MSB of position Z-component;</Comment>
         </Variable>
         <Variable GreisType="u4" Name="word6" RequiredValue="">
           <SizeOfDimensions />
           <Comment>[bitfield]:
-31…24: 8 LSB of 40-bit position ECEF Z-component
-or Height above ellipsoid [10-4 m];
+31…24: 8 LSB of position ECEF Z-component
+or Height above ellipsoid or geoid14 [10-4 m];
 23…20: reserved;
 19…0: RMS Position error [0.001 m];</Comment>
         </Variable>
@@ -2854,7 +3073,7 @@ selected in bits 22…21 of the ‘word2’ field);
           <SizeOfDimensions />
           <Comment>[bitfield]:
 31…4: velocity Z-component [10-4 m/s]
-or North component (if types 1 and 2 are
+or Height component (if types 1 and 2 are
 selected in bits 22…21 of the ‘word2’ field);
 3…0: 4 LSB of GREIS datum number;</Comment>
         </Variable>
@@ -2990,6 +3209,17 @@ the period of the model</Comment>
       </Variables>
       <Codes>
         <Code>QI</Code>
+      </Codes>
+    </StandardMessage>
+    <StandardMessage Name="BeiDouIonoParams" Size="39" Title="[CI] BeiDou Ionospheric Parameters" Validation="None" Type="Unknown">
+      <Variables>
+        <Variable GreisType="IonoParams1" Name="par" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment />
+        </Variable>
+      </Variables>
+      <Codes>
+        <Code>CI</Code>
       </Codes>
     </StandardMessage>
     <StandardMessage Name="Event" Size="-2" Title="[==](EV) Event" Validation="Checksum" Type="Unknown">
@@ -3494,6 +3724,38 @@ string of a GLONASS sub-frame for given FCN.</Comment>
         </Variable>
       </Variables>
     </CustomType>
+    <CustomType Name="SvDelay" Size="9">
+      <Variables>
+        <Variable GreisType="i1" Name="fcn" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>GLONASS FCN[-7…6]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="phase" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Phase delay [cycles]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="range" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Range delay [s]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
+    <CustomType Name="BandDelay" Size="6">
+      <Variables>
+        <Variable GreisType="i1" Name="band" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="signal" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>0-ca, 1-p</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="delay" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Code delay [s]</Comment>
+        </Variable>
+      </Variables>
+    </CustomType>
     <CustomType Name="SvData2" Size="-1">
       <Variables>
         <Variable GreisType="Header" Name="header" RequiredValue="">
@@ -3534,7 +3796,7 @@ string of a GLONASS sub-frame for given FCN.</Comment>
 Delta pseudo-range [0.02 meters].
 SV status [bitfield]:
 15…11: GLONASS slot number (for GPS SV the field
-is undefined), [0…24], 0 - unknown
+is undefined), [0…32], 0 - unknown
 10…6: Channel number [0…31], 31 - unavailable
 5…0: Satellite navigation status
 Delta pseudo-range [0.02 meters]:
@@ -3805,10 +4067,10 @@ N=([Message Length] - 2) / recSize)</Comment>
         <Variable GreisType="u1" Name="type" RequiredValue="">
           <SizeOfDimensions />
           <Comment>Type of data:
-0 - GPS L1 NAV
-1 - GPS L2C CNAV
-2 - GPS L5 CNAV
-3 - GPS L1C CNAV2</Comment>
+0 - L1 NAV
+1 - L2C CNAV
+2 - L5 CNAV
+3 - L1C CNAV2</Comment>
         </Variable>
         <Variable GreisType="u1" Name="len" RequiredValue="">
           <SizeOfDimensions />

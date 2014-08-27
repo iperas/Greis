@@ -1,19 +1,19 @@
-#include "QZSSAlmStdMessage.h"
+#include "BeiDouIonoParamsStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    QZSSAlmStdMessage::QZSSAlmStdMessage( const char* pc_message, int p_length ) 
+    BeiDouIonoParamsStdMessage::BeiDouIonoParamsStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, 46, _gps);
-        p_message += 46;
+        _serializer.Deserialize(p_message, 39, _par);
+        p_message += 39;
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -23,18 +23,18 @@ namespace Greis
         }
     }
     
-    QZSSAlmStdMessage::QZSSAlmStdMessage( const std::string& p_id, int p_size ) 
+    BeiDouIonoParamsStdMessage::BeiDouIonoParamsStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string QZSSAlmStdMessage::ToString() const
+    std::string BeiDouIonoParamsStdMessage::ToString() const
     {
-        return toString("QZSSAlmStdMessage");
+        return toString("BeiDouIonoParamsStdMessage");
     }
     
-    bool QZSSAlmStdMessage::Validate() const
+    bool BeiDouIonoParamsStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
@@ -44,7 +44,7 @@ namespace Greis
         return true;
     }
     
-    void QZSSAlmStdMessage::RecalculateChecksum()
+    void BeiDouIonoParamsStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
@@ -53,7 +53,7 @@ namespace Greis
         
     }
 
-    QByteArray QZSSAlmStdMessage::ToByteArray() const
+    QByteArray BeiDouIonoParamsStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -63,7 +63,7 @@ namespace Greis
 
         result.append(headToByteArray());
 
-        _serializer.Serialize(_gps, result);
+        _serializer.Serialize(_par, result);
         
         assert(result.size() == Size());
         return result;
