@@ -53,6 +53,7 @@ function updateFiles() {
     "updating local files in $outputDir..."
 
     cp $metaXmlFile $outputMetaDir -Force
+    cp ($sqlBaselineDir + '\baseline.sql') $outputMetaDir -Force
 
     $includeDir = $outputDir + '\Greis'
     $srcDir = $outputDir + '\src'
