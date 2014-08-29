@@ -33,7 +33,7 @@ namespace Greis
 
         inline void updateTimePart( RcvTimeStdMessage* msg )
         {
-            _dateTime.setTime(QTime().addMSecs(msg->Tod()));
+            _dateTime.setTime(QTime(0, 0).addMSecs(msg->Tod()));
             _timeIsSet = true;
         }
 
