@@ -37,7 +37,7 @@ namespace
         }
     };
 
-    TEST_F(MySqlSinkTests, mainTest)
+    TEST_F(MySqlSinkTests, ShouldSerializeIntoDatabase)
     {
         QString filename("TestData/ipg_2011_03_28_00.00.00_cropped.jps");
         auto file = DataChunk::FromFile(filename);

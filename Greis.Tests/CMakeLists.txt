@@ -12,6 +12,8 @@ FILE(GLOB_RECURSE SOURCES "src/*.cpp")
 
 FILE(GLOB_RECURSE MOC_SOURCES "*_automoc.cpp")
 
+SET(CONFIG_FILES "config.test.ini")
+
 # source grouping
 
 source_group ("Header Files" FILES ${HEADERS})
@@ -33,7 +35,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
 
 # linking
 
-add_executable(${PROJECT} ${HEADERS} ${SOURCES} ${MOC_SOURCES})
+add_executable(${PROJECT} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${CONFIG_FILES})
 
 SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -50,3 +52,10 @@ target_link_libraries(
 # dependencies
 
 add_dependencies(${PROJECT} googletest ${DEPENDS_ON_PROJECTS})
+
+# add_custom_target(copy)
+foreach(ConfigFile ${CONFIG_FILES})
+  add_custom_command(TARGET ${PROJECT} PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E
+                         copy ${ConfigFile} $<TARGET_FILE_DIR:${PROJECT}>)
+endforeach()

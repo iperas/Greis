@@ -39,7 +39,7 @@ namespace
         }
     };
 
-    TEST_F(MySqlSourceTests, mainTest)
+    TEST_F(MySqlSourceTests, ShouldDeserializeFromDatabase)
     {
         try
         {

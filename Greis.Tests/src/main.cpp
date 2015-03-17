@@ -4,6 +4,8 @@
 #include <gtest/gtest.h>
 #include "Common/Logger.h"
 #include "Common/Path.h"
+
+#include "EnvironmentTests.h"
 #include "MySqlSinkTests.h"
 #include "DataChunkTests.h"
 #include "MySqlSourceTests.h"
@@ -24,6 +26,7 @@ int main(int argc, char **argv)
 
     //sLogger.Initialize(Path::Combine(Path::ApplicationDirPath(), "logger.config.xml"));
     sLogger.Initialize(5);
+    sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.test.ini"));
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
