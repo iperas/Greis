@@ -14,6 +14,18 @@ FILE(GLOB_RECURSE MOC_SOURCES "*_automoc.cpp")
 
 SET(CONFIG_FILES "config.test.ini")
 
+# check 64 bit
+#if(CMAKE_SIZEOF_VOID_P EQUALS 4)
+#    set(HAVE_64_BIT 0)
+#else()
+#    set(HAVE_64_BIT 1)
+#endif()
+
+if (MSVC)
+	# Now we support only x86 build with this. Be aware that x64 configuration will fail with a strange error 'Driver not found'
+	SET (DEPLOY_FILES ${DEPLOY_FILES} "C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/lib/libmysql.dll")
+endif()
+
 # source grouping
 
 source_group ("Header Files" FILES ${HEADERS})
@@ -58,4 +70,10 @@ foreach(ConfigFile ${CONFIG_FILES})
   add_custom_command(TARGET ${PROJECT} PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E
                          copy ${ConfigFile} $<TARGET_FILE_DIR:${PROJECT}>)
+endforeach()
+
+foreach(File ${DEPLOY_FILES})
+  add_custom_command(TARGET ${PROJECT} PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E
+                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
 endforeach()
