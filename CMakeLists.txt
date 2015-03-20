@@ -8,6 +8,22 @@ MACRO(add_test_ex target)
     ADD_TEST(NAME ${target} COMMAND $<TARGET_FILE:${target}> --gtest_output=xml:${CMAKE_BINARY_DIR}/build/test-reports/${target}.xml)
 ENDMACRO()
 
+SET(TEXT_TRANSFORM "C:/Program Files (x86)/Common Files/Microsoft Shared/TextTemplating/12.0/TextTransform.exe")
+
+MACRO(add_custom_action_t4 targets)
+	foreach(target ${targets})
+    	add_custom_command(TARGET ${PROJECT} PRE_BUILD COMMAND ${TEXT_TRANSFORM} -out "${CMAKE_CURRENT_SOURCE_DIR}/${target}" "${CMAKE_CURRENT_SOURCE_DIR}/${target}.tt")
+    endforeach()
+ENDMACRO()
+
+MACRO(add_custom_action_copy targets)
+	foreach(File ${targets})
+	  add_custom_command(TARGET ${PROJECT} PRE_BUILD
+	                     COMMAND ${CMAKE_COMMAND} -E
+	                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
+	endforeach()
+ENDMACRO()
+
 # Project settings
 
 PROJECT(jpsutils CXX)

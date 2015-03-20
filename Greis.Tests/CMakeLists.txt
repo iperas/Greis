@@ -14,6 +14,8 @@ FILE(GLOB_RECURSE MOC_SOURCES "*_automoc.cpp")
 
 SET(CONFIG_FILES "config.test.ini")
 
+SET(TEXT_TEMPLATES "include/tests.h")
+
 # check 64 bit
 #if(CMAKE_SIZEOF_VOID_P EQUALS 4)
 #    set(HAVE_64_BIT 0)
@@ -47,7 +49,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
 
 # linking
 
-add_executable(${PROJECT} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${CONFIG_FILES})
+add_executable(${PROJECT} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${CONFIG_FILES} ${TEXT_TEMPLATES})
 
 SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -66,14 +68,9 @@ target_link_libraries(
 add_dependencies(${PROJECT} googletest ${DEPENDS_ON_PROJECTS})
 
 # add_custom_target(copy)
-foreach(ConfigFile ${CONFIG_FILES})
-  add_custom_command(TARGET ${PROJECT} PRE_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E
-                         copy ${ConfigFile} $<TARGET_FILE_DIR:${PROJECT}>)
-endforeach()
+add_custom_action_copy(${CONFIG_FILES})
+add_custom_action_copy(${DEPLOY_FILES})
+if (MSVC)
+	add_custom_action_t4(${TEXT_TEMPLATES})
+endif()	
 
-foreach(File ${DEPLOY_FILES})
-  add_custom_command(TARGET ${PROJECT} PRE_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E
-                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
-endforeach()

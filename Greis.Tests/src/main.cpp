@@ -5,12 +5,13 @@
 #include "Common/Logger.h"
 #include "Common/Path.h"
 
-#include "EnvironmentTests.h"
-#include "MySqlSinkTests.h"
-#include "DataChunkTests.h"
-#include "MySqlSourceTests.h"
-#include "GreisBinarySerializerTests.h"
-#include "GreisMessageStreamTests.h"
+#include "tests.h"
+#include "tests/EnvironmentTests.h"
+#include "tests/MySqlSinkTests.h"
+#include "tests/DataChunkTests.h"
+#include "tests/MySqlSourceTests.h"
+#include "tests/GreisBinarySerializerTests.h"
+#include "tests/GreisMessageStreamTests.h"
 
 using namespace Common;
 
