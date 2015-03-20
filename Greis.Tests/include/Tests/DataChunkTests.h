@@ -20,7 +20,7 @@ namespace Greis
 
         TEST_F(DataChunkTests, TestData_ipg_2011_03_28_cropped_jps_DeserializationTest)
         {
-            QString filename("TestData/ipg_2011_03_28_00.00.00_cropped.jps");
+            QString filename("../../../TestData/ifz-data-0.jps");
 
             auto file = DataChunk::FromFile(filename);
 

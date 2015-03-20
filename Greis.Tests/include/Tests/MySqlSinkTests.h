@@ -25,10 +25,8 @@ namespace Greis
 
         TEST_F(MySqlSinkTests, ShouldSerializeIntoDatabase)
         {
-            QString filename("TestData/ipg_2011_03_28_00.00.00_cropped.jps");
+            QString filename("../../../TestData/ifz-data-0.jps");
             auto file = DataChunk::FromFile(filename);
-
-            sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
 
             bool wrapIntoTransaction = sIniSettings.value("WrapIntoTransaction", false).toBool();
             int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();

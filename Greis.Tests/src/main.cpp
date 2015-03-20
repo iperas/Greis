@@ -6,12 +6,6 @@
 #include "Common/Path.h"
 
 #include "tests.h"
-#include "tests/EnvironmentTests.h"
-#include "tests/MySqlSinkTests.h"
-#include "tests/DataChunkTests.h"
-#include "tests/MySqlSourceTests.h"
-#include "tests/GreisBinarySerializerTests.h"
-#include "tests/GreisMessageStreamTests.h"
 
 using namespace Common;
 

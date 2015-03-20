@@ -18,7 +18,7 @@ namespace Generator.Console
         [Option('t', "target", Required = true, HelpText = "Target directory for the output. Output data has fixed filename that cannot be changed.")]
         public string Target { get; set; }
 
-        [Option('b', "database", DefaultValue = "world", HelpText = "Database name that will be used by the sql baseline generator while generating baseline.sql, `world` by default.")]
+        [Option('b', "database", DefaultValue = "test", HelpText = "Database name that will be used by the sql baseline generator while generating baseline.sql, `world` by default.")]
         public string DatabaseName { get; set; }
 
         [HelpOption(HelpText = "Display this help screen.")]

@@ -1,4 +1,12 @@
-﻿ 
+﻿///
+/// Generated code. DO NOT MODIFY MANUALLY.
+///
+
 #pragma once
 
-D:\work\git\ifz\jpsutils\Greis.Tests\include\Tests
+#include "Tests/DataChunkTests.h"
+#include "Tests/EnvironmentTests.h"
+#include "Tests/GreisBinarySerializerTests.h"
+#include "Tests/GreisMessageStreamTests.h"
+#include "Tests/MySqlSinkTests.h"
+#include "Tests/MySqlSourceTests.h"

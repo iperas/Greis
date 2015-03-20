@@ -12,7 +12,7 @@ SET(TEXT_TRANSFORM "C:/Program Files (x86)/Common Files/Microsoft Shared/TextTem
 
 MACRO(add_custom_action_t4 targets)
 	foreach(target ${targets})
-    	add_custom_command(TARGET ${PROJECT} PRE_BUILD COMMAND ${TEXT_TRANSFORM} -out "${CMAKE_CURRENT_SOURCE_DIR}/${target}" "${CMAKE_CURRENT_SOURCE_DIR}/${target}.tt")
+    	add_custom_command(TARGET ${PROJECT} PRE_BUILD COMMAND ${TEXT_TRANSFORM} -I "${CMAKE_CURRENT_SOURCE_DIR}" -out "${CMAKE_CURRENT_SOURCE_DIR}/${target}" "${CMAKE_CURRENT_SOURCE_DIR}/${target}.tt")
     endforeach()
 ENDMACRO()
 

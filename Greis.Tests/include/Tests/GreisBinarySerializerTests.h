@@ -25,14 +25,6 @@ namespace Greis
             {
             }
 
-            virtual void SetUp()
-            {
-            }
-
-            virtual void TearDown()
-            {
-            }
-
             GreisBinarySerializer _serializer;
         };
 

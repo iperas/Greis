@@ -5,14 +5,19 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections" #>
-<#@ import namespace="System.Collections.Generic" #> 
+<#@ import namespace="System.Collections.Generic" #>///
+/// Generated code. DO NOT MODIFY MANUALLY.
+///
+
 #pragma once
 
 <#
-    var testsDir = Host.ResolvePath("include/Tests");
-    var files = Directory.GetFiles(testsDir, "*.Tests.h", SearchOption.AllDirectories);
-    testsDir = Path.GetFullPath(testsDir);
-#>
-<#=
-testsDir
+    Console.WriteLine("Building test includes list...");
+    var testsDir = Host.ResolvePath("Tests");
+    var fileNames = Directory.GetFiles(testsDir, "*Tests.h", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+    foreach (var fileName in fileNames)
+    {
+        #>#include "Tests/<#=fileName#>"
+<#
+    }
 #>
