@@ -21,30 +21,29 @@ namespace Greis
 
         TEST_F(GreisMessageStreamTests, TestData_ipg_2011_03_28_cropped_jps_SerializationTest)
         {
+            // Reading file content
             QString filename("../../../TestData/ifz-data-0.jps");
-            QByteArray expected;
-            {
-                auto file = File::OpenReadBinary(filename);
-                expected = file->readAll();
-            }
+            auto file = File::OpenReadBinary(filename);
+            QByteArray expected = file->readAll();
+            file->close();
 
+            // Making object stream of it
             GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
             std::vector<Message::UniquePtr_t> messages;
+            messages.reserve(100000);
+            Message::UniquePtr_t msg;
+            int i = 1;
+            while ((msg = stream.Next()).get())
             {
-                messages.reserve(100000);
-                Message::UniquePtr_t msg;
-                int i = 1;
-                while ((msg = stream.Next()).get())
+                messages.push_back(std::move(msg));
+                if (i % 100000 == 0)
                 {
-                    messages.push_back(std::move(msg));
-                    if (i % 100000 == 0)
-                    {
-                        sLogger.Info(QString("100k messages deserialized. %1 total.").arg(i));
-                    }
-                    i++;
+                    sLogger.Info(QString("100k messages deserialized. %1 total.").arg(i));
                 }
+                i++;
             }
 
+            // 
             QByteArray actual;
             {
                 int coreCount = boost::thread::hardware_concurrency();
@@ -96,6 +95,7 @@ namespace Greis
                 }*/
             }
 
+            // Comparing byte arrays of byte-object-byte and byte cases
             ASSERT_EQ(expected.size(), actual.size());
             bool bad = false;
             for (int i = 0; i < expected.size(); ++i)
