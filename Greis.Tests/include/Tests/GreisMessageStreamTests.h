@@ -19,6 +19,11 @@ namespace Greis
         {
         };
 
+        TEST_F(GreisMessageStreamTests, ShouldSerializeTheIdenticalFile)
+        {
+
+        }
+
         TEST_F(GreisMessageStreamTests, TestData_ipg_2011_03_28_cropped_jps_SerializationTest)
         {
             // Reading file content

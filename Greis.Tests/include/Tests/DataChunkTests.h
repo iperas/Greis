@@ -18,12 +18,13 @@ namespace Greis
         {
         };
 
-        TEST_F(DataChunkTests, TestData_ipg_2011_03_28_cropped_jps_DeserializationTest)
+        TEST_F(DataChunkTests, ShouldDeserializeIntoObjectModel)
         {
+            // Arrange, Act
             QString filename("../../../TestData/ifz-data-0.jps");
-
             auto file = DataChunk::FromFile(filename);
 
+            // Assert
             for (auto e = file->Body().begin(); e != file->Body().end(); ++e)
             {
                 for (auto it = (*e)->Messages.begin(); it != (*e)->Messages.end(); ++it)
