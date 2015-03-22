@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #include <boost/thread.hpp>
 #include "Utils/BaseTest.h"
+#include "Utils/Helpers.h"
 #include "Common/SmartPtr.h"
 #include "Greis/GreisMessageStream.h"
 #include "Greis/FileBinaryStream.h"
@@ -19,19 +20,31 @@ namespace Greis
         {
         };
 
-        TEST_F(GreisMessageStreamTests, ShouldSerializeTheIdenticalFile)
+        TEST_F(GreisMessageStreamTests, ShouldDeserializeIntoObjectModelThenSerializeTheSameBinary)
         {
+            // Arrange
+            QString filename("../../../TestData/ifz-data-0.jps");
+            QByteArray expected;
+            {
+                auto file = File::OpenReadBinary(filename);
+                expected = file->readAll();
+            }
 
+            // Act
+            DataChunk::UniquePtr_t file = DataChunk::FromFile(filename);
+            QByteArray actual = file->ToByteArray();
+
+            // Assert
+            sHelpers.assertBinaryArray(expected, actual);
         }
 
-        TEST_F(GreisMessageStreamTests, TestData_ipg_2011_03_28_cropped_jps_SerializationTest)
+        TEST_F(GreisMessageStreamTests, ShouldMakeItMultiThreaded)
         {
+            // Arrange
             // Reading file content
             QString filename("../../../TestData/ifz-data-0.jps");
             auto file = File::OpenReadBinary(filename);
-            QByteArray expected = file->readAll();
             file->close();
-
             // Making object stream of it
             GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
             std::vector<Message::UniquePtr_t> messages;
@@ -48,7 +61,7 @@ namespace Greis
                 i++;
             }
 
-            // 
+            // Act
             QByteArray actual;
             {
                 int coreCount = boost::thread::hardware_concurrency();
@@ -87,37 +100,15 @@ namespace Greis
                 {
                     actual.append(results[i]);
                 }
-
-                /*int msgIndex = 1;
-                for (auto it = messages.begin(); it != messages.end(); ++it)
-                {
-                actual.append((*it)->ToByteArray());
-                if (msgIndex % 100000 == 0)
-                {
-                sLogger.Info(QString("100k messages serialized. %1 total.").arg(msgIndex));
-                }
-                msgIndex++;
-                }*/
             }
 
-            // Comparing byte arrays of byte-object-byte and byte cases
-            ASSERT_EQ(expected.size(), actual.size());
-            bool bad = false;
-            for (int i = 0; i < expected.size(); ++i)
+            // Assert
+            QByteArray expected;
+            for (auto& msg : messages)
             {
-                EXPECT_EQ(expected[i], actual[i]);
-                if (expected[i] != actual[i])
-                {
-                    sLogger.Info(QString("Bytes mismatch at %1.").arg(i));
-                    bad = true;
-                    break;
-                }
+                expected.append(msg->ToByteArray());
             }
-            if (bad)
-            {
-                auto tmpFile = File::CreateBinary("testData.temp.jps");
-                tmpFile->write(actual);
-            }
+            sHelpers.assertBinaryArray(expected, actual);
         }
     }
 }
