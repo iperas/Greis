@@ -20,12 +20,7 @@ namespace Greis
 
         TEST_F(EnvironmentTests, ShouldConnect)
         {
-            auto connection = Connection::FromSettings("Db");
-            connection->Connect();
-            sLogger.Info("Starting a new transaction...");
-            connection->Database().transaction();
-            connection->DbHelper()->ExecuteQuery("SHOW TABLES;");
-            connection->Database().commit();
+            this->Connection()->DbHelper()->ExecuteQuery("SHOW TABLES;");
             sLogger.Info("Connection succeeded.");
         }
     }

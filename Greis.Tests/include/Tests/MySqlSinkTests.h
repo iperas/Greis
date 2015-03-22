@@ -28,26 +28,12 @@ namespace Greis
             QString filename("../../../TestData/ifz-data-0.jps");
             auto file = DataChunk::FromFile(filename);
 
-            bool wrapIntoTransaction = sIniSettings.value("WrapIntoTransaction", false).toBool();
-            int inserterBatchSize = sIniSettings.value("inserterBatchSize", 10000).toInt();
-            auto connection = Connection::FromSettings("Db");
-            connection->Connect();
+            int inserterBatchSize = 10000;
 
-            bool transactionStarted;
-            if (wrapIntoTransaction)
             {
-                sLogger.Info("Starting a new transaction...");
-                transactionStarted = connection->Database().transaction();
-            }
-            {
-                auto sink = make_unique<MySqlSink>(connection.get(), inserterBatchSize);
+                auto sink = make_unique<MySqlSink>(this->Connection().get(), inserterBatchSize);
                 sink->AddJpsFile(file.get());
                 sink->Flush();
-            }
-            if (wrapIntoTransaction && transactionStarted)
-            {
-                connection->Database().commit();
-                sLogger.Info("Transaction has been committed.");
             }
             sLogger.Info(QString("Insertion completed."));
         }

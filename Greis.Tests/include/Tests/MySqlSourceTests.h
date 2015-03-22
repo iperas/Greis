@@ -27,17 +27,23 @@ namespace Greis
 
         TEST_F(MySqlSourceTests, ShouldDeserializeFromDatabase)
         {
+            // Arrange
+            QString filename("../../../TestData/ifz-data-0.jps");
+            auto file = DataChunk::FromFile(filename);
+
+            {
+                int inserterBatchSize = 10000;
+                auto sink = make_unique<MySqlSink>(this->Connection().get(), inserterBatchSize);
+                sink->AddJpsFile(file.get());
+                sink->Flush();
+            }
+
+            // Act
             try
             {
-                sIniSettings.Initialize(Path::Combine(Path::ApplicationDirPath(), "config.ini"));
-
-                auto connection = Connection::FromSettings("Db");
-                connection->Connect();
-
-                auto source = make_unique<MySqlSource>(connection.get());
-
-                auto jpsFile = source->ReadRange(QDateTime(QDate(2000, 03, 22), QTime(0, 0, 0), Qt::LocalTime),
-                    QDateTime(QDate(2013, 03, 22), QTime(5, 0, 1), Qt::LocalTime));
+                auto source = make_unique<MySqlSource>(this->Connection().get());
+                
+                auto jpsFile = source->ReadRange(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTime());
 
                 auto ba = jpsFile->ToByteArray();
                 auto out = File::CreateBinary("from_database.jps");
@@ -46,6 +52,7 @@ namespace Greis
             }
             catch (Exception& ex)
             {
+                // Assert
                 sLogger.Error(ex.what());
                 ASSERT_TRUE(false);
             }

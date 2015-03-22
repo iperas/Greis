@@ -25,7 +25,7 @@ SET(TEXT_TEMPLATES "include/tests.h")
 
 if (MSVC)
 	# Now we support only x86 build with this. Be aware that x64 configuration will fail with a strange error 'Driver not found'
-	SET (DEPLOY_FILES ${DEPLOY_FILES} "C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/lib/libmysql.dll")
+	SET (DEPLOY_FILES ${DEPLOY_FILES} "C:/MySQL/MySQLConnectorC6.1/lib/libmysql.dll")
 endif()
 
 # source grouping
