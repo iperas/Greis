@@ -25,19 +25,6 @@ namespace Greis
         bool _skipInvalid;
         bool _handleStdOnly;
     };
-
-    class GreisMessageStream2
-    {
-    public:
-        GreisMessageStream2(QString filename, bool skipInvalid = false, bool handleStdOnly = true);
-        bool HasNext();
-        Message::UniquePtr_t Next();
-
-    private:
-        Common::QFilePtr _file;
-        bool _skipInvalid;
-        bool _handleStdOnly;
-    };
 }
 
 #endif // GreisMessageStream_h__
