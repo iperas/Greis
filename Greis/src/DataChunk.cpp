@@ -8,12 +8,13 @@ namespace Greis
 {
     DataChunk::UniquePtr_t DataChunk::FromFile(QString filename)
     {
-        auto jpsFile = DataChunk::UniquePtr_t(new DataChunk());
+        auto dataChunk = DataChunk::UniquePtr_t(new DataChunk());
         GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
         
         // Collecting the head
         Message::UniquePtr_t msg;
         int index = 0;
+
         while((msg = stream.Next()).get())
         {
             if (msg->Kind() == EMessageKind::StdMessage)
@@ -21,55 +22,52 @@ namespace Greis
                 auto stdMsg = dynamic_cast<StdMessage*>(msg.get());
                 if (stdMsg->IdNumber() == EMessageId::RcvTime)
                 {
-                    jpsFile->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
+                    dataChunk->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
                     break;
                 }
                 if (stdMsg->IdNumber() == EMessageId::RcvDate)
                 {
         
-                    jpsFile->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
+                    dataChunk->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
                 }
             }
-            if (index++ < 6)
-            {
-                // Only first 6 messages are actually collected (JP, \r, \n, MF, \r, \n).
-                // PM messages are ignored.
-                jpsFile->_head.push_back(std::move(msg));
-            }
+
+            // All messages go to _head until date and time is set
+            dataChunk->_head.push_back(std::move(msg));
         }
         // if the head collection was interrupted by a RcvTime message, move it to the first epoch
         if (msg.get())
         {
-            jpsFile->_lastEpoch->Messages.push_back(std::move(msg));
+            dataChunk->_lastEpoch->Messages.push_back(std::move(msg));
         }
         // Collecting a body
         while((msg = stream.Next()).get())
         {
-            jpsFile->AddMessage(std::move(msg));
+            dataChunk->AddMessage(std::move(msg));
         }
         // last Epoch
-        if (jpsFile->_lastEpoch->Messages.size() > 0)
+        if (dataChunk->_lastEpoch->Messages.size() > 0)
         {
-            jpsFile->_lastEpoch->DateTime = jpsFile->_dateTime;
-            jpsFile->_body.push_back(std::move(jpsFile->_lastEpoch));
+            dataChunk->_lastEpoch->DateTime = dataChunk->_dateTime;
+            dataChunk->_body.push_back(std::move(dataChunk->_lastEpoch));
         }
 
-        sLogger.Trace(QString("%1 epochs have been totally deserialized.").arg(jpsFile->_epochCounter));
-        return jpsFile;
+        sLogger.Trace(QString("%1 epochs have been totally deserialized.").arg(dataChunk->_epochCounter));
+        return dataChunk;
     }
 
     QByteArray DataChunk::ToByteArray() const
     {
         QByteArray result;
-        for (auto it = _head.cbegin(); it != _head.cend(); ++it)
+        for (const auto& msg : _head)
         {
-            result.append((*it)->ToByteArray());
+            result.append(msg->ToByteArray());
         }
-        for (auto epochIt = _body.cbegin(); epochIt != _body.cend(); ++epochIt)
+        for (const auto& epoch : _body)
         {
-            for (auto msgIt = (*epochIt)->Messages.cbegin(); msgIt != (*epochIt)->Messages.cend(); ++msgIt)
+            for (const auto& msg : epoch->Messages)
             {
-                result.append((*msgIt)->ToByteArray());
+                result.append(msg->ToByteArray());
             }
         }
         return result;

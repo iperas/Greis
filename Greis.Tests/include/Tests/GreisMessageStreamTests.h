@@ -28,6 +28,16 @@ namespace Greis
             {
                 auto file = File::OpenReadBinary(filename);
                 expected = file->readAll();
+
+                int i;
+                for (i = 0; i < expected.size(); i++)
+                {
+                    if (expected.at(i) != '\0')
+                    {
+                        break;
+                    }
+                }
+                expected.remove(0, i);
             }
 
             // Act
