@@ -6,6 +6,7 @@
 
 #include "Tests/DataChunkTests.h"
 #include "Tests/EnvironmentTests.h"
+#include "Tests/FullStackTests.h"
 #include "Tests/GreisBinarySerializerTests.h"
 #include "Tests/GreisMessageStreamTests.h"
 #include "Tests/MySqlSinkTests.h"
