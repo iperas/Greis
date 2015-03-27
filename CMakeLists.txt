@@ -42,7 +42,9 @@ endif()
 
 # Libraries
 
-## Qt (Make sure that CMAKE_PREFIX_PATH env var is set)
+## Qt
+
+# (Make sure that CMAKE_PREFIX_PATH env var is set)
 #set(CMAKE_AUTOMOC ON)
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Sql)
