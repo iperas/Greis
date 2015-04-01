@@ -152,6 +152,7 @@ CREATE TABLE `messageVariableSizeForDimension` (
 CREATE TABLE `rawBinaryMessages` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL,
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     code CHAR(2) NOT NULL, 
     bodySize INT NOT NULL, 

@@ -1,4 +1,3 @@
-﻿USE `test`;
 SET GLOBAL sql_mode='STRICT_ALL_TABLES';
 
 DROP TABLE IF EXISTS `msg_FileId`;
@@ -288,6 +287,7 @@ CREATE TABLE `messageVariableSizeForDimension` (
 CREATE TABLE `rawBinaryMessages` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL,
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     code CHAR(2) NOT NULL, 
     bodySize INT NOT NULL, 
@@ -578,6 +578,7 @@ CREATE TABLE `ct_GpsRawNavData1` (
 CREATE TABLE `msg_FileId` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -596,6 +597,7 @@ CREATE TABLE `msg_FileId` (
 CREATE TABLE `msg_MsgFmt` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -617,6 +619,7 @@ CREATE TABLE `msg_MsgFmt` (
 CREATE TABLE `msg_RcvTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -635,6 +638,7 @@ CREATE TABLE `msg_RcvTime` (
 CREATE TABLE `msg_EpochTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -653,6 +657,7 @@ CREATE TABLE `msg_EpochTime` (
 CREATE TABLE `msg_RcvDate` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -674,6 +679,7 @@ CREATE TABLE `msg_RcvDate` (
 CREATE TABLE `msg_RcvTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -693,6 +699,7 @@ CREATE TABLE `msg_RcvTimeOffset` (
 CREATE TABLE `msg_RcvTimeOffsetDot` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -712,6 +719,7 @@ CREATE TABLE `msg_RcvTimeOffsetDot` (
 CREATE TABLE `msg_RcvTimeAccuracy` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -730,6 +738,7 @@ CREATE TABLE `msg_RcvTimeAccuracy` (
 CREATE TABLE `msg_GPSTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -749,6 +758,7 @@ CREATE TABLE `msg_GPSTime` (
 CREATE TABLE `msg_RcvGPSTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -768,6 +778,7 @@ CREATE TABLE `msg_RcvGPSTimeOffset` (
 CREATE TABLE `msg_GLOTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -787,6 +798,7 @@ CREATE TABLE `msg_GLOTime` (
 CREATE TABLE `msg_RcvGLOTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -806,6 +818,7 @@ CREATE TABLE `msg_RcvGLOTimeOffset` (
 CREATE TABLE `msg_RcvGALTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -825,6 +838,7 @@ CREATE TABLE `msg_RcvGALTimeOffset` (
 CREATE TABLE `msg_RcvSBASTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -844,6 +858,7 @@ CREATE TABLE `msg_RcvSBASTimeOffset` (
 CREATE TABLE `msg_RcvQZSSTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -863,6 +878,7 @@ CREATE TABLE `msg_RcvQZSSTimeOffset` (
 CREATE TABLE `msg_RcvBeiDouTimeOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -882,6 +898,7 @@ CREATE TABLE `msg_RcvBeiDouTimeOffset` (
 CREATE TABLE `msg_GpsUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -900,6 +917,7 @@ CREATE TABLE `msg_GpsUtcParam` (
 CREATE TABLE `msg_SbasUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -922,6 +940,7 @@ CREATE TABLE `msg_SbasUtcParam` (
 CREATE TABLE `msg_GalUtcGpsParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -945,6 +964,7 @@ CREATE TABLE `msg_GalUtcGpsParam` (
 CREATE TABLE `msg_QzssUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -963,6 +983,7 @@ CREATE TABLE `msg_QzssUtcParam` (
 CREATE TABLE `msg_BeiDouUtcParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -981,6 +1002,7 @@ CREATE TABLE `msg_BeiDouUtcParam` (
 CREATE TABLE `msg_GloUtcGpsParam` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1005,6 +1027,7 @@ CREATE TABLE `msg_GloUtcGpsParam` (
 CREATE TABLE `msg_SolutionTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1024,6 +1047,7 @@ CREATE TABLE `msg_SolutionTime` (
 CREATE TABLE `msg_Pos` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1046,6 +1070,7 @@ CREATE TABLE `msg_Pos` (
 CREATE TABLE `msg_Vel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1068,6 +1093,7 @@ CREATE TABLE `msg_Vel` (
 CREATE TABLE `msg_PosVel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1094,6 +1120,7 @@ CREATE TABLE `msg_PosVel` (
 CREATE TABLE `msg_GeoPos` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1116,6 +1143,7 @@ CREATE TABLE `msg_GeoPos` (
 CREATE TABLE `msg_GeoVel` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1138,6 +1166,7 @@ CREATE TABLE `msg_GeoVel` (
 CREATE TABLE `msg_Rms` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1160,6 +1189,7 @@ CREATE TABLE `msg_Rms` (
 CREATE TABLE `msg_Dops` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1181,6 +1211,7 @@ CREATE TABLE `msg_Dops` (
 CREATE TABLE `msg_PosCov` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1209,6 +1240,7 @@ CREATE TABLE `msg_PosCov` (
 CREATE TABLE `msg_VelCov` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1237,6 +1269,7 @@ CREATE TABLE `msg_VelCov` (
 CREATE TABLE `msg_Baseline` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1260,6 +1293,7 @@ CREATE TABLE `msg_Baseline` (
 CREATE TABLE `msg_Baselines` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1282,6 +1316,7 @@ CREATE TABLE `msg_Baselines` (
 CREATE TABLE `msg_FullRotationMatrix` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1308,6 +1343,7 @@ CREATE TABLE `msg_FullRotationMatrix` (
 CREATE TABLE `msg_PosStat` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1333,6 +1369,7 @@ CREATE TABLE `msg_PosStat` (
 CREATE TABLE `msg_PosCompTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1351,6 +1388,7 @@ CREATE TABLE `msg_PosCompTime` (
 CREATE TABLE `msg_SatIndex` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1369,6 +1407,7 @@ CREATE TABLE `msg_SatIndex` (
 CREATE TABLE `msg_AntName` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1387,6 +1426,7 @@ CREATE TABLE `msg_AntName` (
 CREATE TABLE `msg_SatNumbers` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1405,6 +1445,7 @@ CREATE TABLE `msg_SatNumbers` (
 CREATE TABLE `msg_SatElevation` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1423,6 +1464,7 @@ CREATE TABLE `msg_SatElevation` (
 CREATE TABLE `msg_SatAzimuth` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1441,6 +1483,7 @@ CREATE TABLE `msg_SatAzimuth` (
 CREATE TABLE `msg_PR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1459,6 +1502,7 @@ CREATE TABLE `msg_PR` (
 CREATE TABLE `msg_SPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1477,6 +1521,7 @@ CREATE TABLE `msg_SPR` (
 CREATE TABLE `msg_RPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1495,6 +1540,7 @@ CREATE TABLE `msg_RPR` (
 CREATE TABLE `msg_SRPR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1513,6 +1559,7 @@ CREATE TABLE `msg_SRPR` (
 CREATE TABLE `msg_SC` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1531,6 +1578,7 @@ CREATE TABLE `msg_SC` (
 CREATE TABLE `msg_SS` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1549,6 +1597,7 @@ CREATE TABLE `msg_SS` (
 CREATE TABLE `msg_CP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1567,6 +1616,7 @@ CREATE TABLE `msg_CP` (
 CREATE TABLE `msg_SCP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1585,6 +1635,7 @@ CREATE TABLE `msg_SCP` (
 CREATE TABLE `msg_RCP_RC0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1603,6 +1654,7 @@ CREATE TABLE `msg_RCP_RC0` (
 CREATE TABLE `msg_RCP_rc1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1621,6 +1673,7 @@ CREATE TABLE `msg_RCP_rc1` (
 CREATE TABLE `msg_DP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1639,6 +1692,7 @@ CREATE TABLE `msg_DP` (
 CREATE TABLE `msg_SRDP` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1657,6 +1711,7 @@ CREATE TABLE `msg_SRDP` (
 CREATE TABLE `msg_CNR` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1675,6 +1730,7 @@ CREATE TABLE `msg_CNR` (
 CREATE TABLE `msg_CNR_4` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1693,6 +1749,7 @@ CREATE TABLE `msg_CNR_4` (
 CREATE TABLE `msg_Flags` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1711,6 +1768,7 @@ CREATE TABLE `msg_Flags` (
 CREATE TABLE `msg_IAmp` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1729,6 +1787,7 @@ CREATE TABLE `msg_IAmp` (
 CREATE TABLE `msg_QAmp` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1747,6 +1806,7 @@ CREATE TABLE `msg_QAmp` (
 CREATE TABLE `msg_TrackingTimeCA` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1765,6 +1825,7 @@ CREATE TABLE `msg_TrackingTimeCA` (
 CREATE TABLE `msg_NavStatus` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1784,6 +1845,7 @@ CREATE TABLE `msg_NavStatus` (
 CREATE TABLE `msg_IonoDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1802,6 +1864,7 @@ CREATE TABLE `msg_IonoDelay` (
 CREATE TABLE `msg_RangeResidual` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1820,6 +1883,7 @@ CREATE TABLE `msg_RangeResidual` (
 CREATE TABLE `msg_VelocityResidual` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1838,6 +1902,7 @@ CREATE TABLE `msg_VelocityResidual` (
 CREATE TABLE `msg_GPSAlm0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1870,6 +1935,7 @@ CREATE TABLE `msg_GPSAlm0` (
 CREATE TABLE `msg_GALAlm` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1889,6 +1955,7 @@ CREATE TABLE `msg_GALAlm` (
 CREATE TABLE `msg_QZSSAlm` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1906,6 +1973,7 @@ CREATE TABLE `msg_QZSSAlm` (
 CREATE TABLE `msg_BeiDouAlm` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1923,6 +1991,7 @@ CREATE TABLE `msg_BeiDouAlm` (
 CREATE TABLE `msg_GLOAlmanac` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1956,6 +2025,7 @@ CREATE TABLE `msg_GLOAlmanac` (
 CREATE TABLE `msg_SBASAlmanac` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -1986,6 +2056,7 @@ CREATE TABLE `msg_SBASAlmanac` (
 CREATE TABLE `msg_GPSEphemeris0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2013,6 +2084,7 @@ CREATE TABLE `msg_GPSEphemeris0` (
 CREATE TABLE `msg_GALEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2038,6 +2110,7 @@ CREATE TABLE `msg_GALEphemeris` (
 CREATE TABLE `msg_QZSSEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2056,6 +2129,7 @@ CREATE TABLE `msg_QZSSEphemeris` (
 CREATE TABLE `msg_BeiDouEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2076,6 +2150,7 @@ CREATE TABLE `msg_BeiDouEphemeris` (
 CREATE TABLE `msg_GLOEphemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2119,6 +2194,7 @@ CREATE TABLE `msg_GLOEphemeris` (
 CREATE TABLE `msg_SBASEhemeris` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2155,6 +2231,7 @@ CREATE TABLE `msg_SBASEhemeris` (
 CREATE TABLE `msg_GpsNavData0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2174,6 +2251,7 @@ CREATE TABLE `msg_GpsNavData0` (
 CREATE TABLE `msg_GpsRawNavData0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2196,6 +2274,7 @@ CREATE TABLE `msg_GpsRawNavData0` (
 CREATE TABLE `msg_QzssNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2213,6 +2292,7 @@ CREATE TABLE `msg_QzssNavData` (
 CREATE TABLE `msg_QzssRawNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2230,6 +2310,7 @@ CREATE TABLE `msg_QzssRawNavData` (
 CREATE TABLE `msg_GloNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2249,6 +2330,7 @@ CREATE TABLE `msg_GloNavData` (
 CREATE TABLE `msg_GloRawNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2272,6 +2354,7 @@ CREATE TABLE `msg_GloRawNavData` (
 CREATE TABLE `msg_SbasRawNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2293,6 +2376,7 @@ CREATE TABLE `msg_SbasRawNavData` (
 CREATE TABLE `msg_GalRawNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2315,6 +2399,7 @@ CREATE TABLE `msg_GalRawNavData` (
 CREATE TABLE `msg_CompRawNavData` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2337,6 +2422,7 @@ CREATE TABLE `msg_CompRawNavData` (
 CREATE TABLE `msg_Spectrum0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2359,6 +2445,7 @@ CREATE TABLE `msg_Spectrum0` (
 CREATE TABLE `msg_Spectrum1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2381,6 +2468,7 @@ CREATE TABLE `msg_Spectrum1` (
 CREATE TABLE `msg_GloDelays` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2399,6 +2487,7 @@ CREATE TABLE `msg_GloDelays` (
 CREATE TABLE `msg_CalBandsDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2417,6 +2506,7 @@ CREATE TABLE `msg_CalBandsDelay` (
 CREATE TABLE `msg_RotationMatrix` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2442,6 +2532,7 @@ CREATE TABLE `msg_RotationMatrix` (
 CREATE TABLE `msg_RotationMatrixAndVectors` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2470,6 +2561,7 @@ CREATE TABLE `msg_RotationMatrixAndVectors` (
 CREATE TABLE `msg_RotationAngles` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2495,6 +2587,7 @@ CREATE TABLE `msg_RotationAngles` (
 CREATE TABLE `msg_AngularVelocity` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2518,6 +2611,7 @@ CREATE TABLE `msg_AngularVelocity` (
 CREATE TABLE `msg_InertialMeasurements` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2537,6 +2631,7 @@ CREATE TABLE `msg_InertialMeasurements` (
 CREATE TABLE `msg_ExtEvent` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2557,6 +2652,7 @@ CREATE TABLE `msg_ExtEvent` (
 CREATE TABLE `msg_PPSOffset` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2575,6 +2671,7 @@ CREATE TABLE `msg_PPSOffset` (
 CREATE TABLE `msg_RcvTimeOffsAtPPS` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2594,6 +2691,7 @@ CREATE TABLE `msg_RcvTimeOffsAtPPS` (
 CREATE TABLE `msg_HeadAndPitch` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2614,6 +2712,7 @@ CREATE TABLE `msg_HeadAndPitch` (
 CREATE TABLE `msg_RefEpoch` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2634,6 +2733,7 @@ CREATE TABLE `msg_RefEpoch` (
 CREATE TABLE `msg_RawMeas` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2657,6 +2757,7 @@ CREATE TABLE `msg_RawMeas` (
 CREATE TABLE `msg_PosVelVector` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2685,6 +2786,7 @@ CREATE TABLE `msg_PosVelVector` (
 CREATE TABLE `msg_ClockOffsets` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2706,6 +2808,7 @@ CREATE TABLE `msg_ClockOffsets` (
 CREATE TABLE `msg_RE` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2723,6 +2826,7 @@ CREATE TABLE `msg_RE` (
 CREATE TABLE `msg_ER` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2740,6 +2844,7 @@ CREATE TABLE `msg_ER` (
 CREATE TABLE `msg_IonoParams0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2767,6 +2872,7 @@ CREATE TABLE `msg_IonoParams0` (
 CREATE TABLE `msg_QzssIonoParams` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2784,6 +2890,7 @@ CREATE TABLE `msg_QzssIonoParams` (
 CREATE TABLE `msg_BeiDouIonoParams` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2801,6 +2908,7 @@ CREATE TABLE `msg_BeiDouIonoParams` (
 CREATE TABLE `msg_Event` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2821,6 +2929,7 @@ CREATE TABLE `msg_Event` (
 CREATE TABLE `msg_Latency` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2839,6 +2948,7 @@ CREATE TABLE `msg_Latency` (
 CREATE TABLE `msg_Wrapper` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2858,6 +2968,7 @@ CREATE TABLE `msg_Wrapper` (
 CREATE TABLE `msg_Params` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2877,6 +2988,7 @@ CREATE TABLE `msg_Params` (
 CREATE TABLE `msg_LoggingHistory` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2901,6 +3013,7 @@ CREATE TABLE `msg_LoggingHistory` (
 CREATE TABLE `msg_BaseInfo` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2923,6 +3036,7 @@ CREATE TABLE `msg_BaseInfo` (
 CREATE TABLE `msg_Security0` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2941,6 +3055,7 @@ CREATE TABLE `msg_Security0` (
 CREATE TABLE `msg_Security1` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2959,6 +3074,7 @@ CREATE TABLE `msg_Security1` (
 CREATE TABLE `msg_TrackingTime` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2977,6 +3093,7 @@ CREATE TABLE `msg_TrackingTime` (
 CREATE TABLE `msg_RcvOscOffs` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
@@ -2995,6 +3112,7 @@ CREATE TABLE `msg_RcvOscOffs` (
 CREATE TABLE `msg_EpochEnd` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
+    epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 

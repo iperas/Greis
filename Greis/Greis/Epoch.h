@@ -13,6 +13,16 @@ namespace Greis
 
         QDateTime DateTime;
         std::vector<Message::UniquePtr_t> Messages;
+
+        virtual QByteArray ToByteArray() const
+        {
+            QByteArray result;
+            for (const auto& msg : this->Messages)
+            {
+                result.append(msg->ToByteArray());
+            }
+            return result;
+        }
     };
 }
 

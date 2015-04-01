@@ -34,6 +34,7 @@ namespace Greis
         ~MySqlSource();
 
         DataChunk::UniquePtr_t ReadRange(const QDateTime& from, const QDateTime& to);
+        DataChunk::UniquePtr_t ReadAll();
     private:
         template<typename Func>
         void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, Epoch*>& epochsByDateTime);

@@ -146,7 +146,7 @@ namespace Generator.Core
                 var tableName = tableNames.GetName(msg);
 
                 const string predefinedMsgCols =
-                    "`id`, `idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                    "`id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
                 var colNames = msg.Variables.Select(
                     variable => string.Format("`{0}`", MySqlBaselineGenerator.GetColumnName(variable))).ToArray();
                 var columns = predefinedMsgCols + string.Join(", ", colNames);

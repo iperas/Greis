@@ -97,6 +97,7 @@ namespace Generator.Core
                                        "CREATE TABLE `{2}` (\r\n" +
                                        "    id SERIAL, \r\n" +
                                        "    idEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
+                                       "    epochIndex INT UNSIGNED NOT NULL, \r\n" +
                                        "    unixTimeEpoch BIGINT UNSIGNED NOT NULL, \r\n" +
                                        "    idMessageCode BIGINT UNSIGNED NOT NULL, \r\n" +
                                        "    bodySize INT NOT NULL, \r\n{3}" +

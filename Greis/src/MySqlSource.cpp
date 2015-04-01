@@ -52,8 +52,14 @@ namespace Greis
         }
     }
 
+    DataChunk::UniquePtr_t MySqlSource::ReadAll()
+    {
+        return this->ReadRange(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTimeUtc());
+    }
+
     void MySqlSource::pushStandardJpsHeader( DataChunk* jpsFile )
     {
+        return;
         auto fileId = make_unique<FileIdStdMessage>(
             "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);
         auto msgFmt = make_unique<MsgFmtStdMessage>("MF009JP010109F", 14);

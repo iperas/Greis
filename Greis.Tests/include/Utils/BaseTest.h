@@ -19,43 +19,19 @@ namespace Greis
         private:
             std::shared_ptr<Connection> _connection;
         protected:
-            BaseTest()
-            {
-            }
+            BaseTest();
 
-            virtual ~BaseTest()
-            {
-            }
+            virtual ~BaseTest();
 
-            virtual void SetUp()
-            {
-                sLogger.Info("Connecting to the test database...");
-                this->_connection = Connection::FromSettings("Db");
-                this->_connection->Connect();
+            virtual void SetUp();
 
-                this->_connection->DbHelper()->ExecuteQuery("SET autocommit=0;");
+            virtual void TearDown();
 
-                sLogger.Info("Starting a new transaction...");
-                bool z = this->_connection->Database().driver()->hasFeature(QSqlDriver::Transactions);
-                bool transactionStarted = this->_connection->Database().transaction();
-                if (!transactionStarted)
-                {
-                    auto errText = this->_connection->Database().lastError().text();
-                    throw Exception("Failed to start a database transaction.");
-                }
-                sLogger.Info("SetUp Succeeded...");
-            }
+            const std::shared_ptr<Connection>& Connection() const;
 
-            virtual void TearDown()
-            {
-                this->_connection->Database().rollback();
-                sLogger.Info("Transaction has been reverted.");
-            }
+            QString ResolvePath(const QString& fileName) const;
 
-            const std::shared_ptr<Connection>& Connection() const
-            {
-                return this->_connection;
-            }
+            QByteArray ReadJpsBinary(const QString& fileName) const;
         };
     }
 }
