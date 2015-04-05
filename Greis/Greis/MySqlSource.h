@@ -85,10 +85,11 @@ namespace Greis
         {
             int id = query.value(0).toInt();
             //int idEpoch = query.value(1).toInt();
-            qulonglong unixTime = query.value(2).toULongLong();
-            int messageCodeId = query.value(3).toInt();
+            int epochIndex = query.value(2).toInt();
+            qulonglong unixTime = query.value(3).toULongLong();
+            int messageCodeId = query.value(4).toInt();
             std::string messageCode = _codes[messageCodeId];
-            int bodySize = query.value(4).toInt();
+            int bodySize = query.value(5).toInt();
 
             Message::UniquePtr_t msg;
 

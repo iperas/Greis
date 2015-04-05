@@ -68,6 +68,7 @@ namespace Greis
         DataBatchInserter::SharedPtr_t _epochInserter;
         DataBatchInserter::SharedPtr_t _rawMessageInserter;
         int _lastEpochId;
+        int _index;
         QDateTime _lastEpochDateTime;
 
         QMap<ECustomTypeId::Type, int> _ctCurrentMaxId;

@@ -40,6 +40,7 @@ namespace Greis
         data << ++_lastEpochId;
         data << dateTime.toMSecsSinceEpoch();
         _lastEpochDateTime = dateTime;
+        _index = 0;
         _epochInserter->AddRow(data);
     }
 
@@ -80,6 +81,7 @@ namespace Greis
         {
             QVariantList fields;
             fields << _lastEpochId;
+            fields << _index++;
             fields << _lastEpochDateTime.toMSecsSinceEpoch();
             fields << QString::fromLatin1(stdMsg->Id().c_str(), 2);
             fields << stdMsg->BodySize();
@@ -95,6 +97,7 @@ namespace Greis
 
         QVariantList fields;
         fields << _lastEpochId;
+        fields << _index++;
         fields << _lastEpochDateTime.toMSecsSinceEpoch();
         fields << _codeIds[stdMsg->Id()];
         fields << stdMsg->BodySize();

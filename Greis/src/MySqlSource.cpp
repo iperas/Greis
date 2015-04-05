@@ -75,18 +75,19 @@ namespace Greis
     {
         int msgCount = 0;
         QSqlQuery query = _dbHelper->ExecuteQuery(QString(
-            "SELECT `id`, `idEpoch`, `unixTimeEpoch`, `code`, `bodySize`, `data` FROM `rawBinaryMessages` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
+            "SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `code`, `bodySize`, `data` FROM `rawBinaryMessages` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
             .arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch()));
         bool first = true;
         while (query.next())
         {
             int id = query.value(0).toInt();
             //int idEpoch = query.value(1).toInt();
-            qulonglong unixTime = query.value(2).toULongLong();
-            //auto messageCodeBa = query.value(3).toString().toLatin1();
+            int epochIndex = query.value(2).toInt();
+            qulonglong unixTime = query.value(3).toULongLong();
+            //auto messageCodeBa = query.value(4).toString().toLatin1();
             //std::string messageCode(messageCodeBa, 2);
-            int bodySize = query.value(4).toInt();
-            auto data = query.value(5).toByteArray();
+            int bodySize = query.value(5).toInt();
+            auto data = query.value(6).toByteArray();
 
             //messageCodeBa.append(QString::number(bodySize, 16));
             //data.prepend(messageCodeBa);

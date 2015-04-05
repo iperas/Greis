@@ -31,7 +31,7 @@ namespace Generator.Core
         private const string StdMessagesDir = "StdMessage";
         private const string CustomTypesDir = "CustomType";
         private const string IncludeDir = "Greis";
-        private const int CountOfCommonFieldsInMsgTable = 5;
+        private const int CountOfCommonFieldsInMsgTable = 6;
         private const int CountOfCommonFieldsInCtTable = 4;
         private readonly MetaInfo metaInfo;
         private readonly string cppEnvTemplatesDir;
@@ -545,8 +545,8 @@ namespace Generator.Core
                 int predefinedColsCount;
                 if (ct is StandardMessage)
                 {
-                    predefinedCols = "`idEpoch`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
-                    predefinedColsCount = 4;
+                    predefinedCols = "`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
+                    predefinedColsCount = 5;
                 }
                 else
                 {
