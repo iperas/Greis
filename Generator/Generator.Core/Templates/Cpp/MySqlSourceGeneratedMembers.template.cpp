@@ -17,31 +17,11 @@ namespace Greis
         
         // ${ConstructCtQueriesAndHandlers}
     }
-    
-    DataChunk::UniquePtr_t MySqlSource::ReadRange( const QDateTime& from, const QDateTime& to )
+
+    void MySqlSource::constructMsgQueriesAndHandlers()
     {
-        _ctBuffer.clear();
-
-        _from = from;
-        _to = to;
-
-        auto jpsFile = make_unique<DataChunk>();
-        pushStandardJpsHeader(jpsFile.get());
-        
-        QMap<qulonglong, Epoch*> epochsByDateTime;
-
         GreisMysqlSerializer& serializer = _serializer;
 
-        readRawStdMessages();
-        
-        // ${HandleMessageStub}
-
-        insertRawMessage(epochsByDateTime);
-
-        for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
-        {
-            jpsFile->Body().push_back(Epoch::UniquePtr_t(it.value()));
-        }
-        return jpsFile;
+        // ${ConstructMsgQueriesAndHandlers}
     }
 }

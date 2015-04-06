@@ -25,7 +25,7 @@ namespace Generator.Core
         private const string EMessageIdStubToken = "${EMessageId}";
         private const string ECustomTypeIdStubToken = "${ECustomTypeId}";
         private const string InsertersCreationCodeStubToken = "// ${InsertersCreationCode}";
-        private const string HandleMessageStubToken = "// ${HandleMessageStub}";
+        private const string ConstructMsgQueriesAndHandlersStubToken = "// ${ConstructMsgQueriesAndHandlers}";
         private const string ConstructCtQueriesAndHandlersStubToken = "// ${ConstructCtQueriesAndHandlers}";
         private const string RecalculateChecksumStubToken = "// ${RecalculateChecksumStub}";
         private const string StdMessagesDir = "StdMessage";
@@ -76,12 +76,12 @@ namespace Generator.Core
             var templatePath = Path.Combine(this.cppEnvTemplatesDir, "MySqlSourceGeneratedMembers.template.cpp");
             var templateStr = File.ReadAllText(templatePath, Encoding.Default);
 
-            var codeIntend = GetCodeIntend(templateStr, HandleMessageStubToken);
+            var codeIntend = GetCodeIntend(templateStr, ConstructCtQueriesAndHandlersStubToken);
 
-            var handleMessageContent = this.GenerateHandleMessageContent(codeIntend);
             var constructCtQueriesAndHandlers = this.GenerateCtQueriesAndHandlersCode(codeIntend);
+            var constructMsgQueriesAndHandlers = this.GenerateMsgQueriesAndHandlersCode(codeIntend);
 
-            var fileContent = templateStr.Replace(HandleMessageStubToken, handleMessageContent)
+            var fileContent = templateStr.Replace(ConstructMsgQueriesAndHandlersStubToken, constructMsgQueriesAndHandlers)
                                          .Replace(ConstructCtQueriesAndHandlersStubToken, constructCtQueriesAndHandlers);
 
             this.WriteGeneratedFile("MySqlSourceGeneratedMembers.cpp", fileContent);
@@ -136,26 +136,27 @@ namespace Generator.Core
             return result;
         }
 
-        private string GenerateHandleMessageContent(string codeIntend)
+        private string GenerateMsgQueriesAndHandlersCode(string codeIntend)
         {
             var tableNames = new SqlTableNameFactory(this.metaInfo);
 
             var handleMessageLines = new List<string>();
+            var msgMapLines = new List<string>();
+
             foreach (var msg in this.metaInfo.StandardMessages)
             {
+                // SELECT command
                 var tableName = tableNames.GetName(msg);
-
                 const string predefinedMsgCols =
                     "`id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, ";
                 var colNames = msg.Variables.Select(
                     variable => string.Format("`{0}`", MySqlBaselineGenerator.GetColumnName(variable))).ToArray();
                 var columns = predefinedMsgCols + string.Join(", ", colNames);
-
-                var selectCommand = string.Format("SELECT {0} FROM `{1}` WHERE `unixTimeEpoch` BETWEEN %1 AND %2",
-                                                  columns, tableName);
+                var selectCommand = string.Format("SELECT {0} FROM `{1}`", columns, tableName);
 
                 var serCode = this.GenerateVariablesMySqlSourceSerializationContent(codeIntend, msg);
 
+                // Handler
                 var handleMessageFields =
                     string.Format("[&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)\r\n{0}" +
                                   "{{\r\n{0}" +
@@ -164,19 +165,22 @@ namespace Generator.Core
                                   "    {2}\r\n{0}" +
                                   "}}",
                                   codeIntend + "    ", this.GetClassName(msg), serCode);
-
                 var handleMessageLine = string.Format(
-                    "handleMessage(QString(\"{0}\")\r\n{2}" +
-                    "    .arg(_from.toMSecsSinceEpoch())\r\n{2}" +
-                    "    .arg(_to.toMSecsSinceEpoch()), \r\n{2}" +
-                    "    {1}, \r\n{2}" +
-                    "    epochsByDateTime);",
-                    selectCommand, handleMessageFields, codeIntend);
-
+                    "auto query{3} = QString(\"{0}\");\r\n{2}" +
+                    "auto handler{3} = {1};\r\n{2}",
+                    selectCommand, handleMessageFields, codeIntend, this.GetClassName(msg));
                 handleMessageLines.Add(handleMessageLine);
+
+                // Mapping
+                var mapLine = string.Format("_msgQueries.insert(EMessageId::{1}, query{2});\r\n{0}" +
+                                            "_msgHandlers.insert(EMessageId::{1}, handler{2});",
+                                            codeIntend, this.GetEnumName(msg), this.GetClassName(msg));
+                msgMapLines.Add(mapLine);
             }
 
-            var result = string.Join("\r\n" + codeIntend, handleMessageLines);
+            var result = string.Join("\r\n" + codeIntend, handleMessageLines) +
+                         "\r\n" + codeIntend +
+                         string.Join("\r\n" + codeIntend, msgMapLines);
             return result;
         }
 

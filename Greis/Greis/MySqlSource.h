@@ -36,6 +36,8 @@ namespace Greis
         DataChunk::UniquePtr_t ReadRange(const QDateTime& from, const QDateTime& to);
         DataChunk::UniquePtr_t ReadAll();
     private:
+        DataChunk::UniquePtr_t read(const QString& sqlWhere = "");
+
         template<typename Func>
         void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, Epoch*>& epochsByDateTime);
 
@@ -44,6 +46,8 @@ namespace Greis
         typename T::UniquePtr_t extractCustomType(ECustomTypeId::Type ctId, int dbId);
 
         void constructCtQueriesAndHandlers();
+        void constructMsgQueriesAndHandlers();
+        QList<EMessageId::Type> getSerializableMessages();
 
         template<typename T>
         std::vector<typename T::UniquePtr_t> deserializeAndGetCustomTypes(ECustomTypeId::Type ctId, const QVariant& encodedIds);
@@ -60,14 +64,13 @@ namespace Greis
         Connection* _connection;
         DatabaseHelper* _dbHelper;
 
-        QDateTime _from;
-        QDateTime _to;
-
         GreisMysqlSerializer _serializer;
 
         QMap<ECustomTypeId::Type, QMap<int, CustomType*>> _ctBuffer;
         QMap<ECustomTypeId::Type, QString> _ctQueries;
-        QMap<ECustomTypeId::Type, std::function<void (int,const QSqlQuery&,CustomType*&)>> _ctHandlers;
+        QMap<ECustomTypeId::Type, std::function<void(int, const QSqlQuery&, CustomType*&)>> _ctHandlers;
+        QMap<EMessageId::Type, QString> _msgQueries;
+        QMap<EMessageId::Type, std::function<void(int, const QSqlQuery&, Message*&)>> _msgHandlers;
 
         QMap<unsigned short, QMap<qulonglong, std::vector<StdMessage*>>> _rawMsgBuffer;
 

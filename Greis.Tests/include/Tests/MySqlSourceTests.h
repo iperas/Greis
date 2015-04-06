@@ -43,7 +43,7 @@ namespace Greis
             {
                 auto source = make_unique<MySqlSource>(this->Connection().get());
                 
-                auto jpsFile = source->ReadRange(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTime());
+                auto jpsFile = source->ReadAll(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTime());
 
                 auto ba = jpsFile->ToByteArray();
                 auto out = File::CreateBinary("from_database.jps");

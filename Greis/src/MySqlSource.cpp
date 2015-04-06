@@ -26,6 +26,7 @@ namespace Greis
         }
 
         constructCtQueriesAndHandlers();
+        constructMsgQueriesAndHandlers();
     }
 
     MySqlSource::~MySqlSource()
@@ -52,9 +53,45 @@ namespace Greis
         }
     }
 
+    QList<EMessageId::Type> MySqlSource::getSerializableMessages()
+    {
+        return _msgQueries.keys();
+    }
+
+    DataChunk::UniquePtr_t MySqlSource::read(const QString& sqlWhere)
+    {
+        _ctBuffer.clear();
+
+        auto jpsFile = make_unique<DataChunk>();
+        pushStandardJpsHeader(jpsFile.get());
+
+        // TODO: 
+        false
+        QMap<qulonglong, Epoch*> epochsByDateTime;
+
+        GreisMysqlSerializer& serializer = _serializer;
+
+        readRawStdMessages();
+
+        // ${HandleMessageStub}
+
+        insertRawMessage(epochsByDateTime);
+
+        for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
+        {
+            jpsFile->Body().push_back(Epoch::UniquePtr_t(it.value()));
+        }
+        return jpsFile;
+    }
+
     DataChunk::UniquePtr_t MySqlSource::ReadAll()
     {
-        return this->ReadRange(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTimeUtc());
+        return this->read();
+    }
+
+    DataChunk::UniquePtr_t MySqlSource::ReadRange(const QDateTime& from, const QDateTime& to)
+    {
+        return this->read(QString("WHERE `unixTimeEpoch` BETWEEN %1 AND %2").arg(from.toMSecsSinceEpoch()).arg(to.toMSecsSinceEpoch()));
     }
 
     void MySqlSource::pushStandardJpsHeader( DataChunk* jpsFile )
