@@ -65,13 +65,20 @@ namespace Greis
         auto jpsFile = make_unique<DataChunk>();
         pushStandardJpsHeader(jpsFile.get());
 
+        readRawStdMessages(sqlWhere);
+
+        for (auto messageId : getSerializableMessages())
+        {
+            QString query = _msgQueries[messageId] + " " + sqlWhere;
+            auto handler = _msgHandlers[messageId];
+            
+        }
+
         // TODO: 
         false
         QMap<qulonglong, Epoch*> epochsByDateTime;
 
         GreisMysqlSerializer& serializer = _serializer;
-
-        readRawStdMessages();
 
         // ${HandleMessageStub}
 
@@ -108,26 +115,19 @@ namespace Greis
         jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
     }
 
-    void MySqlSource::readRawStdMessages()
+    void MySqlSource::readRawStdMessages(const QString& sqlWhere)
     {
         int msgCount = 0;
-        QSqlQuery query = _dbHelper->ExecuteQuery(QString(
-            "SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `code`, `bodySize`, `data` FROM `rawBinaryMessages` WHERE `unixTimeEpoch` BETWEEN %1 AND %2")
-            .arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch()));
+        QString command = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `code`, `bodySize`, `data` FROM `rawBinaryMessages` %1").arg(sqlWhere);
+        QSqlQuery query = _dbHelper->ExecuteQuery(command);
         bool first = true;
         while (query.next())
         {
             int id = query.value(0).toInt();
-            //int idEpoch = query.value(1).toInt();
             int epochIndex = query.value(2).toInt();
             qulonglong unixTime = query.value(3).toULongLong();
-            //auto messageCodeBa = query.value(4).toString().toLatin1();
-            //std::string messageCode(messageCodeBa, 2);
             int bodySize = query.value(5).toInt();
             auto data = query.value(6).toByteArray();
-
-            //messageCodeBa.append(QString::number(bodySize, 16));
-            //data.prepend(messageCodeBa);
 
             StdMessage* msg = new RawStdMessage(data.data(), data.size());
 

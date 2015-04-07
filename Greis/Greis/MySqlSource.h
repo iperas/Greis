@@ -53,7 +53,7 @@ namespace Greis
         std::vector<typename T::UniquePtr_t> deserializeAndGetCustomTypes(ECustomTypeId::Type ctId, const QVariant& encodedIds);
 
         void pushStandardJpsHeader(DataChunk* jpsFile);
-        void readRawStdMessages();
+        void readRawStdMessages(const QString& sqlWhere);
         // Moving messages with specified id from _rawMsgBuffer into epochsByDateTime
         void insertRawMessage(const char* msgId, QMap<qulonglong, Epoch*>& epochsByDateTime);
         // Moving messages from collection into epochsByDateTime
