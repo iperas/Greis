@@ -27,6 +27,16 @@ namespace Greis
 
     class MySqlSource : private boost::noncopyable
     {
+    private:
+        struct MessageEx
+        {
+            MessageEx(Message* msg, int epochIndex) : msg(msg), epochIndex(epochIndex)
+            {
+            }
+
+            Message* msg;
+            int epochIndex;
+        };
     public:
         SMART_PTR_T(MySqlSource);
 
@@ -39,7 +49,7 @@ namespace Greis
         DataChunk::UniquePtr_t read(const QString& sqlWhere = "");
 
         template<typename Func>
-        void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, Epoch*>& epochsByDateTime);
+        void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, QVector<MessageEx>>& messagesByDateTime);
 
         // Extract a custom type from the buffer
         template<typename T>
@@ -64,13 +74,15 @@ namespace Greis
         Connection* _connection;
         DatabaseHelper* _dbHelper;
 
+        QString _sqlWhere;
+
         GreisMysqlSerializer _serializer;
 
         QMap<ECustomTypeId::Type, QMap<int, CustomType*>> _ctBuffer;
         QMap<ECustomTypeId::Type, QString> _ctQueries;
         QMap<ECustomTypeId::Type, std::function<void(int, const QSqlQuery&, CustomType*&)>> _ctHandlers;
         QMap<EMessageId::Type, QString> _msgQueries;
-        QMap<EMessageId::Type, std::function<void(int, const QSqlQuery&, Message*&)>> _msgHandlers;
+        QMap<EMessageId::Type, std::function<Message*(int, const QSqlQuery&, Message*&)>> _msgHandlers;
 
         QMap<unsigned short, QMap<qulonglong, std::vector<StdMessage*>>> _rawMsgBuffer;
 
@@ -78,8 +90,7 @@ namespace Greis
     };
 
     template<typename Func>
-    void MySqlSource::handleMessage( QString queryStr, Func handleMessageFields, 
-        QMap<qulonglong, Epoch*>& epochsByDateTime )
+    void MySqlSource::handleMessage(QString queryStr, Func handleMessageBody, QMap<qulonglong, QVector<MessageEx>>& messagesByDateTime)
     {
         int msgCount = 0;
         QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);
@@ -94,10 +105,7 @@ namespace Greis
             std::string messageCode = _codes[messageCodeId];
             int bodySize = query.value(5).toInt();
 
-            Message::UniquePtr_t msg;
-
-            // message-specific fields handling
-            handleMessageFields(messageCode, bodySize + StdMessage::HeadSize(), query, msg);
+            Message* msg = handleMessageBody(messageCode, bodySize + StdMessage::HeadSize(), query);
 
             if (!msg->Validate())
             {
@@ -109,33 +117,23 @@ namespace Greis
                 }
                 if (msg->Kind() == EMessageKind::StdMessage)
                 {
-                    dynamic_cast<StdMessage*>(msg.get())->RecalculateChecksum();
+                    dynamic_cast<StdMessage*>(msg)->RecalculateChecksum();
                     if (!msg->Validate())
                     {
                         throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
                             arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
                     }
                 }
-                //throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
-                //    arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
             }
             assert(msg->Size() == bodySize + StdMessage::HeadSize());
 
-            auto epoch = epochsByDateTime.value(unixTime, nullptr);
-            if (epoch == nullptr)
-            {
-                epoch = new Epoch();
-                epoch->DateTime = QDateTime::fromMSecsSinceEpoch(unixTime);
-                epochsByDateTime[unixTime] = epoch;
-            }
-            epoch->Messages.push_back(std::move(msg));
-            epoch->Messages.push_back(NonStdTextMessage::CreateCarriageReturnMessage());
-            epoch->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
+            auto& messages = messagesByDateTime.value(unixTime);
+            messages.push_back(new MessageEx(msg, epochIndex));
             ++msgCount;
         }
         if (msgCount > 0)
         {
-            sLogger.Info(QString("%1 messages readed into memory...").arg(msgCount));
+            sLogger.Info(QString("%1 messages read into memory...").arg(msgCount));
         }
     }
 
@@ -155,7 +153,10 @@ namespace Greis
 
         assert (queryStr != QString());
 
-        queryStr = queryStr.arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch());
+        if (!_sqlWhere.isEmpty())
+        {
+            queryStr +=  " " + _sqlWhere;
+        }
 
         int ctCount = 0;
         typename T::UniquePtr_t retVal;

@@ -15,7 +15,7 @@ namespace Greis
     {
         GreisMysqlSerializer& serializer = _serializer;
         
-        auto queryUtcOffsCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `a0`, `a1`, `tot`, `wnt`, `dtls`, `dn`, `wnlsf`, `dtlsf` FROM `ct_UtcOffs` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryUtcOffsCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `a0`, `a1`, `tot`, `wnt`, `dtls`, `dn`, `wnlsf`, `dtlsf` FROM `ct_UtcOffs`");
         auto handlerUtcOffsCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new UtcOffsCustomType(size);
@@ -30,7 +30,7 @@ namespace Greis
                 serializer.Deserialize(q.value(11), c->Dtlsf());
             };
         
-        auto querySmoothCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `value`, `interval` FROM `ct_Smooth` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySmoothCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `value`, `interval` FROM `ct_Smooth`");
         auto handlerSmoothCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SmoothCustomType(size);
@@ -39,7 +39,7 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Interval());
             };
         
-        auto queryGpsEphReqDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis` FROM `ct_GpsEphReqData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGpsEphReqDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis` FROM `ct_GpsEphReqData`");
         auto handlerGpsEphReqDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GpsEphReqDataCustomType(size);
@@ -75,7 +75,7 @@ namespace Greis
                 serializer.Deserialize(q.value(32), c->Cis());
             };
         
-        auto querySvData0CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data` FROM `ct_SvData0` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySvData0CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data` FROM `ct_SvData0`");
         auto handlerSvData0CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SvData0CustomType(size);
@@ -85,7 +85,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Data());
             };
         
-        auto querySvData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `fcn1`, `cnt`, `data` FROM `ct_SvData1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySvData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `fcn1`, `cnt`, `data` FROM `ct_SvData1`");
         auto handlerSvData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SvData1CustomType(size);
@@ -95,7 +95,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Data());
             };
         
-        auto querySpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec` FROM `ct_SpecData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec` FROM `ct_SpecData`");
         auto handlerSpecDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SpecDataCustomType(size);
@@ -104,7 +104,7 @@ namespace Greis
                 /*throw Common::NotImplementedException();*/
             };
         
-        auto queryExtSpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax` FROM `ct_ExtSpecData` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryExtSpecDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax` FROM `ct_ExtSpecData`");
         auto handlerExtSpecDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new ExtSpecDataCustomType(size);
@@ -113,7 +113,7 @@ namespace Greis
                 /*throw Common::NotImplementedException();*/
             };
         
-        auto querySvDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `fcn`, `phase`, `range` FROM `ct_SvDelay` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySvDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `fcn`, `phase`, `range` FROM `ct_SvDelay`");
         auto handlerSvDelayCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SvDelayCustomType(size);
@@ -123,7 +123,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Range());
             };
         
-        auto queryBandDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `band`, `signal`, `delay` FROM `ct_BandDelay` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryBandDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `band`, `signal`, `delay` FROM `ct_BandDelay`");
         auto handlerBandDelayCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new BandDelayCustomType(size);
@@ -133,7 +133,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Delay());
             };
         
-        auto querySvData2CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `header`, `slot` FROM `ct_SvData2` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySvData2CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `header`, `slot` FROM `ct_SvData2`");
         auto handlerSvData2CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SvData2CustomType(size);
@@ -142,7 +142,7 @@ namespace Greis
                 /*throw Common::NotImplementedException();*/
             };
         
-        auto queryHeaderCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `refrange`, `usi`, `num` FROM `ct_Header` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryHeaderCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `refrange`, `usi`, `num` FROM `ct_Header`");
         auto handlerHeaderCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new HeaderCustomType(size);
@@ -152,7 +152,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Num());
             };
         
-        auto querySlotRecCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `svstOrDelrange`, `word1`, `flags`, `lock`, `word2` FROM `ct_SlotRec` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto querySlotRecCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `svstOrDelrange`, `word1`, `flags`, `lock`, `word2` FROM `ct_SlotRec`");
         auto handlerSlotRecCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new SlotRecCustomType(size);
@@ -164,7 +164,7 @@ namespace Greis
                 serializer.Deserialize(q.value(8), c->Word2());
             };
         
-        auto queryClkOffsCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `word1`, `word2` FROM `ct_ClkOffs` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryClkOffsCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `word1`, `word2` FROM `ct_ClkOffs`");
         auto handlerClkOffsCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new ClkOffsCustomType(size);
@@ -173,7 +173,7 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Word2());
             };
         
-        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1`");
         auto handlerGPSAlm1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSAlm1CustomType(size);
@@ -195,7 +195,7 @@ namespace Greis
                 serializer.Deserialize(q.value(18), c->OmegaDot());
             };
         
-        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2` FROM `ct_GPSEphemeris1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2` FROM `ct_GPSEphemeris1`");
         auto handlerGPSEphemeris1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSEphemeris1CustomType(size);
@@ -212,7 +212,7 @@ namespace Greis
                 serializer.Deserialize(q.value(13), c->CURAoc2());
             };
         
-        auto queryIonoParams1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `ct_IonoParams1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryIonoParams1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `ct_IonoParams1`");
         auto handlerIonoParams1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new IonoParams1CustomType(size);
@@ -230,7 +230,7 @@ namespace Greis
                 serializer.Deserialize(q.value(14), c->Cs());
             };
         
-        auto queryGpsNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `recSize`, `dat`, `cs` FROM `ct_GpsNavData1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGpsNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `recSize`, `dat`, `cs` FROM `ct_GpsNavData1`");
         auto handlerGpsNavData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GpsNavData1CustomType(size);
@@ -240,7 +240,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Cs());
             };
         
-        auto queryGpsRawNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `ct_GpsRawNavData1` WHERE `unixTimeEpoch` BETWEEN %1 AND %2");
+        auto queryGpsRawNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `ct_GpsRawNavData1`");
         auto handlerGpsRawNavData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GpsRawNavData1CustomType(size);
@@ -296,192 +296,191 @@ namespace Greis
         GreisMysqlSerializer& serializer = _serializer;
 
         auto queryFileIdStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `description` FROM `msg_FileId`");
-        auto handlerFileIdStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerFileIdStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<FileIdStdMessage>(id, bodySize);
-                auto c = dynamic_cast<FileIdStdMessage*>(msg.get());
+                auto c = new FileIdStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->IdField());
                 serializer.Deserialize(q.value(7), c->Description());
+                return (Message*)c;
             };
         
         auto queryMsgFmtStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `majorVer`, `minorVer`, `order`, `cs` FROM `msg_MsgFmt`");
-        auto handlerMsgFmtStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerMsgFmtStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<MsgFmtStdMessage>(id, bodySize);
-                auto c = dynamic_cast<MsgFmtStdMessage*>(msg.get());
+                auto c = new MsgFmtStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->IdField());
                 serializer.Deserialize(q.value(7), c->MajorVer());
                 serializer.Deserialize(q.value(8), c->MinorVer());
                 serializer.DeserializeChar(q.value(9), c->Order());
                 serializer.Deserialize(q.value(10), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `cs` FROM `msg_RcvTime`");
-        auto handlerRcvTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvTimeStdMessage*>(msg.get());
+                auto c = new RcvTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tod());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryEpochTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `cs` FROM `msg_EpochTime`");
-        auto handlerEpochTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerEpochTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<EpochTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<EpochTimeStdMessage*>(msg.get());
+                auto c = new EpochTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tod());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvDateStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `year`, `month`, `day`, `base`, `cs` FROM `msg_RcvDate`");
-        auto handlerRcvDateStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvDateStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvDateStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvDateStdMessage*>(msg.get());
+                auto c = new RcvDateStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Year());
                 serializer.Deserialize(q.value(7), c->Month());
                 serializer.Deserialize(q.value(8), c->Day());
                 serializer.Deserialize(q.value(9), c->Base());
                 serializer.Deserialize(q.value(10), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvTimeOffset`");
-        auto handlerRcvTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvTimeOffsetDotStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvTimeOffsetDot`");
-        auto handlerRcvTimeOffsetDotStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvTimeOffsetDotStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvTimeOffsetDotStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvTimeOffsetDotStdMessage*>(msg.get());
+                auto c = new RcvTimeOffsetDotStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvTimeAccuracyStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `acc`, `cs` FROM `msg_RcvTimeAccuracy`");
-        auto handlerRcvTimeAccuracyStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvTimeAccuracyStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvTimeAccuracyStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvTimeAccuracyStdMessage*>(msg.get());
+                auto c = new RcvTimeAccuracyStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Acc());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGPSTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tow`, `wn`, `cs` FROM `msg_GPSTime`");
-        auto handlerGPSTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGPSTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GPSTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GPSTimeStdMessage*>(msg.get());
+                auto c = new GPSTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tow());
                 serializer.Deserialize(q.value(7), c->Wn());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvGPSTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvGPSTimeOffset`");
-        auto handlerRcvGPSTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvGPSTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvGPSTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvGPSTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvGPSTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGLOTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tod`, `dn`, `cs` FROM `msg_GLOTime`");
-        auto handlerGLOTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGLOTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GLOTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GLOTimeStdMessage*>(msg.get());
+                auto c = new GLOTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tod());
                 serializer.Deserialize(q.value(7), c->Dn());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvGLOTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvGLOTimeOffset`");
-        auto handlerRcvGLOTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvGLOTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvGLOTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvGLOTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvGLOTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvGALTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvGALTimeOffset`");
-        auto handlerRcvGALTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvGALTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvGALTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvGALTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvGALTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvSBASTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvSBASTimeOffset`");
-        auto handlerRcvSBASTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvSBASTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvSBASTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvSBASTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvSBASTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvQZSSTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvQZSSTimeOffset`");
-        auto handlerRcvQZSSTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvQZSSTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvQZSSTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvQZSSTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvQZSSTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvBeiDouTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvBeiDouTimeOffset`");
-        auto handlerRcvBeiDouTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvBeiDouTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvBeiDouTimeOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvBeiDouTimeOffsetStdMessage*>(msg.get());
+                auto c = new RcvBeiDouTimeOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Sval());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGpsUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_GpsUtcParam`");
-        auto handlerGpsUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGpsUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GpsUtcParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GpsUtcParamStdMessage*>(msg.get());
+                auto c = new GpsUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySbasUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `utcsi`, `tow`, `wn`, `flags`, `cs` FROM `msg_SbasUtcParam`");
-        auto handlerSbasUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSbasUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SbasUtcParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SbasUtcParamStdMessage*>(msg.get());
+                auto c = new SbasUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Utcsi());
                 serializer.Deserialize(q.value(8), c->Tow());
                 serializer.Deserialize(q.value(9), c->Wn());
                 serializer.Deserialize(q.value(10), c->Flags());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGalUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `a0g`, `a1g`, `t0g`, `wn0g`, `flags`, `cs` FROM `msg_GalUtcGpsParam`");
-        auto handlerGalUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGalUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GalUtcGpsParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GalUtcGpsParamStdMessage*>(msg.get());
+                auto c = new GalUtcGpsParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->A0g());
                 serializer.Deserialize(q.value(8), c->A1g());
@@ -489,31 +488,31 @@ namespace Greis
                 serializer.Deserialize(q.value(10), c->Wn0g());
                 serializer.Deserialize(q.value(11), c->Flags());
                 serializer.Deserialize(q.value(12), c->Cs());
+                return (Message*)c;
             };
         
         auto queryQzssUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_QzssUtcParam`");
-        auto handlerQzssUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQzssUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QzssUtcParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QzssUtcParamStdMessage*>(msg.get());
+                auto c = new QzssUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryBeiDouUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_BeiDouUtcParam`");
-        auto handlerBeiDouUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBeiDouUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BeiDouUtcParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BeiDouUtcParamStdMessage*>(msg.get());
+                auto c = new BeiDouUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGloUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tauSys`, `tauGps`, `B1`, `B2`, `KP`, `N4`, `Dn`, `cs` FROM `msg_GloUtcGpsParam`");
-        auto handlerGloUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGloUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GloUtcGpsParamStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GloUtcGpsParamStdMessage*>(msg.get());
+                auto c = new GloUtcGpsParamStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->TauSys());
                 serializer.Deserialize(q.value(7), c->TauGps());
                 serializer.Deserialize(q.value(8), c->B1());
@@ -522,49 +521,49 @@ namespace Greis
                 serializer.Deserialize(q.value(11), c->N4());
                 serializer.Deserialize(q.value(12), c->Dn());
                 serializer.Deserialize(q.value(13), c->Cs());
+                return (Message*)c;
             };
         
         auto querySolutionTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `solType`, `cs` FROM `msg_SolutionTime`");
-        auto handlerSolutionTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSolutionTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SolutionTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SolutionTimeStdMessage*>(msg.get());
+                auto c = new SolutionTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->SolType());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `cs` FROM `msg_Pos`");
-        auto handlerPosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosStdMessage*>(msg.get());
+                auto c = new PosStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
                 serializer.Deserialize(q.value(9), c->Sigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `cs` FROM `msg_Vel`");
-        auto handlerVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<VelStdMessage>(id, bodySize);
-                auto c = dynamic_cast<VelStdMessage*>(msg.get());
+                auto c = new VelStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
                 serializer.Deserialize(q.value(9), c->Sigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPosVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `pSigma`, `vx`, `vy`, `vz`, `vSigma`, `solType`, `cs` FROM `msg_PosVel`");
-        auto handlerPosVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosVelStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosVelStdMessage*>(msg.get());
+                auto c = new PosVelStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
@@ -575,64 +574,64 @@ namespace Greis
                 serializer.Deserialize(q.value(13), c->VSigma());
                 serializer.Deserialize(q.value(14), c->SolType());
                 serializer.Deserialize(q.value(15), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGeoPosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `pSigma`, `solType`, `cs` FROM `msg_GeoPos`");
-        auto handlerGeoPosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGeoPosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GeoPosStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GeoPosStdMessage*>(msg.get());
+                auto c = new GeoPosStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Lat());
                 serializer.Deserialize(q.value(7), c->Lon());
                 serializer.Deserialize(q.value(8), c->Alt());
                 serializer.Deserialize(q.value(9), c->PSigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGeoVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `pSigma`, `solType`, `cs` FROM `msg_GeoVel`");
-        auto handlerGeoVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGeoVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GeoVelStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GeoVelStdMessage*>(msg.get());
+                auto c = new GeoVelStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Lat());
                 serializer.Deserialize(q.value(7), c->Lon());
                 serializer.Deserialize(q.value(8), c->Alt());
                 serializer.Deserialize(q.value(9), c->PSigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRmsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `hpos`, `vpos`, `hvel`, `vvel`, `solType`, `cs` FROM `msg_Rms`");
-        auto handlerRmsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRmsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RmsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RmsStdMessage*>(msg.get());
+                auto c = new RmsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Hpos());
                 serializer.Deserialize(q.value(7), c->Vpos());
                 serializer.Deserialize(q.value(8), c->Hvel());
                 serializer.Deserialize(q.value(9), c->Vvel());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryDopsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `hdop`, `vdop`, `tdop`, `solType`, `cs` FROM `msg_Dops`");
-        auto handlerDopsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerDopsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<DopsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<DopsStdMessage*>(msg.get());
+                auto c = new DopsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Hdop());
                 serializer.Deserialize(q.value(7), c->Vdop());
                 serializer.Deserialize(q.value(8), c->Tdop());
                 serializer.Deserialize(q.value(9), c->SolType());
                 serializer.Deserialize(q.value(10), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPosCovStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `xx`, `yy`, `zz`, `tt`, `xy`, `xz`, `xt`, `yz`, `yt`, `zt`, `solType`, `cs` FROM `msg_PosCov`");
-        auto handlerPosCovStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosCovStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosCovStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosCovStdMessage*>(msg.get());
+                auto c = new PosCovStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Xx());
                 serializer.Deserialize(q.value(7), c->Yy());
                 serializer.Deserialize(q.value(8), c->Zz());
@@ -645,13 +644,13 @@ namespace Greis
                 serializer.Deserialize(q.value(15), c->Zt());
                 serializer.Deserialize(q.value(16), c->SolType());
                 serializer.Deserialize(q.value(17), c->Cs());
+                return (Message*)c;
             };
         
         auto queryVelCovStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `xx`, `yy`, `zz`, `tt`, `xy`, `xz`, `xt`, `yz`, `yt`, `zt`, `solType`, `cs` FROM `msg_VelCov`");
-        auto handlerVelCovStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerVelCovStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<VelCovStdMessage>(id, bodySize);
-                auto c = dynamic_cast<VelCovStdMessage*>(msg.get());
+                auto c = new VelCovStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Xx());
                 serializer.Deserialize(q.value(7), c->Yy());
                 serializer.Deserialize(q.value(8), c->Zz());
@@ -664,13 +663,13 @@ namespace Greis
                 serializer.Deserialize(q.value(15), c->Zt());
                 serializer.Deserialize(q.value(16), c->SolType());
                 serializer.Deserialize(q.value(17), c->Cs());
+                return (Message*)c;
             };
         
         auto queryBaselineStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `time`, `cs` FROM `msg_Baseline`");
-        auto handlerBaselineStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBaselineStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BaselineStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BaselineStdMessage*>(msg.get());
+                auto c = new BaselineStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
@@ -678,26 +677,26 @@ namespace Greis
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Time());
                 serializer.Deserialize(q.value(12), c->Cs());
+                return (Message*)c;
             };
         
         auto queryBaselinesStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `bl0`, `bl1`, `bl2`, `rms`, `solType`, `cs` FROM `msg_Baselines`");
-        auto handlerBaselinesStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBaselinesStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BaselinesStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BaselinesStdMessage*>(msg.get());
+                auto c = new BaselinesStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Bl0());
                 serializer.Deserialize(q.value(7), c->Bl1());
                 serializer.Deserialize(q.value(8), c->Bl2());
                 serializer.Deserialize(q.value(9), c->Rms());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryFullRotationMatrixStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `q00`, `q01`, `q02`, `q10`, `q11`, `q12`, `q20`, `q21`, `q22`, `cs` FROM `msg_FullRotationMatrix`");
-        auto handlerFullRotationMatrixStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerFullRotationMatrixStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<FullRotationMatrixStdMessage>(id, bodySize);
-                auto c = dynamic_cast<FullRotationMatrixStdMessage*>(msg.get());
+                auto c = new FullRotationMatrixStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Q00());
                 serializer.Deserialize(q.value(7), c->Q01());
                 serializer.Deserialize(q.value(8), c->Q02());
@@ -708,13 +707,13 @@ namespace Greis
                 serializer.Deserialize(q.value(13), c->Q21());
                 serializer.Deserialize(q.value(14), c->Q22());
                 serializer.Deserialize(q.value(15), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPosStatStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `solType`, `gpsLocked`, `gloLocked`, `gpsAvail`, `gloAvail`, `gpsUsed`, `gloUsed`, `fixProg`, `cs` FROM `msg_PosStat`");
-        auto handlerPosStatStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosStatStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosStatStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosStatStdMessage*>(msg.get());
+                auto c = new PosStatStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->SolType());
                 serializer.Deserialize(q.value(7), c->GpsLocked());
                 serializer.Deserialize(q.value(8), c->GloLocked());
@@ -724,266 +723,266 @@ namespace Greis
                 serializer.Deserialize(q.value(12), c->GloUsed());
                 serializer.Deserialize(q.value(13), c->FixProg());
                 serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPosCompTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `pt`, `cs` FROM `msg_PosCompTime`");
-        auto handlerPosCompTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosCompTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosCompTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosCompTimeStdMessage*>(msg.get());
+                auto c = new PosCompTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Pt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySatIndexStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `usi`, `cs` FROM `msg_SatIndex`");
-        auto handlerSatIndexStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSatIndexStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SatIndexStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SatIndexStdMessage*>(msg.get());
+                auto c = new SatIndexStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Usi());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryAntNameStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `name`, `cs` FROM `msg_AntName`");
-        auto handlerAntNameStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerAntNameStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<AntNameStdMessage>(id, bodySize);
-                auto c = dynamic_cast<AntNameStdMessage*>(msg.get());
+                auto c = new AntNameStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Name());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySatNumbersStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `osn`, `cs` FROM `msg_SatNumbers`");
-        auto handlerSatNumbersStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSatNumbersStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SatNumbersStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SatNumbersStdMessage*>(msg.get());
+                auto c = new SatNumbersStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Osn());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySatElevationStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `elev`, `cs` FROM `msg_SatElevation`");
-        auto handlerSatElevationStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSatElevationStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SatElevationStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SatElevationStdMessage*>(msg.get());
+                auto c = new SatElevationStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Elev());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySatAzimuthStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `azim`, `cs` FROM `msg_SatAzimuth`");
-        auto handlerSatAzimuthStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSatAzimuthStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SatAzimuthStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SatAzimuthStdMessage*>(msg.get());
+                auto c = new SatAzimuthStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Azim());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPRStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `pr`, `cs` FROM `msg_PR`");
-        auto handlerPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PRStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PRStdMessage*>(msg.get());
+                auto c = new PRStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Pr());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySPRStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `spr`, `cs` FROM `msg_SPR`");
-        auto handlerSPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SPRStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SPRStdMessage*>(msg.get());
+                auto c = new SPRStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Spr());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRPRStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `rpr`, `cs` FROM `msg_RPR`");
-        auto handlerRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RPRStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RPRStdMessage*>(msg.get());
+                auto c = new RPRStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Rpr());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySRPRStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `srpr`, `cs` FROM `msg_SRPR`");
-        auto handlerSRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SRPRStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SRPRStdMessage*>(msg.get());
+                auto c = new SRPRStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Srpr());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySCStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `smooth`, `cs` FROM `msg_SC`");
-        auto handlerSCStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSCStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SCStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SCStdMessage*>(msg.get());
+                auto c = new SCStdMessage(id, bodySize);
                 c->Smooth() = this->deserializeAndGetCustomTypes<SmoothCustomType>(ECustomTypeId::Smooth, q.value(6));
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySSStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `smooth`, `cs` FROM `msg_SS`");
-        auto handlerSSStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSSStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SSStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SSStdMessage*>(msg.get());
+                auto c = new SSStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Smooth());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryCPStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cp`, `cs` FROM `msg_CP`");
-        auto handlerCPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerCPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<CPStdMessage>(id, bodySize);
-                auto c = dynamic_cast<CPStdMessage*>(msg.get());
+                auto c = new CPStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Cp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySCPStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `scp`, `cs` FROM `msg_SCP`");
-        auto handlerSCPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSCPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SCPStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SCPStdMessage*>(msg.get());
+                auto c = new SCPStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Scp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRCPRC0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `rcp`, `cs` FROM `msg_RCP_RC0`");
-        auto handlerRCPRC0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRCPRC0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RCPRC0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<RCPRC0StdMessage*>(msg.get());
+                auto c = new RCPRC0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Rcp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRCPRc1StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `rcp`, `cs` FROM `msg_RCP_rc1`");
-        auto handlerRCPRc1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRCPRc1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RCPRc1StdMessage>(id, bodySize);
-                auto c = dynamic_cast<RCPRc1StdMessage*>(msg.get());
+                auto c = new RCPRc1StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Rcp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryDPStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `dp`, `cs` FROM `msg_DP`");
-        auto handlerDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<DPStdMessage>(id, bodySize);
-                auto c = dynamic_cast<DPStdMessage*>(msg.get());
+                auto c = new DPStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Dp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySRDPStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `srdp`, `cs` FROM `msg_SRDP`");
-        auto handlerSRDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSRDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SRDPStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SRDPStdMessage*>(msg.get());
+                auto c = new SRDPStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Srdp());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryCNRStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cnr`, `cs` FROM `msg_CNR`");
-        auto handlerCNRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerCNRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<CNRStdMessage>(id, bodySize);
-                auto c = dynamic_cast<CNRStdMessage*>(msg.get());
+                auto c = new CNRStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Cnr());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryCNR4StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cnrX4`, `cs` FROM `msg_CNR_4`");
-        auto handlerCNR4StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerCNR4StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<CNR4StdMessage>(id, bodySize);
-                auto c = dynamic_cast<CNR4StdMessage*>(msg.get());
+                auto c = new CNR4StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->CnrX4());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryFlagsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `flags`, `cs` FROM `msg_Flags`");
-        auto handlerFlagsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerFlagsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<FlagsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<FlagsStdMessage*>(msg.get());
+                auto c = new FlagsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Flags());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryIAmpStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs` FROM `msg_IAmp`");
-        auto handlerIAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerIAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<IAmpStdMessage>(id, bodySize);
-                auto c = dynamic_cast<IAmpStdMessage*>(msg.get());
+                auto c = new IAmpStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryQAmpStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `amp`, `cs` FROM `msg_QAmp`");
-        auto handlerQAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QAmpStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QAmpStdMessage*>(msg.get());
+                auto c = new QAmpStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryTrackingTimeCAStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tt`, `cs` FROM `msg_TrackingTimeCA`");
-        auto handlerTrackingTimeCAStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerTrackingTimeCAStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<TrackingTimeCAStdMessage>(id, bodySize);
-                auto c = dynamic_cast<TrackingTimeCAStdMessage*>(msg.get());
+                auto c = new TrackingTimeCAStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryNavStatusStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `ns`, `solType`, `cs` FROM `msg_NavStatus`");
-        auto handlerNavStatusStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerNavStatusStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<NavStatusStdMessage>(id, bodySize);
-                auto c = dynamic_cast<NavStatusStdMessage*>(msg.get());
+                auto c = new NavStatusStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Ns());
                 serializer.Deserialize(q.value(7), c->SolType());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryIonoDelayStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `delay`, `cs` FROM `msg_IonoDelay`");
-        auto handlerIonoDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerIonoDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<IonoDelayStdMessage>(id, bodySize);
-                auto c = dynamic_cast<IonoDelayStdMessage*>(msg.get());
+                auto c = new IonoDelayStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Delay());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRangeResidualStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `res`, `cs` FROM `msg_RangeResidual`");
-        auto handlerRangeResidualStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRangeResidualStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RangeResidualStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RangeResidualStdMessage*>(msg.get());
+                auto c = new RangeResidualStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryVelocityResidualStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `res`, `cs` FROM `msg_VelocityResidual`");
-        auto handlerVelocityResidualStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerVelocityResidualStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<VelocityResidualStdMessage>(id, bodySize);
-                auto c = dynamic_cast<VelocityResidualStdMessage*>(msg.get());
+                auto c = new VelocityResidualStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryGPSAlm0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs` FROM `msg_GPSAlm0`");
-        auto handlerGPSAlm0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGPSAlm0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GPSAlm0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<GPSAlm0StdMessage*>(msg.get());
+                auto c = new GPSAlm0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sv());
                 serializer.Deserialize(q.value(7), c->Wna());
                 serializer.Deserialize(q.value(8), c->Toa());
@@ -1000,39 +999,39 @@ namespace Greis
                 serializer.Deserialize(q.value(19), c->Deli());
                 serializer.Deserialize(q.value(20), c->OmegaDot());
                 serializer.Deserialize(q.value(21), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGALAlmStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `iod`, `cs` FROM `msg_GALAlm`");
-        auto handlerGALAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGALAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GALAlmStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GALAlmStdMessage*>(msg.get());
+                auto c = new GALAlmStdMessage(id, bodySize);
                 c->Gps() = this->extractCustomType<GPSAlm1CustomType>(ECustomTypeId::GPSAlm1, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Iod());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryQZSSAlmStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps` FROM `msg_QZSSAlm`");
-        auto handlerQZSSAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQZSSAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QZSSAlmStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QZSSAlmStdMessage*>(msg.get());
+                auto c = new QZSSAlmStdMessage(id, bodySize);
                 c->Gps() = this->extractCustomType<GPSAlm1CustomType>(ECustomTypeId::GPSAlm1, q.value(6).toInt());
+                return (Message*)c;
             };
         
         auto queryBeiDouAlmStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps` FROM `msg_BeiDouAlm`");
-        auto handlerBeiDouAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBeiDouAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BeiDouAlmStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BeiDouAlmStdMessage*>(msg.get());
+                auto c = new BeiDouAlmStdMessage(id, bodySize);
                 c->Gps() = this->extractCustomType<GPSAlm1CustomType>(ECustomTypeId::GPSAlm1, q.value(6).toInt());
+                return (Message*)c;
             };
         
         auto queryGLOAlmanacStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `n4`, `navType`, `gammaN`, `cs` FROM `msg_GLOAlmanac`");
-        auto handlerGLOAlmanacStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGLOAlmanacStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GLOAlmanacStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GLOAlmanacStdMessage*>(msg.get());
+                auto c = new GLOAlmanacStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sv());
                 serializer.Deserialize(q.value(7), c->FrqNum());
                 serializer.Deserialize(q.value(8), c->Dna());
@@ -1054,13 +1053,13 @@ namespace Greis
                     serializer.Deserialize(q.value(21), c->GammaN());
                 }
                 serializer.Deserialize(q.value(22), c->Cs());
+                return (Message*)c;
             };
         
         auto querySBASAlmanacStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `id_sugar`, `healthS`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `tow`, `wn`, `cs` FROM `msg_SBASAlmanac`");
-        auto handlerSBASAlmanacStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSBASAlmanacStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SBASAlmanacStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SBASAlmanacStdMessage*>(msg.get());
+                auto c = new SBASAlmanacStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->WaasPrn());
                 serializer.Deserialize(q.value(7), c->GpsPrn());
                 serializer.Deserialize(q.value(8), c->IdField());
@@ -1075,13 +1074,13 @@ namespace Greis
                 serializer.Deserialize(q.value(17), c->Tow());
                 serializer.Deserialize(q.value(18), c->Wn());
                 serializer.Deserialize(q.value(19), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGPSEphemeris0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `cs` FROM `msg_GPSEphemeris0`");
-        auto handlerGPSEphemeris0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGPSEphemeris0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GPSEphemeris0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<GPSEphemeris0StdMessage*>(msg.get());
+                auto c = new GPSEphemeris0StdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
                 if (bodySize == 148)
                 {
@@ -1097,13 +1096,13 @@ namespace Greis
                     serializer.Deserialize(q.value(15), c->CURAoc2());
                 }
                 serializer.Deserialize(q.value(16), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGALEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs` FROM `msg_GALEphemeris`");
-        auto handlerGALEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGALEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GALEphemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GALEphemerisStdMessage*>(msg.get());
+                auto c = new GALEphemerisStdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->BgdE1E5a());
                 serializer.Deserialize(q.value(8), c->BgdE1E5b());
@@ -1113,33 +1112,33 @@ namespace Greis
                 serializer.Deserialize(q.value(12), c->Sfi());
                 serializer.Deserialize(q.value(13), c->NavType());
                 serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
             };
         
         auto queryQZSSEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `cs` FROM `msg_QZSSEphemeris`");
-        auto handlerQZSSEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQZSSEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QZSSEphemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg.get());
+                auto c = new QZSSEphemerisStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryBeiDouEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `tgd2`, `navType`, `cs` FROM `msg_BeiDouEphemeris`");
-        auto handlerBeiDouEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBeiDouEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BeiDouEphemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BeiDouEphemerisStdMessage*>(msg.get());
+                auto c = new BeiDouEphemerisStdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Tgd2());
                 serializer.Deserialize(q.value(8), c->NavType());
                 serializer.Deserialize(q.value(9), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGLOEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dne`, `tk`, `tb`, `health`, `age`, `flags`, `r`, `v`, `w`, `tauSys`, `tau`, `gamma`, `fDelTauN`, `nFt`, `nN4`, `flags2`, `navType`, `beta`, `tauSysDot`, `ec`, `ee`, `fc`, `fe`, `reserv`, `cs` FROM `msg_GLOEphemeris`");
-        auto handlerGLOEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGLOEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GLOEphemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GLOEphemerisStdMessage*>(msg.get());
+                auto c = new GLOEphemerisStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sv());
                 serializer.Deserialize(q.value(7), c->FrqNum());
                 serializer.Deserialize(q.value(8), c->Dne());
@@ -1171,13 +1170,13 @@ namespace Greis
                     serializer.Deserialize(q.value(31), c->Reserv());
                 }
                 serializer.Deserialize(q.value(32), c->Cs());
+                return (Message*)c;
             };
         
         auto querySBASEhemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `waasPrn`, `gpsPrn`, `iod`, `acc`, `tod`, `xg`, `yg`, `zg`, `vxg`, `vyg`, `vzg`, `vvxg`, `vvyg`, `vvzg`, `agf0`, `agf1`, `tow`, `wn`, `flags`, `cs` FROM `msg_SBASEhemeris`");
-        auto handlerSBASEhemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSBASEhemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SBASEhemerisStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SBASEhemerisStdMessage*>(msg.get());
+                auto c = new SBASEhemerisStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->WaasPrn());
                 serializer.Deserialize(q.value(7), c->GpsPrn());
                 serializer.Deserialize(q.value(8), c->Iod());
@@ -1198,64 +1197,64 @@ namespace Greis
                 serializer.Deserialize(q.value(23), c->Wn());
                 serializer.Deserialize(q.value(24), c->Flags());
                 serializer.Deserialize(q.value(25), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGpsNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData0`");
-        auto handlerGpsNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGpsNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GpsNavData0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<GpsNavData0StdMessage*>(msg.get());
+                auto c = new GpsNavData0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->RecSize());
                 c->Dat() = this->deserializeAndGetCustomTypes<SvData0CustomType>(ECustomTypeId::SvData0, q.value(7));
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGpsRawNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GpsRawNavData0`");
-        auto handlerGpsRawNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGpsRawNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GpsRawNavData0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<GpsRawNavData0StdMessage*>(msg.get());
+                auto c = new GpsRawNavData0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Prn());
                 serializer.Deserialize(q.value(7), c->Time());
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
                 serializer.Deserialize(q.value(10), c->Data());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryQzssNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssNavData`");
-        auto handlerQzssNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQzssNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QzssNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QzssNavDataStdMessage*>(msg.get());
+                auto c = new QzssNavDataStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryQzssRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssRawNavData`");
-        auto handlerQzssRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQzssRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QzssRawNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QzssRawNavDataStdMessage*>(msg.get());
+                auto c = new QzssRawNavDataStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryGloNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GloNavData`");
-        auto handlerGloNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGloNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GloNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GloNavDataStdMessage*>(msg.get());
+                auto c = new GloNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->RecSize());
                 c->Dat() = this->deserializeAndGetCustomTypes<SvData1CustomType>(ECustomTypeId::SvData1, q.value(7));
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGloRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `num`, `fcn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GloRawNavData`");
-        auto handlerGloRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGloRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GloRawNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GloRawNavDataStdMessage*>(msg.get());
+                auto c = new GloRawNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Num());
                 serializer.Deserialize(q.value(7), c->Fcn());
                 serializer.Deserialize(q.value(8), c->Time());
@@ -1263,87 +1262,87 @@ namespace Greis
                 serializer.Deserialize(q.value(10), c->Len());
                 serializer.Deserialize(q.value(11), c->Data());
                 serializer.Deserialize(q.value(12), c->Cs());
+                return (Message*)c;
             };
         
         auto querySbasRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs` FROM `msg_SbasRawNavData`");
-        auto handlerSbasRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSbasRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<SbasRawNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<SbasRawNavDataStdMessage*>(msg.get());
+                auto c = new SbasRawNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Prn());
                 serializer.Deserialize(q.value(7), c->Time());
                 serializer.Deserialize(q.value(8), c->Reserv());
                 serializer.Deserialize(q.value(9), c->Data());
                 serializer.Deserialize(q.value(10), c->Cs());
+                return (Message*)c;
             };
         
         auto queryGalRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GalRawNavData`");
-        auto handlerGalRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGalRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GalRawNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GalRawNavDataStdMessage*>(msg.get());
+                auto c = new GalRawNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Prn());
                 serializer.Deserialize(q.value(7), c->Time());
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
                 serializer.Deserialize(q.value(10), c->Data());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto queryCompRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_CompRawNavData`");
-        auto handlerCompRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerCompRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<CompRawNavDataStdMessage>(id, bodySize);
-                auto c = dynamic_cast<CompRawNavDataStdMessage*>(msg.get());
+                auto c = new CompRawNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Prn());
                 serializer.Deserialize(q.value(7), c->Time());
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
                 serializer.Deserialize(q.value(10), c->Data());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto querySpectrum0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs` FROM `msg_Spectrum0`");
-        auto handlerSpectrum0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSpectrum0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<Spectrum0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<Spectrum0StdMessage*>(msg.get());
+                auto c = new Spectrum0StdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto querySpectrum1StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `currFrq`, `finalFrq`, `n`, `m`, `s`, `cs` FROM `msg_Spectrum1`");
-        auto handlerSpectrum1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSpectrum1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<Spectrum1StdMessage>(id, bodySize);
-                auto c = dynamic_cast<Spectrum1StdMessage*>(msg.get());
+                auto c = new Spectrum1StdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryGloDelaysStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `del`, `cs` FROM `msg_GloDelays`");
-        auto handlerGloDelaysStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerGloDelaysStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<GloDelaysStdMessage>(id, bodySize);
-                auto c = dynamic_cast<GloDelaysStdMessage*>(msg.get());
+                auto c = new GloDelaysStdMessage(id, bodySize);
                 c->Del() = this->deserializeAndGetCustomTypes<SvDelayCustomType>(ECustomTypeId::SvDelay, q.value(6));
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryCalBandsDelayStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `d`, `cs` FROM `msg_CalBandsDelay`");
-        auto handlerCalBandsDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerCalBandsDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<CalBandsDelayStdMessage>(id, bodySize);
-                auto c = dynamic_cast<CalBandsDelayStdMessage*>(msg.get());
+                auto c = new CalBandsDelayStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryRotationMatrixStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `q00`, `q01`, `q02`, `q12`, `rms`, `solType`, `flag`, `cs` FROM `msg_RotationMatrix`");
-        auto handlerRotationMatrixStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRotationMatrixStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RotationMatrixStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RotationMatrixStdMessage*>(msg.get());
+                auto c = new RotationMatrixStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Q00());
                 serializer.Deserialize(q.value(8), c->Q01());
@@ -1353,13 +1352,13 @@ namespace Greis
                 serializer.Deserialize(q.value(12), c->SolType());
                 serializer.Deserialize(q.value(13), c->Flag());
                 serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRotationMatrixAndVectorsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `q00`, `q01`, `q02`, `q12`, `rms`, `solType`, `flag`, `bl0`, `bl1`, `bl2`, `cs` FROM `msg_RotationMatrixAndVectors`");
-        auto handlerRotationMatrixAndVectorsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRotationMatrixAndVectorsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RotationMatrixAndVectorsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RotationMatrixAndVectorsStdMessage*>(msg.get());
+                auto c = new RotationMatrixAndVectorsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Q00());
                 serializer.Deserialize(q.value(8), c->Q01());
@@ -1372,13 +1371,13 @@ namespace Greis
                 serializer.Deserialize(q.value(15), c->Bl1());
                 serializer.Deserialize(q.value(16), c->Bl2());
                 serializer.Deserialize(q.value(17), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRotationAnglesStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `pitch`, `roll`, `heading`, `pitchRms`, `rollRms`, `headingRms`, `flags`, `cs` FROM `msg_RotationAngles`");
-        auto handlerRotationAnglesStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRotationAnglesStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RotationAnglesStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RotationAnglesStdMessage*>(msg.get());
+                auto c = new RotationAnglesStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Pitch());
                 serializer.Deserialize(q.value(8), c->Roll());
@@ -1388,13 +1387,13 @@ namespace Greis
                 serializer.Deserialize(q.value(12), c->HeadingRms());
                 serializer.Deserialize(q.value(13), c->Flags());
                 serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
             };
         
         auto queryAngularVelocityStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `x`, `y`, `z`, `rms`, `flags`, `cs` FROM `msg_AngularVelocity`");
-        auto handlerAngularVelocityStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerAngularVelocityStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<AngularVelocityStdMessage>(id, bodySize);
-                auto c = dynamic_cast<AngularVelocityStdMessage*>(msg.get());
+                auto c = new AngularVelocityStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->X());
                 serializer.Deserialize(q.value(8), c->Y());
@@ -1402,84 +1401,84 @@ namespace Greis
                 serializer.Deserialize(q.value(10), c->Rms());
                 serializer.Deserialize(q.value(11), c->Flags());
                 serializer.Deserialize(q.value(12), c->Cs());
+                return (Message*)c;
             };
         
         auto queryInertialMeasurementsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `accelerations`, `angularVelocities`, `cs` FROM `msg_InertialMeasurements`");
-        auto handlerInertialMeasurementsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerInertialMeasurementsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<InertialMeasurementsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<InertialMeasurementsStdMessage*>(msg.get());
+                auto c = new InertialMeasurementsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Accelerations());
                 serializer.Deserialize(q.value(7), c->AngularVelocities());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryExtEventStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `ms`, `ns`, `timeScale`, `cs` FROM `msg_ExtEvent`");
-        auto handlerExtEventStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerExtEventStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<ExtEventStdMessage>(id, bodySize);
-                auto c = dynamic_cast<ExtEventStdMessage*>(msg.get());
+                auto c = new ExtEventStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Ms());
                 serializer.Deserialize(q.value(7), c->Ns());
                 serializer.Deserialize(q.value(8), c->TimeScale());
                 serializer.Deserialize(q.value(9), c->Cs());
+                return (Message*)c;
             };
         
         auto queryPPSOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `offs`, `cs` FROM `msg_PPSOffset`");
-        auto handlerPPSOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPPSOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PPSOffsetStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PPSOffsetStdMessage*>(msg.get());
+                auto c = new PPSOffsetStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Offs());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvTimeOffsAtPPSStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `offs`, `timeScale`, `cs` FROM `msg_RcvTimeOffsAtPPS`");
-        auto handlerRcvTimeOffsAtPPSStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvTimeOffsAtPPSStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvTimeOffsAtPPSStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvTimeOffsAtPPSStdMessage*>(msg.get());
+                auto c = new RcvTimeOffsAtPPSStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Offs());
                 serializer.Deserialize(q.value(7), c->TimeScale());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryHeadAndPitchStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `heading`, `pitch`, `solType`, `cs` FROM `msg_HeadAndPitch`");
-        auto handlerHeadAndPitchStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerHeadAndPitchStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<HeadAndPitchStdMessage>(id, bodySize);
-                auto c = dynamic_cast<HeadAndPitchStdMessage*>(msg.get());
+                auto c = new HeadAndPitchStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Heading());
                 serializer.Deserialize(q.value(7), c->Pitch());
                 serializer.Deserialize(q.value(8), c->SolType());
                 serializer.Deserialize(q.value(9), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRefEpochStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `scale`, `reftime`, `crc16` FROM `msg_RefEpoch`");
-        auto handlerRefEpochStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRefEpochStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RefEpochStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RefEpochStdMessage*>(msg.get());
+                auto c = new RefEpochStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sample());
                 serializer.Deserialize(q.value(7), c->Scale());
                 serializer.Deserialize(q.value(8), c->Reftime());
                 serializer.Deserialize(q.value(9), c->Crc16());
+                return (Message*)c;
             };
         
         auto queryRawMeasStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `scale`, `reftime`, `clock`, `flags`, `svd`, `crc16` FROM `msg_RawMeas`");
-        auto handlerRawMeasStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRawMeasStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RawMeasStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RawMeasStdMessage*>(msg.get());
+                auto c = new RawMeasStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryPosVelVectorStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `delta`, `word1`, `word2`, `word3`, `word4`, `word5`, `word6`, `word7`, `word8`, `word9`, `crc16` FROM `msg_PosVelVector`");
-        auto handlerPosVelVectorStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerPosVelVectorStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<PosVelVectorStdMessage>(id, bodySize);
-                auto c = dynamic_cast<PosVelVectorStdMessage*>(msg.get());
+                auto c = new PosVelVectorStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sample());
                 serializer.Deserialize(q.value(7), c->Delta());
                 serializer.Deserialize(q.value(8), c->Word1());
@@ -1492,41 +1491,41 @@ namespace Greis
                 serializer.Deserialize(q.value(15), c->Word8());
                 serializer.Deserialize(q.value(16), c->Word9());
                 serializer.Deserialize(q.value(17), c->Crc16());
+                return (Message*)c;
             };
         
         auto queryClockOffsetsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `reserved`, `recSize`, `Offs`, `crc16` FROM `msg_ClockOffsets`");
-        auto handlerClockOffsetsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerClockOffsetsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<ClockOffsetsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<ClockOffsetsStdMessage*>(msg.get());
+                auto c = new ClockOffsetsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sample());
                 serializer.Deserialize(q.value(7), c->Reserved());
                 serializer.Deserialize(q.value(8), c->RecSize());
                 c->Offs() = this->deserializeAndGetCustomTypes<ClkOffsCustomType>(ECustomTypeId::ClkOffs, q.value(9));
                 serializer.Deserialize(q.value(10), c->Crc16());
+                return (Message*)c;
             };
         
         auto queryREStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `reply` FROM `msg_RE`");
-        auto handlerREStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerREStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<REStdMessage>(id, bodySize);
-                auto c = dynamic_cast<REStdMessage*>(msg.get());
+                auto c = new REStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Reply());
+                return (Message*)c;
             };
         
         auto queryERStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `error` FROM `msg_ER`");
-        auto handlerERStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerERStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<ERStdMessage>(id, bodySize);
-                auto c = dynamic_cast<ERStdMessage*>(msg.get());
+                auto c = new ERStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Error());
+                return (Message*)c;
             };
         
         auto queryIonoParams0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `msg_IonoParams0`");
-        auto handlerIonoParams0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerIonoParams0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<IonoParams0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<IonoParams0StdMessage*>(msg.get());
+                auto c = new IonoParams0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tot());
                 serializer.Deserialize(q.value(7), c->Wn());
                 serializer.Deserialize(q.value(8), c->Alpha0());
@@ -1538,128 +1537,129 @@ namespace Greis
                 serializer.Deserialize(q.value(14), c->Beta2());
                 serializer.Deserialize(q.value(15), c->Beta3());
                 serializer.Deserialize(q.value(16), c->Cs());
+                return (Message*)c;
             };
         
         auto queryQzssIonoParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `par` FROM `msg_QzssIonoParams`");
-        auto handlerQzssIonoParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerQzssIonoParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<QzssIonoParamsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<QzssIonoParamsStdMessage*>(msg.get());
+                auto c = new QzssIonoParamsStdMessage(id, bodySize);
                 c->Par() = this->extractCustomType<IonoParams1CustomType>(ECustomTypeId::IonoParams1, q.value(6).toInt());
+                return (Message*)c;
             };
         
         auto queryBeiDouIonoParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `par` FROM `msg_BeiDouIonoParams`");
-        auto handlerBeiDouIonoParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBeiDouIonoParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BeiDouIonoParamsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BeiDouIonoParamsStdMessage*>(msg.get());
+                auto c = new BeiDouIonoParamsStdMessage(id, bodySize);
                 c->Par() = this->extractCustomType<IonoParams1CustomType>(ECustomTypeId::IonoParams1, q.value(6).toInt());
+                return (Message*)c;
             };
         
         auto queryEventStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `type`, `data`, `cs` FROM `msg_Event`");
-        auto handlerEventStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerEventStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<EventStdMessage>(id, bodySize);
-                auto c = dynamic_cast<EventStdMessage*>(msg.get());
+                auto c = new EventStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
                 serializer.Deserialize(q.value(7), c->Type());
                 serializer.Deserialize(q.value(8), c->Data());
                 serializer.Deserialize(q.value(9), c->Cs());
+                return (Message*)c;
             };
         
         auto queryLatencyStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lt`, `cs` FROM `msg_Latency`");
-        auto handlerLatencyStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerLatencyStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<LatencyStdMessage>(id, bodySize);
-                auto c = dynamic_cast<LatencyStdMessage*>(msg.get());
+                auto c = new LatencyStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Lt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryWrapperStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `data`, `cs` FROM `msg_Wrapper`");
-        auto handlerWrapperStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerWrapperStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<WrapperStdMessage>(id, bodySize);
-                auto c = dynamic_cast<WrapperStdMessage*>(msg.get());
+                auto c = new WrapperStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->IdField());
                 serializer.Deserialize(q.value(7), c->Data());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `params`, `delim`, `cs` FROM `msg_Params`");
-        auto handlerParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<ParamsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<ParamsStdMessage*>(msg.get());
+                auto c = new ParamsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Params());
                 serializer.Deserialize(q.value(7), c->Delim());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
             };
         
         auto queryLoggingHistoryStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `svsCount`, `targetStream`, `issue`, `bitsCount`, `lastBitTime`, `uids`, `pad`, `hist` FROM `msg_LoggingHistory`");
-        auto handlerLoggingHistoryStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerLoggingHistoryStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<LoggingHistoryStdMessage>(id, bodySize);
-                auto c = dynamic_cast<LoggingHistoryStdMessage*>(msg.get());
+                auto c = new LoggingHistoryStdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
             };
         
         auto queryBaseInfoStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `id_sugar`, `solType`, `cs` FROM `msg_BaseInfo`");
-        auto handlerBaseInfoStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerBaseInfoStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<BaseInfoStdMessage>(id, bodySize);
-                auto c = dynamic_cast<BaseInfoStdMessage*>(msg.get());
+                auto c = new BaseInfoStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
                 serializer.Deserialize(q.value(9), c->IdField());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
             };
         
         auto querySecurity0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data`, `cs` FROM `msg_Security0`");
-        auto handlerSecurity0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSecurity0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<Security0StdMessage>(id, bodySize);
-                auto c = dynamic_cast<Security0StdMessage*>(msg.get());
+                auto c = new Security0StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Data());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto querySecurity1StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data`, `crc16` FROM `msg_Security1`");
-        auto handlerSecurity1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerSecurity1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<Security1StdMessage>(id, bodySize);
-                auto c = dynamic_cast<Security1StdMessage*>(msg.get());
+                auto c = new Security1StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Data());
                 serializer.Deserialize(q.value(7), c->Crc16());
+                return (Message*)c;
             };
         
         auto queryTrackingTimeStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tt`, `cs` FROM `msg_TrackingTime`");
-        auto handlerTrackingTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerTrackingTimeStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<TrackingTimeStdMessage>(id, bodySize);
-                auto c = dynamic_cast<TrackingTimeStdMessage*>(msg.get());
+                auto c = new TrackingTimeStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Tt());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryRcvOscOffsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `cs` FROM `msg_RcvOscOffs`");
-        auto handlerRcvOscOffsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerRcvOscOffsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<RcvOscOffsStdMessage>(id, bodySize);
-                auto c = dynamic_cast<RcvOscOffsStdMessage*>(msg.get());
+                auto c = new RcvOscOffsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Val());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
             };
         
         auto queryEpochEndStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cs` FROM `msg_EpochEnd`");
-        auto handlerEpochEndStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)
+        auto handlerEpochEndStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                msg = make_unique<EpochEndStdMessage>(id, bodySize);
-                auto c = dynamic_cast<EpochEndStdMessage*>(msg.get());
+                auto c = new EpochEndStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Cs());
+                return (Message*)c;
             };
         
         _msgQueries.insert(EMessageId::FileId, queryFileIdStdMessage);

@@ -61,32 +61,42 @@ namespace Greis
     DataChunk::UniquePtr_t MySqlSource::read(const QString& sqlWhere)
     {
         _ctBuffer.clear();
+        _sqlWhere = sqlWhere;
 
         auto jpsFile = make_unique<DataChunk>();
         pushStandardJpsHeader(jpsFile.get());
 
         readRawStdMessages(sqlWhere);
 
+        QMap<qulonglong, QVector<MessageEx>> messagesByDateTime;
         for (auto messageId : getSerializableMessages())
         {
             QString query = _msgQueries[messageId] + " " + sqlWhere;
             auto handler = _msgHandlers[messageId];
-            
+            handleMessage(query, handler, messagesByDateTime);
         }
 
         // TODO: 
-        false
-        QMap<qulonglong, Epoch*> epochsByDateTime;
-
-        GreisMysqlSerializer& serializer = _serializer;
+        //GreisMysqlSerializer& serializer = _serializer;
 
         // ${HandleMessageStub}
+        /*                epoch->DateTime = QDateTime::fromMSecsSinceEpoch(unixTime);
 
-        insertRawMessage(epochsByDateTime);
+        queryStr = queryStr.arg(_from.toMSecsSinceEpoch()).arg(_to.toMSecsSinceEpoch());
+            if (messages == nullptr)
+            {
+            messages = new QVector<MessageEx>();
+            messagesByDateTime[unixTime] = messages;
+            }
+        messages->push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+        messages->push_back(NonStdTextMessage::CreateNewLineMessage()); */
 
-        for (auto it = epochsByDateTime.begin(); it != epochsByDateTime.end(); ++it)
+        // TODO:insertRawMessage(epochsByDateTime);
+
+        for (auto it = messagesByDateTime.begin(); it != messagesByDateTime.end(); ++it)
         {
-            jpsFile->Body().push_back(Epoch::UniquePtr_t(it.value()));
+
+            //jpsFile->Body().push_back(Epoch::UniquePtr_t(it.value()));
         }
         return jpsFile;
     }

@@ -103,7 +103,7 @@ namespace Generator.Core
                     variable => string.Format("`{0}`", MySqlBaselineGenerator.GetColumnName(variable))).ToArray();
                 var columns = predefinedMsgCols + string.Join(", ", colNames);
 
-                var selectCommand = string.Format("SELECT {0} FROM `{1}` WHERE `unixTimeEpoch` BETWEEN %1 AND %2",
+                var selectCommand = string.Format("SELECT {0} FROM `{1}`",
                                                   columns, tableName);
 
                 var serCode = this.GenerateVariablesMySqlSourceSerializationContent(codeIntend, ct);
@@ -158,11 +158,11 @@ namespace Generator.Core
 
                 // Handler
                 var handleMessageFields =
-                    string.Format("[&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q, Message::UniquePtr_t& msg)\r\n{0}" +
+                    string.Format("[&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)\r\n{0}" +
                                   "{{\r\n{0}" +
-                                  "    msg = make_unique<{1}>(id, bodySize);\r\n{0}" +
-                                  "    auto c = dynamic_cast<{1}*>(msg.get());\r\n{0}" +
+                                  "    auto c = new {1}(id, bodySize);\r\n{0}" +
                                   "    {2}\r\n{0}" +
+                                  "    return (Message*)c;\r\n{0}" +
                                   "}}",
                                   codeIntend + "    ", this.GetClassName(msg), serCode);
                 var handleMessageLine = string.Format(
