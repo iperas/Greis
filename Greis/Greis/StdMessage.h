@@ -1,7 +1,6 @@
 #ifndef StdMessage_h__
 #define StdMessage_h__
 
-#include <vector>
 #include "Message.h"
 #include "Common/InvalidOperationException.h"
 #include "EMessageId.h"
@@ -18,16 +17,19 @@ namespace Greis
 
         StdMessage();
 
-        virtual std::string ToString() const = 0;
-        virtual bool Validate() const;
+        virtual std::string ToString() const override = 0;
+        virtual bool Validate() const override;
         virtual bool IsCorrect() const { return true; }
         virtual void RecalculateChecksum() = 0;
 
         virtual std::string Id() const = 0;
         virtual EMessageId::Type IdNumber() const = 0;
         virtual int BodySize() const = 0;
-        virtual int Size() const { return HeadSize() + BodySize(); }
-        virtual QByteArray ToByteArray() const = 0;
+        virtual int Size() const override
+        {
+            return HeadSize() + BodySize();
+        }
+        virtual QByteArray ToByteArray() const override = 0;
         
         inline static int HeadSize() { return _headSize; }
         
@@ -41,7 +43,7 @@ namespace Greis
         static bool validateChecksum8Bin(char* p_message, int p_length);
         static std::string convertByteArrayToReadableString(char* p_message, int p_length);
         QByteArray headToByteArray() const;
-    protected:
+
         static const int _headSize = 5;
         static GreisBinarySerializer _serializer;
     };

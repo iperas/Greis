@@ -1,7 +1,6 @@
 #ifndef Message_h__
 #define Message_h__
 
-#include <string>
 #include <boost/utility.hpp>
 #include <QtCore/QByteArray>
 #include "Common/SmartPtr.h"
@@ -16,7 +15,11 @@ namespace Greis
     public:
         SMART_PTR_T(Message);
 
-        Message(EMessageKind::Type p_kind) : _kind(p_kind)
+        explicit Message(EMessageKind::Type p_kind) : _kind(p_kind)
+        {
+        }
+
+        virtual ~Message()
         {
         }
 

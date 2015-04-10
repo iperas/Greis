@@ -30,11 +30,11 @@ namespace Greis
     private:
         struct MessageEx
         {
-            MessageEx(Message* msg, int epochIndex) : msg(msg), epochIndex(epochIndex)
+            MessageEx(Message::UniquePtr_t msg, int epochIndex) : msg(std::move(msg)), epochIndex(epochIndex)
             {
             }
 
-            Message* msg;
+            Message::UniquePtr_t msg;
             int epochIndex;
         };
     public:
@@ -48,8 +48,7 @@ namespace Greis
     private:
         DataChunk::UniquePtr_t read(const QString& sqlWhere = "");
 
-        template<typename Func>
-        void handleMessage(QString queryStr, Func handleMessageFields, QMap<qulonglong, QVector<MessageEx>>& messagesByDateTime);
+        void handleMessage(QString queryStr, std::function<Message*(const std::string&, int, const QSqlQuery&)> handleMessageFields, QMap<qulonglong, QVector<MessageEx*>>& messagesByDateTime);
 
         // Extract a custom type from the buffer
         template<typename T>
@@ -82,60 +81,12 @@ namespace Greis
         QMap<ECustomTypeId::Type, QString> _ctQueries;
         QMap<ECustomTypeId::Type, std::function<void(int, const QSqlQuery&, CustomType*&)>> _ctHandlers;
         QMap<EMessageId::Type, QString> _msgQueries;
-        QMap<EMessageId::Type, std::function<Message*(int, const QSqlQuery&, Message*&)>> _msgHandlers;
+        QMap<EMessageId::Type, std::function<Message*(const std::string&, int, const QSqlQuery&)>> _msgHandlers;
 
         QMap<unsigned short, QMap<qulonglong, std::vector<StdMessage*>>> _rawMsgBuffer;
 
         QMap<int, std::string> _codes;
     };
-
-    template<typename Func>
-    void MySqlSource::handleMessage(QString queryStr, Func handleMessageBody, QMap<qulonglong, QVector<MessageEx>>& messagesByDateTime)
-    {
-        int msgCount = 0;
-        QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);
-        bool first = true;
-        while (query.next())
-        {
-            int id = query.value(0).toInt();
-            //int idEpoch = query.value(1).toInt();
-            int epochIndex = query.value(2).toInt();
-            qulonglong unixTime = query.value(3).toULongLong();
-            int messageCodeId = query.value(4).toInt();
-            std::string messageCode = _codes[messageCodeId];
-            int bodySize = query.value(5).toInt();
-
-            Message* msg = handleMessageBody(messageCode, bodySize + StdMessage::HeadSize(), query);
-
-            if (!msg->Validate())
-            {
-                if (first)
-                {
-                    sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
-                        arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
-                    first = false;
-                }
-                if (msg->Kind() == EMessageKind::StdMessage)
-                {
-                    dynamic_cast<StdMessage*>(msg)->RecalculateChecksum();
-                    if (!msg->Validate())
-                    {
-                        throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
-                            arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
-                    }
-                }
-            }
-            assert(msg->Size() == bodySize + StdMessage::HeadSize());
-
-            auto& messages = messagesByDateTime.value(unixTime);
-            messages.push_back(new MessageEx(msg, epochIndex));
-            ++msgCount;
-        }
-        if (msgCount > 0)
-        {
-            sLogger.Info(QString("%1 messages read into memory...").arg(msgCount));
-        }
-    }
 
     template<typename T>
     typename T::UniquePtr_t MySqlSource::extractCustomType( ECustomTypeId::Type ctId, int dbId )

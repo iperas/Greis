@@ -63,12 +63,12 @@ namespace Greis
         _ctBuffer.clear();
         _sqlWhere = sqlWhere;
 
-        auto jpsFile = make_unique<DataChunk>();
-        pushStandardJpsHeader(jpsFile.get());
+        auto dataChunk = make_unique<DataChunk>();
+        pushStandardJpsHeader(dataChunk.get());
 
         readRawStdMessages(sqlWhere);
 
-        QMap<qulonglong, QVector<MessageEx>> messagesByDateTime;
+        QMap<qulonglong, QVector<MessageEx*>> messagesByDateTime;
         for (auto messageId : getSerializableMessages())
         {
             QString query = _msgQueries[messageId] + " " + sqlWhere;
@@ -95,10 +95,69 @@ namespace Greis
 
         for (auto it = messagesByDateTime.begin(); it != messagesByDateTime.end(); ++it)
         {
-
-            //jpsFile->Body().push_back(Epoch::UniquePtr_t(it.value()));
+            auto epoch = new Epoch();
+            epoch->DateTime = QDateTime::fromMSecsSinceEpoch(it.key());
+            auto& messages = it.value();
+            std::sort(messages.begin(), messages.end(), [](MessageEx* left, MessageEx* right)
+            {
+                return left->epochIndex < right->epochIndex;
+            });
+            for (auto& msg : messages)
+            {
+                epoch->Messages.push_back(std::move(msg->msg));
+                epoch->Messages.push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+                epoch->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
+                delete msg;
+            }
+            dataChunk->Body().push_back(Epoch::UniquePtr_t(epoch));
         }
-        return jpsFile;
+        return dataChunk;
+    }
+
+    void MySqlSource::handleMessage(QString queryStr, std::function<Message*(const std::string&, int, const QSqlQuery&)> handleMessageBody, QMap<qulonglong, QVector<MessageEx*>>& messagesByDateTime)
+    {
+        int msgCount = 0;
+        QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);
+        bool first = true;
+        while (query.next())
+        {
+            int id = query.value(0).toInt();
+            //int idEpoch = query.value(1).toInt();
+            int epochIndex = query.value(2).toInt();
+            qulonglong unixTime = query.value(3).toULongLong();
+            int messageCodeId = query.value(4).toInt();
+            std::string messageCode = _codes[messageCodeId];
+            int bodySize = query.value(5).toInt();
+
+            auto msg = std::unique_ptr<Message>(handleMessageBody(messageCode, bodySize + StdMessage::HeadSize(), query));
+
+            if (!msg->Validate())
+            {
+                if (first)
+                {
+                    sLogger.Warn(QString("Message `%1` with Id `%2` has been validated with negative result. It is possible because of floating-point data conversion.").
+                        arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
+                    first = false;
+                }
+                if (msg->Kind() == EMessageKind::StdMessage)
+                {
+                    dynamic_cast<StdMessage*>(msg.get())->RecalculateChecksum();
+                    if (!msg->Validate())
+                    {
+                        throw DataConsistencyException(QString("Invalid message `%1` with Id `%2`.").
+                            arg(QString::fromLatin1(messageCode.c_str(), 2)).arg(id));
+                    }
+                }
+            }
+            assert(msg->Size() == bodySize + StdMessage::HeadSize());
+
+            messagesByDateTime[unixTime].push_back(new MessageEx(std::move(msg), epochIndex));
+            ++msgCount;
+        }
+        if (msgCount > 0)
+        {
+            sLogger.Info(QString("%1 messages read into memory...").arg(msgCount));
+        }
     }
 
     DataChunk::UniquePtr_t MySqlSource::ReadAll()
