@@ -48,7 +48,7 @@ namespace Greis
     private:
         DataChunk::UniquePtr_t read(const QString& sqlWhere = "");
 
-        void handleMessage(QString queryStr, std::function<Message*(const std::string&, int, const QSqlQuery&)> handleMessageFields, QMap<qulonglong, QVector<MessageEx*>>& messagesByDateTime);
+        void handleMessage(QString queryStr, std::function<Message*(const std::basic_string<char>&, int, const QSqlQuery&)> handleMessageFields, std::map<unsigned long long, std::vector<MessageEx*>>& messagesByDateTime);
 
         // Extract a custom type from the buffer
         template<typename T>
@@ -129,8 +129,10 @@ namespace Greis
             if (id == dbId)
             {
                 retVal = typename T::UniquePtr_t(dynamic_cast<T*>(ct));
+            } else
+            {
+                buffer[id] = ct;
             }
-            buffer[id] = ct;
             ++ctCount;
         }
         if (ctCount > 0)

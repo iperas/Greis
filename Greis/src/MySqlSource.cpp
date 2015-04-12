@@ -66,9 +66,9 @@ namespace Greis
         auto dataChunk = make_unique<DataChunk>();
         pushStandardJpsHeader(dataChunk.get());
 
-        readRawStdMessages(sqlWhere);
+        //readRawStdMessages(sqlWhere);
 
-        QMap<qulonglong, QVector<MessageEx*>> messagesByDateTime;
+        std::map<qulonglong, std::vector<MessageEx*>> messagesByDateTime;
         for (auto messageId : getSerializableMessages())
         {
             QString query = _msgQueries[messageId] + " " + sqlWhere;
@@ -96,25 +96,25 @@ namespace Greis
         for (auto it = messagesByDateTime.begin(); it != messagesByDateTime.end(); ++it)
         {
             auto epoch = new Epoch();
-            epoch->DateTime = QDateTime::fromMSecsSinceEpoch(it.key());
-            auto& messages = it.value();
+            epoch->DateTime = QDateTime::fromMSecsSinceEpoch(it->first);
+            auto& messages = it->second;
             std::sort(messages.begin(), messages.end(), [](MessageEx* left, MessageEx* right)
             {
                 return left->epochIndex < right->epochIndex;
             });
-            for (auto& msg : messages)
+            for (auto& msgEx : messages)
             {
-                epoch->Messages.push_back(std::move(msg->msg));
+                epoch->Messages.push_back(std::move(msgEx->msg));
                 epoch->Messages.push_back(NonStdTextMessage::CreateCarriageReturnMessage());
                 epoch->Messages.push_back(NonStdTextMessage::CreateNewLineMessage());
-                delete msg;
+                delete msgEx;
             }
             dataChunk->Body().push_back(Epoch::UniquePtr_t(epoch));
         }
         return dataChunk;
     }
 
-    void MySqlSource::handleMessage(QString queryStr, std::function<Message*(const std::string&, int, const QSqlQuery&)> handleMessageBody, QMap<qulonglong, QVector<MessageEx*>>& messagesByDateTime)
+    void MySqlSource::handleMessage(QString queryStr, std::function<Message*(const std::basic_string<char>&, int, const QSqlQuery&)> handleMessageBody, std::map<qulonglong, std::vector<MessageEx*>>& messagesByDateTime)
     {
         int msgCount = 0;
         QSqlQuery query = _dbHelper->ExecuteQuery(queryStr);

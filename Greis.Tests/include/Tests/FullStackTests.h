@@ -53,25 +53,54 @@ namespace Greis
         {
             // Arrange
             QString fileName = this->ResolvePath("ifz-data-epoch.jps");
-            auto dataChunk = DataChunk::FromFile(fileName);
-            auto expected = dataChunk->ToByteArray();
+            auto expectedChunk = DataChunk::FromFile(fileName);
+            auto expected = expectedChunk->ToByteArray();
 
             // Act
             QByteArray actual;
             {
                 // Saving to the database
                 auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
-                sink->AddJpsFile(dataChunk.get());
+                sink->AddJpsFile(expectedChunk.get());
                 sink->Flush();
             }
+            DataChunk::UniquePtr_t actualChunk;
             {
                 // Reading from the database
                 auto source = make_unique<MySqlSource>(this->Connection().get());
-                auto loadedFile = source->ReadAll();
-                actual = loadedFile->ToByteArray();
+                actualChunk = source->ReadAll();
+                actual = actualChunk->ToByteArray();
             }
 
             // Assert
+            ASSERT_EQ(actualChunk->Body().size(), expectedChunk->Body().size());
+            auto& actualEpoch = actualChunk->Body()[0];
+            auto& expectedEpoch = expectedChunk->Body()[0];
+            ASSERT_EQ(actualEpoch->DateTime, expectedEpoch->DateTime);
+            ASSERT_EQ(actualEpoch->Messages.size(), expectedEpoch->Messages.size());
+            auto& actualMessages = actualEpoch->Messages;
+            auto& expectedMessages = expectedEpoch->Messages;
+            int actualIndex = 0;
+            int expectedIndex = 0;
+            while (actualIndex < actualMessages.size() && expectedIndex < expectedMessages.size())
+            {
+                auto& actualMsg = actualMessages[actualIndex];
+                auto& expectedMsg = expectedMessages[expectedIndex];
+                if (actualMsg->Kind() != EMessageKind::StdMessage)
+                {
+                    actualIndex++;
+                    continue;
+                }
+                if (expectedMsg->Kind() != EMessageKind::StdMessage)
+                {
+                    expectedIndex++;
+                    continue;
+                }
+                auto actualBinary = actualMsg->ToByteArray();
+                auto expectedBinary = expectedMsg->ToByteArray();
+                sHelpers.assertBinaryArray(actualBinary, expectedBinary);
+            }
+
             sHelpers.assertBinaryArray(expected, actual);
         }
     }
