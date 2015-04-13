@@ -69,8 +69,9 @@ add_dependencies(${PROJECT} googletest ${DEPENDS_ON_PROJECTS})
 
 # add_custom_target(copy)
 add_custom_action_copy(${CONFIG_FILES})
-add_custom_action_copy(${DEPLOY_FILES})
+if (DEPLOY_FILES)
+    add_custom_action_copy(${DEPLOY_FILES})
+endif()
 if (MSVC)
 	add_custom_action_t4(${TEXT_TEMPLATES})
-endif()	
-
+endif()

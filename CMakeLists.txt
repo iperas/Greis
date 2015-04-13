@@ -17,13 +17,11 @@ MACRO(add_custom_action_t4 targets)
 ENDMACRO()
 
 MACRO(add_custom_action_copy targets)
-	if(targets)
-		foreach(File ${targets})
-		  add_custom_command(TARGET ${PROJECT} PRE_BUILD
-		                     COMMAND ${CMAKE_COMMAND} -E
-		                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
-		endforeach()
-    endif()
+	foreach(File ${targets})
+	  add_custom_command(TARGET ${PROJECT} PRE_BUILD
+	                     COMMAND ${CMAKE_COMMAND} -E
+	                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
+	endforeach()
 ENDMACRO()
 
 # Project settings
