@@ -170,18 +170,17 @@ namespace Greis
         return this->read(QString("WHERE `unixTimeEpoch` BETWEEN %1 AND %2").arg(from.toMSecsSinceEpoch()).arg(to.toMSecsSinceEpoch()));
     }
 
-    void MySqlSource::pushStandardJpsHeader( DataChunk* jpsFile )
+    void MySqlSource::pushStandardJpsHeader( DataChunk* dataChunk )
     {
-        return;
         auto fileId = make_unique<FileIdStdMessage>(
             "JP055RLOGF JPS ALPHA Receiver Log File                                                    ", 90);
         auto msgFmt = make_unique<MsgFmtStdMessage>("MF009JP010109F", 14);
-        jpsFile->Head().push_back(std::move(fileId));
-        jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
-        jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
-        jpsFile->Head().push_back(std::move(msgFmt));
-        jpsFile->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
-        jpsFile->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
+        dataChunk->Head().push_back(std::move(fileId));
+        dataChunk->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+        dataChunk->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
+        dataChunk->Head().push_back(std::move(msgFmt));
+        dataChunk->Head().push_back(NonStdTextMessage::CreateCarriageReturnMessage());
+        dataChunk->Head().push_back(NonStdTextMessage::CreateNewLineMessage());
     }
 
     void MySqlSource::readRawStdMessages(const QString& sqlWhere)

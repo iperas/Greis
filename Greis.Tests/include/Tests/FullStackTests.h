@@ -1,9 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <cmath>
 #include <gtest/gtest.h>
-#include <boost/thread.hpp>
 #include "Utils/BaseTest.h"
 #include "Utils/Helpers.h"
 #include "Common/SmartPtr.h"
@@ -23,41 +20,13 @@ namespace Greis
         {
         };
 
-        TEST_F(FullStackTests, ShouldSaveToDatabaseAndBinarizeTheSame)
+        TEST_F(FullStackTests, ShouldSaveToDatabaseRequiredHeaderParams)
         {
             // Arrange
             QString fileName = this->ResolvePath("ifz-data-0.jps");
-            QByteArray expected = this->ReadJpsBinary(fileName);
-            auto dataChunk = DataChunk::FromFile(fileName);
-
-            // Act
-            QByteArray actual;
-            {
-                // Saving to the database
-                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
-                sink->AddJpsFile(dataChunk.get());
-                sink->Flush();
-            }
-            {
-                // Reading from the database
-                auto source = make_unique<MySqlSource>(this->Connection().get());
-                auto loadedFile = source->ReadAll();
-                actual = loadedFile->ToByteArray();
-            }
-
-            // Assert
-            sHelpers.assertBinaryArray(expected, actual);
-        }
-
-        TEST_F(FullStackTests, ShouldSaveToDatabaseOneEpoch)
-        {
-            // Arrange
-            QString fileName = this->ResolvePath("ifz-data-epoch.jps");
             auto expectedChunk = DataChunk::FromFile(fileName);
-            auto expected = expectedChunk->ToByteArray();
 
             // Act
-            QByteArray actual;
             {
                 // Saving to the database
                 auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
@@ -69,38 +38,76 @@ namespace Greis
                 // Reading from the database
                 auto source = make_unique<MySqlSource>(this->Connection().get());
                 actualChunk = source->ReadAll();
-                actual = actualChunk->ToByteArray();
             }
 
             // Assert
-            ASSERT_EQ(actualChunk->Body().size(), expectedChunk->Body().size());
-            auto& actualEpoch = actualChunk->Body()[0];
-            auto& expectedEpoch = expectedChunk->Body()[0];
-            ASSERT_EQ(actualEpoch->DateTime, expectedEpoch->DateTime);
-            //ASSERT_EQ(actualEpoch->Messages.size(), expectedEpoch->Messages.size());
-            auto& actualMessages = actualEpoch->Messages;
-            auto& expectedMessages = expectedEpoch->Messages;
-            int actualIndex = 0;
-            int expectedIndex = 0;
-            while (actualIndex < actualMessages.size() && expectedIndex < expectedMessages.size())
+            const int count = 2;
+            int index = 0;
+            std::vector<StdMessage*> headerMessages;
+            for (auto& msg : actualChunk->Head())
             {
-                auto& actualMsg = actualMessages[actualIndex];
-                auto& expectedMsg = expectedMessages[expectedIndex];
-                if (actualMsg->Kind() != EMessageKind::StdMessage)
+                if (msg->Kind() == EMessageKind::StdMessage)
                 {
-                    actualIndex++;
-                    continue;
+                    headerMessages.push_back(static_cast<StdMessage*>(msg.get()));
+                    index++;
+                    if (index >= count)
+                    {
+                        break;
+                    }
                 }
-                if (expectedMsg->Kind() != EMessageKind::StdMessage)
-                {
-                    expectedIndex++;
-                    continue;
-                }
-                ASSERT_EQ(actualMsg->Kind(), expectedMsg->Kind());
-                ASSERT_EQ(actualMsg->Size(), expectedMsg->Size());
-                actualIndex++;
-                expectedIndex++;
             }
+            ASSERT_EQ(headerMessages[0]->IdNumber(), EMessageId::FileId);
+            ASSERT_EQ(headerMessages[0]->BodySize(), 85);
+            ASSERT_EQ(headerMessages[1]->IdNumber(), EMessageId::MsgFmt);
+            ASSERT_EQ(headerMessages[1]->BodySize(), 9);
+        }
+
+        TEST_F(FullStackTests, ShouldSaveToDatabaseWithoutHeader)
+        {
+            // Arrange
+            QString fileName = this->ResolvePath("ifz-data-no-header.jps");
+            auto expectedChunk = DataChunk::FromFile(fileName);
+
+            // Act
+            {
+                // Saving to the database
+                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                sink->AddJpsFile(expectedChunk.get());
+                sink->Flush();
+            }
+            DataChunk::UniquePtr_t actualChunk;
+            {
+                // Reading from the database
+                auto source = make_unique<MySqlSource>(this->Connection().get());
+                actualChunk = source->ReadAll();
+            }
+
+            // Assert
+            sHelpers.assertDataChunk(expectedChunk.get(), actualChunk.get(), false);
+        }
+
+        TEST_F(FullStackTests, ShouldSaveToDatabaseOneEpoch)
+        {
+            // Arrange
+            QString fileName = this->ResolvePath("ifz-data-epoch.jps");
+            auto expectedChunk = DataChunk::FromFile(fileName);
+
+            // Act
+            {
+                // Saving to the database
+                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                sink->AddJpsFile(expectedChunk.get());
+                sink->Flush();
+            }
+            DataChunk::UniquePtr_t actualChunk;
+            {
+                // Reading from the database
+                auto source = make_unique<MySqlSource>(this->Connection().get());
+                actualChunk = source->ReadAll();
+            }
+
+            // Assert
+            sHelpers.assertDataChunk(expectedChunk.get(), actualChunk.get(), true);
         }
     }
 }
