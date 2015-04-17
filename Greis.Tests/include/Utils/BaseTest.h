@@ -8,8 +8,6 @@
 #include "Common/Exception.h"
 #include "Common/Connection.h"
 
-using namespace Common;
-
 namespace Greis
 {
     namespace Tests
@@ -17,7 +15,7 @@ namespace Greis
         class BaseTest : public ::testing::Test
         {
         private:
-            std::shared_ptr<Connection> _connection;
+            std::shared_ptr<Common::Connection> _connection;
         protected:
             BaseTest();
 
@@ -27,7 +25,7 @@ namespace Greis
 
             virtual void TearDown();
 
-            const std::shared_ptr<Connection>& Connection() const;
+            const std::shared_ptr<Common::Connection>& Connection() const;
 
             QString ResolvePath(const QString& fileName) const;
 
