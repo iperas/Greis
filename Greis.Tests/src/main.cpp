@@ -11,8 +11,8 @@ using namespace Common;
 
 int main(int argc, char **argv)
 {
-    std::setlocale(LC_ALL, "Russian_Russia.1251");
-    std::locale::global(std::locale("Russian_Russia.1251"));
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::locale::global(std::locale("en_US.UTF-8"));
 
     QCoreApplication a(argc, argv);
 
