@@ -25,6 +25,7 @@ namespace Greis
             void assertMessages(const std::vector<Message::UniquePtr_t>& expectedMessages, const std::vector<Message::UniquePtr_t>& actualMessages);
             void assertEpoch(Epoch* expected, Epoch* actual);
             void assertDataChunk(DataChunk* expected, DataChunk* actual, bool assertHead);
+            void saveToFile(const QString& fileName, DataChunk* data);
         };
     }
 }

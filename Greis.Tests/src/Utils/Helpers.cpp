@@ -91,5 +91,11 @@ namespace Greis
                 this->assertEpoch(expected->Body()[i].get(), actual->Body()[i].get());
             }
         }
+
+        void Helpers::saveToFile(const QString& fileName, DataChunk* data)
+        {
+            auto file = File::CreateBinary(fileName);
+            file->write(data->ToByteArray());
+        }
     }
 }

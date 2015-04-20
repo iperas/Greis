@@ -60,6 +60,7 @@ namespace Greis
             ASSERT_EQ(headerMessages[0]->BodySize(), 85);
             ASSERT_EQ(headerMessages[1]->IdNumber(), EMessageId::MsgFmt);
             ASSERT_EQ(headerMessages[1]->BodySize(), 9);
+            sHelpers.saveToFile("ifz-data-0-out.jps", actualChunk.get());
         }
 
         TEST_F(FullStackTests, ShouldSaveToDatabaseWithoutHeader)
