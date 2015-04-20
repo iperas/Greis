@@ -47,13 +47,14 @@ namespace Greis
 
         QString BaseTest::ResolvePath(const QString& fileName) const
         {
-            QString fullPath1("../../../TestData/" + fileName);
+            QString baseDir = QCoreApplication::applicationDirPath();
+            QString fullPath1(baseDir + "/../../../TestData/" + fileName);
             if (QFile::exists(fullPath1))
             {
                 return fullPath1;
             }
 
-            QString fullPath2 = "../../TestData/" + fileName;
+            QString fullPath2 = baseDir + "/../../TestData/" + fileName;
             if (QFile::exists(fullPath2))
             {
                 return fullPath2;
