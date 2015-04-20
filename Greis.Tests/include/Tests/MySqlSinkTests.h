@@ -25,7 +25,7 @@ namespace Greis
 
         TEST_F(MySqlSinkTests, ShouldSerializeIntoDatabase)
         {
-            QString filename("../../../TestData/ifz-data-0.jps");
+            QString filename = this->ResolvePath("ifz-data-0.jps");
             auto file = DataChunk::FromFile(filename);
 
             int inserterBatchSize = 10000;

@@ -23,7 +23,7 @@ namespace Greis
         TEST_F(GreisMessageStreamTests, ShouldDeserializeIntoObjectModelThenSerializeTheSameBinary)
         {
             // Arrange
-            QString filename("../../../TestData/ifz-data-0.jps");
+            QString filename = this->ResolvePath("ifz-data-0.jps");
             QByteArray expected;
             {
                 auto file = File::OpenReadBinary(filename);
@@ -52,7 +52,7 @@ namespace Greis
         {
             // Arrange
             // Reading file content
-            QString filename("../../../TestData/ifz-data-0.jps");
+            QString filename = this->ResolvePath("ifz-data-0.jps");
             auto file = File::OpenReadBinary(filename);
             file->close();
             // Making object stream of it

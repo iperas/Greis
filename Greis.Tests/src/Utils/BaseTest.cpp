@@ -47,12 +47,19 @@ namespace Greis
 
         QString BaseTest::ResolvePath(const QString& fileName) const
         {
-            QString fullPath("../../../TestData/" + fileName);
-            if (!QFile::exists(fullPath))
+            QString fullPath1("../../../TestData/" + fileName);
+            if (QFile::exists(fullPath1))
             {
-                throw Common::Exception(QString("File %1 does not exist").arg(fullPath));
+                return fullPath1;
             }
-            return fullPath;
+
+            QString fullPath2 = "../../TestData/" + fileName;
+            if (QFile::exists(fullPath2))
+            {
+                return fullPath2;
+            }
+
+            throw Common::Exception(QString("File %1 does not exist. Checked pathes: %2 %3.").arg(fileName).arg(fullPath1).arg(fullPath2));
         }
 
         QByteArray BaseTest::ReadJpsBinary(const QString& fileName) const

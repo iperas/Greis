@@ -21,7 +21,7 @@ namespace Greis
         TEST_F(DataChunkTests, ShouldDeserializeIntoObjectModel)
         {
             // Arrange, Act
-            QString filename("../../../TestData/ifz-data-0.jps");
+            QString filename = this->ResolvePath("ifz-data-0.jps");
             auto file = DataChunk::FromFile(filename);
 
             // Assert
