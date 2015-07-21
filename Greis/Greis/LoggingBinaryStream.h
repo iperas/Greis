@@ -19,6 +19,11 @@ namespace Greis
             _logStorage = logStorage;
         }
 
+        virtual ~LoggingBinaryStream()
+        {
+            _logStorage->close();
+        }
+
         void write(QByteArray data)
         {
             _loggedStream->write(data);
