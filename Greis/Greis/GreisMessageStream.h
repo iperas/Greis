@@ -5,6 +5,7 @@
 #include <QtCore/QFile>
 #include "Common/File.h"
 #include "Common/Logger.h"
+#include "Common/SmartPtr.h"
 #include <string>
 #include "GreisException.h"
 #include "StdMessage.h"
@@ -16,6 +17,8 @@ namespace Greis
     class GreisMessageStream
     {
     public:
+        SMART_PTR_T(GreisMessageStream);
+
         GreisMessageStream(IBinaryStream::SharedPtr_t openedBinaryStream, bool skipInvalid = false, bool handleStdOnly = true);
         bool HasNext();
         Message::UniquePtr_t Next();

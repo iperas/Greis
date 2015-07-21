@@ -5,6 +5,12 @@
 
 namespace Greis
 {
+    enum FileBinaryStreamOpenMode
+    {
+        Read,
+        Create
+    };
+
     class FileBinaryStream : public IBinaryStream
     {
     private:
@@ -12,9 +18,15 @@ namespace Greis
     public:
         SMART_PTR_T(FileBinaryStream);
 
-        FileBinaryStream(QString filename)
+        FileBinaryStream(QString filename, FileBinaryStreamOpenMode openMode = Read)
         {
-            _file = Common::File::OpenReadBinary(filename);
+            if (openMode == Read)
+            {
+                _file = Common::File::OpenReadBinary(filename);
+            } else if (openMode == Create)
+            {
+                _file = Common::File::CreateBinary(filename);
+            }
         }
 
         int pos() const { return _file->pos(); }
@@ -42,6 +54,11 @@ namespace Greis
         qint64 peek(char * data, qint64 maxSize)
         {
             return _file->peek(data, maxSize);
+        }
+
+        void close()
+        {
+            return _file->close();
         }
     };
 }
