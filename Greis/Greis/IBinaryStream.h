@@ -21,5 +21,6 @@ namespace Greis
         virtual QByteArray peek(qint64 maxlen) = 0;
         virtual qint64 peek(char * data, qint64 maxSize) = 0;
         virtual void close() = 0;
+        virtual void purgeBuffers() = 0;
     };
 }

@@ -23,6 +23,8 @@ static int rate_to_constant(int baudrate) {
     }
 #undef B
 }
+#else
+#include <windows.h>
 #endif
 
 #include "IBinaryStream.h"
@@ -145,6 +147,15 @@ namespace Greis
             qint64 read = boost::asio::read(_serial, boost::asio::buffer(_peekedData.data(), _peekedData.size()));
             memcpy(data, _peekedData.data(), read);
             return read;
+        }
+
+        void purgeBuffers()
+        {
+#ifdef Q_OS_WIN
+            PurgeComm(_serial.native(), PURGE_RXCLEAR);
+#else
+            ioctl(_serial.native(), TCFLSH, 2);
+#endif
         }
 
         bool isOpen()

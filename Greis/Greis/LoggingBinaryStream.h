@@ -57,5 +57,10 @@ namespace Greis
         {
             _loggedStream->close();
         }
+
+        void purgeBuffers()
+        {
+            _loggedStream->purgeBuffers();
+        }
     };
 }

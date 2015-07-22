@@ -2,6 +2,7 @@
 
 #include "IBinaryStream.h"
 #include "Common/File.h"
+#include <Common/NotSupportedException.h>
 
 namespace Greis
 {
@@ -59,6 +60,11 @@ namespace Greis
         void close()
         {
             return _file->close();
+        }
+
+        void purgeBuffers()
+        {
+            throw Common::NotSupportedException("Buffers purge is not supported in FileBinaryStream.");
         }
     };
 }
