@@ -158,6 +158,10 @@ namespace Greis
 #endif
         }
 
+        void flush()
+        {
+        }
+
         bool isOpen()
         {
             return _serial.is_open();

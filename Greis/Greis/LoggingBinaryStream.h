@@ -33,6 +33,7 @@ namespace Greis
         {
             QByteArray data = _loggedStream->read(maxlen);
             _logStorage->write(data);
+            _logStorage->flush();
             return data;
         }
 
@@ -45,12 +46,19 @@ namespace Greis
         {
             qint64 readCount = _loggedStream->read(data, maxSize);
             _logStorage->write(QByteArray(data, (int)readCount));
+            _logStorage->flush();
             return readCount;
         }
 
         qint64 peek(char * data, qint64 maxSize)
         {
             return _loggedStream->peek(data, maxSize);
+        }
+
+        void flush()
+        {
+            _loggedStream->flush();
+            _logStorage->flush();
         }
 
         void close()

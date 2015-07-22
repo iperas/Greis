@@ -37,6 +37,11 @@ namespace Greis
             _file->write(data);
         }
 
+        void flush()
+        {
+            _file->flush();
+        }
+
         QByteArray read(qint64 maxlen)
         {
             return _file->read(maxlen);

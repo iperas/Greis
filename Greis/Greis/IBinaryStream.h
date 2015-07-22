@@ -22,5 +22,6 @@ namespace Greis
         virtual qint64 peek(char * data, qint64 maxSize) = 0;
         virtual void close() = 0;
         virtual void purgeBuffers() = 0;
+        virtual void flush() = 0;
     };
 }
