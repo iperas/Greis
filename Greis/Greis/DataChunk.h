@@ -17,7 +17,7 @@ namespace Greis
     public:
         SMART_PTR_T(DataChunk);
 
-        static DataChunk::UniquePtr_t FromFile(QString filename);
+        static DataChunk::UniquePtr_t FromFile(QString filename, bool skipInvalid = false);
 
         inline const std::vector<Message::UniquePtr_t>& Head() const { return _head; }
         inline std::vector<Message::UniquePtr_t>& Head() { return _head; }

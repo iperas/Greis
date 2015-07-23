@@ -6,10 +6,10 @@ using namespace Common;
 
 namespace Greis
 {
-    DataChunk::UniquePtr_t DataChunk::FromFile(QString filename)
+    DataChunk::UniquePtr_t DataChunk::FromFile(QString filename, bool skipInvalid)
     {
         auto dataChunk = DataChunk::UniquePtr_t(new DataChunk());
-        GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
+        GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), skipInvalid, false);
         
         // Collecting the head
         Message::UniquePtr_t msg;
