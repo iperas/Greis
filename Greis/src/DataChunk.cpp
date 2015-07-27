@@ -8,7 +8,7 @@ namespace Greis
 {
     DataChunk::UniquePtr_t DataChunk::FromFile(QString filename, bool skipInvalid)
     {
-        auto dataChunk = std::make_unique<DataChunk>();
+        auto dataChunk = make_unique<DataChunk>();
         GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), skipInvalid, false);
         
         // Collecting the head
