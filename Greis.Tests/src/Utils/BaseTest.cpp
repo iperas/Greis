@@ -1,5 +1,6 @@
 #include "Utils/BaseTest.h"
 #include "Common/File.h"
+#include <Greis/MySqlSource.h>
 
 namespace Greis
 {
@@ -31,6 +32,9 @@ namespace Greis
                 auto errText = this->_connection->Database().lastError().text();
                 throw Common::Exception("Failed to start a database transaction: " + errText);
             }
+            sLogger.Info("Testing that database is empty...");
+            auto source = std::make_shared<Greis::MySqlSource>(this->Connection().get());
+            ASSERT_EQ(source->ReadAll()->Body().size(), 0);
             sLogger.Info("SetUp Succeeded...");
         }
 

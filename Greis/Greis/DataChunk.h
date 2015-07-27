@@ -29,6 +29,11 @@ namespace Greis
         void AddMessage(Message::UniquePtr_t msg);
 
         DataChunk();
+
+        inline Epoch::UniquePtr_t& UnfinishedEpoch()
+        {
+            return _lastEpoch;
+        }
     private:
 
         inline void updateTimePart( RcvTimeStdMessage* msg )
