@@ -82,3 +82,4 @@ Platform.Tests/Platform.Tests.vcxproj.filters
 Platform/Platform.vcxproj
 Platform/Platform.vcxproj.filters
 Platform/Platform.sln
+*.vcxproj.user
