@@ -15,8 +15,8 @@ namespace Greis
             "INSERT INTO `epoch` (id, unixTime) VALUES (?, ?)", 2, _connection, "epoch", _inserterBatchSize));
 
         _rawMessageInserter = DataBatchInserter::SharedPtr_t(new DataBatchInserter(
-            "INSERT INTO `rawBinaryMessages` (`idEpoch`, `unixTimeEpoch`, `code`, `bodySize`, `data`) VALUES (?, ?, ?, ?, ?)", 
-            5, _connection, "rawBinaryMessages", _inserterBatchSize));
+            "INSERT INTO `rawBinaryMessages` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `code`, `bodySize`, `data`) VALUES (?, ?, ?, ?, ?, ?)", 
+            6, _connection, "rawBinaryMessages", _inserterBatchSize));
         _rawMessageInserter->AddChild(_epochInserter);
 
         auto query = _dbHelper->ExecuteQuery("SELECT id, code FROM messageCode");
