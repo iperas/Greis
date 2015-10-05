@@ -34,6 +34,7 @@ namespace Greis
         void AddMessage(Message* msg);
 
         void Flush();
+        void Clear();
     private:
         void construct();
 

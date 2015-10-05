@@ -61,6 +61,10 @@ namespace Greis
                     expectedIndex++;
                     continue;
                 }
+                if (actualMsg->Size() != expectedMsg->Size())
+                {
+                    int stub = 1;
+                }
                 ASSERT_EQ(actualMsg->Kind(), expectedMsg->Kind());
                 ASSERT_EQ(actualMsg->Size(), expectedMsg->Size());
                 actualIndex++;

@@ -52,6 +52,16 @@ namespace Greis
         }
     }
 
+    void MySqlSink::Clear()
+    {
+        _epochInserter->Clear();
+        _rawMessageInserter->Clear();
+        foreach (DataBatchInserter::SharedPtr_t inserter, _msgInserters)
+        {
+            inserter->Clear();
+        }
+    }
+
     void MySqlSink::AddJpsFile( DataChunk* file )
     {
         for (auto epochIt = file->Body().cbegin(); epochIt != file->Body().cend(); ++epochIt)

@@ -110,5 +110,46 @@ namespace Greis
             // Assert
             sHelpers.assertDataChunk(expectedChunk.get(), actualChunk.get(), true);
         }
+
+        TEST_F(FullStackTests, ShouldSaveToDatabaseRawBinaryMessages)
+        {
+            // Arrange
+            QString fileName = this->ResolvePath("ifz-data-epoch_raw-binary.jps");
+            auto expectedChunk = DataChunk::FromFile(fileName);
+
+            // Act
+            {
+                // Saving to the database
+                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                sink->AddJpsFile(expectedChunk.get());
+                sink->Flush();
+            }
+            DataChunk::UniquePtr_t actualChunk;
+            {
+                // Reading from the database
+                auto source = make_unique<MySqlSource>(this->Connection().get());
+                actualChunk = source->ReadAll();
+            }
+
+            // NOTE (!): we EXPECT that raw messages can be written, but reading is not implemented!
+            for (auto& epoch : expectedChunk->Body())
+            {
+                for (auto it = epoch->Messages.begin(); it != epoch->Messages.end(); ++it)
+                {
+                    if ((*it)->Kind() == EMessageKind::StdMessage)
+                    {
+                        auto stdMsg = static_cast<StdMessage*>((*it).get());
+                        if (stdMsg->IdNumber() == EMessageId::Unknown)
+                        {
+                            epoch->Messages.erase(it);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Assert
+            sHelpers.assertDataChunk(expectedChunk.get(), actualChunk.get(), true);
+        }
     }
 }
