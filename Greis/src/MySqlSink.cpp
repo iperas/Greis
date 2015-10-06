@@ -31,7 +31,6 @@ namespace Greis
 
     MySqlSink::~MySqlSink()
     {
-        Flush();
     }
 
     void MySqlSink::AddEpoch( QDateTime dateTime )

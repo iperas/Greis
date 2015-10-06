@@ -7,7 +7,7 @@ using namespace Common;
 
 namespace Greis
 {
-    MySqlSink::MySqlSink(Connection* connection, int inserterBatchSize)
+    MySqlSink::MySqlSink(Connection::SharedPtr_t connection, int inserterBatchSize)
     {
         _connection = connection;
         _dbHelper = _connection->DbHelper();

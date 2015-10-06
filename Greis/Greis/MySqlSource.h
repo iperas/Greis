@@ -40,7 +40,7 @@ namespace Greis
     public:
         SMART_PTR_T(MySqlSource);
 
-        MySqlSource(Connection* connection);
+        MySqlSource(Connection::SharedPtr_t connection);
         ~MySqlSource();
 
         DataChunk::UniquePtr_t ReadRange(const QDateTime& from, const QDateTime& to);
@@ -70,7 +70,7 @@ namespace Greis
         // Moving all buffered raw messages into epochsByDateTime
         void insertRawMessage(QMap<qulonglong, Epoch*>& epochsByDateTime);
     private:
-        Connection* _connection;
+        Connection::SharedPtr_t _connection;
         DatabaseHelper* _dbHelper;
 
         QString _sqlWhere;

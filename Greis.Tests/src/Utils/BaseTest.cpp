@@ -33,7 +33,7 @@ namespace Greis
                 throw Common::Exception("Failed to start a database transaction: " + errText);
             }
             sLogger.Info("Testing that database is empty...");
-            auto source = std::make_shared<Greis::MySqlSource>(this->Connection().get());
+            auto source = std::make_shared<Greis::MySqlSource>(this->Connection());
             ASSERT_EQ(source->ReadAll()->Body().size(), 0);
             sLogger.Info("SetUp Succeeded...");
         }

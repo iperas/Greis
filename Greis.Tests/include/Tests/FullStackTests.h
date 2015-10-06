@@ -29,14 +29,14 @@ namespace Greis
             // Act
             {
                 // Saving to the database
-                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                auto sink = make_unique<MySqlSink>(this->Connection(), 1000);
                 sink->AddJpsFile(expectedChunk.get());
                 sink->Flush();
             }
             DataChunk::UniquePtr_t actualChunk;
             {
                 // Reading from the database
-                auto source = make_unique<MySqlSource>(this->Connection().get());
+                auto source = make_unique<MySqlSource>(this->Connection());
                 actualChunk = source->ReadAll();
             }
 
@@ -72,14 +72,14 @@ namespace Greis
             // Act
             {
                 // Saving to the database
-                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                auto sink = make_unique<MySqlSink>(this->Connection(), 1000);
                 sink->AddJpsFile(expectedChunk.get());
                 sink->Flush();
             }
             DataChunk::UniquePtr_t actualChunk;
             {
                 // Reading from the database
-                auto source = make_unique<MySqlSource>(this->Connection().get());
+                auto source = make_unique<MySqlSource>(this->Connection());
                 actualChunk = source->ReadAll();
             }
 
@@ -96,14 +96,14 @@ namespace Greis
             // Act
             {
                 // Saving to the database
-                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                auto sink = make_unique<MySqlSink>(this->Connection(), 1000);
                 sink->AddJpsFile(expectedChunk.get());
                 sink->Flush();
             }
             DataChunk::UniquePtr_t actualChunk;
             {
                 // Reading from the database
-                auto source = make_unique<MySqlSource>(this->Connection().get());
+                auto source = make_unique<MySqlSource>(this->Connection());
                 actualChunk = source->ReadAll();
             }
 
@@ -120,14 +120,14 @@ namespace Greis
             // Act
             {
                 // Saving to the database
-                auto sink = make_unique<MySqlSink>(this->Connection().get(), 1000);
+                auto sink = make_unique<MySqlSink>(this->Connection(), 1000);
                 sink->AddJpsFile(expectedChunk.get());
                 sink->Flush();
             }
             DataChunk::UniquePtr_t actualChunk;
             {
                 // Reading from the database
-                auto source = make_unique<MySqlSource>(this->Connection().get());
+                auto source = make_unique<MySqlSource>(this->Connection());
                 actualChunk = source->ReadAll();
             }
 

@@ -25,7 +25,7 @@ namespace Greis
     public:
         SMART_PTR_T(MySqlSink);
 
-        MySqlSink(Connection* connection, int inserterBatchSize = 10000);
+        MySqlSink(Connection::SharedPtr_t connection, int inserterBatchSize = 10000);
         ~MySqlSink();
 
         void AddJpsFile(DataChunk* file);
@@ -57,7 +57,7 @@ namespace Greis
             return _serializer.SerializeIds(ids);
         }
     private:
-        Connection* _connection;
+        Connection::SharedPtr_t _connection;
         DatabaseHelper* _dbHelper;
         int _inserterBatchSize;
 

@@ -11,7 +11,7 @@ using namespace Common;
 
 namespace Greis
 {
-    MySqlSource::MySqlSource( Connection* connection )
+    MySqlSource::MySqlSource(Connection::SharedPtr_t connection)
     {
         _connection = connection;
         _dbHelper = _connection->DbHelper();
