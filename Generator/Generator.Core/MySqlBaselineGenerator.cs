@@ -306,10 +306,10 @@ namespace Generator.Core
             greisTypesToSqlTypesMap[GreisTypes.a1.ToString()] = "CHAR";
             greisTypesToSqlTypesMap[GreisTypes.f4.ToString()] = "FLOAT";
             greisTypesToSqlTypesMap[GreisTypes.f8.ToString()] = "DOUBLE";
-            greisTypesToSqlTypesMap[GreisTypes.i1.ToString()] = "TINYINT";
+            greisTypesToSqlTypesMap[GreisTypes.i1.ToString()] = "SMALLINT";
             greisTypesToSqlTypesMap[GreisTypes.i2.ToString()] = "SMALLINT";
             greisTypesToSqlTypesMap[GreisTypes.i4.ToString()] = "INT";
-            greisTypesToSqlTypesMap[GreisTypes.u1.ToString()] = "TINYINT UNSIGNED";
+            greisTypesToSqlTypesMap[GreisTypes.u1.ToString()] = "SMALLINT UNSIGNED";
             greisTypesToSqlTypesMap[GreisTypes.u2.ToString()] = "SMALLINT UNSIGNED";
             greisTypesToSqlTypesMap[GreisTypes.u4.ToString()] = "INT UNSIGNED";
             const string idType = "BIGINT UNSIGNED";
