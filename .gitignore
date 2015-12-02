@@ -83,3 +83,6 @@ Platform/Platform.vcxproj
 Platform/Platform.vcxproj.filters
 Platform/Platform.sln
 *.vcxproj.user
+Greis.Tests/from_database.jps
+Greis.Tests/generatedJpsFile.jps
+Greis.Tests/ifz-data-0-out.jps

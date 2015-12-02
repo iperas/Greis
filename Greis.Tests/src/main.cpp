@@ -11,14 +11,6 @@ using namespace Common;
 
 int main(int argc, char **argv)
 {
-#ifdef WIN32
-    std::setlocale(LC_ALL, "en_US.utf-8");
-    std::locale::global(std::locale("en-US"));
-#else
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    std::locale::global(std::locale("en_US.UTF-8"));
-#endif
-
     QCoreApplication a(argc, argv);
 
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");

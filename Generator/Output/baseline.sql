@@ -1,5 +1,5 @@
-﻿USE `test`;
-SET GLOBAL sql_mode='STRICT_ALL_TABLES';
+#﻿USE `test`;
+#SET GLOBAL sql_mode='STRICT_ALL_TABLES';
 
 DROP TABLE IF EXISTS `msg_FileId`;
 DROP TABLE IF EXISTS `msg_MsgFmt`;
