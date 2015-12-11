@@ -10,49 +10,66 @@ namespace Greis
     {
         auto dataChunk = make_unique<DataChunk>();
         GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), skipInvalid, false);
-        
+        dataChunk->ReadHead(stream);
+        dataChunk->ReadBody(stream);
+        return dataChunk;
+    }
+
+    void DataChunk::ReadHead(GreisMessageStream& stream)
+    {
         // Collecting the head
         Message::UniquePtr_t msg;
-
-        while((msg = stream.Next()).get())
+        while ((msg = stream.Next()).get())
         {
             if (msg->Kind() == EMessageKind::StdMessage)
             {
                 auto stdMsg = dynamic_cast<StdMessage*>(msg.get());
                 if (stdMsg->IdNumber() == EMessageId::RcvTime)
                 {
-                    dataChunk->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
+                    this->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
                     break;
                 }
                 if (stdMsg->IdNumber() == EMessageId::RcvDate)
                 {
-        
-                    dataChunk->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
+                    this->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
                 }
             }
 
             // All messages go to _head until date and time is set
-            dataChunk->_head.push_back(std::move(msg));
+            this->_head.push_back(std::move(msg));
         }
         // if the head collection was interrupted by a RcvTime message, move it to the first epoch
         if (msg.get())
         {
-            dataChunk->_lastEpoch->Messages.push_back(std::move(msg));
+            this->_lastEpoch->Messages.push_back(std::move(msg));
         }
-        // Collecting a body
-        while((msg = stream.Next()).get())
+    }
+
+    bool DataChunk::ReadBody(GreisMessageStream& stream, int maxEpochCount)
+    {
+        int epochCount = 0;
+        Message::UniquePtr_t msg;
+        // Collecting body
+        while ((msg = stream.Next()).get())
         {
-            dataChunk->AddMessage(std::move(msg));
+            if (this->AddMessage(std::move(msg)))
+            {
+                epochCount++;
+                if (maxEpochCount > 0 && epochCount >= maxEpochCount)
+                {
+                    return true;
+                }
+            }
         }
         // last Epoch
-        if (dataChunk->_lastEpoch->Messages.size() > 0)
+        if (this->_lastEpoch->Messages.size() > 0)
         {
-            dataChunk->_lastEpoch->DateTime = dataChunk->_dateTime;
-            dataChunk->_body.push_back(std::move(dataChunk->_lastEpoch));
+            this->_lastEpoch->DateTime = this->_dateTime;
+            this->_body.push_back(std::move(this->_lastEpoch));
         }
 
-        sLogger.Trace(QString("%1 epochs have been totally deserialized.").arg(dataChunk->_epochCounter));
-        return dataChunk;
+        sLogger.Trace(QString("%1 epochs have been deserialized.").arg(this->_body.size()));
+        return false;
     }
 
     QByteArray DataChunk::ToByteArray() const
@@ -72,8 +89,9 @@ namespace Greis
         return result;
     }
 
-    void DataChunk::AddMessage( Message::UniquePtr_t msg )
+    bool DataChunk::AddMessage(Message::UniquePtr_t msg)
     {
+        bool gotNewEpoch = false;
         if (msg->Kind() == EMessageKind::StdMessage)
         {
             auto stdMsg = dynamic_cast<StdMessage*>(msg.get());
@@ -88,9 +106,10 @@ namespace Greis
                     // push in the previous epoch
                     if (++_epochCounter % 3000 == 0)
                     {
-                        sLogger.Trace(QString("3000 epochs deserialized. %1 total.").arg(_epochCounter));
+                        sLogger.Trace(QString("3000 epochs deserialized. %1 total.").arg(_body.size()));
                     }
                     _lastEpoch = make_unique<Epoch>();
+                    gotNewEpoch = true;
                 }
 
                 updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
@@ -101,6 +120,7 @@ namespace Greis
             }
         }
         _lastEpoch->Messages.push_back(std::move(msg));
+        return gotNewEpoch;
     }
 
     DataChunk::DataChunk()

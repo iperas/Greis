@@ -18,37 +18,39 @@ namespace Greis
         SMART_PTR_T(DataChunk);
 
         static DataChunk::UniquePtr_t FromFile(QString filename, bool skipInvalid = false);
+        void ReadHead(GreisMessageStream& stream);
+        bool ReadBody(GreisMessageStream& stream, int maxEpochCount = -1);
 
-        inline const std::vector<Message::UniquePtr_t>& Head() const { return _head; }
-        inline std::vector<Message::UniquePtr_t>& Head() { return _head; }
-        inline const std::vector<Epoch::UniquePtr_t>& Body() const { return _body; }
-        inline std::vector<Epoch::UniquePtr_t>& Body() { return _body; }
+        const std::vector<Message::UniquePtr_t>& Head() const { return _head; }
+        std::vector<Message::UniquePtr_t>& Head() { return _head; }
+        const std::vector<Epoch::UniquePtr_t>& Body() const { return _body; }
+        std::vector<Epoch::UniquePtr_t>& Body() { return _body; }
 
         QByteArray ToByteArray() const;
 
-        void AddMessage(Message::UniquePtr_t msg);
+        bool AddMessage(Message::UniquePtr_t msg);
 
         DataChunk();
 
-        inline Epoch::UniquePtr_t& UnfinishedEpoch()
+        Epoch::UniquePtr_t& UnfinishedEpoch()
         {
             return _lastEpoch;
         }
     private:
 
-        inline void updateTimePart( RcvTimeStdMessage* msg )
+        void updateTimePart( RcvTimeStdMessage* msg )
         {
             _dateTime.setTime(QTime(0, 0).addMSecs(msg->Tod()));
             _timeIsSet = true;
         }
 
-        inline void updateDatePart( RcvDateStdMessage* msg ) 
+        void updateDatePart( RcvDateStdMessage* msg ) 
         {
             _dateTime.setDate(QDate(msg->Year(), msg->Month(), msg->Day()));
             _dateIsSet = true;
         }
 
-        inline bool dateTimeIsSet() const { return _dateIsSet && _timeIsSet; }
+        bool dateTimeIsSet() const { return _dateIsSet && _timeIsSet; }
 
         std::vector<Message::UniquePtr_t> _head;
         std::vector<Epoch::UniquePtr_t> _body;

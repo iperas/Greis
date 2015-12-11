@@ -7,6 +7,8 @@
 #include "Utils/BaseTest.h"
 #include "Common/SmartPtr.h"
 #include "Greis/DataChunk.h"
+#include <Greis/FileBinaryStream.h>
+#include <Utils/Helpers.h>
 
 using namespace Common;
 
@@ -34,10 +36,46 @@ namespace Greis
                 }
             }
 
+            EXPECT_EQ(file->Body().size(), 90);
             auto ba = file->ToByteArray();
             auto outFile = File::CreateBinary("generatedJpsFile.jps");
             outFile->write(ba);
             outFile->close();
+        }
+
+        TEST_F(DataChunkTests, ShouldDeserializeIntoObjectModelByParts)
+        {
+            // Arrange
+            QString filename = this->ResolvePath("ifz-data-0.jps");
+            auto exceptedFile = DataChunk::FromFile(filename);
+
+            // Act
+            auto file = make_unique<DataChunk>();
+            GreisMessageStream stream(std::make_shared<FileBinaryStream>(filename), false, false);
+            file->ReadHead(stream);
+            std::vector<Epoch::UniquePtr_t> epochs;
+            bool hasMore;
+            do
+            {
+                hasMore = file->ReadBody(stream, 10);
+                
+                for (auto& epoch : file->Body())
+                {
+                    epochs.push_back(std::move(epoch));
+                }
+
+                file->Body().clear();
+            } while (hasMore);
+
+            // Assert
+            EXPECT_TRUE(epochs.size() == 90);
+            for (int i = 0; i < epochs.size(); i++)
+            {
+                auto& expectedEpoch = exceptedFile->Body()[i];
+                auto& actualEpoch = epochs[i];
+                EXPECT_EQ(expectedEpoch->Messages.size(), actualEpoch->Messages.size());
+                sHelpers.assertBinaryArray(expectedEpoch->ToByteArray(), actualEpoch->ToByteArray());
+            }
         }
     }
 }
