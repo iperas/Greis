@@ -65,11 +65,16 @@ namespace Greis
     {
         for (auto epochIt = file->Body().cbegin(); epochIt != file->Body().cend(); ++epochIt)
         {
-            AddEpoch((*epochIt)->DateTime);
-            for (auto msgIt = (*epochIt)->Messages.cbegin(); msgIt != (*epochIt)->Messages.cend(); ++msgIt)
-            {
-                AddMessage(msgIt->get());
-            }
+            AddEpoch((*epochIt).get());
+        }
+    }
+
+    void MySqlSink::AddEpoch( Epoch* epoch )
+    {
+        AddEpoch(epoch->DateTime);
+        for (auto& msg : epoch->Messages)
+        {
+            AddMessage(msg.get());
         }
     }
 

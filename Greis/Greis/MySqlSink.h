@@ -29,7 +29,7 @@ namespace Greis
         ~MySqlSink();
 
         void AddJpsFile(DataChunk* file);
-
+        void AddEpoch(Epoch* epoch);
         void AddEpoch(QDateTime dateTime);
         void AddMessage(Message* msg);
 
