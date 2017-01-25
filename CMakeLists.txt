@@ -3,18 +3,36 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 # Common settings
 
 CMAKE_POLICY(SET CMP0003 NEW)
+CMAKE_POLICY(SET CMP0054 NEW)
 
-MACRO(add_test_ex target)
-    ADD_TEST(NAME ${target} COMMAND $<TARGET_FILE:${target}> --gtest_output=xml:${CMAKE_BINARY_DIR}/build/test-reports/${target}.xml)
-ENDMACRO()
+# Get all propreties that cmake supports
+execute_process(COMMAND cmake --help-property-list OUTPUT_VARIABLE CMAKE_PROPERTY_LIST)
 
-SET(TEXT_TRANSFORM "C:/Program Files (x86)/Common Files/Microsoft Shared/TextTemplating/12.0/TextTransform.exe")
+# Convert command output into a CMake list
+STRING(REGEX REPLACE ";" "\\\\;" CMAKE_PROPERTY_LIST "${CMAKE_PROPERTY_LIST}")
+STRING(REGEX REPLACE "\n" ";" CMAKE_PROPERTY_LIST "${CMAKE_PROPERTY_LIST}")
 
-MACRO(add_custom_action_t4 targets)
-	foreach(target ${targets})
-    	add_custom_command(TARGET ${PROJECT} PRE_BUILD COMMAND ${TEXT_TRANSFORM} -I "${CMAKE_CURRENT_SOURCE_DIR}" -out "${CMAKE_CURRENT_SOURCE_DIR}/${target}" "${CMAKE_CURRENT_SOURCE_DIR}/${target}.tt")
-    endforeach()
-ENDMACRO()
+function(print_properties)
+    message ("CMAKE_PROPERTY_LIST = ${CMAKE_PROPERTY_LIST}")
+endfunction(print_properties)
+
+function(print_target_properties tgt)
+    if(NOT TARGET ${tgt})
+      message("There is no target named '${tgt}'")
+      return()
+    endif()
+
+    foreach (prop ${CMAKE_PROPERTY_LIST})
+        string(REPLACE "<CONFIG>" "${CMAKE_BUILD_TYPE}" prop ${prop})
+        # message ("Checking ${prop}")
+        get_property(propval TARGET ${tgt} PROPERTY ${prop} SET)
+        if (propval)
+            get_target_property(propval ${tgt} ${prop})
+            message ("${tgt} ${prop} = ${propval}")
+        endif()
+    endforeach(prop)
+endfunction(print_target_properties)
+
 
 MACRO(add_custom_action_copy targets)
 	foreach(File ${targets})
@@ -24,9 +42,15 @@ MACRO(add_custom_action_copy targets)
 	endforeach()
 ENDMACRO()
 
+MACRO(add_test_ex target)
+    ADD_TEST(NAME ${target} COMMAND $<TARGET_FILE:${target}> --gtest_output=xml:
+${CMAKE_BINARY_DIR}/build/test-reports/${target}.xml)
+ENDMACRO()
+
 # Project settings
 
-PROJECT(jpsutils CXX)
+SET(PROJECT Greis)
+PROJECT(${PROJECT} CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -35,10 +59,6 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
-
-if (CMAKE_COMPILER_IS_GNUCXX)
-    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-endif()
 
 # Add some multithreaded build support
 MARK_AS_ADVANCED(MULTITHREADED_BUILD)
@@ -59,7 +79,6 @@ endif()
 ## Qt
 
 # (Make sure that CMAKE_PREFIX_PATH env var is set)
-#set(CMAKE_AUTOMOC ON)
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Sql)
 
@@ -71,26 +90,97 @@ FIND_PACKAGE(Boost COMPONENTS regex system thread REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
 
-## GTest
+## Gtest
 
 INCLUDE(CMakeGTest.txt)
 
-# Sub projects
+# Common
 
-add_subdirectory(Common)
-add_subdirectory(Common.Tests)
-add_subdirectory(Greis)
-add_subdirectory(Greis.Tests)
-add_subdirectory(Platform)
-add_subdirectory(Platform.Tests)
-add_subdirectory(DatabaseToJps)
-add_subdirectory(JpsToDatabase)
-add_subdirectory(jpslogd)
+include(ExternalProject)
+
+ExternalProject_Add (
+ libCommon
+ GIT_REPOSITORY "https://stash.ifz.ru/scm/omni/common.git"
+ GIT_TAG "master"
+ UPDATE_COMMAND ""
+ INSTALL_COMMAND ""
+ BUILD_IN_SOURCE 1
+)
+ExternalProject_Get_Property(libCommon source_dir)
+SET(Common_source_dir ${source_dir})
+add_library( Common STATIC IMPORTED )
+if (UNIX)
+    SET(pathCommon ${Common_source_dir}/build/lib/libCommon.a)
+endif (UNIX)
+if (WIN32)
+    SET(pathCommon ${Common_source_dir}/build/lib/Common.lib)   
+endif (WIN32)
+set_target_properties( Common PROPERTIES IMPORTED_LOCATION ${pathCommon} )
+add_dependencies( Common libCommon )
+
+print_target_properties(Common)
+
+# Greis
+
+SET(CMAKE_AUTOMOC ON)
+
+SET(DEPENDS_ON_PROJECTS Common)
+
+FILE(GLOB_RECURSE HEADERS "${PROJECT}/*.h")
+FILE(GLOB ROOT_HEADERS "${PROJECT}/*.h")
+FILE(GLOB STDMESSAGE_HEADERS "${PROJECT}/StdMessage/*.h")
+FILE(GLOB CUSTOMTYPE_HEADERS "${PROJECT}/CustomType/*.h")
+
+FILE(GLOB_RECURSE SOURCES "src/*.cpp")
+FILE(GLOB ROOT_SOURCES "src/*.cpp")
+FILE(GLOB STDMESSAGE_SOURCES "src/StdMessage/*.cpp")
+FILE(GLOB CUSTOMTYPE_SOURCES "src/CustomType/*.cpp")
+
+# source grouping
+
+source_group ("Header Files" FILES ${ROOT_HEADERS})
+source_group ("Header Files\\StdMessage" FILES ${STDMESSAGE_HEADERS})
+source_group ("Header Files\\CustomType" FILES ${CUSTOMTYPE_HEADERS})
+
+source_group ("Source Files" FILES ${ROOT_SOURCES})
+source_group ("Source Files\\StdMessage" FILES ${STDMESSAGE_SOURCES})
+source_group ("Source Files\\CustomType" FILES ${CUSTOMTYPE_SOURCES})
+
+# includes
+
+foreach(DEPENDENCY ${DEPENDS_ON_PROJECTS})
+        include_directories("../${DEPENDENCY}")
+endforeach()
+
+include_directories("${Common_source_dir}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/StdMessage")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/CustomType")
+
+# linking
+
+add_library(${PROJECT} STATIC ${HEADERS} ${SOURCES} ${MOC_SOURCES})
+set_property(TARGET ${PROJECT} PROPERTY CXX_STANDARD 14)
+SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
+
+target_link_libraries(
+    ${PROJECT}
+    ${DEPENDS_ON_PROJECTS}
+    ${Boost_LIBRARIES}
+    Qt5::Core
+        Qt5::Sql)
+
+
+install ( TARGETS ${PROJECT} EXPORT ${PROJECT} ARCHIVE DESTINATION ${CMAKE_BINARY_DIR}/build/lib)
+export ( TARGETS ${PROJECT} FILE ${CMAKE_BINARY_DIR}/${PROJECT}-config.cmake )
+export ( PACKAGE ${PROJECT} )
+
 
 # Tests
 
+add_subdirectory(Greis.Tests)
 ENABLE_TESTING()
-
-ADD_TEST_EX(Common.Tests)
 ADD_TEST_EX(Greis.Tests)
-ADD_TEST_EX(Platform.Tests)
+

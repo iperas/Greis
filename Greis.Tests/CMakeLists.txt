@@ -1,10 +1,37 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-
+CMAKE_POLICY(SET CMP0054 NEW)
+CMAKE_POLICY(SET CMP0060 NEW)
 # variables declaration
 
 SET(PROJECT Greis.Tests)
 
-SET(DEPENDS_ON_PROJECTS Common Greis)
+# Get all propreties that cmake supports
+execute_process(COMMAND cmake --help-property-list OUTPUT_VARIABLE CMAKE_PROPERTY_LIST)
+
+# Convert command output into a CMake list
+STRING(REGEX REPLACE ";" "\\\\;" CMAKE_PROPERTY_LIST "${CMAKE_PROPERTY_LIST}")
+STRING(REGEX REPLACE "\n" ";" CMAKE_PROPERTY_LIST "${CMAKE_PROPERTY_LIST}")
+
+function(print_properties)
+    message ("CMAKE_PROPERTY_LIST = ${CMAKE_PROPERTY_LIST}")
+endfunction(print_properties)
+
+function(print_target_properties tgt)
+    if(NOT TARGET ${tgt})
+      message("There is no target named '${tgt}'")
+      return()
+    endif()
+
+    foreach (prop ${CMAKE_PROPERTY_LIST})
+        string(REPLACE "<CONFIG>" "${CMAKE_BUILD_TYPE}" prop ${prop})
+        # message ("Checking ${prop}")
+        get_property(propval TARGET ${tgt} PROPERTY ${prop} SET)
+        if (propval)
+            get_target_property(propval ${tgt} ${prop})
+            message ("${tgt} ${prop} = ${propval}")
+        endif()
+    endforeach(prop)
+endfunction(print_target_properties)
 
 FILE(GLOB_RECURSE HEADERS "include/*.h")
 
@@ -40,23 +67,22 @@ PROJECT(${PROJECT} CXX)
 
 # includes
 
-foreach(DEPENDENCY ${DEPENDS_ON_PROJECTS})
-	include_directories("../${DEPENDENCY}")
-endforeach()
-
+include_directories("${Common_source_dir}/Common")
+include_directories("${Common_source_dir}/Greis")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
 
 # linking
 
 add_executable(${PROJECT} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${CONFIG_FILES} ${TEXT_TEMPLATES})
-
+set_property(TARGET ${PROJECT} PROPERTY CXX_STANDARD 14)
 SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(
     ${PROJECT}
-    ${DEPENDS_ON_PROJECTS}
     ${Boost_LIBRARIES}
+    Greis
+    Common
     Qt5::Core
     Qt5::Sql
     debug ${GTEST_DEBUG_LIBS}
@@ -66,7 +92,6 @@ target_link_libraries(
 # dependencies
 
 add_dependencies(${PROJECT} googletest ${DEPENDS_ON_PROJECTS})
-
 # add_custom_target(copy)
 add_custom_action_copy(${CONFIG_FILES})
 if (DEPLOY_FILES)
