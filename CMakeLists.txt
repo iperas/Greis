@@ -100,7 +100,7 @@ include(ExternalProject)
 
 ExternalProject_Add (
  libCommon
- GIT_REPOSITORY "https://stash.ifz.ru/scm/omni/common.git"
+ GIT_REPOSITORY "https://github.com/iperas/Common"
  GIT_TAG "master"
  UPDATE_COMMAND ""
  INSTALL_COMMAND ""
