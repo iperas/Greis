@@ -16,6 +16,8 @@
 #include "StdMessage/SCPStdMessage.h"
 #include "StdMessage/SPRStdMessage.h"
 #include "StdMessage/SRPRStdMessage.h"
+#include "StdMessage/RcvTimeStdMessage.h"
+#include "StdMessage/RcvDateStdMessage.h"
 #include "Common/Logger.h"
 
 namespace Greis
@@ -52,12 +54,18 @@ namespace Greis
 
         SMART_PTR_T(SkyPeek);
 
-        QDateTime DateTime;
+        QDateTime dateTime();
 
         void AddMessage(Message * msg);
-
+        float getCarrierFrequency(int, int);
     private:
-        float getCarrierFrequency(int PRN, int Fn);
+        void updateTimePart( RcvTimeStdMessage* );
+        void updateDatePart( RcvDateStdMessage* );
+        QDateTime _dateTime;
+        bool _dateIsSet;
+        bool _timeIsSet;
+        float getAsys(int);
+        float getKsys(int);
     };
 }
 
