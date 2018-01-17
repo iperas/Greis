@@ -54,7 +54,7 @@ namespace Greis
 #ifdef Q_OS_WIN
             _serial.set_option(boost::asio::serial_port_base::baud_rate(baudRate));
 #else
-            auto fd = _serial.native();
+            auto fd = _serial.native_handle();
             struct serial_struct serinfo;
             struct termios options;
 
@@ -152,9 +152,9 @@ namespace Greis
         void purgeBuffers()
         {
 #ifdef Q_OS_WIN
-            PurgeComm(_serial.native(), PURGE_RXCLEAR);
+            PurgeComm(_serial.native_handle(), PURGE_RXCLEAR);
 #else
-            ioctl(_serial.native(), TCFLSH, 2);
+            ioctl(_serial.native_handle(), TCFLSH, 2);
 #endif
         }
 
