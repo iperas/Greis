@@ -1,15 +1,20 @@
-#include "CalBandsDelayCustomType.h"
+#include "BandDelayCustomType.h"
 #include <cassert>
 #include "Common/Logger.h"
 
 namespace Greis
 {
-    CalBandsDelayCustomType::CalBandsDelayCustomType( const char* pc_message, int p_length )
+    BandDelayCustomType::BandDelayCustomType( const char* pc_message, int p_length )
         : _size(p_length)
     {
         char* p_message = const_cast<char*>(pc_message);
     
-        /*throw Common::NotImplementedException();*/
+        _serializer.Deserialize(p_message, _band);
+        p_message += sizeof(_band);
+        _serializer.Deserialize(p_message, _signal);
+        p_message += sizeof(_signal);
+        _serializer.Deserialize(p_message, _delay);
+        p_message += sizeof(_delay);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -19,13 +24,13 @@ namespace Greis
         }
     }
     
-    CalBandsDelayCustomType::CalBandsDelayCustomType( int p_size ) 
+    BandDelayCustomType::BandDelayCustomType( int p_size ) 
         : _size(p_size)
     {
         _isCorrect = true;
     }
 
-    QByteArray CalBandsDelayCustomType::ToByteArray() const
+    QByteArray BandDelayCustomType::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -33,8 +38,9 @@ namespace Greis
             return result;
         }
 
-        _serializer.Serialize(_d, result);
-        _serializer.Serialize(_cs, result);
+        _serializer.Serialize(_band, result);
+        _serializer.Serialize(_signal, result);
+        _serializer.Serialize(_delay, result);
         
         assert(result.size() == Size());
         return result;

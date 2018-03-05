@@ -2889,16 +2889,17 @@ ADU Messages
 
 [gR]: Code Delays of Receiver RF Bands 
 
+
+struct CalBandsDelay {6*n+1} {
+BandDelay d[n]; // n may vary depending on receiver model
+u1 cs; // Checksum 
+}; 
+
 struct BandDelay {6} {
 i1 band; // 0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3
 i1 signal; // 0-ca, 1-p
 f4 delay; // Code delay [s] 
 
-}; 
-
-struct CalBandsDelay {6*n+1} {
-BandDelay d[n]; // n may vary depending on receiver model
-u1 cs; // Checksum 
 }; 
 
 

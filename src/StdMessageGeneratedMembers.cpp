@@ -15,7 +15,6 @@ namespace Greis
             cache[CHAR2_TO_USHORT("MA")] = EMessageId::AccMag;
             cache[CHAR2_TO_USHORT("AV")] = EMessageId::AngularVelocity;
             cache[CHAR2_TO_USHORT("AN")] = EMessageId::AntName;
-            cache[CHAR2_TO_USHORT("gR")] = EMessageId::BandDelay;
             cache[CHAR2_TO_USHORT("BI")] = EMessageId::BaseInfo;
             cache[CHAR2_TO_USHORT("BL")] = EMessageId::Baseline;
             cache[CHAR2_TO_USHORT("bL")] = EMessageId::Baselines;
@@ -23,6 +22,7 @@ namespace Greis
             cache[CHAR2_TO_USHORT("CN")] = EMessageId::BeiDouEphemeris;
             cache[CHAR2_TO_USHORT("CI")] = EMessageId::BeiDouIonoParams;
             cache[CHAR2_TO_USHORT("CU")] = EMessageId::BeiDouUtcParam;
+            cache[CHAR2_TO_USHORT("gR")] = EMessageId::CalBandsDelay;
             cache[CHAR2_TO_USHORT("rT")] = EMessageId::ClockOffsets;
             cache[CHAR2_TO_USHORT("EC")] = EMessageId::CNR;
             cache[CHAR2_TO_USHORT("E1")] = EMessageId::CNR;

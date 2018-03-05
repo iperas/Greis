@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Greis/CustomType/CalBandsDelayCustomType.h"
+#include "Greis/CustomType/BandDelayCustomType.h"
 #include "Greis/CustomType/ClkOffsCustomType.h"
 #include "Greis/CustomType/ESICustomType.h"
 #include "Greis/CustomType/ExtSpecDataCustomType.h"

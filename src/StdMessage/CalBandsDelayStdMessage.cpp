@@ -1,23 +1,18 @@
-#include "BandDelayStdMessage.h"
+#include "CalBandsDelayStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    BandDelayStdMessage::BandDelayStdMessage( const char* pc_message, int p_length ) 
+    CalBandsDelayStdMessage::CalBandsDelayStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, _band);
-        p_message += sizeof(_band);
-        _serializer.Deserialize(p_message, _signal);
-        p_message += sizeof(_signal);
-        _serializer.Deserialize(p_message, _delay);
-        p_message += sizeof(_delay);
+        /*throw Common::NotImplementedException();*/
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -27,37 +22,39 @@ namespace Greis
         }
     }
     
-    BandDelayStdMessage::BandDelayStdMessage( const std::string& p_id, int p_size ) 
+    CalBandsDelayStdMessage::CalBandsDelayStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string BandDelayStdMessage::ToString() const
+    std::string CalBandsDelayStdMessage::ToString() const
     {
-        return toString("BandDelayStdMessage");
+        return toString("CalBandsDelayStdMessage");
     }
     
-    bool BandDelayStdMessage::Validate() const
+    bool CalBandsDelayStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
             return false;
         }
 
-        return true;
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
     
-    void BandDelayStdMessage::RecalculateChecksum()
+    void CalBandsDelayStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
             return;
         }
-        
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
-    QByteArray BandDelayStdMessage::ToByteArray() const
+    QByteArray CalBandsDelayStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -67,9 +64,8 @@ namespace Greis
 
         result.append(headToByteArray());
 
-        _serializer.Serialize(_band, result);
-        _serializer.Serialize(_signal, result);
-        _serializer.Serialize(_delay, result);
+        _serializer.Serialize(_d, result);
+        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

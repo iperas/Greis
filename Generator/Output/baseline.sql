@@ -103,7 +103,7 @@ DROP TABLE IF EXISTS `msg_Spectrum0`;
 DROP TABLE IF EXISTS `msg_Spectrum1`;
 DROP TABLE IF EXISTS `msg_MDM_Spectrum`;
 DROP TABLE IF EXISTS `msg_SvDelays`;
-DROP TABLE IF EXISTS `msg_BandDelay`;
+DROP TABLE IF EXISTS `msg_CalBandsDelay`;
 DROP TABLE IF EXISTS `msg_RotationMatrix`;
 DROP TABLE IF EXISTS `msg_RotationMatrixAndVectors`;
 DROP TABLE IF EXISTS `msg_RotationAngles`;
@@ -144,7 +144,7 @@ DROP TABLE IF EXISTS `ct_SvData1`;
 DROP TABLE IF EXISTS `ct_SpecData`;
 DROP TABLE IF EXISTS `ct_ExtSpecData`;
 DROP TABLE IF EXISTS `ct_GloDelays`;
-DROP TABLE IF EXISTS `ct_CalBandsDelay`;
+DROP TABLE IF EXISTS `ct_BandDelay`;
 DROP TABLE IF EXISTS `ct_SvData2`;
 DROP TABLE IF EXISTS `ct_Header`;
 DROP TABLE IF EXISTS `ct_SlotRec`;
@@ -472,16 +472,17 @@ CREATE TABLE `ct_GloDelays` (
     PRIMARY KEY (`id`), 
     INDEX `idx_fk_ct_GloDelays_unixTimeEpoch` (`unixTimeEpoch`));
 
--- custom type 'CalBandsDelay'
-CREATE TABLE `ct_CalBandsDelay` (
+-- custom type 'BandDelay'
+CREATE TABLE `ct_BandDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
-    `d` BLOB, 
-    `cs` SMALLINT UNSIGNED, 
+    `band` SMALLINT, 
+    `signal` SMALLINT, 
+    `delay` FLOAT, 
     PRIMARY KEY (`id`), 
-    INDEX `idx_fk_ct_CalBandsDelay_unixTimeEpoch` (`unixTimeEpoch`));
+    INDEX `idx_fk_ct_BandDelay_unixTimeEpoch` (`unixTimeEpoch`));
 
 -- custom type 'SvData2'
 CREATE TABLE `ct_SvData2` (
@@ -2832,24 +2833,23 @@ CREATE TABLE `msg_SvDelays` (
     CONSTRAINT `fk_msg_SvDelays_idMessageCode` FOREIGN KEY (`idMessageCode`) 
         REFERENCES `messageCode` (`id`));
 
--- message 'BandDelay': [gR]: Code Delays of Receiver RF Bands 
-CREATE TABLE `msg_BandDelay` (
+-- message 'CalBandsDelay': [gR]: Code Delays of Receiver RF Bands 
+CREATE TABLE `msg_CalBandsDelay` (
     id SERIAL, 
     idEpoch BIGINT UNSIGNED NOT NULL, 
     epochIndex INT UNSIGNED NOT NULL, 
     unixTimeEpoch BIGINT UNSIGNED NOT NULL, 
     idMessageCode BIGINT UNSIGNED NOT NULL, 
     bodySize INT NOT NULL, 
-    `band` SMALLINT, 
-    `signal` SMALLINT, 
-    `delay` FLOAT, 
+    `d` BLOB, 
+    `cs` SMALLINT UNSIGNED, 
     PRIMARY KEY (`id`), 
-    INDEX `idx_fk_msg_BandDelay_idEpoch` (`idEpoch`), 
-    INDEX `idx_fk_msg_BandDelay_unixTimeEpoch` (`unixTimeEpoch`), 
-    INDEX `idx_fk_msg_BandDelay_idMessageCode` (`idMessageCode`), 
-    CONSTRAINT `fk_msg_BandDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
+    INDEX `idx_fk_msg_CalBandsDelay_idEpoch` (`idEpoch`), 
+    INDEX `idx_fk_msg_CalBandsDelay_unixTimeEpoch` (`unixTimeEpoch`), 
+    INDEX `idx_fk_msg_CalBandsDelay_idMessageCode` (`idMessageCode`), 
+    CONSTRAINT `fk_msg_CalBandsDelay_idEpoch` FOREIGN KEY (`idEpoch`) 
         REFERENCES `epoch` (`id`), 
-    CONSTRAINT `fk_msg_BandDelay_idMessageCode` FOREIGN KEY (`idMessageCode`) 
+    CONSTRAINT `fk_msg_CalBandsDelay_idMessageCode` FOREIGN KEY (`idMessageCode`) 
         REFERENCES `messageCode` (`id`));
 
 -- message 'RotationMatrix': [MR] Rotation Matrix 
@@ -3540,7 +3540,7 @@ INSERT INTO `customTypeMeta` (`id`, `name`, `size`, `tableName`)
            (8, 'SpecData', -1, 'ct_SpecData'), 
            (9, 'ExtSpecData', -1, 'ct_ExtSpecData'), 
            (10, 'GloDelays', -1, 'ct_GloDelays'), 
-           (11, 'CalBandsDelay', -1, 'ct_CalBandsDelay'), 
+           (11, 'BandDelay', 6, 'ct_BandDelay'), 
            (12, 'SvData2', -1, 'ct_SvData2'), 
            (13, 'Header', 6, 'ct_Header'), 
            (14, 'SlotRec', 14, 'ct_SlotRec'), 
@@ -3656,7 +3656,7 @@ INSERT INTO `messageMeta` (`id`, `name`, `title`, `size`, `idValidation`, `idKin
            (101, 'Spectrum1', '[sP] Extended Spectrum ', -1, 1, 3, 1, 'msg_Spectrum1'), 
            (102, 'MDM_Spectrum', '[ms] Modem Spectrum ', 9, 1, 3, 1, 'msg_MDM_Spectrum'), 
            (103, 'SvDelays', '[gC], [g1], [g2], [g3]: GLONASS Delays ', 9, 0, 3, 1, 'msg_SvDelays'), 
-           (104, 'BandDelay', '[gR]: Code Delays of Receiver RF Bands ', 6, 0, 3, 1, 'msg_BandDelay'), 
+           (104, 'CalBandsDelay', '[gR]: Code Delays of Receiver RF Bands ', -1, 1, 3, 1, 'msg_CalBandsDelay'), 
            (105, 'RotationMatrix', '[MR] Rotation Matrix ', 37, 1, 3, 1, 'msg_RotationMatrix'), 
            (106, 'RotationMatrixAndVectors', '[mr] Rotation Matrix and Vectors ', 73, 1, 3, 1, 'msg_RotationMatrixAndVectors'), 
            (107, 'RotationAngles', '[AR] Rotation Angles ', 33, 1, 3, 1, 'msg_RotationAngles'), 
@@ -4405,144 +4405,143 @@ INSERT INTO `messageVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `
            (466, 'fcn', 'i1', '', 103), 
            (467, 'phase', 'f4', '', 103), 
            (468, 'range', 'f4', '', 103), 
-           (469, 'band', 'i1', '', 104), 
-           (470, 'signal', 'i1', '', 104), 
-           (471, 'delay', 'f4', '', 104), 
-           (472, 'time', 'u4', '', 105), 
-           (473, 'q00', 'f4', '', 105), 
-           (474, 'q01', 'f4', '', 105), 
-           (475, 'q02', 'f4', '', 105), 
-           (476, 'q12', 'f4', '', 105), 
-           (477, 'rms', 'f4', '', 105), 
-           (478, 'solType', 'u1', '', 105), 
-           (479, 'flag', 'u1', '', 105), 
-           (480, 'cs', 'u1', '', 105), 
-           (481, 'time', 'u4', '', 106), 
-           (482, 'q00', 'f4', '', 106), 
-           (483, 'q01', 'f4', '', 106), 
-           (484, 'q02', 'f4', '', 106), 
-           (485, 'q12', 'f4', '', 106), 
-           (486, 'rms', 'f4', '', 106), 
-           (487, 'solType', 'u1', '', 106), 
-           (488, 'flag', 'u1', '', 106), 
-           (489, 'bl1', 'f4', '', 106), 
-           (490, 'bl2', 'f4', '', 106), 
-           (491, 'cs', 'u1', '', 106), 
-           (492, 'time', 'u4', '', 107), 
-           (493, 'p', 'f4', '', 107), 
-           (494, 'r', 'f4', '', 107), 
-           (495, 'h', 'f4', '', 107), 
-           (496, 'sp', 'f4', '', 107), 
-           (497, 'sr', 'f4', '', 107), 
-           (498, 'sh', 'f4', '', 107), 
-           (499, 'solType', 'u1', '', 107), 
-           (500, 'flags', 'u1', '', 107), 
-           (501, 'cs', 'u1', '', 107), 
-           (502, 'time', 'u4', '', 108), 
-           (503, 'x', 'f4', '', 108), 
-           (504, 'y', 'f4', '', 108), 
-           (505, 'z', 'f4', '', 108), 
-           (506, 'rms', 'f4', '', 108), 
-           (507, 'flags', 'u1', '', 108), 
-           (508, 'cs', 'u1', '', 108), 
-           (509, 'accelerations', 'f4', '', 109), 
-           (510, 'angularVelocities', 'f4', '', 109), 
-           (511, 'cs', 'u1', '', 109), 
-           (512, 'time', 'u4', '', 110), 
-           (513, 'accelerations', 'f4', '', 110), 
-           (514, 'induction', 'f4', '', 110), 
-           (515, 'magnitude', 'f4', '', 110), 
-           (516, 'temperature', 'f4', '', 110), 
-           (517, 'calibrated', 'u1', '', 110), 
-           (518, 'cs', 'u1', '', 110), 
-           (519, 'ms', 'i4', '', 111), 
-           (520, 'ns', 'i4', '', 111), 
-           (521, 'timeScale', 'u1', '', 111), 
-           (522, 'cs', 'u1', '', 111), 
-           (523, 'offs', 'f4', '', 112), 
-           (524, 'cs', 'u1', '', 112), 
-           (525, 'offs', 'f8', '', 113), 
-           (526, 'timeScale', 'u1', '', 113), 
-           (527, 'cs', 'u1', '', 113), 
-           (528, 'heading', 'f4', '', 114), 
-           (529, 'pitch', 'f4', '', 114), 
-           (530, 'solType', 'u1', '', 114), 
-           (531, 'cs', 'u1', '', 114), 
-           (532, 'sample', 'u2', '', 115), 
-           (533, 'scale', 'u2', '', 115), 
-           (534, 'reftime', 'u4', '', 115), 
-           (535, 'crc16', 'u2', '', 115), 
-           (536, 'sample', 'u2', '', 116), 
-           (537, 'scale', 'u2', '', 116), 
-           (538, 'reftime', 'u4', '', 116), 
-           (539, 'clock', 'i2', '', 116), 
-           (540, 'flags', 'u2', '', 116), 
-           (541, 'svd', 'SvData2', '', 116), 
-           (542, 'crc16', 'u2', '', 116), 
-           (543, 'sample', 'u2', '', 117), 
-           (544, 'delta', 'u2', '', 117), 
-           (545, 'word1', 'u4', '', 117), 
-           (546, 'word2', 'u4', '', 117), 
-           (547, 'word3', 'u4', '', 117), 
-           (548, 'word4', 'u4', '', 117), 
-           (549, 'word5', 'u4', '', 117), 
-           (550, 'word6', 'u4', '', 117), 
-           (551, 'word7', 'u4', '', 117), 
-           (552, 'word8', 'u4', '', 117), 
-           (553, 'word9', 'u4', '', 117), 
-           (554, 'crc16', 'u2', '', 117), 
-           (555, 'sample', 'u2', '', 118), 
-           (556, 'reserved', 'u2', '', 118), 
-           (557, 'Offs', 'ClkOffs', '', 118), 
-           (558, 'crc16', 'u2', '', 118), 
-           (559, 'reply', 'a1', '', 119), 
-           (560, 'error', 'a1', '', 120), 
-           (561, 'tot', 'u4', '', 121), 
-           (562, 'wn', 'u2', '', 121), 
-           (563, 'alpha0', 'f4', '', 121), 
-           (564, 'alpha1', 'f4', '', 121), 
-           (565, 'alpha2', 'f4', '', 121), 
-           (566, 'alpha3', 'f4', '', 121), 
-           (567, 'beta0', 'f4', '', 121), 
-           (568, 'beta1', 'f4', '', 121), 
-           (569, 'beta2', 'f4', '', 121), 
-           (570, 'beta3', 'f4', '', 121), 
-           (571, 'cs', 'u1', '', 121), 
-           (572, 'par', 'IonoParams1', '', 122), 
-           (573, 'par', 'IonoParams1', '', 123), 
-           (574, 'par', 'IonoParams1', '', 124), 
-           (575, 'time', 'u4', '', 125), 
-           (576, 'type', 'u1', '', 125), 
-           (577, 'data', 'u1', '', 125), 
-           (578, 'cs', 'u1', '', 125), 
-           (579, 'lt', 'u1', '', 126), 
-           (580, 'cs', 'u1', '', 126), 
-           (581, 'id', 'u1', '', 127), 
-           (582, 'data', 'u1', '', 127), 
-           (583, 'cs', 'a1', '', 127), 
-           (584, 'params', 'a1', '', 128), 
-           (585, 'svsCount', 'u1', '', 129), 
-           (586, 'targetStream', 'u1', '', 129), 
-           (587, 'issue', 'u2', '', 129), 
-           (588, 'bitsCount', 'u2', '', 129), 
-           (589, 'lastBitTime', 'u4', '', 129), 
-           (590, 'uids', 'u1', '', 129), 
-           (591, 'pad', 'u1', '', 129), 
-           (592, 'hist', 'u4', '', 129), 
-           (593, 'x', 'f8', '', 130), 
-           (594, 'y', 'f8', '', 130), 
-           (595, 'z', 'f8', '', 130), 
-           (596, 'id', 'u2', '', 130), 
-           (597, 'solType', 'u1', '', 130), 
-           (598, 'cs', 'u1', '', 130), 
-           (599, 'data', 'u1', '', 131), 
-           (600, 'cs', 'u1', '', 131), 
-           (601, 'data', 'u1', '', 132), 
-           (602, 'crc16', 'u2', '', 132), 
-           (603, 'tt', 'u4', '', 133), 
-           (604, 'cs', 'u1', '', 133), 
-           (605, 'val', 'f4', '', 134), 
-           (606, 'cs', 'u1', '', 134);
+           (469, 'd', 'BandDelay', '', 104), 
+           (470, 'cs', 'u1', '', 104), 
+           (471, 'time', 'u4', '', 105), 
+           (472, 'q00', 'f4', '', 105), 
+           (473, 'q01', 'f4', '', 105), 
+           (474, 'q02', 'f4', '', 105), 
+           (475, 'q12', 'f4', '', 105), 
+           (476, 'rms', 'f4', '', 105), 
+           (477, 'solType', 'u1', '', 105), 
+           (478, 'flag', 'u1', '', 105), 
+           (479, 'cs', 'u1', '', 105), 
+           (480, 'time', 'u4', '', 106), 
+           (481, 'q00', 'f4', '', 106), 
+           (482, 'q01', 'f4', '', 106), 
+           (483, 'q02', 'f4', '', 106), 
+           (484, 'q12', 'f4', '', 106), 
+           (485, 'rms', 'f4', '', 106), 
+           (486, 'solType', 'u1', '', 106), 
+           (487, 'flag', 'u1', '', 106), 
+           (488, 'bl1', 'f4', '', 106), 
+           (489, 'bl2', 'f4', '', 106), 
+           (490, 'cs', 'u1', '', 106), 
+           (491, 'time', 'u4', '', 107), 
+           (492, 'p', 'f4', '', 107), 
+           (493, 'r', 'f4', '', 107), 
+           (494, 'h', 'f4', '', 107), 
+           (495, 'sp', 'f4', '', 107), 
+           (496, 'sr', 'f4', '', 107), 
+           (497, 'sh', 'f4', '', 107), 
+           (498, 'solType', 'u1', '', 107), 
+           (499, 'flags', 'u1', '', 107), 
+           (500, 'cs', 'u1', '', 107), 
+           (501, 'time', 'u4', '', 108), 
+           (502, 'x', 'f4', '', 108), 
+           (503, 'y', 'f4', '', 108), 
+           (504, 'z', 'f4', '', 108), 
+           (505, 'rms', 'f4', '', 108), 
+           (506, 'flags', 'u1', '', 108), 
+           (507, 'cs', 'u1', '', 108), 
+           (508, 'accelerations', 'f4', '', 109), 
+           (509, 'angularVelocities', 'f4', '', 109), 
+           (510, 'cs', 'u1', '', 109), 
+           (511, 'time', 'u4', '', 110), 
+           (512, 'accelerations', 'f4', '', 110), 
+           (513, 'induction', 'f4', '', 110), 
+           (514, 'magnitude', 'f4', '', 110), 
+           (515, 'temperature', 'f4', '', 110), 
+           (516, 'calibrated', 'u1', '', 110), 
+           (517, 'cs', 'u1', '', 110), 
+           (518, 'ms', 'i4', '', 111), 
+           (519, 'ns', 'i4', '', 111), 
+           (520, 'timeScale', 'u1', '', 111), 
+           (521, 'cs', 'u1', '', 111), 
+           (522, 'offs', 'f4', '', 112), 
+           (523, 'cs', 'u1', '', 112), 
+           (524, 'offs', 'f8', '', 113), 
+           (525, 'timeScale', 'u1', '', 113), 
+           (526, 'cs', 'u1', '', 113), 
+           (527, 'heading', 'f4', '', 114), 
+           (528, 'pitch', 'f4', '', 114), 
+           (529, 'solType', 'u1', '', 114), 
+           (530, 'cs', 'u1', '', 114), 
+           (531, 'sample', 'u2', '', 115), 
+           (532, 'scale', 'u2', '', 115), 
+           (533, 'reftime', 'u4', '', 115), 
+           (534, 'crc16', 'u2', '', 115), 
+           (535, 'sample', 'u2', '', 116), 
+           (536, 'scale', 'u2', '', 116), 
+           (537, 'reftime', 'u4', '', 116), 
+           (538, 'clock', 'i2', '', 116), 
+           (539, 'flags', 'u2', '', 116), 
+           (540, 'svd', 'SvData2', '', 116), 
+           (541, 'crc16', 'u2', '', 116), 
+           (542, 'sample', 'u2', '', 117), 
+           (543, 'delta', 'u2', '', 117), 
+           (544, 'word1', 'u4', '', 117), 
+           (545, 'word2', 'u4', '', 117), 
+           (546, 'word3', 'u4', '', 117), 
+           (547, 'word4', 'u4', '', 117), 
+           (548, 'word5', 'u4', '', 117), 
+           (549, 'word6', 'u4', '', 117), 
+           (550, 'word7', 'u4', '', 117), 
+           (551, 'word8', 'u4', '', 117), 
+           (552, 'word9', 'u4', '', 117), 
+           (553, 'crc16', 'u2', '', 117), 
+           (554, 'sample', 'u2', '', 118), 
+           (555, 'reserved', 'u2', '', 118), 
+           (556, 'Offs', 'ClkOffs', '', 118), 
+           (557, 'crc16', 'u2', '', 118), 
+           (558, 'reply', 'a1', '', 119), 
+           (559, 'error', 'a1', '', 120), 
+           (560, 'tot', 'u4', '', 121), 
+           (561, 'wn', 'u2', '', 121), 
+           (562, 'alpha0', 'f4', '', 121), 
+           (563, 'alpha1', 'f4', '', 121), 
+           (564, 'alpha2', 'f4', '', 121), 
+           (565, 'alpha3', 'f4', '', 121), 
+           (566, 'beta0', 'f4', '', 121), 
+           (567, 'beta1', 'f4', '', 121), 
+           (568, 'beta2', 'f4', '', 121), 
+           (569, 'beta3', 'f4', '', 121), 
+           (570, 'cs', 'u1', '', 121), 
+           (571, 'par', 'IonoParams1', '', 122), 
+           (572, 'par', 'IonoParams1', '', 123), 
+           (573, 'par', 'IonoParams1', '', 124), 
+           (574, 'time', 'u4', '', 125), 
+           (575, 'type', 'u1', '', 125), 
+           (576, 'data', 'u1', '', 125), 
+           (577, 'cs', 'u1', '', 125), 
+           (578, 'lt', 'u1', '', 126), 
+           (579, 'cs', 'u1', '', 126), 
+           (580, 'id', 'u1', '', 127), 
+           (581, 'data', 'u1', '', 127), 
+           (582, 'cs', 'a1', '', 127), 
+           (583, 'params', 'a1', '', 128), 
+           (584, 'svsCount', 'u1', '', 129), 
+           (585, 'targetStream', 'u1', '', 129), 
+           (586, 'issue', 'u2', '', 129), 
+           (587, 'bitsCount', 'u2', '', 129), 
+           (588, 'lastBitTime', 'u4', '', 129), 
+           (589, 'uids', 'u1', '', 129), 
+           (590, 'pad', 'u1', '', 129), 
+           (591, 'hist', 'u4', '', 129), 
+           (592, 'x', 'f8', '', 130), 
+           (593, 'y', 'f8', '', 130), 
+           (594, 'z', 'f8', '', 130), 
+           (595, 'id', 'u2', '', 130), 
+           (596, 'solType', 'u1', '', 130), 
+           (597, 'cs', 'u1', '', 130), 
+           (598, 'data', 'u1', '', 131), 
+           (599, 'cs', 'u1', '', 131), 
+           (600, 'data', 'u1', '', 132), 
+           (601, 'crc16', 'u2', '', 132), 
+           (602, 'tt', 'u4', '', 133), 
+           (603, 'cs', 'u1', '', 133), 
+           (604, 'val', 'f4', '', 134), 
+           (605, 'cs', 'u1', '', 134);
 
 INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`, `idCustomTypeMeta`) 
     VALUES (1, 'a0', 'f8', '', 1), 
@@ -4609,57 +4608,58 @@ INSERT INTO `customTypeVariableMeta` (`id`, `name`, `greisType`, `requiredValue`
            (62, 'agcmax', 'u1', '', 9), 
            (63, 'del', 'SvDelay', '', 10), 
            (64, 'cs', 'u1', '', 10), 
-           (65, 'd', 'BandDelay', '', 11), 
-           (66, 'cs', 'u1', '', 11), 
-           (67, 'header', 'Header', '', 12), 
-           (68, 'slot', 'SlotRec', '', 12), 
-           (69, 'refrange', 'u4', '', 13), 
-           (70, 'usi', 'u1', '', 13), 
-           (71, 'num', 'u1', '', 13), 
-           (72, 'svstOrDelrange', 'i2', '', 14), 
-           (73, 'word1', 'u4', '', 14), 
-           (74, 'flags', 'u2', '', 14), 
-           (75, 'lock', 'u2', '', 14), 
-           (76, 'word2', 'u4', '', 14), 
-           (77, 'word1', 'u4', '', 15), 
-           (78, 'word2', 'u4', '', 15), 
-           (79, 'sv', 'u1', '', 16), 
-           (80, 'wna', 'i2', '', 16), 
-           (81, 'toa', 'i4', '', 16), 
-           (82, 'healthA', 'u1', '', 16), 
-           (83, 'config', 'u1', '', 16), 
-           (84, 'af1', 'f4', '', 16), 
-           (85, 'af0', 'f4', '', 16), 
-           (86, 'rootA', 'f4', '', 16), 
-           (87, 'ecc', 'f4', '', 16), 
-           (88, 'm0', 'f4', '', 16), 
-           (89, 'omega0', 'f4', '', 16), 
-           (90, 'argPer', 'f4', '', 16), 
-           (91, 'deli', 'f4', '', 16), 
-           (92, 'omegaDot', 'f4', '', 16), 
-           (93, 'req', 'GpsEphReqData', '', 17), 
-           (94, 'opt', 'GpsEphOptData', '', 17), 
-           (95, 'tot', 'u4', '', 18), 
-           (96, 'wn', 'u2', '', 18), 
-           (97, 'alpha0', 'f4', '', 18), 
-           (98, 'alpha1', 'f4', '', 18), 
-           (99, 'alpha2', 'f4', '', 18), 
-           (100, 'alpha3', 'f4', '', 18), 
-           (101, 'beta0', 'f4', '', 18), 
-           (102, 'beta1', 'f4', '', 18), 
-           (103, 'beta2', 'f4', '', 18), 
-           (104, 'beta3', 'f4', '', 18), 
-           (105, 'cs', 'u1', '', 18), 
-           (106, 'recSize', 'u1', '', 19), 
-           (107, 'dat', 'SvData0', '', 19), 
-           (108, 'cs', 'u1', '', 19), 
-           (109, 'prn', 'u1', '', 20), 
-           (110, 'time', 'u4', '', 20), 
-           (111, 'type', 'u1', '', 20), 
-           (112, 'len', 'u1', '', 20), 
-           (113, 'data', 'u4', '', 20), 
-           (114, 'errCorr', 'i1', '', 20), 
-           (115, 'cs', 'u1', '', 20);
+           (65, 'band', 'i1', '', 11), 
+           (66, 'signal', 'i1', '', 11), 
+           (67, 'delay', 'f4', '', 11), 
+           (68, 'header', 'Header', '', 12), 
+           (69, 'slot', 'SlotRec', '', 12), 
+           (70, 'refrange', 'u4', '', 13), 
+           (71, 'usi', 'u1', '', 13), 
+           (72, 'num', 'u1', '', 13), 
+           (73, 'svstOrDelrange', 'i2', '', 14), 
+           (74, 'word1', 'u4', '', 14), 
+           (75, 'flags', 'u2', '', 14), 
+           (76, 'lock', 'u2', '', 14), 
+           (77, 'word2', 'u4', '', 14), 
+           (78, 'word1', 'u4', '', 15), 
+           (79, 'word2', 'u4', '', 15), 
+           (80, 'sv', 'u1', '', 16), 
+           (81, 'wna', 'i2', '', 16), 
+           (82, 'toa', 'i4', '', 16), 
+           (83, 'healthA', 'u1', '', 16), 
+           (84, 'config', 'u1', '', 16), 
+           (85, 'af1', 'f4', '', 16), 
+           (86, 'af0', 'f4', '', 16), 
+           (87, 'rootA', 'f4', '', 16), 
+           (88, 'ecc', 'f4', '', 16), 
+           (89, 'm0', 'f4', '', 16), 
+           (90, 'omega0', 'f4', '', 16), 
+           (91, 'argPer', 'f4', '', 16), 
+           (92, 'deli', 'f4', '', 16), 
+           (93, 'omegaDot', 'f4', '', 16), 
+           (94, 'req', 'GpsEphReqData', '', 17), 
+           (95, 'opt', 'GpsEphOptData', '', 17), 
+           (96, 'tot', 'u4', '', 18), 
+           (97, 'wn', 'u2', '', 18), 
+           (98, 'alpha0', 'f4', '', 18), 
+           (99, 'alpha1', 'f4', '', 18), 
+           (100, 'alpha2', 'f4', '', 18), 
+           (101, 'alpha3', 'f4', '', 18), 
+           (102, 'beta0', 'f4', '', 18), 
+           (103, 'beta1', 'f4', '', 18), 
+           (104, 'beta2', 'f4', '', 18), 
+           (105, 'beta3', 'f4', '', 18), 
+           (106, 'cs', 'u1', '', 18), 
+           (107, 'recSize', 'u1', '', 19), 
+           (108, 'dat', 'SvData0', '', 19), 
+           (109, 'cs', 'u1', '', 19), 
+           (110, 'prn', 'u1', '', 20), 
+           (111, 'time', 'u4', '', 20), 
+           (112, 'type', 'u1', '', 20), 
+           (113, 'len', 'u1', '', 20), 
+           (114, 'data', 'u4', '', 20), 
+           (115, 'errCorr', 'i1', '', 20), 
+           (116, 'cs', 'u1', '', 20);
 
 -- Наполнение информации о размерностях для пользовательского типа `SvData0`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -4683,21 +4683,17 @@ INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
     VALUES (63, 1, -2);
 
--- Наполнение информации о размерностях для пользовательского типа `CalBandsDelay`
-INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (65, 1, -2);
-
 -- Наполнение информации о размерностях для пользовательского типа `SvData2`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (68, 1, -2);
+    VALUES (69, 1, -2);
 
 -- Наполнение информации о размерностях для пользовательского типа `GpsNavData1`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (107, 1, -2);
+    VALUES (108, 1, -2);
 
 -- Наполнение информации о размерностях для пользовательского типа `GpsRawNavData1`
 INSERT INTO `customTypeVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (113, 1, -2);
+    VALUES (114, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `FileId`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
@@ -4888,75 +4884,79 @@ INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, 
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
     VALUES (461, 1, -2);
 
+-- Наполнение информации о размерностях для сообщения `CalBandsDelay`
+INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
+    VALUES (469, 1, -2);
+
 -- Наполнение информации о размерностях для сообщения `RotationMatrix`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (477, 1, 3), 
-           (478, 1, 3);
+    VALUES (476, 1, 3), 
+           (477, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `RotationMatrixAndVectors`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (486, 1, 3), 
-           (487, 1, 3), 
-           (489, 1, 3), 
-           (490, 1, 3);
+    VALUES (485, 1, 3), 
+           (486, 1, 3), 
+           (488, 1, 3), 
+           (489, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `RotationAngles`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (499, 1, 3);
+    VALUES (498, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `InertialMeasurements`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (509, 1, 3), 
-           (510, 1, 3);
+    VALUES (508, 1, 3), 
+           (509, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `AccMag`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (513, 1, 3), 
-           (514, 1, 3);
+    VALUES (512, 1, 3), 
+           (513, 1, 3);
 
 -- Наполнение информации о размерностях для сообщения `RawMeas`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (541, 1, -2);
+    VALUES (540, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ClockOffsets`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (557, 1, -2);
+    VALUES (556, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `RE`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (559, 1, -2);
+    VALUES (558, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `ER`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (560, 1, -2);
+    VALUES (559, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Event`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (577, 1, -2);
+    VALUES (576, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `Wrapper`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (582, 1, -2), 
-           (583, 1, 2);
+    VALUES (581, 1, -2), 
+           (582, 1, 2);
 
 -- Наполнение информации о размерностях для сообщения `Params`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (584, 1, -2);
+    VALUES (583, 1, -2);
 
 -- Наполнение информации о размерностях для сообщения `LoggingHistory`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (590, 1, -2), 
+    VALUES (589, 1, -2), 
+           (590, 1, -2), 
            (591, 1, -2), 
-           (592, 1, -2), 
-           (592, 2, -2);
+           (591, 2, -2);
 
 -- Наполнение информации о размерностях для сообщения `Security0`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (599, 1, 5);
+    VALUES (598, 1, 5);
 
 -- Наполнение информации о размерностях для сообщения `Security1`
 INSERT INTO `messageVariableSizeForDimension` (`idVariable`, `dimensionNumber`, `size`) 
-    VALUES (601, 1, 6);
+    VALUES (600, 1, 6);
 
 
 

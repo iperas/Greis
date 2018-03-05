@@ -2964,19 +2964,17 @@ N=([Message Length] - 2) / recSize) </Comment>
         <Code>g3</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="BandDelay" Size="6" Title="[gR]: Code Delays of Receiver RF Bands " Validation="None" Type="Unknown">
+    <StandardMessage Name="CalBandsDelay" Size="-1" Title="[gR]: Code Delays of Receiver RF Bands " Validation="Checksum" Type="Unknown">
       <Variables>
-        <Variable GreisType="i1" Name="band" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3</Comment>
+        <Variable GreisType="BandDelay" Name="d" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>n may vary depending on receiver model</Comment>
         </Variable>
-        <Variable GreisType="i1" Name="signal" RequiredValue="">
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>0-ca, 1-p</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="delay" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Code delay [s] </Comment>
+          <Comment>Checksum </Comment>
         </Variable>
       </Variables>
       <Codes>
@@ -4218,17 +4216,19 @@ string of a GLONASS sub-frame for given FCN. </Comment>
         </Variable>
       </Variables>
     </CustomType>
-    <CustomType Name="CalBandsDelay" Size="-1">
+    <CustomType Name="BandDelay" Size="6">
       <Variables>
-        <Variable GreisType="BandDelay" Name="d" RequiredValue="">
-          <SizeOfDimensions>
-            <Dimension>-2</Dimension>
-          </SizeOfDimensions>
-          <Comment>n may vary depending on receiver model</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="cs" RequiredValue="">
+        <Variable GreisType="i1" Name="band" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Checksum </Comment>
+          <Comment>0-gps1, 1-gps2, 2-gps5, 3-glo1, 4-glo2, 5-glo3</Comment>
+        </Variable>
+        <Variable GreisType="i1" Name="signal" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>0-ca, 1-p</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="delay" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Code delay [s] </Comment>
         </Variable>
       </Variables>
     </CustomType>

@@ -149,13 +149,14 @@ namespace Greis
                 /*throw Common::NotImplementedException();*/
             };
         
-        auto queryCalBandsDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `d`, `cs` FROM `ct_CalBandsDelay`");
-        auto handlerCalBandsDelayCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+        auto queryBandDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `band`, `signal`, `delay` FROM `ct_BandDelay`");
+        auto handlerBandDelayCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
-                ct = new CalBandsDelayCustomType(size);
-                auto c = dynamic_cast<CalBandsDelayCustomType*>(ct);
-                
-                /*throw Common::NotImplementedException();*/
+                ct = new BandDelayCustomType(size);
+                auto c = dynamic_cast<BandDelayCustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Band());
+                serializer.Deserialize(q.value(5), c->Signal());
+                serializer.Deserialize(q.value(6), c->Delay());
             };
         
         auto querySvData2CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `header`, `slot` FROM `ct_SvData2`");
@@ -290,8 +291,8 @@ namespace Greis
         _ctHandlers.insert(ECustomTypeId::ExtSpecData, handlerExtSpecDataCustomType);
         _ctQueries.insert(ECustomTypeId::GloDelays, queryGloDelaysCustomType);
         _ctHandlers.insert(ECustomTypeId::GloDelays, handlerGloDelaysCustomType);
-        _ctQueries.insert(ECustomTypeId::CalBandsDelay, queryCalBandsDelayCustomType);
-        _ctHandlers.insert(ECustomTypeId::CalBandsDelay, handlerCalBandsDelayCustomType);
+        _ctQueries.insert(ECustomTypeId::BandDelay, queryBandDelayCustomType);
+        _ctHandlers.insert(ECustomTypeId::BandDelay, handlerBandDelayCustomType);
         _ctQueries.insert(ECustomTypeId::SvData2, querySvData2CustomType);
         _ctHandlers.insert(ECustomTypeId::SvData2, handlerSvData2CustomType);
         _ctQueries.insert(ECustomTypeId::Header, queryHeaderCustomType);
@@ -1505,13 +1506,12 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryBandDelayStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `band`, `signal`, `delay` FROM `msg_BandDelay`");
-        auto handlerBandDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+        auto queryCalBandsDelayStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `d`, `cs` FROM `msg_CalBandsDelay`");
+        auto handlerCalBandsDelayStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                auto c = new BandDelayStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Band());
-                serializer.Deserialize(q.value(7), c->Signal());
-                serializer.Deserialize(q.value(8), c->Delay());
+                auto c = new CalBandsDelayStdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -2055,8 +2055,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::MDMSpectrum, handlerMDMSpectrumStdMessage);
         _msgQueries.insert(EMessageId::SvDelays, querySvDelaysStdMessage);
         _msgHandlers.insert(EMessageId::SvDelays, handlerSvDelaysStdMessage);
-        _msgQueries.insert(EMessageId::BandDelay, queryBandDelayStdMessage);
-        _msgHandlers.insert(EMessageId::BandDelay, handlerBandDelayStdMessage);
+        _msgQueries.insert(EMessageId::CalBandsDelay, queryCalBandsDelayStdMessage);
+        _msgHandlers.insert(EMessageId::CalBandsDelay, handlerCalBandsDelayStdMessage);
         _msgQueries.insert(EMessageId::RotationMatrix, queryRotationMatrixStdMessage);
         _msgHandlers.insert(EMessageId::RotationMatrix, handlerRotationMatrixStdMessage);
         _msgQueries.insert(EMessageId::RotationMatrixAndVectors, queryRotationMatrixAndVectorsStdMessage);

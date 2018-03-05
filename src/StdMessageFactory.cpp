@@ -30,8 +30,6 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new AngularVelocityStdMessage(p_message, p_length));
             case EMessageId::AntName:
                 return StdMessage::UniquePtr_t(new AntNameStdMessage(p_message, p_length));
-            case EMessageId::BandDelay:
-                return StdMessage::UniquePtr_t(new BandDelayStdMessage(p_message, p_length));
             case EMessageId::BaseInfo:
                 return StdMessage::UniquePtr_t(new BaseInfoStdMessage(p_message, p_length));
             case EMessageId::Baseline:
@@ -46,6 +44,8 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new BeiDouIonoParamsStdMessage(p_message, p_length));
             case EMessageId::BeiDouUtcParam:
                 return StdMessage::UniquePtr_t(new BeiDouUtcParamStdMessage(p_message, p_length));
+            case EMessageId::CalBandsDelay:
+                return StdMessage::UniquePtr_t(new CalBandsDelayStdMessage(p_message, p_length));
             case EMessageId::ClockOffsets:
                 return StdMessage::UniquePtr_t(new ClockOffsetsStdMessage(p_message, p_length));
             case EMessageId::CNR:

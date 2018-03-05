@@ -24,9 +24,6 @@ namespace Greis
         auto antNameInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_AntName` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `name`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_AntName", _inserterBatchSize);
-        auto bandDelayInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_BandDelay` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `band`, `signal`, `delay`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-            8, _connection, "msg_BandDelay", _inserterBatchSize);
         auto baseInfoInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_BaseInfo` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `id_sugar`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             11, _connection, "msg_BaseInfo", _inserterBatchSize);
@@ -48,6 +45,9 @@ namespace Greis
         auto beiDouUtcParamInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_BeiDouUtcParam` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "msg_BeiDouUtcParam", _inserterBatchSize);
+        auto calBandsDelayInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `msg_CalBandsDelay` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `d`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_CalBandsDelay", _inserterBatchSize);
         auto clockOffsetsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_ClockOffsets` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `reserved`, `Offs`, `crc16`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             9, _connection, "msg_ClockOffsets", _inserterBatchSize);
@@ -417,9 +417,9 @@ namespace Greis
         auto wrapperInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_Wrapper` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `data`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             8, _connection, "msg_Wrapper", _inserterBatchSize);
-        auto calBandsDelayInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `ct_CalBandsDelay` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `d`, `cs`) VALUES (?, ?, ?, ?, ?, ?)", 
-            6, _connection, "ct_CalBandsDelay", _inserterBatchSize);
+        auto bandDelayInserter = std::make_shared<DataBatchInserter>(
+            "INSERT INTO `ct_BandDelay` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `band`, `signal`, `delay`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "ct_BandDelay", _inserterBatchSize);
         auto clkOffsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_ClkOffs` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `word1`, `word2`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "ct_ClkOffs", _inserterBatchSize);
@@ -481,7 +481,6 @@ namespace Greis
         accMagInserter->AddChild(_epochInserter);
         angularVelocityInserter->AddChild(_epochInserter);
         antNameInserter->AddChild(_epochInserter);
-        bandDelayInserter->AddChild(_epochInserter);
         baseInfoInserter->AddChild(_epochInserter);
         baselineInserter->AddChild(_epochInserter);
         baselinesInserter->AddChild(_epochInserter);
@@ -493,6 +492,8 @@ namespace Greis
         beiDouIonoParamsInserter->AddChild(_epochInserter);
         beiDouUtcParamInserter->AddChild(utcOffsInserter);
         beiDouUtcParamInserter->AddChild(_epochInserter);
+        calBandsDelayInserter->AddChild(bandDelayInserter);
+        calBandsDelayInserter->AddChild(_epochInserter);
         clockOffsetsInserter->AddChild(clkOffsInserter);
         clockOffsetsInserter->AddChild(_epochInserter);
         cNRInserter->AddChild(_epochInserter);
@@ -641,7 +642,7 @@ namespace Greis
         velCovInserter->AddChild(_epochInserter);
         velocityResidualInserter->AddChild(_epochInserter);
         wrapperInserter->AddChild(_epochInserter);
-        calBandsDelayInserter->AddChild(_epochInserter);
+        bandDelayInserter->AddChild(_epochInserter);
         clkOffsInserter->AddChild(_epochInserter);
         eSIInserter->AddChild(_epochInserter);
         extSpecDataInserter->AddChild(_epochInserter);
@@ -670,7 +671,6 @@ namespace Greis
         _msgInserters[EMessageId::AccMag] = accMagInserter;
         _msgInserters[EMessageId::AngularVelocity] = angularVelocityInserter;
         _msgInserters[EMessageId::AntName] = antNameInserter;
-        _msgInserters[EMessageId::BandDelay] = bandDelayInserter;
         _msgInserters[EMessageId::BaseInfo] = baseInfoInserter;
         _msgInserters[EMessageId::Baseline] = baselineInserter;
         _msgInserters[EMessageId::Baselines] = baselinesInserter;
@@ -678,6 +678,7 @@ namespace Greis
         _msgInserters[EMessageId::BeiDouEphemeris] = beiDouEphemerisInserter;
         _msgInserters[EMessageId::BeiDouIonoParams] = beiDouIonoParamsInserter;
         _msgInserters[EMessageId::BeiDouUtcParam] = beiDouUtcParamInserter;
+        _msgInserters[EMessageId::CalBandsDelay] = calBandsDelayInserter;
         _msgInserters[EMessageId::ClockOffsets] = clockOffsetsInserter;
         _msgInserters[EMessageId::CNR] = cNRInserter;
         _msgInserters[EMessageId::CNR2560] = cNR2560Inserter;
@@ -801,7 +802,7 @@ namespace Greis
         _msgInserters[EMessageId::VelCov] = velCovInserter;
         _msgInserters[EMessageId::VelocityResidual] = velocityResidualInserter;
         _msgInserters[EMessageId::Wrapper] = wrapperInserter;
-        _ctInserters[ECustomTypeId::CalBandsDelay] = calBandsDelayInserter;
+        _ctInserters[ECustomTypeId::BandDelay] = bandDelayInserter;
         _ctInserters[ECustomTypeId::ClkOffs] = clkOffsInserter;
         _ctInserters[ECustomTypeId::ESI] = eSIInserter;
         _ctInserters[ECustomTypeId::ExtSpecData] = extSpecDataInserter;
@@ -822,8 +823,8 @@ namespace Greis
         _ctInserters[ECustomTypeId::SvData2] = svData2Inserter;
         _ctInserters[ECustomTypeId::UtcOffs] = utcOffsInserter;
 
-        int maxIdForCalBandsDelay = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_CalBandsDelay`").toInt();
-        _ctCurrentMaxId[ECustomTypeId::CalBandsDelay] = maxIdForCalBandsDelay;
+        int maxIdForBandDelay = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_BandDelay`").toInt();
+        _ctCurrentMaxId[ECustomTypeId::BandDelay] = maxIdForBandDelay;
         int maxIdForClkOffs = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_ClkOffs`").toInt();
         _ctCurrentMaxId[ECustomTypeId::ClkOffs] = maxIdForClkOffs;
         int maxIdForESI = _dbHelper->ExecuteSingleValueQuery("SELECT MAX(`id`) FROM `ct_ESI`").toInt();
@@ -904,14 +905,6 @@ namespace Greis
                 out << _serializer.Serialize(c->Cs());
             }
             break;
-        case EMessageId::BandDelay:
-            {
-                auto c = dynamic_cast<BandDelayStdMessage*>(msg);
-                out << _serializer.Serialize(c->Band());
-                out << _serializer.Serialize(c->Signal());
-                out << _serializer.Serialize(c->Delay());
-            }
-            break;
         case EMessageId::BaseInfo:
             {
                 auto c = dynamic_cast<BaseInfoStdMessage*>(msg);
@@ -972,6 +965,13 @@ namespace Greis
             {
                 auto c = dynamic_cast<BeiDouUtcParamStdMessage*>(msg);
                 out << addCustomType(c->Utc().get());
+            }
+            break;
+        case EMessageId::CalBandsDelay:
+            {
+                auto c = dynamic_cast<CalBandsDelayStdMessage*>(msg);
+                
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::ClockOffsets:
@@ -2166,11 +2166,12 @@ namespace Greis
 
         switch (ct->IdNumber())
         {
-        case ECustomTypeId::CalBandsDelay:
+        case ECustomTypeId::BandDelay:
             {
-                auto c = dynamic_cast<CalBandsDelayCustomType*>(ct);
-                
-                /*throw Common::NotImplementedException();*/
+                auto c = dynamic_cast<BandDelayCustomType*>(ct);
+                out << _serializer.Serialize(c->Band());
+                out << _serializer.Serialize(c->Signal());
+                out << _serializer.Serialize(c->Delay());
             }
             break;
         case ECustomTypeId::ClkOffs:

@@ -7,7 +7,7 @@ namespace Greis
         enum Type
         {
             Unknown,
-            CalBandsDelay,
+            BandDelay,
             ClkOffs,
             ESI,
             ExtSpecData,

@@ -10,7 +10,6 @@ namespace Greis
             AccMag, // [MA] Accelerometer and Magnetometer Measurements 
             AngularVelocity, // [AV] Angular Velocities 
             AntName, // [AN] Antenna Names 
-            BandDelay, // [gR]: Code Delays of Receiver RF Bands 
             BaseInfo, // [BI] Base Station Information 
             Baseline, // [BL] Baseline 
             Baselines, // [bL] Attitude Baselines 
@@ -18,6 +17,7 @@ namespace Greis
             BeiDouEphemeris, // [CN] BeiDou Ephemeris 
             BeiDouIonoParams, // [CI] BeiDou Ionospheric Parameters 
             BeiDouUtcParam, // [CU] BeiDou UTC Time Parameters 
+            CalBandsDelay, // [gR]: Code Delays of Receiver RF Bands 
             ClockOffsets, // [rT] Receiver Clock Offsets 
             CNR, // [EC], [E1], [E2], [E3], [E5], [El]: SNR 
             CNR2560, // [s0], [s1], [s2], [s3], [s5], [sl]: SNR x 256 
