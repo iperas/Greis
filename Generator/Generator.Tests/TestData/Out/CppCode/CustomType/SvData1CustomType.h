@@ -1,9 +1,8 @@
-#ifndef SvData1CustomType_h__
-#define SvData1CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -20,17 +19,16 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Frequency Channel Number plus 1(FCN+1)
+        // Frequency Channel Number plus 1(FCN+1) 
         const Types::i1& Fcn1() const { return _fcn1; }
         Types::i1& Fcn1() { return _fcn1; }
 
         // Counter which is updated upon receiving a
-        // string of a GLONASS sub-frame for given FCN.
+        // string of a GLONASS sub-frame for given FCN. 
         const Types::u1& Cnt() const { return _cnt; }
         Types::u1& Cnt() { return _cnt; }
 
-        // GLONASS string contents. Every 4-bytes word contains
-        // 25 LSB of the string of GLONASS sub-frame.
+        // GLONASS string contents. Every 4-bytes word contains// 25 LSB of the string of GLONASS sub-frame. 
         const std::vector<Types::u4>& Data() const { return _data; }
         std::vector<Types::u4>& Data() { return _data; }
     private:
@@ -42,5 +40,3 @@ namespace Greis
         std::vector<Types::u4> _data;
     };
 }
-
-#endif // SvData1CustomType_h__

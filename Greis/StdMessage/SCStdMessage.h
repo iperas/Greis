@@ -29,7 +29,7 @@ namespace Greis
         const std::vector<SmoothCustomType::UniquePtr_t>& Smooth() const { return _smooth; }
         std::vector<SmoothCustomType::UniquePtr_t>& Smooth() { return _smooth; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

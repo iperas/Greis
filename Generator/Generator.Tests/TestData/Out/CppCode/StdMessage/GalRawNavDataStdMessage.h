@@ -1,9 +1,8 @@
-#ifndef GalRawNavDataStdMessage_h__
-#define GalRawNavDataStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,19 +23,22 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SV PRN number within the range [1…30]
+        // SV PRN number within the range [1…30] 
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 
-        // Time of receiving of message [s]
+        // Time of receiving of message [s] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
         // Type of data:
-        // 0 - GALILEO E1B(INAV)
-        // 1 - GALILEO E5A(FNAV)
-        // 3 - GIOVE E1B
-        // 4 - GIOVE E5A
+        // 0 - GALILEO E1B(INAV) 
+        // 1 - GALILEO E5A(FNAV) 
+        // 2 - GALILEO E5B(INAV) 
+        // 3 - GIOVE E1B (historical) 
+        // 4 - GIOVE E5A (historical) 
+        // 5 - <reserved> 
+        // 6 - GALILEO E6 
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
@@ -47,6 +49,10 @@ namespace Greis
         // Navigation data block
         const std::vector<Types::u1>& Data() const { return _data; }
         std::vector<Types::u1>& Data() { return _data; }
+
+        // Error corrections
+        const Types::i1& ErrCorr() const { return _errCorr; }
+        Types::i1& ErrCorr() { return _errCorr; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -61,8 +67,7 @@ namespace Greis
         Types::u1 _type;
         Types::u1 _len;
         std::vector<Types::u1> _data;
+        Types::i1 _errCorr;
         Types::u1 _cs;
     };
 }
-
-#endif // GalRawNavDataStdMessage_h__

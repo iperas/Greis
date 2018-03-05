@@ -31,7 +31,7 @@ namespace Greis
         const Types::u1& TimeScale() const { return _timeScale; }
         Types::u1& TimeScale() { return _timeScale; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

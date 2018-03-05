@@ -1,6 +1,6 @@
 #include "SpecDataCustomType.h"
-#include "Common/Logger.h"
 #include <cassert>
+#include "Common/Logger.h"
 
 namespace Greis
 {
@@ -9,7 +9,7 @@ namespace Greis
     {
         char* p_message = const_cast<char*>(pc_message);
     
-        /*throw ProjectBase::NotImplementedException();*/
+        /*throw Common::NotImplementedException();*/
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)

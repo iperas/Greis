@@ -1,7 +1,7 @@
 #include "RotationMatrixAndVectorsStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -28,8 +28,6 @@ namespace Greis
         p_message += sizeof(std::vector<Types::u1>::value_type) * 3;
         _serializer.Deserialize(p_message, _flag);
         p_message += sizeof(_flag);
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl0);
-        p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
         _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl1);
         p_message += sizeof(std::vector<Types::f4>::value_type) * 3;
         _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * 3, _bl2);
@@ -95,7 +93,6 @@ namespace Greis
         _serializer.Serialize(_rms, result);
         _serializer.Serialize(_solType, result);
         _serializer.Serialize(_flag, result);
-        _serializer.Serialize(_bl0, result);
         _serializer.Serialize(_bl1, result);
         _serializer.Serialize(_bl2, result);
         _serializer.Serialize(_cs, result);

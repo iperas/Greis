@@ -1,7 +1,7 @@
 #include "GLOAlmanacStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -43,8 +43,8 @@ namespace Greis
         if (BodySize() == 52)
         {
             // Optional Data Block
-            _serializer.Deserialize(p_message, _navType);
-            p_message += sizeof(_navType);
+            _serializer.Deserialize(p_message, _reserved);
+            p_message += sizeof(_reserved);
             _serializer.Deserialize(p_message, _gammaN);
             p_message += sizeof(_gammaN);
         }
@@ -118,7 +118,7 @@ namespace Greis
         if (BodySize() == 52)
         {
             // Optional Data Block
-            _serializer.Serialize(_navType, result);
+            _serializer.Serialize(_reserved, result);
             _serializer.Serialize(_gammaN, result);
         }
         _serializer.Serialize(_cs, result);

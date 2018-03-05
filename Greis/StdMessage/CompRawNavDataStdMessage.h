@@ -23,29 +23,31 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SV PRN number
+        // SV PRN number 
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 
-        // BeiDou Time of receiving of message [s]
+        // BeiDou Time of receiving of message [s] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
-        // Type of data: TBD
+        // Type of data:
+        // 0 - B1 
+        // 1 - B2 
+        // 2 - B3 
+        // 3 - B1 from GEO 
+        // 4 - B2 from GEO 
+        // 5 - B3 from GEO 
+        // 6 - B1C 
+        // 7 - B1-2 
+        // 8 - B5A 
+        // 9 - B5B 
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
-        // Length of the navigation data block ‘data’
+        // Length of the navigation data block ‘data’u4 data[len]; // Navigation data blocki1 errCorr; // Error correctionsu1 cs; // Checksum 
         const Types::u1& Len() const { return _len; }
         Types::u1& Len() { return _len; }
-
-        // Navigation data block
-        const std::vector<Types::u4>& Data() const { return _data; }
-        std::vector<Types::u4>& Data() { return _data; }
-
-        // Checksum
-        const Types::u1& Cs() const { return _cs; }
-        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
@@ -55,7 +57,5 @@ namespace Greis
         Types::u4 _time;
         Types::u1 _type;
         Types::u1 _len;
-        std::vector<Types::u4> _data;
-        Types::u1 _cs;
     };
 }

@@ -27,7 +27,7 @@ namespace Greis
         const std::vector<Types::f8>& Cp() const { return _cp; }
         std::vector<Types::f8>& Cp() { return _cp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

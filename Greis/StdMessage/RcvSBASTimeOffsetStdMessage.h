@@ -31,7 +31,7 @@ namespace Greis
         const Types::f8& Sval() const { return _sval; }
         Types::f8& Sval() { return _sval; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

@@ -31,7 +31,7 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

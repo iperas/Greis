@@ -1,9 +1,8 @@
-#ifndef DPStdMessage_h__
-#define DPStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,7 +27,7 @@ namespace Greis
         const std::vector<Types::i4>& Dp() const { return _dp; }
         std::vector<Types::i4>& Dp() { return _dp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // DPStdMessage_h__

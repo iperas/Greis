@@ -1,9 +1,8 @@
-#ifndef SpecDataCustomType_h__
-#define SpecDataCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -20,7 +19,7 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Spectrum values for n spectrums [dB*0.1]
+        // Spectrum values for n spectra [dB*0.1]
         const std::vector<Types::i2>& Spec() const { return _spec; }
         std::vector<Types::i2>& Spec() { return _spec; }
     private:
@@ -30,5 +29,3 @@ namespace Greis
         std::vector<Types::i2> _spec;
     };
 }
-
-#endif // SpecDataCustomType_h__

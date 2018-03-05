@@ -1,12 +1,11 @@
-#ifndef SvData2CustomType_h__
-#define SvData2CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
-#include "CustomType/HeaderCustomType.h"
-#include "CustomType/SlotRecCustomType.h"
+#include "Greis/CustomType/HeaderCustomType.h"
+#include "Greis/CustomType/SlotRecCustomType.h"
 
 namespace Greis
 {
@@ -23,11 +22,11 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Header (see below)
+        // Header (see below) 
         const HeaderCustomType::UniquePtr_t& Header() const { return _header; }
         HeaderCustomType::UniquePtr_t& Header() { return _header; }
 
-        // Slot records (see below)
+        // Slot records (see below) 
         const std::vector<SlotRecCustomType::UniquePtr_t>& Slot() const { return _slot; }
         std::vector<SlotRecCustomType::UniquePtr_t>& Slot() { return _slot; }
     private:
@@ -38,5 +37,3 @@ namespace Greis
         std::vector<SlotRecCustomType::UniquePtr_t> _slot;
     };
 }
-
-#endif // SvData2CustomType_h__

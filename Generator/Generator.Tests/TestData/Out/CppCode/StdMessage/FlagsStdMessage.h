@@ -1,9 +1,8 @@
-#ifndef FlagsStdMessage_h__
-#define FlagsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,7 +27,7 @@ namespace Greis
         const std::vector<Types::u2>& Flags() const { return _flags; }
         std::vector<Types::u2>& Flags() { return _flags; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // FlagsStdMessage_h__

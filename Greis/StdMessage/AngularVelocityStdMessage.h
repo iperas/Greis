@@ -23,19 +23,19 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // receiver time [ms]
+        // receiver time [ms] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
-        // X component of angular velocity [rad/s]
+        // X component of angular velocity [rad/s] 
         const Types::f4& X() const { return _x; }
         Types::f4& X() { return _x; }
 
-        // Y component of angular velocity [rad/s]
+        // Y component of angular velocity [rad/s] 
         const Types::f4& Y() const { return _y; }
         Types::f4& Y() { return _y; }
 
-        // Z component of angular velocity [rad/s]
+        // Z component of angular velocity [rad/s] 
         const Types::f4& Z() const { return _z; }
         Types::f4& Z() { return _z; }
 
@@ -43,14 +43,14 @@ namespace Greis
         const Types::f4& Rms() const { return _rms; }
         Types::f4& Rms() { return _rms; }
 
-        // flags [bitfield]:
-        // 0: 0 - no data available
-        // 1 - data are valid
-        // 7…1: reserved
+        // flags [bitfield]: 
+        // 0: 0 - no data available 
+        // 1 - data are valid 
+        // 7…1: reserved 
         const Types::u1& Flags() const { return _flags; }
         Types::u1& Flags() { return _flags; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

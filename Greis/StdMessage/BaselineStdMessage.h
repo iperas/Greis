@@ -43,11 +43,11 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // receiver time of the baseline estimate [s]
+        // receiver time of the baseline estimate [s] 
         const Types::i4& Time() const { return _time; }
         Types::i4& Time() { return _time; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

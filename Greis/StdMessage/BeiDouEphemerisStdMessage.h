@@ -26,7 +26,7 @@ namespace Greis
         virtual QByteArray ToByteArray() const;
         
         // GPS required data, ‘req.sv’ within the range [1…30]
-        // --- BeiDou-specific data block ---
+        // --- BeiDou-specific data block --
         const GpsEphReqDataCustomType::UniquePtr_t& Req() const { return _req; }
         GpsEphReqDataCustomType::UniquePtr_t& Req() { return _req; }
 
@@ -34,12 +34,19 @@ namespace Greis
         const Types::f4& Tgd2() const { return _tgd2; }
         Types::f4& Tgd2() { return _tgd2; }
 
-        // Type of navigation data
-        // --- End of BeiDou-specific data block ---
+        // Signal type[bitfield]
+        // 0 - B1 
+        // 1 - B2 
+        // 2 - B3 
         const Types::u1& NavType() const { return _navType; }
         Types::u1& NavType() { return _navType; }
 
-        // Checksum
+        // correction to ‘af0’. Exact term = af0 + DAF0
+        // --- End of BeiDou-specific data block --
+        const Types::f4& DAf0() const { return _DAf0; }
+        Types::f4& DAf0() { return _DAf0; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -50,6 +57,7 @@ namespace Greis
         GpsEphReqDataCustomType::UniquePtr_t _req;
         Types::f4 _tgd2;
         Types::u1 _navType;
+        Types::f4 _DAf0;
         Types::u1 _cs;
     };
 }

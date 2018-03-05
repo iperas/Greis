@@ -14,18 +14,20 @@ namespace Greis
     
         _serializer.Deserialize(p_message, _time);
         p_message += sizeof(_time);
-        _serializer.Deserialize(p_message, _pitch);
-        p_message += sizeof(_pitch);
-        _serializer.Deserialize(p_message, _roll);
-        p_message += sizeof(_roll);
-        _serializer.Deserialize(p_message, _heading);
-        p_message += sizeof(_heading);
-        _serializer.Deserialize(p_message, _pitchRms);
-        p_message += sizeof(_pitchRms);
-        _serializer.Deserialize(p_message, _rollRms);
-        p_message += sizeof(_rollRms);
-        _serializer.Deserialize(p_message, _headingRms);
-        p_message += sizeof(_headingRms);
+        _serializer.Deserialize(p_message, _p);
+        p_message += sizeof(_p);
+        _serializer.Deserialize(p_message, _r);
+        p_message += sizeof(_r);
+        _serializer.Deserialize(p_message, _h);
+        p_message += sizeof(_h);
+        _serializer.Deserialize(p_message, _sp);
+        p_message += sizeof(_sp);
+        _serializer.Deserialize(p_message, _sr);
+        p_message += sizeof(_sr);
+        _serializer.Deserialize(p_message, _sh);
+        p_message += sizeof(_sh);
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * 3, _solType);
+        p_message += sizeof(std::vector<Types::u1>::value_type) * 3;
         _serializer.Deserialize(p_message, _flags);
         p_message += sizeof(_flags);
         _serializer.Deserialize(p_message, _cs);
@@ -82,12 +84,13 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_time, result);
-        _serializer.Serialize(_pitch, result);
-        _serializer.Serialize(_roll, result);
-        _serializer.Serialize(_heading, result);
-        _serializer.Serialize(_pitchRms, result);
-        _serializer.Serialize(_rollRms, result);
-        _serializer.Serialize(_headingRms, result);
+        _serializer.Serialize(_p, result);
+        _serializer.Serialize(_r, result);
+        _serializer.Serialize(_h, result);
+        _serializer.Serialize(_sp, result);
+        _serializer.Serialize(_sr, result);
+        _serializer.Serialize(_sh, result);
+        _serializer.Serialize(_solType, result);
         _serializer.Serialize(_flags, result);
         _serializer.Serialize(_cs, result);
         

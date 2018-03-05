@@ -1,9 +1,8 @@
-#ifndef NavStatusStdMessage_h__
-#define NavStatusStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,11 +27,11 @@ namespace Greis
         const std::vector<Types::u1>& Ns() const { return _ns; }
         std::vector<Types::u1>& Ns() { return _ns; }
 
-        // Solution type
+        // Solution type 
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -45,5 +44,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // NavStatusStdMessage_h__

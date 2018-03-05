@@ -1,7 +1,7 @@
 #include "SbasRawNavDataStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -16,10 +16,14 @@ namespace Greis
         p_message += sizeof(_prn);
         _serializer.Deserialize(p_message, _time);
         p_message += sizeof(_time);
-        _serializer.Deserialize(p_message, _reserv);
-        p_message += sizeof(_reserv);
+        _serializer.Deserialize(p_message, _type);
+        p_message += sizeof(_type);
+        _serializer.Deserialize(p_message, _len);
+        p_message += sizeof(_len);
         _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * 32, _data);
         p_message += sizeof(std::vector<Types::u1>::value_type) * 32;
+        _serializer.Deserialize(p_message, _errCorr);
+        p_message += sizeof(_errCorr);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -75,8 +79,10 @@ namespace Greis
 
         _serializer.Serialize(_prn, result);
         _serializer.Serialize(_time, result);
-        _serializer.Serialize(_reserv, result);
+        _serializer.Serialize(_type, result);
+        _serializer.Serialize(_len, result);
         _serializer.Serialize(_data, result);
+        _serializer.Serialize(_errCorr, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

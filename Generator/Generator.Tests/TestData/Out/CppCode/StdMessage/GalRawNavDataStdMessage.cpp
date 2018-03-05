@@ -1,7 +1,7 @@
 #include "GalRawNavDataStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -12,7 +12,7 @@ namespace Greis
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 8) / 1;
+        int arraySizeInUniformFillFields = (BodySize() - 9) / 1;
 
         _serializer.Deserialize(p_message, _prn);
         p_message += sizeof(_prn);
@@ -24,6 +24,8 @@ namespace Greis
         p_message += sizeof(_len);
         _serializer.Deserialize(p_message, sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields, _data);
         p_message += sizeof(std::vector<Types::u1>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, _errCorr);
+        p_message += sizeof(_errCorr);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -82,6 +84,7 @@ namespace Greis
         _serializer.Serialize(_type, result);
         _serializer.Serialize(_len, result);
         _serializer.Serialize(_data, result);
+        _serializer.Serialize(_errCorr, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

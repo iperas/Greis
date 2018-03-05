@@ -1,7 +1,7 @@
 #include "GalUtcGpsParamStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -14,8 +14,6 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 23, _utc);
         p_message += 23;
-        _serializer.Deserialize(p_message, _a0g);
-        p_message += sizeof(_a0g);
         _serializer.Deserialize(p_message, _a1g);
         p_message += sizeof(_a1g);
         _serializer.Deserialize(p_message, _t0g);
@@ -78,7 +76,6 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_utc, result);
-        _serializer.Serialize(_a0g, result);
         _serializer.Serialize(_a1g, result);
         _serializer.Serialize(_t0g, result);
         _serializer.Serialize(_wn0g, result);

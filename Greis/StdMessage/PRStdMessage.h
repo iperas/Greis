@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Pseudorange, [s]
+        // Pseudo-range, [s] 
         const std::vector<Types::f8>& Pr() const { return _pr; }
         std::vector<Types::f8>& Pr() { return _pr; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

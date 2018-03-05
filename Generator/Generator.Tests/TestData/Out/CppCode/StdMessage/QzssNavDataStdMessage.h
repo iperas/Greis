@@ -1,11 +1,10 @@
-#ifndef QzssNavDataStdMessage_h__
-#define QzssNavDataStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GpsNavData1CustomType.h"
+#include "Greis/CustomType/GpsNavData1CustomType.h"
 
 namespace Greis
 {
@@ -37,5 +36,3 @@ namespace Greis
         GpsNavData1CustomType::UniquePtr_t _data;
     };
 }
-
-#endif // QzssNavDataStdMessage_h__

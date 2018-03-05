@@ -1,7 +1,7 @@
 #include "CompRawNavDataStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -12,8 +12,6 @@ namespace Greis
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 8) / 4;
-
         _serializer.Deserialize(p_message, _prn);
         p_message += sizeof(_prn);
         _serializer.Deserialize(p_message, _time);
@@ -22,10 +20,6 @@ namespace Greis
         p_message += sizeof(_type);
         _serializer.Deserialize(p_message, _len);
         p_message += sizeof(_len);
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields, _data);
-        p_message += sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, _cs);
-        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -53,8 +47,7 @@ namespace Greis
             return false;
         }
 
-        auto message = ToByteArray();
-        return validateChecksum8Bin(message.data(), message.size());
+        return true;
     }
     
     void CompRawNavDataStdMessage::RecalculateChecksum()
@@ -63,8 +56,7 @@ namespace Greis
         {
             return;
         }
-        auto message = ToByteArray();
-        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
+        
     }
 
     QByteArray CompRawNavDataStdMessage::ToByteArray() const
@@ -81,8 +73,6 @@ namespace Greis
         _serializer.Serialize(_time, result);
         _serializer.Serialize(_type, result);
         _serializer.Serialize(_len, result);
-        _serializer.Serialize(_data, result);
-        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

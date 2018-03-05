@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // (PR[s] - CA/L1 PR[s] - 2*10-7) * 1011
+        // (PR[s] - REF[s] - 2*10-7) * 1011 
         const std::vector<Types::i2>& Srpr() const { return _srpr; }
         std::vector<Types::i2>& Srpr() { return _srpr; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

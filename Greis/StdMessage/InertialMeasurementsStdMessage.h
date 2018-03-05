@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // ax,ay,az [m/sec]
+        // ax,ay,az [m/sec2]
         const std::vector<Types::f4>& Accelerations() const { return _accelerations; }
         std::vector<Types::f4>& Accelerations() { return _accelerations; }
 
-        // wx,wy,wz [rad/sec]
+        // wx,wy,wz [rad/sec] 
         const std::vector<Types::f4>& AngularVelocities() const { return _angularVelocities; }
         std::vector<Types::f4>& AngularVelocities() { return _angularVelocities; }
 

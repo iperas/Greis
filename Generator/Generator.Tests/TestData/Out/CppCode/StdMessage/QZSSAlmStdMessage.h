@@ -1,11 +1,10 @@
-#ifndef QZSSAlmStdMessage_h__
-#define QZSSAlmStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GPSAlm1CustomType.h"
+#include "Greis/CustomType/GPSAlm1CustomType.h"
 
 namespace Greis
 {
@@ -26,21 +25,14 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Without ‘cs’ field, gps.sv within the range [193…197]
+        // ‘gps.sv’ within the range [193…197]
         const GPSAlm1CustomType::UniquePtr_t& Gps() const { return _gps; }
         GPSAlm1CustomType::UniquePtr_t& Gps() { return _gps; }
-
-        // Checksum
-        const Types::u1& Cs() const { return _cs; }
-        Types::u1& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
         bool _isCorrect;
 
         GPSAlm1CustomType::UniquePtr_t _gps;
-        Types::u1 _cs;
     };
 }
-
-#endif // QZSSAlmStdMessage_h__

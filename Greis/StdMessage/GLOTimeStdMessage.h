@@ -28,11 +28,11 @@ namespace Greis
         Types::u4& Tod() { return _tod; }
 
         // GLONASS day number (modulo 4 years
-        // starting from 1996) []
+        // starting from 1996) [] 
         const Types::u2& Dn() const { return _dn; }
         Types::u2& Dn() { return _dn; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

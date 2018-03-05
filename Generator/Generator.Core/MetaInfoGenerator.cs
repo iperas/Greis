@@ -57,7 +57,13 @@ namespace Generator.Core
                 "GE",
                 "NE",
                 "WE",
-                "EN"
+                "EN",
+                "IA",
+                "CA",
+                "QA",
+                "QE",
+                "CN",
+                "IE"
             };
 
         private static readonly List<string> MessagesWithUniformFillBehavior = new List<string>
@@ -119,7 +125,7 @@ namespace Generator.Core
                         msg.Validation = ValidationType.Crc16;
                     } else
                     {
-                        
+
                     }
                 }
 
@@ -190,6 +196,7 @@ namespace Generator.Core
             // fixed in 03-2012 version
             //var waasEphemeris = (CustomType) metaInfo.StandardMessages.First(m => m.Name == "WAASEhemeris");
             //waasEphemeris.Size = 71;
+
         }
 
         private static void AddGpsAlmsAndEphemerisTypes(MetaInfo metaInfo)
@@ -256,14 +263,14 @@ namespace Generator.Core
             {
                 resolvingPointsCountPrevIter = resolvingPointsCount;
 
-                var resolvingPoints = types.Where(ct => ct.Size < 0 && !ct.ContainsOptionalDataBlock && 
+                var resolvingPoints = types.Where(ct => ct.Size < 0 && !ct.ContainsOptionalDataBlock &&
                     ct.Variables.All(v => nameToSizeCache.ContainsKey(v.GreisType) && v.SizeOfDimensions.All(s => s >= 0))).ToList();
 
                 resolvingPointsCount = resolvingPoints.Count;
 
                 foreach (var customType in resolvingPoints)
                 {
-                    int size = customType.Variables.Sum(v => nameToSizeCache[v.GreisType] * 
+                    int size = customType.Variables.Sum(v => nameToSizeCache[v.GreisType] *
                         (v.IsScalar ? 1 : v.SizeOfDimensions.Aggregate(1, (s1, s2) => s1 * s2)));
                     customType.Size = size;
                     nameToSizeCache[customType.Name] = size;

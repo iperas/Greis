@@ -27,7 +27,7 @@ namespace Greis
         const std::vector<Types::i4>& Dp() const { return _dp; }
         std::vector<Types::i4>& Dp() { return _dp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

@@ -19,31 +19,31 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Constant term of polynomial [s]
+        // Constant term of polynomial [s] 
         const Types::f8& A0() const { return _a0; }
         Types::f8& A0() { return _a0; }
 
-        // First order term of polynomial [s/s]
+        // First order term of polynomial [s/s] 
         const Types::f4& A1() const { return _a1; }
         Types::f4& A1() { return _a1; }
 
-        // Reference time of week [s]
+        // Reference time of week [s] 
         const Types::u4& Tot() const { return _tot; }
         Types::u4& Tot() { return _tot; }
 
-        // Reference week number []
+        // Reference week number [] 
         const Types::u2& Wnt() const { return _wnt; }
         Types::u2& Wnt() { return _wnt; }
 
-        // Delta time due to leap seconds [s]
+        // Delta time due to leap seconds [s] 
         const Types::i1& Dtls() const { return _dtls; }
         Types::i1& Dtls() { return _dtls; }
 
-        // 'Future' reference day number [1…7] []
+        // 'Future' reference day number [1…7] [] 
         const Types::u1& Dn() const { return _dn; }
         Types::u1& Dn() { return _dn; }
 
-        // 'Future' reference week number []
+        // 'Future' reference week number [] 
         const Types::u2& Wnlsf() const { return _wnlsf; }
         Types::u2& Wnlsf() { return _wnlsf; }
 

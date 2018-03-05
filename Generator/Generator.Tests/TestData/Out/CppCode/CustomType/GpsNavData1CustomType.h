@@ -1,11 +1,10 @@
-#ifndef GpsNavData1CustomType_h__
-#define GpsNavData1CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
-#include "CustomType/SvData0CustomType.h"
+#include "Greis/CustomType/SvData0CustomType.h"
 
 namespace Greis
 {
@@ -26,13 +25,13 @@ namespace Greis
         const Types::u1& RecSize() const { return _recSize; }
         Types::u1& RecSize() { return _recSize; }
 
-        // Satellite data. “N” can be derived from the
+        // Satellite data. “N” can be derived from the 
         // following expression:
-        // N=([Message Length] - 2) / recSize)
+        // N=([Message Length] - 2) / recSize) 
         const std::vector<SvData0CustomType::UniquePtr_t>& Dat() const { return _dat; }
         std::vector<SvData0CustomType::UniquePtr_t>& Dat() { return _dat; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -44,5 +43,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // GpsNavData1CustomType_h__

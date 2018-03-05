@@ -22,11 +22,11 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Header (see below)
+        // Header (see below) 
         const HeaderCustomType::UniquePtr_t& Header() const { return _header; }
         HeaderCustomType::UniquePtr_t& Header() { return _header; }
 
-        // Slot records (see below)
+        // Slot records (see below) 
         const std::vector<SlotRecCustomType::UniquePtr_t>& Slot() const { return _slot; }
         std::vector<SlotRecCustomType::UniquePtr_t>& Slot() { return _slot; }
     private:

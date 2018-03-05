@@ -1,9 +1,8 @@
-#ifndef GeoPosStdMessage_h__
-#define GeoPosStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,15 +23,15 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Latitude [rad]
+        // Latitude [rad] 
         const Types::f8& Lat() const { return _lat; }
         Types::f8& Lat() { return _lat; }
 
-        // Longitude [rad]
+        // Longitude [rad] 
         const Types::f8& Lon() const { return _lon; }
         Types::f8& Lon() { return _lon; }
 
-        // Ellipsoidal height [m]
+        // Ellipsoidal height [m] 
         const Types::f8& Alt() const { return _alt; }
         Types::f8& Alt() { return _alt; }
 
@@ -44,7 +43,7 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -60,5 +59,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // GeoPosStdMessage_h__

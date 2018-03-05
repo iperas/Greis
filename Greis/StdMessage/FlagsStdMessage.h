@@ -27,7 +27,7 @@ namespace Greis
         const std::vector<Types::u2>& Flags() const { return _flags; }
         std::vector<Types::u2>& Flags() { return _flags; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

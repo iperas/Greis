@@ -1,9 +1,8 @@
-#ifndef RCPRc1StdMessage_h__
-#define RCPRc1StdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // cp / FLn - pr_rc, [s*2-40]
+        // cp / FLn - pr_ref, [s*2-40]
         const std::vector<Types::i4>& Rcp() const { return _rcp; }
         std::vector<Types::i4>& Rcp() { return _rcp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // RCPRc1StdMessage_h__

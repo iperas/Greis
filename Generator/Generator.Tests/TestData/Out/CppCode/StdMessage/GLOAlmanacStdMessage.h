@@ -1,9 +1,8 @@
-#ifndef GLOAlmanacStdMessage_h__
-#define GLOAlmanacStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Satellite orbit slot number within [1…24] []
+        // Satellite orbit slot number within [1…32] []
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 
@@ -32,27 +31,26 @@ namespace Greis
         const Types::i1& FrqNum() const { return _frqNum; }
         Types::i1& FrqNum() { return _frqNum; }
 
-        // Day number within 4-year period starting
-        // with the leap year []
+        // Day number within 4-year period starting 
+        // with the leap year [] 
         const Types::i2& Dna() const { return _dna; }
         Types::i2& Dna() { return _dna; }
 
-        // Time of the first ascending node passage
-        // on day ‘dna’ [s]
+        // Time of the first ascending node passage 
+        // on day ‘dna’ [s] 
         const Types::f4& Tlam() const { return _tlam; }
         Types::f4& Tlam() { return _tlam; }
 
-        // Satellite flags [bitfield]:
-        // 0 - health: 1 - healthy SV, as specified
-        // by ‘Cn’, 0 - unhealthy
-        // 1 - SVs type: 0 - GLONASS, 1 - GLONASS-M
-        // 2…7 - reserved
+        // Satellite flags [bitfield]: 
+        // 0 - health: 1 - healthy SV, as specified 
+        // by ‘Cn’, 0 - unhealthy 
+        // 1 - SVs type: 0 - GLONASS, 1 - GLONASS-M 
+        // 2…7 - reserved 
         // ======= Clock data =======
         const Types::u1& Flags() const { return _flags; }
         Types::u1& Flags() { return _flags; }
 
-        // Coarse time correction to SV clock
-        // with respect to GLONASS system time [s]
+        // Coarse time correction to SV clock// with respect to GLONASS system time [s]
         const Types::f4& TauN() const { return _tauN; }
         Types::f4& TauN() { return _tauN; }
 
@@ -71,8 +69,7 @@ namespace Greis
         const Types::f4& Lambda() const { return _lambda; }
         Types::f4& Lambda() { return _lambda; }
 
-        // Argument of perigee
-        // at reference time ‘tlam’ [semi-circles]
+        // Argument of perigee// at reference time ‘tlam’ [semi-circles] 
         const Types::f4& ArgPer() const { return _argPer; }
         Types::f4& ArgPer() { return _argPer; }
 
@@ -86,26 +83,26 @@ namespace Greis
         Types::f4& DelTdt() { return _delTdt; }
 
         // Correction to inclination
-        // at reference time ‘tlam’[semi-circles]
+        // at reference time ‘tlam’[semi-circles] 
         const Types::f4& Deli() const { return _deli; }
         Types::f4& Deli() { return _deli; }
 
         // Number of 4-year period []
-        // --- Optional data block ---
+        // --- Optional data block --
         const Types::u1& N4() const { return _n4; }
         Types::u1& N4() { return _n4; }
 
-        // Signal type nav. data was decoded from
-        const Types::u1& NavType() const { return _navType; }
-        Types::u1& NavType() { return _navType; }
+        // <reserved>
+        const Types::u1& Reserved() const { return _reserved; }
+        Types::u1& Reserved() { return _reserved; }
 
         // Rate of coarse satellite clock correction to
         // GLONASS time scale [s/s]
-        // --- End of optional data block ---
+        // --- End of optional data block --
         const Types::f4& GammaN() const { return _gammaN; }
         Types::f4& GammaN() { return _gammaN; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -127,10 +124,8 @@ namespace Greis
         Types::f4 _delTdt;
         Types::f4 _deli;
         Types::u1 _n4;
-        Types::u1 _navType;
+        Types::u1 _reserved;
         Types::f4 _gammaN;
         Types::u1 _cs;
     };
 }
-
-#endif // GLOAlmanacStdMessage_h__

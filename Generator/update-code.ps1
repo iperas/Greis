@@ -12,7 +12,7 @@ $testContainer = '/testcontainer:' + $root + 'Generator.Tests\bin\Release\Genera
 
 $buildDir = $root + 'build'
 $outputMetaDir = $root + 'Output'
-$outputDir = (get-item ($root + '..\Greis')).FullName
+$outputDir = (get-item ($root + '..\')).FullName
 
 $greisSource = $root + 'Data\greis-manual.txt'
 $metaXmlDir = $buildDir

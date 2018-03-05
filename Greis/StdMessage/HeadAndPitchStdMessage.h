@@ -24,7 +24,7 @@ namespace Greis
         virtual QByteArray ToByteArray() const;
         
         // Heading of the baseline between the base and the
-        // rover receiver [degrees]
+        // rover receiver [degrees] 
         const Types::f4& Heading() const { return _heading; }
         Types::f4& Heading() { return _heading; }
 
@@ -37,7 +37,7 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

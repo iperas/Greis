@@ -1,9 +1,8 @@
-#ifndef RotationAnglesStdMessage_h__
-#define RotationAnglesStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,42 +23,46 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // receiver time [ms]
+        // Receiver time [ms] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
-        // pitch angle [deg]
-        const Types::f4& Pitch() const { return _pitch; }
-        Types::f4& Pitch() { return _pitch; }
+        // Pitch ,roll , heading angles [deg] 
+        const Types::f4& P() const { return _p; }
+        Types::f4& P() { return _p; }
 
-        // roll angle [deg]
-        const Types::f4& Roll() const { return _roll; }
-        Types::f4& Roll() { return _roll; }
+        // Pitch ,roll , heading angles [deg] 
+        const Types::f4& R() const { return _r; }
+        Types::f4& R() { return _r; }
 
-        // heading angle [deg]
-        const Types::f4& Heading() const { return _heading; }
-        Types::f4& Heading() { return _heading; }
+        // Pitch ,roll , heading angles [deg] 
+        const Types::f4& H() const { return _h; }
+        Types::f4& H() { return _h; }
 
-        // pitch angle RMS [deg]
-        const Types::f4& PitchRms() const { return _pitchRms; }
-        Types::f4& PitchRms() { return _pitchRms; }
+        // Pitch, roll, heading angles RMS[deg]
+        const Types::f4& Sp() const { return _sp; }
+        Types::f4& Sp() { return _sp; }
 
-        // roll angle RMS [deg]
-        const Types::f4& RollRms() const { return _rollRms; }
-        Types::f4& RollRms() { return _rollRms; }
+        // Pitch, roll, heading angles RMS[deg]
+        const Types::f4& Sr() const { return _sr; }
+        Types::f4& Sr() { return _sr; }
 
-        // heading angle RMS [deg]
-        const Types::f4& HeadingRms() const { return _headingRms; }
-        Types::f4& HeadingRms() { return _headingRms; }
+        // Pitch, roll, heading angles RMS[deg]
+        const Types::f4& Sh() const { return _sh; }
+        Types::f4& Sh() { return _sh; }
+
+        // Solution type for 3 base lines
+        const std::vector<Types::u1>& SolType() const { return _solType; }
+        std::vector<Types::u1>& SolType() { return _solType; }
 
         // flags [bitfield]:
-        // 0: 0 - no data available
-        // 1 - data are valid
-        // 7…1: reserved
+        // 0: 0 - no data available 
+        // 1 - data are valid 
+        // 7…1: reserved 
         const Types::u1& Flags() const { return _flags; }
         Types::u1& Flags() { return _flags; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -68,15 +71,14 @@ namespace Greis
         bool _isCorrect;
 
         Types::u4 _time;
-        Types::f4 _pitch;
-        Types::f4 _roll;
-        Types::f4 _heading;
-        Types::f4 _pitchRms;
-        Types::f4 _rollRms;
-        Types::f4 _headingRms;
+        Types::f4 _p;
+        Types::f4 _r;
+        Types::f4 _h;
+        Types::f4 _sp;
+        Types::f4 _sr;
+        Types::f4 _sh;
+        std::vector<Types::u1> _solType;
         Types::u1 _flags;
         Types::u1 _cs;
     };
 }
-
-#endif // RotationAnglesStdMessage_h__

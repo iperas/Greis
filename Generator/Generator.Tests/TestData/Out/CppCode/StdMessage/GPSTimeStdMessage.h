@@ -1,9 +1,8 @@
-#ifndef GPSTimeStdMessage_h__
-#define GPSTimeStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,11 +27,11 @@ namespace Greis
         const Types::u4& Tow() const { return _tow; }
         Types::u4& Tow() { return _tow; }
 
-        // GPS week number (modulo 1024) []
+        // GPS week number (modulo 1024) [] 
         const Types::u2& Wn() const { return _wn; }
         Types::u2& Wn() { return _wn; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -45,5 +44,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // GPSTimeStdMessage_h__

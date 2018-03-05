@@ -1,6 +1,6 @@
 #include "UtcOffsCustomType.h"
-#include "Common/Logger.h"
 #include <cassert>
+#include "Common/Logger.h"
 
 namespace Greis
 {

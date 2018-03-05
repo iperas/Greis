@@ -27,7 +27,7 @@ namespace Greis
         const std::vector<Types::i2>& Smooth() const { return _smooth; }
         std::vector<Types::i2>& Smooth() { return _smooth; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

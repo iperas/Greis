@@ -29,7 +29,7 @@ namespace Greis
         const UtcOffsCustomType::UniquePtr_t& Utc() const { return _utc; }
         UtcOffsCustomType::UniquePtr_t& Utc() { return _utc; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

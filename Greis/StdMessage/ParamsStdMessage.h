@@ -23,24 +23,14 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Parameters description
+        // Parameters descriptiona1 delim[2] = “,@”; // Checksum delimitera1 cs[2]; // Checksum formatted as hexadecimal 
         const std::string& Params() const { return _params; }
         std::string& Params() { return _params; }
-
-        // Checksum delimiter
-        const std::string& Delim() const { return _delim; }
-        std::string& Delim() { return _delim; }
-
-        // Checksum formatted as hexadecimal
-        const std::string& Cs() const { return _cs; }
-        std::string& Cs() { return _cs; }
     private:
         std::string _id;
         int _bodySize;
         bool _isCorrect;
 
         std::string _params;
-        std::string _delim;
-        std::string _cs;
     };
 }

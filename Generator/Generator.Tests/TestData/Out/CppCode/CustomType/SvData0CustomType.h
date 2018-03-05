@@ -1,9 +1,8 @@
-#ifndef SvData0CustomType_h__
-#define SvData0CustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -20,17 +19,16 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Pseudo-Range Number (PRN)
+        // Pseudo-Range Number (PRN) 
         const Types::i1& Prn() const { return _prn; }
         Types::i1& Prn() { return _prn; }
 
         // Counter which is updated upon receiving a
-        // new sub-frame for given satellite.
+        // new sub-frame for given satellite. 
         const Types::u1& Cnt() const { return _cnt; }
         Types::u1& Cnt() { return _cnt; }
 
-        // GPS sub-frame contents. Every 4-bytes word
-        // contains 30 LSB of the GPS navigation data.
+        // GPS sub-frame contents. Every 4-bytes word// contains 30 LSB of the GPS navigation data. 
         const std::vector<Types::u4>& Data() const { return _data; }
         std::vector<Types::u4>& Data() { return _data; }
     private:
@@ -42,5 +40,3 @@ namespace Greis
         std::vector<Types::u4> _data;
     };
 }
-
-#endif // SvData0CustomType_h__

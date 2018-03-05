@@ -36,14 +36,14 @@ namespace Greis
         Types::f4& Z() { return _z; }
 
         // Velocity SEP [m/s]
-        const Types::f4& Sigma() const { return _sigma; }
-        Types::f4& Sigma() { return _sigma; }
+        const Types::f4& VSigma() const { return _vSigma; }
+        Types::f4& VSigma() { return _vSigma; }
 
         // Solution type
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -54,7 +54,7 @@ namespace Greis
         Types::f4 _x;
         Types::f4 _y;
         Types::f4 _z;
-        Types::f4 _sigma;
+        Types::f4 _vSigma;
         Types::u1 _solType;
         Types::u1 _cs;
     };

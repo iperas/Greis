@@ -1,9 +1,8 @@
-#ifndef InertialMeasurementsStdMessage_h__
-#define InertialMeasurementsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // ax,ay,az [m/sec]
+        // ax,ay,az [m/sec2]
         const std::vector<Types::f4>& Accelerations() const { return _accelerations; }
         std::vector<Types::f4>& Accelerations() { return _accelerations; }
 
-        // wx,wy,wz [rad/sec]
+        // wx,wy,wz [rad/sec] 
         const std::vector<Types::f4>& AngularVelocities() const { return _angularVelocities; }
         std::vector<Types::f4>& AngularVelocities() { return _angularVelocities; }
 
@@ -45,5 +44,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // InertialMeasurementsStdMessage_h__

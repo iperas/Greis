@@ -1,6 +1,6 @@
 #include "GpsRawNavData1CustomType.h"
-#include "Common/Logger.h"
 #include <cassert>
+#include "Common/Logger.h"
 
 namespace Greis
 {
@@ -9,7 +9,7 @@ namespace Greis
     {
         char* p_message = const_cast<char*>(pc_message);
     
-        int arraySizeInUniformFillFields = (Size() - 8) / 4;
+        int arraySizeInUniformFillFields = (Size() - 9) / 4;
 
         _serializer.Deserialize(p_message, _prn);
         p_message += sizeof(_prn);
@@ -21,6 +21,8 @@ namespace Greis
         p_message += sizeof(_len);
         _serializer.Deserialize(p_message, sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields, _data);
         p_message += sizeof(std::vector<Types::u4>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, _errCorr);
+        p_message += sizeof(_errCorr);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -51,6 +53,7 @@ namespace Greis
         _serializer.Serialize(_type, result);
         _serializer.Serialize(_len, result);
         _serializer.Serialize(_data, result);
+        _serializer.Serialize(_errCorr, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

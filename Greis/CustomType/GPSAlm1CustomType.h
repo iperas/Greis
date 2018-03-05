@@ -19,11 +19,11 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // SV PRN number within the range [1…37]
+        // SV PRN number within the range [1…37] 
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 
-        // Almanac reference week []
+        // Almanac reference week [] 
         const Types::i2& Wna() const { return _wna; }
         Types::i2& Wna() { return _wna; }
 
@@ -32,53 +32,49 @@ namespace Greis
         Types::i4& Toa() { return _toa; }
 
         // Health summary (from almanac), [bitfield]
-        // 0…4 - code for health of SV signal components
-        // 5…7 - navigation data health indicators
+        // 0…4 - code for health of SV signal components 
+        // 5…7 - navigation data health indicatorsu1 healthS; // Satellite health (page 25 of subframe 5) []
         const Types::u1& HealthA() const { return _healthA; }
         Types::u1& HealthA() { return _healthA; }
 
-        // Satellite health (page 25 of subframe 5) []
-        const Types::u1& HealthS() const { return _healthS; }
-        Types::u1& HealthS() { return _healthS; }
-
         // Satellite configuration (page 25 of subframe 4)
-        // [bitfield]:
-        // 0…2 - satellite configuration
-        // 3 - anti-spoofing flag
-        // 4…7 - reserved
+        // [bitfield]: 
+        // 0…2 - satellite configuration 
+        // 3 - anti-spoofing flag 
+        // 4…7 - reserved 
         // ======= Clock data =======
         const Types::u1& Config() const { return _config; }
         Types::u1& Config() { return _config; }
 
-        // Polynomial coefficient [s/s]
+        // Polynomial coefficient [s/s] 
         const Types::f4& Af1() const { return _af1; }
         Types::f4& Af1() { return _af1; }
 
         // Polynomial coefficient [s]
         // ===== Ephemeris data =====
-        // --- Keplerian orbital parameters ---
+        // --- Keplerian orbital parameters --
         const Types::f4& Af0() const { return _af0; }
         Types::f4& Af0() { return _af0; }
 
-        // Square root of the semi-major axis [m^0.5]
+        // Square root of the semi-major axis [m^0.5] 
         const Types::f4& RootA() const { return _rootA; }
         Types::f4& RootA() { return _rootA; }
 
-        // Eccentricity []
+        // Eccentricity [] 
         const Types::f4& Ecc() const { return _ecc; }
         Types::f4& Ecc() { return _ecc; }
 
-        // Mean Anomaly at reference time [semi-circles]
+        // Mean Anomaly at reference time [semi-circles] 
         const Types::f4& M0() const { return _m0; }
         Types::f4& M0() { return _m0; }
 
         // Longitude of ascending node of orbit plane
-        // at the start of week ‘wna’ [semi-circles]
+        // at the start of week ‘wna’ [semi-circles] 
         const Types::f4& Omega0() const { return _omega0; }
         Types::f4& Omega0() { return _omega0; }
 
         // Argument of perigee [semi-circles]
-        // --- Corrections to orbital parameters ---
+        // --- Corrections to orbital parameters --
         const Types::f4& ArgPer() const { return _argPer; }
         Types::f4& ArgPer() { return _argPer; }
 
@@ -97,7 +93,6 @@ namespace Greis
         Types::i2 _wna;
         Types::i4 _toa;
         Types::u1 _healthA;
-        Types::u1 _healthS;
         Types::u1 _config;
         Types::f4 _af1;
         Types::f4 _af0;

@@ -47,17 +47,13 @@ namespace Greis
         const std::vector<Types::f4>& Rms() const { return _rms; }
         std::vector<Types::f4>& Rms() { return _rms; }
 
-        // solution type11 for three baseline vectors
+        // solution type8 for three baseline vectors 
         const std::vector<Types::u1>& SolType() const { return _solType; }
         std::vector<Types::u1>& SolType() { return _solType; }
 
-        // 0 – components of matrix Q are invalid, 1 - valid
+        // 0 – components of matrix Q are invalid, 1 - validf4 bl0[3]; // baseline vector M-S0 in the current epoch[m]
         const Types::u1& Flag() const { return _flag; }
         Types::u1& Flag() { return _flag; }
-
-        // baseline vector M-S0 in the current epoch[m]
-        const std::vector<Types::f4>& Bl0() const { return _bl0; }
-        std::vector<Types::f4>& Bl0() { return _bl0; }
 
         // baseline vector M-S1 in the current epoch[m]
         const std::vector<Types::f4>& Bl1() const { return _bl1; }
@@ -67,7 +63,7 @@ namespace Greis
         const std::vector<Types::f4>& Bl2() const { return _bl2; }
         std::vector<Types::f4>& Bl2() { return _bl2; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -83,7 +79,6 @@ namespace Greis
         std::vector<Types::f4> _rms;
         std::vector<Types::u1> _solType;
         Types::u1 _flag;
-        std::vector<Types::f4> _bl0;
         std::vector<Types::f4> _bl1;
         std::vector<Types::f4> _bl2;
         Types::u1 _cs;

@@ -1,11 +1,10 @@
-#ifndef GALEphemerisStdMessage_h__
-#define GALEphemerisStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GpsEphReqDataCustomType.h"
+#include "Greis/CustomType/GpsEphReqDataCustomType.h"
 
 namespace Greis
 {
@@ -27,7 +26,7 @@ namespace Greis
         virtual QByteArray ToByteArray() const;
         
         // GPS required data, ‘req.sv’ within the range [1…30]
-        // --- GALILEO-specific data block ---
+        // --- GALILEO-specific data block --
         const GpsEphReqDataCustomType::UniquePtr_t& Req() const { return _req; }
         GpsEphReqDataCustomType::UniquePtr_t& Req() { return _req; }
 
@@ -39,15 +38,15 @@ namespace Greis
         const Types::f4& BgdE1E5b() const { return _bgdE1E5b; }
         Types::f4& BgdE1E5b() { return _bgdE1E5b; }
 
-        // Effective ionisation level 1-st order parameter []
+        // Effective ionisation level 1-st order parameter [] 
         const Types::f4& Ai0() const { return _ai0; }
         Types::f4& Ai0() { return _ai0; }
 
-        // Effective ionisation level 2-nd order parameter []
+        // Effective ionisation level 2-nd order parameter [] 
         const Types::f4& Ai1() const { return _ai1; }
         Types::f4& Ai1() { return _ai1; }
 
-        // Effective ionisation level 3-rd order parameter []
+        // Effective ionisation level 3-rd order parameter [] 
         const Types::f4& Ai2() const { return _ai2; }
         Types::f4& Ai2() { return _ai2; }
 
@@ -55,16 +54,22 @@ namespace Greis
         const Types::u1& Sfi() const { return _sfi; }
         Types::u1& Sfi() { return _sfi; }
 
-        // Type of navigation data:
-        // 0 - GALILEO E1B(INAV)
-        // 1 - GALILEO E5A(FNAV)
-        // 3 - GIOVE E1B
-        // 4 - GIOVE E5A
-        // --- End of GALILEO-specific data block ---
+        // Signal type [bitfield]:
+        // 0 - GALILEO E1B(INAV) 
+        // 1 - GALILEO E5A(FNAV) 
+        // 2 - GALILEO E5B(INAV) 
+        // 3 - GIOVE E1B (historical) 
+        // 4 - GIOVE E5A (historical) 
+        // 5 - <reserved> 
+        // 6 - GALILEO E6 
         const Types::u1& NavType() const { return _navType; }
         Types::u1& NavType() { return _navType; }
 
-        // Checksum
+        // correction to ‘af0’. Exact term = af0 + DAF0// --- End of GALILEO-specific data block --
+        const Types::f4& DAf0() const { return _DAf0; }
+        Types::f4& DAf0() { return _DAf0; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -80,8 +85,7 @@ namespace Greis
         Types::f4 _ai2;
         Types::u1 _sfi;
         Types::u1 _navType;
+        Types::f4 _DAf0;
         Types::u1 _cs;
     };
 }
-
-#endif // GALEphemerisStdMessage_h__

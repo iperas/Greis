@@ -1,7 +1,7 @@
 #include "RPRStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -12,12 +12,7 @@ namespace Greis
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 1) / 4;
-
-        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields, _rpr);
-        p_message += sizeof(std::vector<Types::f4>::value_type) * arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, _cs);
-        p_message += sizeof(_cs);
+        /*throw Common::NotImplementedException();*/
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)

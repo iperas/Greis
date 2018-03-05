@@ -29,7 +29,7 @@ namespace Greis
         const GPSEphemeris1CustomType::UniquePtr_t& Gps() const { return _gps; }
         GPSEphemeris1CustomType::UniquePtr_t& Gps() { return _gps; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

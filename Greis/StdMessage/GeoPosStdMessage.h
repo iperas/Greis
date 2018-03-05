@@ -23,15 +23,15 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Latitude [rad]
+        // Latitude [rad] 
         const Types::f8& Lat() const { return _lat; }
         Types::f8& Lat() { return _lat; }
 
-        // Longitude [rad]
+        // Longitude [rad] 
         const Types::f8& Lon() const { return _lon; }
         Types::f8& Lon() { return _lon; }
 
-        // Ellipsoidal height [m]
+        // Ellipsoidal height [m] 
         const Types::f8& Alt() const { return _alt; }
         Types::f8& Alt() { return _alt; }
 
@@ -43,7 +43,7 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

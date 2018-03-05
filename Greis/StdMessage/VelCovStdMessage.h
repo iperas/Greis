@@ -23,39 +23,39 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Xx() const { return _xx; }
         Types::f4& Xx() { return _xx; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Yy() const { return _yy; }
         Types::f4& Yy() { return _yy; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Zz() const { return _zz; }
         Types::f4& Zz() { return _zz; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Tt() const { return _tt; }
         Types::f4& Tt() { return _tt; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Xy() const { return _xy; }
         Types::f4& Xy() { return _xy; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Xz() const { return _xz; }
         Types::f4& Xz() { return _xz; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Xt() const { return _xt; }
         Types::f4& Xt() { return _xt; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Yz() const { return _yz; }
         Types::f4& Yz() { return _yz; }
 
-        // [(m/s)^2]
+        // [(m/s)^2] 
         const Types::f4& Yt() const { return _yt; }
         Types::f4& Yt() { return _yt; }
 
@@ -67,7 +67,7 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

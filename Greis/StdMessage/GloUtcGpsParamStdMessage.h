@@ -32,27 +32,31 @@ namespace Greis
         const Types::f4& TauGps() const { return _tauGps; }
         Types::f4& TauGps() { return _tauGps; }
 
-        // Coefficient for calculation of UT1
+        // Coefficient for calculation of UT1 
         const Types::f4& B1() const { return _B1; }
         Types::f4& B1() { return _B1; }
 
-        // Coefficient for calculation of UT1
+        // Coefficient for calculation of UT1 
         const Types::f4& B2() const { return _B2; }
         Types::f4& B2() { return _B2; }
 
-        // Leap second information
+        // Leap second information 
         const Types::u1& KP() const { return _KP; }
         Types::u1& KP() { return _KP; }
 
-        // Number of 4-year cycle [1…31]
+        // Number of 4-year cycle [1…31] 
         const Types::u1& N4() const { return _N4; }
         Types::u1& N4() { return _N4; }
 
-        // Day number within 4-year period []
+        // Day number within 4-year period [] 
         const Types::i2& Dn() const { return _Dn; }
         Types::i2& Dn() { return _Dn; }
 
-        // Checksum
+        // Current day number at the decoding time 
+        const Types::i2& Nt() const { return _Nt; }
+        Types::i2& Nt() { return _Nt; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -67,6 +71,7 @@ namespace Greis
         Types::u1 _KP;
         Types::u1 _N4;
         Types::i2 _Dn;
+        Types::i2 _Nt;
         Types::u1 _cs;
     };
 }

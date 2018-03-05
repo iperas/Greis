@@ -27,7 +27,7 @@ namespace Greis
         const std::vector<Types::i2>& Amp() const { return _amp; }
         std::vector<Types::i2>& Amp() { return _amp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

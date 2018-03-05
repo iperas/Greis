@@ -1,9 +1,8 @@
-#ifndef SCPStdMessage_h__
-#define SCPStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,7 +27,7 @@ namespace Greis
         const std::vector<Types::u4>& Scp() const { return _scp; }
         std::vector<Types::u4>& Scp() { return _scp; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // SCPStdMessage_h__

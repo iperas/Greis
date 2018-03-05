@@ -1,11 +1,10 @@
-#ifndef QzssRawNavDataStdMessage_h__
-#define QzssRawNavDataStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GpsRawNavData1CustomType.h"
+#include "Greis/CustomType/GpsRawNavData1CustomType.h"
 
 namespace Greis
 {
@@ -37,5 +36,3 @@ namespace Greis
         GpsRawNavData1CustomType::UniquePtr_t _data;
     };
 }
-
-#endif // QzssRawNavDataStdMessage_h__

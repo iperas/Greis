@@ -1,9 +1,8 @@
-#ifndef HeaderCustomType_h__
-#define HeaderCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -20,17 +19,17 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // Reference pseudo-range [0.02 meters]
+        // Reference pseudo-range [0.02 meters] 
         const Types::u4& Refrange() const { return _refrange; }
         Types::u4& Refrange() { return _refrange; }
 
-        // USI (see [SI] message)
+        // USI (see [SI] message) 
         const Types::u1& Usi() const { return _usi; }
         Types::u1& Usi() { return _usi; }
 
-        // Number of slot records (M) [bitfield]:
-        // 7…3: reserved
-        // 2…0: number of slot records minus one (M)
+        // Number of slot records (M) [bitfield]: 
+        // 7…3: reserved 
+        // 2…0: number of slot records minus one (M) 
         const Types::u1& Num() const { return _num; }
         Types::u1& Num() { return _num; }
     private:
@@ -42,5 +41,3 @@ namespace Greis
         Types::u1 _num;
     };
 }
-
-#endif // HeaderCustomType_h__

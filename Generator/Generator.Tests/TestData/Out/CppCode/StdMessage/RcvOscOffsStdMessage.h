@@ -1,9 +1,8 @@
-#ifndef RcvOscOffsStdMessage_h__
-#define RcvOscOffsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,7 +27,7 @@ namespace Greis
         const Types::f4& Val() const { return _val; }
         Types::f4& Val() { return _val; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // RcvOscOffsStdMessage_h__

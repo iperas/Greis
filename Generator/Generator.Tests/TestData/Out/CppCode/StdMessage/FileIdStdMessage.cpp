@@ -1,7 +1,7 @@
 #include "FileIdStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -14,8 +14,6 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 5, _idField);
         p_message += 5;
-        _serializer.Deserialize(p_message, 80, _description);
-        p_message += 80;
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -66,7 +64,6 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_idField, result);
-        _serializer.Serialize(_description, result);
         
         assert(result.size() == Size());
         return result;

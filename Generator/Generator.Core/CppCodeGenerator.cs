@@ -212,8 +212,8 @@ namespace Generator.Core
                 // end of optional data block
 
                 var lines = new List<string>();
-                var indexInQuery = ct is StandardMessage 
-                                   ? CountOfCommonFieldsInMsgTable 
+                var indexInQuery = ct is StandardMessage
+                                   ? CountOfCommonFieldsInMsgTable
                                    : CountOfCommonFieldsInCtTable;
                 foreach (var variable in ct.Variables)
                 {
@@ -248,9 +248,9 @@ namespace Generator.Core
                             // custom type
                             var varType = this.GetCustomTypeForVariable(variable);
                             line = string.Format("c->{0}() = this->extractCustomType<{3}>" +
-                                                 "(ECustomTypeId::{2}, q.value({1}).toInt());", 
-                                                 this.GetAccessorNameForVariable(variable), 
-                                                 indexInQuery, 
+                                                 "(ECustomTypeId::{2}, q.value({1}).toInt());",
+                                                 this.GetAccessorNameForVariable(variable),
+                                                 indexInQuery,
                                                  this.GetEnumName(varType),
                                                  this.GetClassName(varType));
                         }
@@ -289,7 +289,7 @@ namespace Generator.Core
                     }
 
                     lines.Add(line);
-                    
+
                     // Closing optional data block 'if' statement
                     if (variable == lastOptionalDataBlock)
                     {
@@ -324,7 +324,12 @@ namespace Generator.Core
 
         private CustomType GetCustomTypeForVariable(Variable variable)
         {
+          try{
             return this.metaInfo.CustomTypes.Single(c => c.Name == variable.GreisType);
+          } catch (System.InvalidOperationException e)
+          {
+            throw new Exception(String.Format("CustomType error: {0}", variable.GreisType));
+          }
         }
 
         #endregion
@@ -571,7 +576,7 @@ namespace Generator.Core
                 var insertCommand = string.Format("INSERT INTO `{0}` ({1}) VALUES ({2})", tableName, columns, valuesSb);
 
                 var inserterVar = string.Format("auto {0} = std::make_shared<DataBatchInserter>(\r\n{1}    " +
-                                                "\"{2}\", \r\n{1}    " + 
+                                                "\"{2}\", \r\n{1}    " +
                                                 "{4}, _connection, \"{3}\", _inserterBatchSize);",
                                                 this.GetInserterVarName(ct), codeIntend, insertCommand, tableName,
                                                 fieldsCount);
@@ -618,13 +623,13 @@ namespace Generator.Core
 
                 var ctCurrentMaxId = string.Format(
                     "int maxIdFor{0} = _dbHelper->ExecuteSingleValueQuery(\"SELECT MAX(`id`) FROM `{1}`\").toInt();\r\n{2}" +
-                    "_ctCurrentMaxId[ECustomTypeId::{0}] = maxIdFor{0};", this.GetEnumName(ct), tableName, 
+                    "_ctCurrentMaxId[ECustomTypeId::{0}] = maxIdFor{0};", this.GetEnumName(ct), tableName,
                     codeIntend);
                 ctCurrentMaxIds.Add(ctCurrentMaxId);
             }
             string insertersCreationCode = string.Join("\r\n" + codeIntend, inserterVars) + "\r\n\r\n" + codeIntend +
                                            string.Join("\r\n" + codeIntend, addChildOps) + "\r\n\r\n" + codeIntend +
-                                           string.Join("\r\n" + codeIntend, insertionsIntoMaps) + "\r\n\r\n" + codeIntend + 
+                                           string.Join("\r\n" + codeIntend, insertionsIntoMaps) + "\r\n\r\n" + codeIntend +
                                            string.Join("\r\n" + codeIntend, ctCurrentMaxIds);
             return insertersCreationCode;
         }
@@ -674,7 +679,7 @@ namespace Generator.Core
                     validationCode =
                         string.Format("\r\n" +
                                       "\r\n{0}auto message = ToByteArray();" +
-                                      "\r\n{0}return validateChecksum8Bin(message.data(), message.size());", 
+                                      "\r\n{0}return validateChecksum8Bin(message.data(), message.size());",
                                       codeIntendation);
                     recalculateChecksumCode =
                         string.Format("auto message = ToByteArray();\r\n{1}" +
@@ -758,7 +763,7 @@ namespace Generator.Core
             }
         }
 
-        private CustomTypeStubsContent generateCustomTypeStubsContent(CustomType msg, 
+        private CustomTypeStubsContent generateCustomTypeStubsContent(CustomType msg,
             string fieldsAccessorsListIntendation, string fieldsListIntendation, string codeIntendation)
         {
             var content = new CustomTypeStubsContent();
@@ -996,7 +1001,7 @@ namespace Generator.Core
             var sizeVal = msg is StandardMessage
                               ? "BodySize()"
                               : "Size()";
-            var arraySizeInUniformFillFields = 
+            var arraySizeInUniformFillFields =
                 string.Format("int arraySizeInUniformFillFields = ({3} - {0}) / {1};\r\n\r\n{2}",
                     sizeOfFieldsWithKnownSize, summarySizeOfFillFields, codeIntendation, sizeVal);
             return arraySizeInUniformFillFields;
@@ -1118,7 +1123,7 @@ namespace Generator.Core
             var lines = this.metaInfo.StandardMessages.OrderBy(msg => msg.Name).
                 Select((msg, i) =>
                        string.Format("case EMessageId::{0}:\r\n" +
-                                     "{1}    return StdMessage::UniquePtr_t(new {0}StdMessage(p_message, p_length));", 
+                                     "{1}    return StdMessage::UniquePtr_t(new {0}StdMessage(p_message, p_length));",
                                      this.stdMessagesNameProvider.GetName(msg), intendation)
                 ).ToArray();
             var stubContent = string.Join("\r\n" + intendation, lines);
@@ -1140,7 +1145,7 @@ namespace Generator.Core
                 Select((msg, i) =>
                        string.Format("#include \"{2}/{0}/{1}StdMessage.h\"", StdMessagesDir,
                                      this.stdMessagesNameProvider.GetName(msg), IncludeDir)).ToArray();
-            
+
             var includesContent = string.Join("\r\n", includeLines);
             var fileContent = templateStr.Replace(IncludesStubToken, includesContent);
 
@@ -1160,7 +1165,7 @@ namespace Generator.Core
                 Select((ct, i) =>
                        string.Format("#include \"{2}/{0}/{1}CustomType.h\"", CustomTypesDir,
                                      this.customTypeNameProvider.GetName(ct), IncludeDir)).ToArray();
-            
+
             var includesContent = string.Join("\r\n", includeLines);
             var fileContent = templateStr.Replace(IncludesStubToken, includesContent);
 
@@ -1180,7 +1185,7 @@ namespace Generator.Core
             var lines = this.metaInfo.StandardMessages.OrderBy(msg => msg.Name).
                 SelectMany((msg, i) =>
                            msg.Codes.Select(
-                               code => string.Format("cache[CHAR2_TO_USHORT(\"{0}\")] = EMessageId::{1};", code, 
+                               code => string.Format("cache[CHAR2_TO_USHORT(\"{0}\")] = EMessageId::{1};", code,
                                                      this.stdMessagesNameProvider.GetName(msg)))
                 ).ToArray();
             var stubContent = string.Join("\r\n" + intendation, lines);

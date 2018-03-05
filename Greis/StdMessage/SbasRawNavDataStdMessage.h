@@ -23,23 +23,33 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SV PRN number within the range [120…142]
+        // SV PRN number within the range [120…142] 
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 
-        // Time of receiving of message [s]
+        // Time of receiving of message [s] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
-        // Reserved
-        const Types::u2& Reserv() const { return _reserv; }
-        Types::u2& Reserv() { return _reserv; }
+        // Type of data:
+        // 0 - L1 CA (NAV) 
+        // 1 - L5 
+        const Types::u1& Type() const { return _type; }
+        Types::u1& Type() { return _type; }
+
+        // Length of the navigation data block ‘data’
+        const Types::u1& Len() const { return _len; }
+        Types::u1& Len() { return _len; }
 
         // Navigation data block
         const std::vector<Types::u1>& Data() const { return _data; }
         std::vector<Types::u1>& Data() { return _data; }
 
-        // Checksum
+        // Error corrections 
+        const Types::i1& ErrCorr() const { return _errCorr; }
+        Types::i1& ErrCorr() { return _errCorr; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -49,8 +59,10 @@ namespace Greis
 
         Types::u1 _prn;
         Types::u4 _time;
-        Types::u2 _reserv;
+        Types::u1 _type;
+        Types::u1 _len;
         std::vector<Types::u1> _data;
+        Types::i1 _errCorr;
         Types::u1 _cs;
     };
 }

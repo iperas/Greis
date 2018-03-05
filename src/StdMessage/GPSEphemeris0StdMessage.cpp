@@ -14,28 +14,8 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 122, _req);
         p_message += 122;
-        if (BodySize() == 148)
-        {
-            // Optional Data Block
-            _serializer.Deserialize(p_message, _cNavType);
-            p_message += sizeof(_cNavType);
-            _serializer.Deserialize(p_message, _lTope);
-            p_message += sizeof(_lTope);
-            _serializer.Deserialize(p_message, _lTopc);
-            p_message += sizeof(_lTopc);
-            _serializer.Deserialize(p_message, _dADot);
-            p_message += sizeof(_dADot);
-            _serializer.Deserialize(p_message, _fDelnDot);
-            p_message += sizeof(_fDelnDot);
-            _serializer.Deserialize(p_message, _cURAoe);
-            p_message += sizeof(_cURAoe);
-            _serializer.Deserialize(p_message, _cURAoc);
-            p_message += sizeof(_cURAoc);
-            _serializer.Deserialize(p_message, _cURAoc1);
-            p_message += sizeof(_cURAoc1);
-            _serializer.Deserialize(p_message, _cURAoc2);
-            p_message += sizeof(_cURAoc2);
-        }
+        _serializer.Deserialize(p_message, 36, _opt);
+        p_message += 36;
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -90,19 +70,7 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_req, result);
-        if (BodySize() == 148)
-        {
-            // Optional Data Block
-            _serializer.Serialize(_cNavType, result);
-            _serializer.Serialize(_lTope, result);
-            _serializer.Serialize(_lTopc, result);
-            _serializer.Serialize(_dADot, result);
-            _serializer.Serialize(_fDelnDot, result);
-            _serializer.Serialize(_cURAoe, result);
-            _serializer.Serialize(_cURAoc, result);
-            _serializer.Serialize(_cURAoc1, result);
-            _serializer.Serialize(_cURAoc2, result);
-        }
+        _serializer.Serialize(_opt, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

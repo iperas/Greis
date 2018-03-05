@@ -23,19 +23,19 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Number of SVs
+        // Number of SVs 
         const Types::u1& SvsCount() const { return _svsCount; }
         Types::u1& SvsCount() { return _svsCount; }
 
-        // Stream ID
+        // Stream ID 
         const Types::u1& TargetStream() const { return _targetStream; }
         Types::u1& TargetStream() { return _targetStream; }
 
-        // Issue of the history
+        // Issue of the history 
         const Types::u2& Issue() const { return _issue; }
         Types::u2& Issue() { return _issue; }
 
-        // Number of bits
+        // Number of bits 
         const Types::u2& BitsCount() const { return _bitsCount; }
         Types::u2& BitsCount() { return _bitsCount; }
 

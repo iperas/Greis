@@ -27,7 +27,7 @@ namespace Greis
         const Types::f4& Acc() const { return _acc; }
         Types::f4& Acc() { return _acc; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

@@ -1,11 +1,10 @@
-#ifndef QZSSEphemerisStdMessage_h__
-#define QZSSEphemerisStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
-#include "CustomType/GPSEphemeris1CustomType.h"
+#include "Greis/CustomType/GPSEphemeris1CustomType.h"
 
 namespace Greis
 {
@@ -30,7 +29,7 @@ namespace Greis
         const GPSEphemeris1CustomType::UniquePtr_t& Gps() const { return _gps; }
         GPSEphemeris1CustomType::UniquePtr_t& Gps() { return _gps; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -42,5 +41,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // QZSSEphemerisStdMessage_h__

@@ -30,11 +30,11 @@ namespace Greis
         const GPSAlm1CustomType::UniquePtr_t& Gps() const { return _gps; }
         GPSAlm1CustomType::UniquePtr_t& Gps() { return _gps; }
 
-        // Issue of almanac data []
+        // Issue of almanac data [] 
         const Types::i2& Iod() const { return _iod; }
         Types::i2& Iod() { return _iod; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

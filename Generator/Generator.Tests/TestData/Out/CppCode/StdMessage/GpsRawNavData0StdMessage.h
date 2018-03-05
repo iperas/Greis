@@ -1,9 +1,8 @@
-#ifndef GpsRawNavData0StdMessage_h__
-#define GpsRawNavData0StdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,19 +23,19 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Pseudo-Range Number (PRN)
+        // Pseudo-Range Number (PRN) 
         const Types::u1& Prn() const { return _prn; }
         Types::u1& Prn() { return _prn; }
 
-        // Time of receiving of message [s]
+        // Time of receiving of message [s] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
         // Type of data:
-        // 0 - GPS L1 NAV
-        // 1 - GPS L2C CNAV
-        // 2 - GPS L5 CNAV
-        // 3 - GPS L1C CNAV2
+        // 0 - L1 NAV 
+        // 1 - L2C CNAV 
+        // 2 - L5 CNAV 
+        // 3 - L1C CNAV2 
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
@@ -47,6 +46,10 @@ namespace Greis
         // Navigation data block
         const std::vector<Types::u4>& Data() const { return _data; }
         std::vector<Types::u4>& Data() { return _data; }
+
+        // Error corrections
+        const Types::i1& ErrCorr() const { return _errCorr; }
+        Types::i1& ErrCorr() { return _errCorr; }
 
         // Checksum
         const Types::u1& Cs() const { return _cs; }
@@ -61,8 +64,7 @@ namespace Greis
         Types::u1 _type;
         Types::u1 _len;
         std::vector<Types::u4> _data;
+        Types::i1 _errCorr;
         Types::u1 _cs;
     };
 }
-
-#endif // GpsRawNavData0StdMessage_h__

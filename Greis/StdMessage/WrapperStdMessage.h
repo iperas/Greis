@@ -31,7 +31,7 @@ namespace Greis
         const std::vector<Types::u1>& Data() const { return _data; }
         std::vector<Types::u1>& Data() { return _data; }
 
-        // Checksum formatted as hexadecimal
+        // Checksum formatted as hexadecimal 
         const std::string& Cs() const { return _cs; }
         std::string& Cs() { return _cs; }
     private:

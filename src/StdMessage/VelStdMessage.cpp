@@ -18,8 +18,8 @@ namespace Greis
         p_message += sizeof(_y);
         _serializer.Deserialize(p_message, _z);
         p_message += sizeof(_z);
-        _serializer.Deserialize(p_message, _sigma);
-        p_message += sizeof(_sigma);
+        _serializer.Deserialize(p_message, _vSigma);
+        p_message += sizeof(_vSigma);
         _serializer.Deserialize(p_message, _solType);
         p_message += sizeof(_solType);
         _serializer.Deserialize(p_message, _cs);
@@ -78,7 +78,7 @@ namespace Greis
         _serializer.Serialize(_x, result);
         _serializer.Serialize(_y, result);
         _serializer.Serialize(_z, result);
-        _serializer.Serialize(_sigma, result);
+        _serializer.Serialize(_vSigma, result);
         _serializer.Serialize(_solType, result);
         _serializer.Serialize(_cs, result);
         

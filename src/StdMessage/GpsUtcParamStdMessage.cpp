@@ -14,8 +14,6 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 23, _utc);
         p_message += 23;
-        _serializer.Deserialize(p_message, _cs);
-        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -43,8 +41,7 @@ namespace Greis
             return false;
         }
 
-        auto message = ToByteArray();
-        return validateChecksum8Bin(message.data(), message.size());
+        return true;
     }
     
     void GpsUtcParamStdMessage::RecalculateChecksum()
@@ -53,8 +50,7 @@ namespace Greis
         {
             return;
         }
-        auto message = ToByteArray();
-        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
+        
     }
 
     QByteArray GpsUtcParamStdMessage::ToByteArray() const
@@ -68,7 +64,6 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_utc, result);
-        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

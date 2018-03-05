@@ -12,7 +12,10 @@ namespace Greis
         
         p_message += HeadSize();
     
-        /*throw Common::NotImplementedException();*/
+        _serializer.Deserialize(p_message, 158, _gps);
+        p_message += 158;
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)

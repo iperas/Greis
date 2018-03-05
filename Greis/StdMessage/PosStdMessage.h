@@ -35,15 +35,15 @@ namespace Greis
         const Types::f8& Z() const { return _z; }
         Types::f8& Z() { return _z; }
 
-        // Position SEP6 [m]
-        const Types::f4& Sigma() const { return _sigma; }
-        Types::f4& Sigma() { return _sigma; }
+        // Position SEP6 [m] 
+        const Types::f4& PSigma() const { return _pSigma; }
+        Types::f4& PSigma() { return _pSigma; }
 
         // Solution type
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -54,7 +54,7 @@ namespace Greis
         Types::f8 _x;
         Types::f8 _y;
         Types::f8 _z;
-        Types::f4 _sigma;
+        Types::f4 _pSigma;
         Types::u1 _solType;
         Types::u1 _cs;
     };

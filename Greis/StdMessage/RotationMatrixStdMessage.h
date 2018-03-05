@@ -47,15 +47,15 @@ namespace Greis
         const std::vector<Types::f4>& Rms() const { return _rms; }
         std::vector<Types::f4>& Rms() { return _rms; }
 
-        // solution type11 for three baseline vectors
+        // solution type8 for three baseline vectors 
         const std::vector<Types::u1>& SolType() const { return _solType; }
         std::vector<Types::u1>& SolType() { return _solType; }
 
-        // 0 – components of matrix Q are invalid, 1 - valid
+        // 0 – components of matrix Q are invalid, 1 - valid 
         const Types::u1& Flag() const { return _flag; }
         Types::u1& Flag() { return _flag; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

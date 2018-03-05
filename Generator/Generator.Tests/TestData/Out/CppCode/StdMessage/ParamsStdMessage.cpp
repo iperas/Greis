@@ -1,7 +1,7 @@
 #include "ParamsStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -12,14 +12,10 @@ namespace Greis
         
         p_message += HeadSize();
     
-        int arraySizeInUniformFillFields = (BodySize() - 4) / 1;
+        int arraySizeInUniformFillFields = (BodySize() - 0) / 1;
 
         _serializer.Deserialize(p_message, arraySizeInUniformFillFields, _params);
         p_message += arraySizeInUniformFillFields;
-        _serializer.Deserialize(p_message, 2, _delim);
-        p_message += 2;
-        _serializer.Deserialize(p_message, 2, _cs);
-        p_message += 2;
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -47,8 +43,7 @@ namespace Greis
             return false;
         }
 
-        auto message = ToByteArray();
-        return validateChecksum8Ascii(message.data(), message.size());
+        return true;
     }
     
     void ParamsStdMessage::RecalculateChecksum()
@@ -57,10 +52,7 @@ namespace Greis
         {
             return;
         }
-        auto message = ToByteArray();
-        auto cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
-        auto ba = QString::number(cs, 16).toAscii();
-        _cs[0] = ba[0]; _cs[1] = ba[1];
+        
     }
 
     QByteArray ParamsStdMessage::ToByteArray() const
@@ -74,8 +66,6 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_params, result);
-        _serializer.Serialize(_delim, result);
-        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

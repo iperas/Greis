@@ -33,19 +33,19 @@ namespace Greis
         const Types::i2& FinalFrq() const { return _finalFrq; }
         Types::i2& FinalFrq() { return _finalFrq; }
 
-        // Number of spectrums in this message
+        // Number of spectra in this message 
         const Types::u1& N() const { return _n; }
         Types::u1& N() { return _n; }
 
-        // Number of spectrum blocks in this message
+        // Number of spectrum blocks in this message 
         const Types::u1& M() const { return _m; }
         Types::u1& M() { return _m; }
 
-        // Extended spectrum data
+        // Extended spectrum data 
         const std::vector<ExtSpecDataCustomType::UniquePtr_t>& S() const { return _s; }
         std::vector<ExtSpecDataCustomType::UniquePtr_t>& S() { return _s; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

@@ -1,9 +1,8 @@
-#ifndef SmoothCustomType_h__
-#define SmoothCustomType_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "CustomType.h"
-#include "ECustomTypeId.h"
+#include "Greis/CustomType.h"
+#include "Greis/ECustomTypeId.h"
 
 namespace Greis
 {
@@ -35,5 +34,3 @@ namespace Greis
         Types::u2 _interval;
     };
 }
-
-#endif // SmoothCustomType_h__

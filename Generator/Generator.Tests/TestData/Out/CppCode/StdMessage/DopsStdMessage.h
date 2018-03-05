@@ -1,9 +1,8 @@
-#ifndef DopsStdMessage_h__
-#define DopsStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Horizontal dilution of precision (HDOP)[]
+        // Horizontal dilution of precision (HDOP)[] 
         const Types::f4& Hdop() const { return _hdop; }
         Types::f4& Hdop() { return _hdop; }
 
-        // Vertical dilution of precision (VDOP) []
+        // Vertical dilution of precision (VDOP) [] 
         const Types::f4& Vdop() const { return _vdop; }
         Types::f4& Vdop() { return _vdop; }
 
@@ -40,7 +39,11 @@ namespace Greis
         const Types::u1& SolType() const { return _solType; }
         Types::u1& SolType() { return _solType; }
 
-        // Checksum
+        // East dilution of precision (eDOP) [] 
+        const Types::f4& Edop() const { return _edop; }
+        Types::f4& Edop() { return _edop; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -52,8 +55,7 @@ namespace Greis
         Types::f4 _vdop;
         Types::f4 _tdop;
         Types::u1 _solType;
+        Types::f4 _edop;
         Types::u1 _cs;
     };
 }
-
-#endif // DopsStdMessage_h__

@@ -1,9 +1,8 @@
-#ifndef GloRawNavDataStdMessage_h__
-#define GloRawNavDataStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,21 +23,24 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SV number
+        // SV number 
         const Types::u1& Num() const { return _num; }
         Types::u1& Num() { return _num; }
 
-        // SV frequency code number
+        // SV frequency code number 
         const Types::i1& Fcn() const { return _fcn; }
         Types::i1& Fcn() { return _fcn; }
 
-        // GLONASS time of receiving of message [s]
+        // GLONASS time of receiving of message [s] 
         const Types::u4& Time() const { return _time; }
         Types::u4& Time() { return _time; }
 
         // Type of data:
-        // 0 - L1
-        // 1 - L3
+        // 0 - L1 
+        // 1 - L3 
+        // 2 - L2C 
+        // 3 - P1 
+        // 4 - P2 
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
@@ -47,10 +49,14 @@ namespace Greis
         Types::u1& Len() { return _len; }
 
         // Navigation data block
-        const std::vector<Types::u1>& Data() const { return _data; }
-        std::vector<Types::u1>& Data() { return _data; }
+        const std::vector<Types::u4>& Data() const { return _data; }
+        std::vector<Types::u4>& Data() { return _data; }
 
-        // Checksum
+        // Error corrections
+        const Types::i1& ErrCorr() const { return _errCorr; }
+        Types::i1& ErrCorr() { return _errCorr; }
+
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -63,9 +69,8 @@ namespace Greis
         Types::u4 _time;
         Types::u1 _type;
         Types::u1 _len;
-        std::vector<Types::u1> _data;
+        std::vector<Types::u4> _data;
+        Types::i1 _errCorr;
         Types::u1 _cs;
     };
 }
-
-#endif // GloRawNavDataStdMessage_h__

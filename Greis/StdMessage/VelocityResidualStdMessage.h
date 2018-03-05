@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Radial velocity residual [m]
+        // Radial velocity residual [m] 
         const std::vector<Types::f4>& Res() const { return _res; }
         std::vector<Types::f4>& Res() { return _res; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

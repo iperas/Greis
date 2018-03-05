@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // ms part of event time tag
+        // ms part of event time tag 
         const Types::i4& Ms() const { return _ms; }
         Types::i4& Ms() { return _ms; }
 
@@ -35,7 +35,7 @@ namespace Greis
         const Types::u1& TimeScale() const { return _timeScale; }
         Types::u1& TimeScale() { return _timeScale; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

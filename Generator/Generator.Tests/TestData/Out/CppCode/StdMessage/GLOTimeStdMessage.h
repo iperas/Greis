@@ -1,9 +1,8 @@
-#ifndef GLOTimeStdMessage_h__
-#define GLOTimeStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -29,11 +28,11 @@ namespace Greis
         Types::u4& Tod() { return _tod; }
 
         // GLONASS day number (modulo 4 years
-        // starting from 1996) []
+        // starting from 1996) [] 
         const Types::u2& Dn() const { return _dn; }
         Types::u2& Dn() { return _dn; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -46,5 +45,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // GLOTimeStdMessage_h__

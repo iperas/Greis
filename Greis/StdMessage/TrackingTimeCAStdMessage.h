@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // tracking time [s]
+        // tracking time [s] 
         const std::vector<Types::u2>& Tt() const { return _tt; }
         std::vector<Types::u2>& Tt() { return _tt; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

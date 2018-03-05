@@ -1,7 +1,7 @@
 #include "QZSSAlmStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -14,8 +14,6 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 46, _gps);
         p_message += 46;
-        _serializer.Deserialize(p_message, _cs);
-        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -43,8 +41,7 @@ namespace Greis
             return false;
         }
 
-        auto message = ToByteArray();
-        return validateChecksum8Bin(message.data(), message.size());
+        return true;
     }
     
     void QZSSAlmStdMessage::RecalculateChecksum()
@@ -53,8 +50,7 @@ namespace Greis
         {
             return;
         }
-        auto message = ToByteArray();
-        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
+        
     }
 
     QByteArray QZSSAlmStdMessage::ToByteArray() const
@@ -68,7 +64,6 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_gps, result);
-        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

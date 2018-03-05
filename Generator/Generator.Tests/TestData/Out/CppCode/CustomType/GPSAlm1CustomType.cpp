@@ -1,6 +1,6 @@
 #include "GPSAlm1CustomType.h"
-#include "Common/Logger.h"
 #include <cassert>
+#include "Common/Logger.h"
 
 namespace Greis
 {
@@ -17,8 +17,6 @@ namespace Greis
         p_message += sizeof(_toa);
         _serializer.Deserialize(p_message, _healthA);
         p_message += sizeof(_healthA);
-        _serializer.Deserialize(p_message, _healthS);
-        p_message += sizeof(_healthS);
         _serializer.Deserialize(p_message, _config);
         p_message += sizeof(_config);
         _serializer.Deserialize(p_message, _af1);
@@ -66,7 +64,6 @@ namespace Greis
         _serializer.Serialize(_wna, result);
         _serializer.Serialize(_toa, result);
         _serializer.Serialize(_healthA, result);
-        _serializer.Serialize(_healthS, result);
         _serializer.Serialize(_config, result);
         _serializer.Serialize(_af1, result);
         _serializer.Serialize(_af0, result);

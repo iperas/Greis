@@ -26,6 +26,8 @@ namespace Greis
         p_message += sizeof(_N4);
         _serializer.Deserialize(p_message, _Dn);
         p_message += sizeof(_Dn);
+        _serializer.Deserialize(p_message, _Nt);
+        p_message += sizeof(_Nt);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -86,6 +88,7 @@ namespace Greis
         _serializer.Serialize(_KP, result);
         _serializer.Serialize(_N4, result);
         _serializer.Serialize(_Dn, result);
+        _serializer.Serialize(_Nt, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

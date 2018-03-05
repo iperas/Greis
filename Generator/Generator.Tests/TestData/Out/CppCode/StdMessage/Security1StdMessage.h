@@ -1,9 +1,8 @@
-#ifndef Security1StdMessage_h__
-#define Security1StdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -28,7 +27,7 @@ namespace Greis
         const std::vector<Types::u1>& Data() const { return _data; }
         std::vector<Types::u1>& Data() { return _data; }
 
-        // 16-bit CRC
+        // 16-bit CRC 
         const Types::u2& Crc16() const { return _crc16; }
         Types::u2& Crc16() { return _crc16; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u2 _crc16;
     };
 }
-
-#endif // Security1StdMessage_h__

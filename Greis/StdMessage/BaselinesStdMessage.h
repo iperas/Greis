@@ -23,15 +23,15 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // baseline vector M-S0 [m]
+        // baseline vector M-S0 [m] 
         const std::vector<Types::f4>& Bl0() const { return _bl0; }
         std::vector<Types::f4>& Bl0() { return _bl0; }
 
-        // baseline vector M-S1 [m]
+        // baseline vector M-S1 [m] 
         const std::vector<Types::f4>& Bl1() const { return _bl1; }
         std::vector<Types::f4>& Bl1() { return _bl1; }
 
-        // baseline vector M-S2 [m]
+        // baseline vector M-S2 [m] 
         const std::vector<Types::f4>& Bl2() const { return _bl2; }
         std::vector<Types::f4>& Bl2() { return _bl2; }
 

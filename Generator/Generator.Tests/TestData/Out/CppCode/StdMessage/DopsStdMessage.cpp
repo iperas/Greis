@@ -1,7 +1,7 @@
 #include "DopsStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -20,6 +20,8 @@ namespace Greis
         p_message += sizeof(_tdop);
         _serializer.Deserialize(p_message, _solType);
         p_message += sizeof(_solType);
+        _serializer.Deserialize(p_message, _edop);
+        p_message += sizeof(_edop);
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -77,6 +79,7 @@ namespace Greis
         _serializer.Serialize(_vdop, result);
         _serializer.Serialize(_tdop, result);
         _serializer.Serialize(_solType, result);
+        _serializer.Serialize(_edop, result);
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

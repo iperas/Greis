@@ -1,9 +1,8 @@
-#ifndef IonoParams0StdMessage_h__
-#define IonoParams0StdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,12 +23,12 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Time of week [s]
+        // Time of week [s] 
         const Types::u4& Tot() const { return _tot; }
         Types::u4& Tot() { return _tot; }
 
-        // Week number (taken from the first subframe)
-        // The coefficients of a cubic equation representing
+        // Week number (taken from the first subframe) 
+        // The coefficients of a cubic equation representing 
         // the amplitude of the vertical delay
         const Types::u2& Wn() const { return _wn; }
         Types::u2& Wn() { return _wn; }
@@ -47,16 +46,16 @@ namespace Greis
         Types::f4& Alpha2() { return _alpha2; }
 
         // [s/semicircles3]
-        // The coefficients of a cubic equation representing
+        // The coefficients of a cubic equation representing 
         // the period of the model
         const Types::f4& Alpha3() const { return _alpha3; }
         Types::f4& Alpha3() { return _alpha3; }
 
-        // [s]
+        // [s] 
         const Types::f4& Beta0() const { return _beta0; }
         Types::f4& Beta0() { return _beta0; }
 
-        // [s/semicircles]
+        // [s/semicircles] 
         const Types::f4& Beta1() const { return _beta1; }
         Types::f4& Beta1() { return _beta1; }
 
@@ -68,7 +67,7 @@ namespace Greis
         const Types::f4& Beta3() const { return _beta3; }
         Types::f4& Beta3() { return _beta3; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -89,5 +88,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // IonoParams0StdMessage_h__

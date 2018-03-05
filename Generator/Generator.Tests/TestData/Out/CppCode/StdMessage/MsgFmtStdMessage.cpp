@@ -1,7 +1,7 @@
 #include "MsgFmtStdMessage.h"
 #include <cassert>
-#include "ChecksumComputer.h"
 #include "Common/Logger.h"
+#include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
@@ -61,7 +61,7 @@ namespace Greis
         }
         auto message = ToByteArray();
         auto cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
-        auto ba = QString::number(cs, 16).toAscii();
+        auto ba = QString::number(cs, 16).toLatin1();
         _cs[0] = ba[0]; _cs[1] = ba[1];
     }
 

@@ -1,5 +1,4 @@
-#ifndef ECustomTypeId_h__
-#define ECustomTypeId_h__
+#pragma once
 
 namespace Greis
 {
@@ -8,10 +7,14 @@ namespace Greis
         enum Type
         {
             Unknown,
+            CalBandsDelay,
             ClkOffs,
+            ESI,
             ExtSpecData,
+            GloDelays,
             GPSAlm1,
             GPSEphemeris1,
+            GpsEphOptData,
             GpsEphReqData,
             GpsNavData1,
             GpsRawNavData1,
@@ -27,5 +30,3 @@ namespace Greis
         };
     };
 }
-
-#endif // ECustomType_h__

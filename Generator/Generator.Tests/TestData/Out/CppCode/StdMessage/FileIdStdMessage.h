@@ -1,9 +1,8 @@
-#ifndef FileIdStdMessage_h__
-#define FileIdStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,21 +23,14 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // File type identifier
+        // File type identifiera1 description[80]; // Human-readable stream description
         const std::string& IdField() const { return _idField; }
         std::string& IdField() { return _idField; }
-
-        // Human-readable stream description
-        const std::string& Description() const { return _description; }
-        std::string& Description() { return _description; }
     private:
         std::string _id;
         int _bodySize;
         bool _isCorrect;
 
         std::string _idField;
-        std::string _description;
     };
 }
-
-#endif // FileIdStdMessage_h__

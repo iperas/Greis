@@ -27,7 +27,7 @@ namespace Greis
         const std::string& Name() const { return _name; }
         std::string& Name() { return _name; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:

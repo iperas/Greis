@@ -1,9 +1,8 @@
-#ifndef TrackingTimeCAStdMessage_h__
-#define TrackingTimeCAStdMessage_h__
+#pragma once
 
 #include <QtCore/QByteArray>
-#include "StdMessage.h"
-#include "EMessageId.h"
+#include "Greis/StdMessage.h"
+#include "Greis/EMessageId.h"
 
 namespace Greis
 {
@@ -24,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // tracking time [s]
+        // tracking time [s] 
         const std::vector<Types::u2>& Tt() const { return _tt; }
         std::vector<Types::u2>& Tt() { return _tt; }
 
-        // Checksum
+        // Checksum 
         const Types::u1& Cs() const { return _cs; }
         Types::u1& Cs() { return _cs; }
     private:
@@ -40,5 +39,3 @@ namespace Greis
         Types::u1 _cs;
     };
 }
-
-#endif // TrackingTimeCAStdMessage_h__
