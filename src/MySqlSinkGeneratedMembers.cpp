@@ -1,7 +1,7 @@
-#include "Common/Connection.h"
-#include "Common/Logger.h"
-#include "Greis/AllStdMessages.h"
-#include "Greis/MySqlSink.h"
+#include "common/Connection.h"
+#include "common/Logger.h"
+#include "greis/AllStdMessages.h"
+#include "greis/MySqlSink.h"
 
 using namespace Common;
 

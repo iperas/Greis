@@ -1,6 +1,6 @@
 #include "NonStdTextMessage.h"
 #include <boost/format.hpp>
-#include "Common/SmartPtr.h"
+#include "common/SmartPtr.h"
 
 using std::string;
 using namespace Common;

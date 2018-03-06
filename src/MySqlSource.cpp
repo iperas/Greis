@@ -1,7 +1,7 @@
 #include "MySqlSource.h"
 #include <vector>
-#include "Common/SmartPtr.h"
-#include "Common/Connection.h"
+#include "common/SmartPtr.h"
+#include "common/Connection.h"
 #include "ECustomTypeId.h"
 #include "DataChunk.h"
 #include "AllStdMessages.h"

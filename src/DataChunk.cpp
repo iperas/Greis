@@ -1,6 +1,6 @@
 #include "DataChunk.h"
 #include "FileBinaryStream.h"
-#include "Common/SmartPtr.h"
+#include "common/SmartPtr.h"
 
 using namespace Common;
 

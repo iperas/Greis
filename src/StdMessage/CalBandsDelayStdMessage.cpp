@@ -1,7 +1,7 @@
 #include "CalBandsDelayStdMessage.h"
 #include <cassert>
-#include "Common/Logger.h"
-#include "Greis/ChecksumComputer.h"
+#include "common/Logger.h"
+#include "greis/ChecksumComputer.h"
 
 namespace Greis
 {

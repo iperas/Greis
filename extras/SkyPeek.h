@@ -16,7 +16,7 @@
 #include "StdMessage/SCPStdMessage.h"
 #include "StdMessage/SPRStdMessage.h"
 #include "StdMessage/SRPRStdMessage.h"
-#include "Common/Logger.h"
+#include "common/Logger.h"
 
 namespace Greis
 {

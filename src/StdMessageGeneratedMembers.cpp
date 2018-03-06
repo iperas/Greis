@@ -1,5 +1,5 @@
 #include <map>
-#include "Greis/StdMessage.h"
+#include "greis/StdMessage.h"
 
 using std::map;
 

@@ -2,7 +2,7 @@
 #include "GreisTypes.h"
 #include "ChecksumComputer.h"
 #include "boost/format.hpp"
-#include "Common/BitConverter.h"
+#include "common/BitConverter.h"
 #include "RawStdMessage.h"
 #include <iostream>
 
