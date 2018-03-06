@@ -38,7 +38,7 @@ MACRO(add_custom_action_copy targets)
 	foreach(File ${targets})
 	  add_custom_command(TARGET ${PROJECT} PRE_BUILD
 	                     COMMAND ${CMAKE_COMMAND} -E
-	                         copy ${File} $<TARGET_FILE_DIR:${PROJECT}>)
+	                         copy $<TARGET_PROPERTY:${PROJECT},SOURCE_DIR>/${File} $<TARGET_FILE_DIR:${PROJECT}>)
 	endforeach()
 ENDMACRO()
 
@@ -49,7 +49,7 @@ ENDMACRO()
 
 # Project settings
 
-SET(PROJECT Greis)
+SET(PROJECT greis)
 PROJECT(${PROJECT} CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -98,36 +98,14 @@ INCLUDE(CMakeGTest.txt)
 
 include(ExternalProject)
 
-ExternalProject_Add (
- libCommon
- GIT_REPOSITORY "https://github.com/iperas/Common"
- GIT_TAG "master"
- UPDATE_COMMAND ""
- INSTALL_COMMAND ""
- BUILD_IN_SOURCE 1
-)
-ExternalProject_Get_Property(libCommon source_dir)
-SET(Common_source_dir ${source_dir})
-add_library( Common STATIC IMPORTED )
-if (UNIX)
-    SET(pathCommon ${Common_source_dir}/build/lib/libCommon.a)
-endif (UNIX)
-if (WIN32)
-    SET(pathCommon ${Common_source_dir}/build/lib/Common.lib)   
-endif (WIN32)
-set_target_properties( Common PROPERTIES IMPORTED_LOCATION ${pathCommon} )
-add_dependencies( Common libCommon )
-
-print_target_properties(Common)
-
 # Greis
 
 SET(CMAKE_AUTOMOC ON)
 
-SET(DEPENDS_ON_PROJECTS Common)
 
 FILE(GLOB_RECURSE HEADERS "${PROJECT}/*.h")
 FILE(GLOB ROOT_HEADERS "${PROJECT}/*.h")
+FILE(GLOB COMMON_HEADERS "common/*.h")
 FILE(GLOB STDMESSAGE_HEADERS "${PROJECT}/StdMessage/*.h")
 FILE(GLOB CUSTOMTYPE_HEADERS "${PROJECT}/CustomType/*.h")
 
@@ -152,9 +130,9 @@ foreach(DEPENDENCY ${DEPENDS_ON_PROJECTS})
         include_directories("../${DEPENDENCY}")
 endforeach()
 
-include_directories("${Common_source_dir}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/common")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/StdMessage")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT}/CustomType")
@@ -180,7 +158,8 @@ export ( PACKAGE ${PROJECT} )
 
 # Tests
 
-add_subdirectory(Greis.Tests)
+add_subdirectory(greis.Tests)
+add_subdirectory(common.Tests)
 ENABLE_TESTING()
-ADD_TEST_EX(Greis.Tests)
-
+ADD_TEST_EX(common.Tests)
+ADD_TEST_EX(greis.Tests)

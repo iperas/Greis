@@ -1,5 +1,5 @@
 #include "GreisMessageStream.h"
-#include "Common/SmartPtr.h"
+#include "common/SmartPtr.h"
 #include "StdMessageFactory.h"
 #include <string>
 
@@ -56,7 +56,7 @@ NextLabel: // avoiding stack overflow in recursive call
             }
             if (eom == 0)
             {
-                // Файл закончился до появления eom символа
+                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ eom пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 sLogger.Warn(QString(
                     "Unexpected end of file, readed %1 body bytes of non-standard text message, expected EOM.").
                     arg(body.size()));
@@ -94,7 +94,7 @@ NextLabel: // avoiding stack overflow in recursive call
                 {
                     _binaryStream->read(1);
                     sLogger.Debug(QString("1 byte skipped."));
-                    goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
+                    goto NextLabel; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
                 }
                 // message len
                 QString msgLenStr = QString::fromLatin1(header.data() + 2, 3);
@@ -139,12 +139,12 @@ NextLabel: // avoiding stack overflow in recursive call
                 //sLog.addInfo(msg->toString());
                 return std::move(msg);
             } else {
-                // Данные еще есть, но это не Greis-сообщение
+                // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ Greis-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 _binaryStream->read(1);
                 sLogger.Debug(QString("Unexpected end of file. ") +
                     QString("Cannot read whole standard message header, readed: %1, expected: 1. Skip 1 byte and try to find Non-standard Text Message.")
                     .arg(header.size()));
-                goto NextLabel; // Пробуем всё сначала, пропустив мусор из файла
+                goto NextLabel; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             }
         }
     }

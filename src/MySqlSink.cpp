@@ -1,5 +1,5 @@
 #include "MySqlSink.h"
-#include "Common/Connection.h"
+#include "common/Connection.h"
 #include "AllStdMessages.h"
 #include <string>
 #include "RawStdMessage.h"

@@ -1,11 +1,11 @@
 #include <vector>
-#include "Common/SmartPtr.h"
-#include "Common/Connection.h"
-#include "Greis/MySqlSource.h"
-#include "Greis/ECustomTypeId.h"
-#include "Greis/DataChunk.h"
-#include "Greis/AllStdMessages.h"
-#include "Greis/AllCustomTypes.h"
+#include "common/SmartPtr.h"
+#include "common/Connection.h"
+#include "greis/MySqlSource.h"
+#include "greis/ECustomTypeId.h"
+#include "greis/DataChunk.h"
+#include "greis/AllStdMessages.h"
+#include "greis/AllCustomTypes.h"
 
 using namespace Common;
 
@@ -28,6 +28,15 @@ namespace Greis
                 serializer.Deserialize(q.value(9), c->Dn());
                 serializer.Deserialize(q.value(10), c->Wnlsf());
                 serializer.Deserialize(q.value(11), c->Dtlsf());
+            };
+        
+        auto queryESICustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `ssid`, `svid` FROM `ct_ESI`");
+        auto handlerESICustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new ESICustomType(size);
+                auto c = dynamic_cast<ESICustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Ssid());
+                serializer.Deserialize(q.value(5), c->Svid());
             };
         
         auto querySmoothCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `value`, `interval` FROM `ct_Smooth`");
@@ -73,6 +82,24 @@ namespace Greis
                 serializer.Deserialize(q.value(30), c->Cus());
                 serializer.Deserialize(q.value(31), c->Cic());
                 serializer.Deserialize(q.value(32), c->Cis());
+            };
+        
+        auto queryGpsEphOptDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `navType`, `lTope`, `lTopc`, `dADot`, `cURAoc`, `cURAoc1`, `cURAoc2`, `fIscL1CA`, `fIscL5I5`, `fIscL1CP`, `DAf0` FROM `ct_GpsEphOptData`");
+        auto handlerGpsEphOptDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+            {
+                ct = new GpsEphOptDataCustomType(size);
+                auto c = dynamic_cast<GpsEphOptDataCustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->NavType());
+                serializer.Deserialize(q.value(5), c->LTope());
+                serializer.Deserialize(q.value(6), c->LTopc());
+                serializer.Deserialize(q.value(7), c->DADot());
+                serializer.Deserialize(q.value(8), c->CURAoc());
+                serializer.Deserialize(q.value(9), c->CURAoc1());
+                serializer.Deserialize(q.value(10), c->CURAoc2());
+                serializer.Deserialize(q.value(11), c->FIscL1CA());
+                serializer.Deserialize(q.value(12), c->FIscL5I5());
+                serializer.Deserialize(q.value(13), c->FIscL1CP());
+                serializer.Deserialize(q.value(14), c->DAf0());
             };
         
         auto querySvData0CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data` FROM `ct_SvData0`");
@@ -173,7 +200,7 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Word2());
             };
         
-        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1`");
+        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1`");
         auto handlerGPSAlm1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSAlm1CustomType(size);
@@ -182,34 +209,25 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Wna());
                 serializer.Deserialize(q.value(6), c->Toa());
                 serializer.Deserialize(q.value(7), c->HealthA());
-                serializer.Deserialize(q.value(8), c->HealthS());
-                serializer.Deserialize(q.value(9), c->Config());
-                serializer.Deserialize(q.value(10), c->Af1());
-                serializer.Deserialize(q.value(11), c->Af0());
-                serializer.Deserialize(q.value(12), c->RootA());
-                serializer.Deserialize(q.value(13), c->Ecc());
-                serializer.Deserialize(q.value(14), c->M0());
-                serializer.Deserialize(q.value(15), c->Omega0());
-                serializer.Deserialize(q.value(16), c->ArgPer());
-                serializer.Deserialize(q.value(17), c->Deli());
-                serializer.Deserialize(q.value(18), c->OmegaDot());
+                serializer.Deserialize(q.value(8), c->Config());
+                serializer.Deserialize(q.value(9), c->Af1());
+                serializer.Deserialize(q.value(10), c->Af0());
+                serializer.Deserialize(q.value(11), c->RootA());
+                serializer.Deserialize(q.value(12), c->Ecc());
+                serializer.Deserialize(q.value(13), c->M0());
+                serializer.Deserialize(q.value(14), c->Omega0());
+                serializer.Deserialize(q.value(15), c->ArgPer());
+                serializer.Deserialize(q.value(16), c->Deli());
+                serializer.Deserialize(q.value(17), c->OmegaDot());
             };
         
-        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2` FROM `ct_GPSEphemeris1`");
+        auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `opt` FROM `ct_GPSEphemeris1`");
         auto handlerGPSEphemeris1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSEphemeris1CustomType(size);
                 auto c = dynamic_cast<GPSEphemeris1CustomType*>(ct);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(4).toInt());
-                serializer.Deserialize(q.value(5), c->CNavType());
-                serializer.Deserialize(q.value(6), c->LTope());
-                serializer.Deserialize(q.value(7), c->LTopc());
-                serializer.Deserialize(q.value(8), c->DADot());
-                serializer.Deserialize(q.value(9), c->FDelnDot());
-                serializer.Deserialize(q.value(10), c->CURAoe());
-                serializer.Deserialize(q.value(11), c->CURAoc());
-                serializer.Deserialize(q.value(12), c->CURAoc1());
-                serializer.Deserialize(q.value(13), c->CURAoc2());
+                c->Opt() = this->extractCustomType<GpsEphOptDataCustomType>(ECustomTypeId::GpsEphOptData, q.value(5).toInt());
             };
         
         auto queryIonoParams1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `tot`, `wn`, `alpha0`, `alpha1`, `alpha2`, `alpha3`, `beta0`, `beta1`, `beta2`, `beta3`, `cs` FROM `ct_IonoParams1`");
@@ -240,7 +258,7 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Cs());
             };
         
-        auto queryGpsRawNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `ct_GpsRawNavData1`");
+        auto queryGpsRawNavData1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `errCorr`, `cs` FROM `ct_GpsRawNavData1`");
         auto handlerGpsRawNavData1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GpsRawNavData1CustomType(size);
@@ -250,15 +268,20 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Type());
                 serializer.Deserialize(q.value(7), c->Len());
                 serializer.Deserialize(q.value(8), c->Data());
-                serializer.Deserialize(q.value(9), c->Cs());
+                serializer.Deserialize(q.value(9), c->ErrCorr());
+                serializer.Deserialize(q.value(10), c->Cs());
             };
         
         _ctQueries.insert(ECustomTypeId::UtcOffs, queryUtcOffsCustomType);
         _ctHandlers.insert(ECustomTypeId::UtcOffs, handlerUtcOffsCustomType);
+        _ctQueries.insert(ECustomTypeId::ESI, queryESICustomType);
+        _ctHandlers.insert(ECustomTypeId::ESI, handlerESICustomType);
         _ctQueries.insert(ECustomTypeId::Smooth, querySmoothCustomType);
         _ctHandlers.insert(ECustomTypeId::Smooth, handlerSmoothCustomType);
         _ctQueries.insert(ECustomTypeId::GpsEphReqData, queryGpsEphReqDataCustomType);
         _ctHandlers.insert(ECustomTypeId::GpsEphReqData, handlerGpsEphReqDataCustomType);
+        _ctQueries.insert(ECustomTypeId::GpsEphOptData, queryGpsEphOptDataCustomType);
+        _ctHandlers.insert(ECustomTypeId::GpsEphOptData, handlerGpsEphOptDataCustomType);
         _ctQueries.insert(ECustomTypeId::SvData0, querySvData0CustomType);
         _ctHandlers.insert(ECustomTypeId::SvData0, handlerSvData0CustomType);
         _ctQueries.insert(ECustomTypeId::SvData1, querySvData1CustomType);
@@ -295,12 +318,11 @@ namespace Greis
     {
         GreisMysqlSerializer& serializer = _serializer;
 
-        auto queryFileIdStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `description` FROM `msg_FileId`");
+        auto queryFileIdStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar` FROM `msg_FileId`");
         auto handlerFileIdStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new FileIdStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->IdField());
-                serializer.Deserialize(q.value(7), c->Description());
                 return (Message*)c;
             };
         
@@ -455,12 +477,21 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGpsUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_GpsUtcParam`");
+        auto queryRcvIrnssTimeOffsetStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `val`, `sval`, `cs` FROM `msg_RcvIrnssTimeOffset`");
+        auto handlerRcvIrnssTimeOffsetStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new RcvIrnssTimeOffsetStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->Val());
+                serializer.Deserialize(q.value(7), c->Sval());
+                serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryGpsUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc` FROM `msg_GpsUtcParam`");
         auto handlerGpsUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GpsUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
-                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -477,17 +508,16 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGalUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `a0g`, `a1g`, `t0g`, `wn0g`, `flags`, `cs` FROM `msg_GalUtcGpsParam`");
+        auto queryGalUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `a1g`, `t0g`, `wn0g`, `flags`, `cs` FROM `msg_GalUtcGpsParam`");
         auto handlerGalUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GalUtcGpsParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
-                serializer.Deserialize(q.value(7), c->A0g());
-                serializer.Deserialize(q.value(8), c->A1g());
-                serializer.Deserialize(q.value(9), c->T0g());
-                serializer.Deserialize(q.value(10), c->Wn0g());
-                serializer.Deserialize(q.value(11), c->Flags());
-                serializer.Deserialize(q.value(12), c->Cs());
+                serializer.Deserialize(q.value(7), c->A1g());
+                serializer.Deserialize(q.value(8), c->T0g());
+                serializer.Deserialize(q.value(9), c->Wn0g());
+                serializer.Deserialize(q.value(10), c->Flags());
+                serializer.Deserialize(q.value(11), c->Cs());
                 return (Message*)c;
             };
         
@@ -500,16 +530,24 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryBeiDouUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_BeiDouUtcParam`");
+        auto queryBeiDouUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc` FROM `msg_BeiDouUtcParam`");
         auto handlerBeiDouUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new BeiDouUtcParamStdMessage(id, bodySize);
+                c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
+                return (Message*)c;
+            };
+        
+        auto queryIrnssUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_IrnssUtcParam`");
+        auto handlerIrnssUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new IrnssUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryGloUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tauSys`, `tauGps`, `B1`, `B2`, `KP`, `N4`, `Dn`, `cs` FROM `msg_GloUtcGpsParam`");
+        auto queryGloUtcGpsParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tauSys`, `tauGps`, `B1`, `B2`, `KP`, `N4`, `Dn`, `Nt`, `cs` FROM `msg_GloUtcGpsParam`");
         auto handlerGloUtcGpsParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GloUtcGpsParamStdMessage(id, bodySize);
@@ -520,7 +558,8 @@ namespace Greis
                 serializer.Deserialize(q.value(10), c->KP());
                 serializer.Deserialize(q.value(11), c->N4());
                 serializer.Deserialize(q.value(12), c->Dn());
-                serializer.Deserialize(q.value(13), c->Cs());
+                serializer.Deserialize(q.value(13), c->Nt());
+                serializer.Deserialize(q.value(14), c->Cs());
                 return (Message*)c;
             };
         
@@ -534,27 +573,42 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryPosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `cs` FROM `msg_Pos`");
+        auto queryPosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `pSigma`, `solType`, `cs` FROM `msg_Pos`");
         auto handlerPosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new PosStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
-                serializer.Deserialize(q.value(9), c->Sigma());
+                serializer.Deserialize(q.value(9), c->PSigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `sigma`, `solType`, `cs` FROM `msg_Vel`");
+        auto querySpecificCrtPos0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `pSigma`, `solType`, `system`, `crsCode`, `cs` FROM `msg_SpecificCrtPos0`");
+        auto handlerSpecificCrtPos0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new SpecificCrtPos0StdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->X());
+                serializer.Deserialize(q.value(7), c->Y());
+                serializer.Deserialize(q.value(8), c->Z());
+                serializer.Deserialize(q.value(9), c->PSigma());
+                serializer.Deserialize(q.value(10), c->SolType());
+                serializer.Deserialize(q.value(11), c->System());
+                serializer.Deserialize(q.value(12), c->CrsCode());
+                serializer.Deserialize(q.value(13), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `x`, `y`, `z`, `vSigma`, `solType`, `cs` FROM `msg_Vel`");
         auto handlerVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new VelStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->X());
                 serializer.Deserialize(q.value(7), c->Y());
                 serializer.Deserialize(q.value(8), c->Z());
-                serializer.Deserialize(q.value(9), c->Sigma());
+                serializer.Deserialize(q.value(9), c->VSigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
                 return (Message*)c;
@@ -590,14 +644,27 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGeoVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `pSigma`, `solType`, `cs` FROM `msg_GeoVel`");
+        auto querySpecificCrtPos1StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `pSigma`, `solType`, `system` FROM `msg_SpecificCrtPos1`");
+        auto handlerSpecificCrtPos1StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new SpecificCrtPos1StdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->Lat());
+                serializer.Deserialize(q.value(7), c->Lon());
+                serializer.Deserialize(q.value(8), c->Alt());
+                serializer.Deserialize(q.value(9), c->PSigma());
+                serializer.Deserialize(q.value(10), c->SolType());
+                serializer.Deserialize(q.value(11), c->System());
+                return (Message*)c;
+            };
+        
+        auto queryGeoVelStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `lat`, `lon`, `alt`, `vSigma`, `solType`, `cs` FROM `msg_GeoVel`");
         auto handlerGeoVelStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GeoVelStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Lat());
                 serializer.Deserialize(q.value(7), c->Lon());
                 serializer.Deserialize(q.value(8), c->Alt());
-                serializer.Deserialize(q.value(9), c->PSigma());
+                serializer.Deserialize(q.value(9), c->VSigma());
                 serializer.Deserialize(q.value(10), c->SolType());
                 serializer.Deserialize(q.value(11), c->Cs());
                 return (Message*)c;
@@ -616,7 +683,39 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryDopsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `hdop`, `vdop`, `tdop`, `solType`, `cs` FROM `msg_Dops`");
+        auto queryLocalPlanePosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `n`, `e`, `u`, `sep`, `pSigma`, `solType`, `geoid`, `prj`, `cs` FROM `msg_LocalPlanePos`");
+        auto handlerLocalPlanePosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new LocalPlanePosStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->N());
+                serializer.Deserialize(q.value(7), c->E());
+                serializer.Deserialize(q.value(8), c->U());
+                serializer.Deserialize(q.value(9), c->Sep());
+                serializer.Deserialize(q.value(10), c->PSigma());
+                serializer.Deserialize(q.value(11), c->SolType());
+                serializer.Deserialize(q.value(12), c->Geoid());
+                serializer.Deserialize(q.value(13), c->Prj());
+                serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryRSLocalPlanePosStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `n`, `e`, `u`, `sep`, `pSigma`, `solType`, `geoid`, `prj`, `cs` FROM `msg_RSLocalPlanePos`");
+        auto handlerRSLocalPlanePosStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new RSLocalPlanePosStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->N());
+                serializer.Deserialize(q.value(7), c->E());
+                serializer.Deserialize(q.value(8), c->U());
+                serializer.Deserialize(q.value(9), c->Sep());
+                serializer.Deserialize(q.value(10), c->PSigma());
+                serializer.Deserialize(q.value(11), c->SolType());
+                serializer.Deserialize(q.value(12), c->Geoid());
+                serializer.Deserialize(q.value(13), c->Prj());
+                serializer.Deserialize(q.value(14), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryDopsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `hdop`, `vdop`, `tdop`, `solType`, `edop`, `cs` FROM `msg_Dops`");
         auto handlerDopsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new DopsStdMessage(id, bodySize);
@@ -624,7 +723,8 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Vdop());
                 serializer.Deserialize(q.value(8), c->Tdop());
                 serializer.Deserialize(q.value(9), c->SolType());
-                serializer.Deserialize(q.value(10), c->Cs());
+                serializer.Deserialize(q.value(10), c->Edop());
+                serializer.Deserialize(q.value(11), c->Cs());
                 return (Message*)c;
             };
         
@@ -735,6 +835,15 @@ namespace Greis
                 return (Message*)c;
             };
         
+        auto queryExtSatIndexStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `esi`, `cs` FROM `msg_ExtSatIndex`");
+        auto handlerExtSatIndexStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new ExtSatIndexStdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
         auto querySatIndexStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `usi`, `cs` FROM `msg_SatIndex`");
         auto handlerSatIndexStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
@@ -784,8 +893,8 @@ namespace Greis
         auto handlerPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new PRStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Pr());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -793,8 +902,8 @@ namespace Greis
         auto handlerSPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SPRStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Spr());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -802,8 +911,8 @@ namespace Greis
         auto handlerRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new RPRStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Rpr());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -811,8 +920,17 @@ namespace Greis
         auto handlerSRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SRPRStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Srpr());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
+        auto queryPrCorrStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prc`, `mode`, `cs` FROM `msg_PrCorr`");
+        auto handlerPrCorrStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new PrCorrStdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -870,12 +988,21 @@ namespace Greis
                 return (Message*)c;
             };
         
+        auto queryPhCorrStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `phc`, `mode`, `cs` FROM `msg_PhCorr`");
+        auto handlerPhCorrStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new PhCorrStdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
         auto queryDPStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `dp`, `cs` FROM `msg_DP`");
         auto handlerDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new DPStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Dp());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -883,8 +1010,8 @@ namespace Greis
         auto handlerSRDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SRDPStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Srdp());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -903,6 +1030,24 @@ namespace Greis
                 auto c = new CNR4StdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->CnrX4());
                 serializer.Deserialize(q.value(7), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryCNR2560StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cnrX256`, `cs` FROM `msg_CNR_2560`");
+        auto handlerCNR2560StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new CNR2560StdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
+        auto queryCNR2561StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cnrX256`, `cs` FROM `msg_CNR_2561`");
+        auto handlerCNR2561StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new CNR2561StdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         
@@ -979,7 +1124,7 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGPSAlm0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs` FROM `msg_GPSAlm0`");
+        auto queryGPSAlm0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs` FROM `msg_GPSAlm0`");
         auto handlerGPSAlm0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GPSAlm0StdMessage(id, bodySize);
@@ -987,18 +1132,17 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Wna());
                 serializer.Deserialize(q.value(8), c->Toa());
                 serializer.Deserialize(q.value(9), c->HealthA());
-                serializer.Deserialize(q.value(10), c->HealthS());
-                serializer.Deserialize(q.value(11), c->Config());
-                serializer.Deserialize(q.value(12), c->Af1());
-                serializer.Deserialize(q.value(13), c->Af0());
-                serializer.Deserialize(q.value(14), c->RootA());
-                serializer.Deserialize(q.value(15), c->Ecc());
-                serializer.Deserialize(q.value(16), c->M0());
-                serializer.Deserialize(q.value(17), c->Omega0());
-                serializer.Deserialize(q.value(18), c->ArgPer());
-                serializer.Deserialize(q.value(19), c->Deli());
-                serializer.Deserialize(q.value(20), c->OmegaDot());
-                serializer.Deserialize(q.value(21), c->Cs());
+                serializer.Deserialize(q.value(10), c->Config());
+                serializer.Deserialize(q.value(11), c->Af1());
+                serializer.Deserialize(q.value(12), c->Af0());
+                serializer.Deserialize(q.value(13), c->RootA());
+                serializer.Deserialize(q.value(14), c->Ecc());
+                serializer.Deserialize(q.value(15), c->M0());
+                serializer.Deserialize(q.value(16), c->Omega0());
+                serializer.Deserialize(q.value(17), c->ArgPer());
+                serializer.Deserialize(q.value(18), c->Deli());
+                serializer.Deserialize(q.value(19), c->OmegaDot());
+                serializer.Deserialize(q.value(20), c->Cs());
                 return (Message*)c;
             };
         
@@ -1028,7 +1172,15 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGLOAlmanacStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `n4`, `navType`, `gammaN`, `cs` FROM `msg_GLOAlmanac`");
+        auto queryIrnssAlmStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps` FROM `msg_IrnssAlm`");
+        auto handlerIrnssAlmStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new IrnssAlmStdMessage(id, bodySize);
+                c->Gps() = this->extractCustomType<GPSAlm1CustomType>(ECustomTypeId::GPSAlm1, q.value(6).toInt());
+                return (Message*)c;
+            };
+        
+        auto queryGLOAlmanacStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `frqNum`, `dna`, `tlam`, `flags`, `tauN`, `tauSys`, `ecc`, `lambda`, `argPer`, `delT`, `delTdt`, `deli`, `n4`, `reserved`, `gammaN`, `cs` FROM `msg_GLOAlmanac`");
         auto handlerGLOAlmanacStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GLOAlmanacStdMessage(id, bodySize);
@@ -1049,7 +1201,7 @@ namespace Greis
                 if (bodySize == 52)
                 {
                     // Optional Data Block
-                    serializer.Deserialize(q.value(20), c->NavType());
+                    serializer.Deserialize(q.value(20), c->Reserved());
                     serializer.Deserialize(q.value(21), c->GammaN());
                 }
                 serializer.Deserialize(q.value(22), c->Cs());
@@ -1077,29 +1229,17 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGPSEphemeris0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `cNavType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `cs` FROM `msg_GPSEphemeris0`");
+        auto queryGPSEphemeris0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `opt`, `cs` FROM `msg_GPSEphemeris0`");
         auto handlerGPSEphemeris0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GPSEphemeris0StdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
-                if (bodySize == 148)
-                {
-                    // Optional Data Block
-                    serializer.Deserialize(q.value(7), c->CNavType());
-                    serializer.Deserialize(q.value(8), c->LTope());
-                    serializer.Deserialize(q.value(9), c->LTopc());
-                    serializer.Deserialize(q.value(10), c->DADot());
-                    serializer.Deserialize(q.value(11), c->FDelnDot());
-                    serializer.Deserialize(q.value(12), c->CURAoe());
-                    serializer.Deserialize(q.value(13), c->CURAoc());
-                    serializer.Deserialize(q.value(14), c->CURAoc1());
-                    serializer.Deserialize(q.value(15), c->CURAoc2());
-                }
-                serializer.Deserialize(q.value(16), c->Cs());
+                c->Opt() = this->extractCustomType<GpsEphOptDataCustomType>(ECustomTypeId::GpsEphOptData, q.value(7).toInt());
+                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryGALEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `cs` FROM `msg_GALEphemeris`");
+        auto queryGALEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `bgdE1E5a`, `bgdE1E5b`, `ai0`, `ai1`, `ai2`, `sfi`, `navType`, `DAf0`, `cs` FROM `msg_GALEphemeris`");
         auto handlerGALEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GALEphemerisStdMessage(id, bodySize);
@@ -1111,7 +1251,8 @@ namespace Greis
                 serializer.Deserialize(q.value(11), c->Ai2());
                 serializer.Deserialize(q.value(12), c->Sfi());
                 serializer.Deserialize(q.value(13), c->NavType());
-                serializer.Deserialize(q.value(14), c->Cs());
+                serializer.Deserialize(q.value(14), c->DAf0());
+                serializer.Deserialize(q.value(15), c->Cs());
                 return (Message*)c;
             };
         
@@ -1119,19 +1260,20 @@ namespace Greis
         auto handlerQZSSEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new QZSSEphemerisStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                c->Gps() = this->extractCustomType<GPSEphemeris1CustomType>(ECustomTypeId::GPSEphemeris1, q.value(6).toInt());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryBeiDouEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `tgd2`, `navType`, `cs` FROM `msg_BeiDouEphemeris`");
+        auto queryBeiDouEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `tgd2`, `navType`, `DAf0`, `cs` FROM `msg_BeiDouEphemeris`");
         auto handlerBeiDouEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new BeiDouEphemerisStdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
                 serializer.Deserialize(q.value(7), c->Tgd2());
                 serializer.Deserialize(q.value(8), c->NavType());
-                serializer.Deserialize(q.value(9), c->Cs());
+                serializer.Deserialize(q.value(9), c->DAf0());
+                serializer.Deserialize(q.value(10), c->Cs());
                 return (Message*)c;
             };
         
@@ -1200,17 +1342,17 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGpsNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData0`");
-        auto handlerGpsNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+        auto queryIrnssEphemerisStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `gps`, `navType`, `cs` FROM `msg_IrnssEphemeris`");
+        auto handlerIrnssEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                auto c = new GpsNavData0StdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->RecSize());
-                c->Dat() = this->deserializeAndGetCustomTypes<SvData0CustomType>(ECustomTypeId::SvData0, q.value(7));
+                auto c = new IrnssEphemerisStdMessage(id, bodySize);
+                c->Gps() = this->extractCustomType<GPSEphemeris1CustomType>(ECustomTypeId::GPSEphemeris1, q.value(6).toInt());
+                serializer.Deserialize(q.value(7), c->NavType());
                 serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryGpsRawNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GpsRawNavData0`");
+        auto queryGpsRawNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `errCorr`, `cs` FROM `msg_GpsRawNavData0`");
         auto handlerGpsRawNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GpsRawNavData0StdMessage(id, bodySize);
@@ -1219,16 +1361,8 @@ namespace Greis
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
                 serializer.Deserialize(q.value(10), c->Data());
-                serializer.Deserialize(q.value(11), c->Cs());
-                return (Message*)c;
-            };
-        
-        auto queryQzssNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssNavData`");
-        auto handlerQzssNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
-            {
-                auto c = new QzssNavDataStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(11), c->ErrCorr());
+                serializer.Deserialize(q.value(12), c->Cs());
                 return (Message*)c;
             };
         
@@ -1241,17 +1375,7 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGloNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GloNavData`");
-        auto handlerGloNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
-            {
-                auto c = new GloNavDataStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->RecSize());
-                c->Dat() = this->deserializeAndGetCustomTypes<SvData1CustomType>(ECustomTypeId::SvData1, q.value(7));
-                serializer.Deserialize(q.value(8), c->Cs());
-                return (Message*)c;
-            };
-        
-        auto queryGloRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `num`, `fcn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GloRawNavData`");
+        auto queryGloRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `num`, `fcn`, `time`, `type`, `len`, `data`, `errCorr`, `cs` FROM `msg_GloRawNavData`");
         auto handlerGloRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GloRawNavDataStdMessage(id, bodySize);
@@ -1261,23 +1385,26 @@ namespace Greis
                 serializer.Deserialize(q.value(9), c->Type());
                 serializer.Deserialize(q.value(10), c->Len());
                 serializer.Deserialize(q.value(11), c->Data());
-                serializer.Deserialize(q.value(12), c->Cs());
+                serializer.Deserialize(q.value(12), c->ErrCorr());
+                serializer.Deserialize(q.value(13), c->Cs());
                 return (Message*)c;
             };
         
-        auto querySbasRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `reserv`, `data`, `cs` FROM `msg_SbasRawNavData`");
+        auto querySbasRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `errCorr`, `cs` FROM `msg_SbasRawNavData`");
         auto handlerSbasRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SbasRawNavDataStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Prn());
                 serializer.Deserialize(q.value(7), c->Time());
-                serializer.Deserialize(q.value(8), c->Reserv());
-                serializer.Deserialize(q.value(9), c->Data());
-                serializer.Deserialize(q.value(10), c->Cs());
+                serializer.Deserialize(q.value(8), c->Type());
+                serializer.Deserialize(q.value(9), c->Len());
+                serializer.Deserialize(q.value(10), c->Data());
+                serializer.Deserialize(q.value(11), c->ErrCorr());
+                serializer.Deserialize(q.value(12), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryGalRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_GalRawNavData`");
+        auto queryGalRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `errCorr`, `cs` FROM `msg_GalRawNavData`");
         auto handlerGalRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GalRawNavDataStdMessage(id, bodySize);
@@ -1286,11 +1413,12 @@ namespace Greis
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
                 serializer.Deserialize(q.value(10), c->Data());
-                serializer.Deserialize(q.value(11), c->Cs());
+                serializer.Deserialize(q.value(11), c->ErrCorr());
+                serializer.Deserialize(q.value(12), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryCompRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len`, `data`, `cs` FROM `msg_CompRawNavData`");
+        auto queryCompRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len` FROM `msg_CompRawNavData`");
         auto handlerCompRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new CompRawNavDataStdMessage(id, bodySize);
@@ -1298,8 +1426,46 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Time());
                 serializer.Deserialize(q.value(8), c->Type());
                 serializer.Deserialize(q.value(9), c->Len());
-                serializer.Deserialize(q.value(10), c->Data());
-                serializer.Deserialize(q.value(11), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryIrnssRawNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `prn`, `time`, `type`, `len` FROM `msg_IrnssRawNavData`");
+        auto handlerIrnssRawNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new IrnssRawNavDataStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->Prn());
+                serializer.Deserialize(q.value(7), c->Time());
+                serializer.Deserialize(q.value(8), c->Type());
+                serializer.Deserialize(q.value(9), c->Len());
+                return (Message*)c;
+            };
+        
+        auto queryGpsNavData0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GpsNavData0`");
+        auto handlerGpsNavData0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new GpsNavData0StdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->RecSize());
+                c->Dat() = this->deserializeAndGetCustomTypes<SvData0CustomType>(ECustomTypeId::SvData0, q.value(7));
+                serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryQzssNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `data` FROM `msg_QzssNavData`");
+        auto handlerQzssNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new QzssNavDataStdMessage(id, bodySize);
+                
+                /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
+        auto queryGloNavDataStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `recSize`, `dat`, `cs` FROM `msg_GloNavData`");
+        auto handlerGloNavDataStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new GloNavDataStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->RecSize());
+                c->Dat() = this->deserializeAndGetCustomTypes<SvData1CustomType>(ECustomTypeId::SvData1, q.value(7));
+                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
@@ -1318,6 +1484,16 @@ namespace Greis
                 auto c = new Spectrum1StdMessage(id, bodySize);
                 
                 /*throw Common::NotImplementedException();*/
+                return (Message*)c;
+            };
+        
+        auto queryMDMSpectrumStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `frq`, `pwr`, `cs` FROM `msg_MDM_Spectrum`");
+        auto handlerMDMSpectrumStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new MDMSpectrumStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->Frq());
+                serializer.Deserialize(q.value(7), c->Pwr());
+                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
@@ -1355,7 +1531,7 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryRotationMatrixAndVectorsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `q00`, `q01`, `q02`, `q12`, `rms`, `solType`, `flag`, `bl0`, `bl1`, `bl2`, `cs` FROM `msg_RotationMatrixAndVectors`");
+        auto queryRotationMatrixAndVectorsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `q00`, `q01`, `q02`, `q12`, `rms`, `solType`, `flag`, `bl1`, `bl2`, `cs` FROM `msg_RotationMatrixAndVectors`");
         auto handlerRotationMatrixAndVectorsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new RotationMatrixAndVectorsStdMessage(id, bodySize);
@@ -1367,26 +1543,26 @@ namespace Greis
                 serializer.Deserialize(q.value(11), c->Rms());
                 serializer.Deserialize(q.value(12), c->SolType());
                 serializer.Deserialize(q.value(13), c->Flag());
-                serializer.Deserialize(q.value(14), c->Bl0());
-                serializer.Deserialize(q.value(15), c->Bl1());
-                serializer.Deserialize(q.value(16), c->Bl2());
-                serializer.Deserialize(q.value(17), c->Cs());
+                serializer.Deserialize(q.value(14), c->Bl1());
+                serializer.Deserialize(q.value(15), c->Bl2());
+                serializer.Deserialize(q.value(16), c->Cs());
                 return (Message*)c;
             };
         
-        auto queryRotationAnglesStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `pitch`, `roll`, `heading`, `pitchRms`, `rollRms`, `headingRms`, `flags`, `cs` FROM `msg_RotationAngles`");
+        auto queryRotationAnglesStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `p`, `r`, `h`, `sp`, `sr`, `sh`, `solType`, `flags`, `cs` FROM `msg_RotationAngles`");
         auto handlerRotationAnglesStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new RotationAnglesStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Time());
-                serializer.Deserialize(q.value(7), c->Pitch());
-                serializer.Deserialize(q.value(8), c->Roll());
-                serializer.Deserialize(q.value(9), c->Heading());
-                serializer.Deserialize(q.value(10), c->PitchRms());
-                serializer.Deserialize(q.value(11), c->RollRms());
-                serializer.Deserialize(q.value(12), c->HeadingRms());
-                serializer.Deserialize(q.value(13), c->Flags());
-                serializer.Deserialize(q.value(14), c->Cs());
+                serializer.Deserialize(q.value(7), c->P());
+                serializer.Deserialize(q.value(8), c->R());
+                serializer.Deserialize(q.value(9), c->H());
+                serializer.Deserialize(q.value(10), c->Sp());
+                serializer.Deserialize(q.value(11), c->Sr());
+                serializer.Deserialize(q.value(12), c->Sh());
+                serializer.Deserialize(q.value(13), c->SolType());
+                serializer.Deserialize(q.value(14), c->Flags());
+                serializer.Deserialize(q.value(15), c->Cs());
                 return (Message*)c;
             };
         
@@ -1411,6 +1587,20 @@ namespace Greis
                 serializer.Deserialize(q.value(6), c->Accelerations());
                 serializer.Deserialize(q.value(7), c->AngularVelocities());
                 serializer.Deserialize(q.value(8), c->Cs());
+                return (Message*)c;
+            };
+        
+        auto queryAccMagStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `accelerations`, `induction`, `magnitude`, `temperature`, `calibrated`, `cs` FROM `msg_AccMag`");
+        auto handlerAccMagStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new AccMagStdMessage(id, bodySize);
+                serializer.Deserialize(q.value(6), c->Time());
+                serializer.Deserialize(q.value(7), c->Accelerations());
+                serializer.Deserialize(q.value(8), c->Induction());
+                serializer.Deserialize(q.value(9), c->Magnitude());
+                serializer.Deserialize(q.value(10), c->Temperature());
+                serializer.Deserialize(q.value(11), c->Calibrated());
+                serializer.Deserialize(q.value(12), c->Cs());
                 return (Message*)c;
             };
         
@@ -1494,15 +1684,14 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryClockOffsetsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `reserved`, `recSize`, `Offs`, `crc16` FROM `msg_ClockOffsets`");
+        auto queryClockOffsetsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sample`, `reserved`, `Offs`, `crc16` FROM `msg_ClockOffsets`");
         auto handlerClockOffsetsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new ClockOffsetsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Sample());
                 serializer.Deserialize(q.value(7), c->Reserved());
-                serializer.Deserialize(q.value(8), c->RecSize());
-                c->Offs() = this->deserializeAndGetCustomTypes<ClkOffsCustomType>(ECustomTypeId::ClkOffs, q.value(9));
-                serializer.Deserialize(q.value(10), c->Crc16());
+                c->Offs() = this->deserializeAndGetCustomTypes<ClkOffsCustomType>(ECustomTypeId::ClkOffs, q.value(8));
+                serializer.Deserialize(q.value(9), c->Crc16());
                 return (Message*)c;
             };
         
@@ -1556,6 +1745,14 @@ namespace Greis
                 return (Message*)c;
             };
         
+        auto queryIrnssIonoParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `par` FROM `msg_IrnssIonoParams`");
+        auto handlerIrnssIonoParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+            {
+                auto c = new IrnssIonoParamsStdMessage(id, bodySize);
+                c->Par() = this->extractCustomType<IonoParams1CustomType>(ECustomTypeId::IonoParams1, q.value(6).toInt());
+                return (Message*)c;
+            };
+        
         auto queryEventStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `time`, `type`, `data`, `cs` FROM `msg_Event`");
         auto handlerEventStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
@@ -1586,13 +1783,11 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `params`, `delim`, `cs` FROM `msg_Params`");
+        auto queryParamsStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `params` FROM `msg_Params`");
         auto handlerParamsStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new ParamsStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->Params());
-                serializer.Deserialize(q.value(7), c->Delim());
-                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
@@ -1654,14 +1849,6 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryEpochEndStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `cs` FROM `msg_EpochEnd`");
-        auto handlerEpochEndStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
-            {
-                auto c = new EpochEndStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Cs());
-                return (Message*)c;
-            };
-        
         _msgQueries.insert(EMessageId::FileId, queryFileIdStdMessage);
         _msgHandlers.insert(EMessageId::FileId, handlerFileIdStdMessage);
         _msgQueries.insert(EMessageId::MsgFmt, queryMsgFmtStdMessage);
@@ -1694,6 +1881,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::RcvQZSSTimeOffset, handlerRcvQZSSTimeOffsetStdMessage);
         _msgQueries.insert(EMessageId::RcvBeiDouTimeOffset, queryRcvBeiDouTimeOffsetStdMessage);
         _msgHandlers.insert(EMessageId::RcvBeiDouTimeOffset, handlerRcvBeiDouTimeOffsetStdMessage);
+        _msgQueries.insert(EMessageId::RcvIrnssTimeOffset, queryRcvIrnssTimeOffsetStdMessage);
+        _msgHandlers.insert(EMessageId::RcvIrnssTimeOffset, handlerRcvIrnssTimeOffsetStdMessage);
         _msgQueries.insert(EMessageId::GpsUtcParam, queryGpsUtcParamStdMessage);
         _msgHandlers.insert(EMessageId::GpsUtcParam, handlerGpsUtcParamStdMessage);
         _msgQueries.insert(EMessageId::SbasUtcParam, querySbasUtcParamStdMessage);
@@ -1704,22 +1893,32 @@ namespace Greis
         _msgHandlers.insert(EMessageId::QzssUtcParam, handlerQzssUtcParamStdMessage);
         _msgQueries.insert(EMessageId::BeiDouUtcParam, queryBeiDouUtcParamStdMessage);
         _msgHandlers.insert(EMessageId::BeiDouUtcParam, handlerBeiDouUtcParamStdMessage);
+        _msgQueries.insert(EMessageId::IrnssUtcParam, queryIrnssUtcParamStdMessage);
+        _msgHandlers.insert(EMessageId::IrnssUtcParam, handlerIrnssUtcParamStdMessage);
         _msgQueries.insert(EMessageId::GloUtcGpsParam, queryGloUtcGpsParamStdMessage);
         _msgHandlers.insert(EMessageId::GloUtcGpsParam, handlerGloUtcGpsParamStdMessage);
         _msgQueries.insert(EMessageId::SolutionTime, querySolutionTimeStdMessage);
         _msgHandlers.insert(EMessageId::SolutionTime, handlerSolutionTimeStdMessage);
         _msgQueries.insert(EMessageId::Pos, queryPosStdMessage);
         _msgHandlers.insert(EMessageId::Pos, handlerPosStdMessage);
+        _msgQueries.insert(EMessageId::SpecificCrtPos0, querySpecificCrtPos0StdMessage);
+        _msgHandlers.insert(EMessageId::SpecificCrtPos0, handlerSpecificCrtPos0StdMessage);
         _msgQueries.insert(EMessageId::Vel, queryVelStdMessage);
         _msgHandlers.insert(EMessageId::Vel, handlerVelStdMessage);
         _msgQueries.insert(EMessageId::PosVel, queryPosVelStdMessage);
         _msgHandlers.insert(EMessageId::PosVel, handlerPosVelStdMessage);
         _msgQueries.insert(EMessageId::GeoPos, queryGeoPosStdMessage);
         _msgHandlers.insert(EMessageId::GeoPos, handlerGeoPosStdMessage);
+        _msgQueries.insert(EMessageId::SpecificCrtPos1, querySpecificCrtPos1StdMessage);
+        _msgHandlers.insert(EMessageId::SpecificCrtPos1, handlerSpecificCrtPos1StdMessage);
         _msgQueries.insert(EMessageId::GeoVel, queryGeoVelStdMessage);
         _msgHandlers.insert(EMessageId::GeoVel, handlerGeoVelStdMessage);
         _msgQueries.insert(EMessageId::Rms, queryRmsStdMessage);
         _msgHandlers.insert(EMessageId::Rms, handlerRmsStdMessage);
+        _msgQueries.insert(EMessageId::LocalPlanePos, queryLocalPlanePosStdMessage);
+        _msgHandlers.insert(EMessageId::LocalPlanePos, handlerLocalPlanePosStdMessage);
+        _msgQueries.insert(EMessageId::RSLocalPlanePos, queryRSLocalPlanePosStdMessage);
+        _msgHandlers.insert(EMessageId::RSLocalPlanePos, handlerRSLocalPlanePosStdMessage);
         _msgQueries.insert(EMessageId::Dops, queryDopsStdMessage);
         _msgHandlers.insert(EMessageId::Dops, handlerDopsStdMessage);
         _msgQueries.insert(EMessageId::PosCov, queryPosCovStdMessage);
@@ -1736,6 +1935,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::PosStat, handlerPosStatStdMessage);
         _msgQueries.insert(EMessageId::PosCompTime, queryPosCompTimeStdMessage);
         _msgHandlers.insert(EMessageId::PosCompTime, handlerPosCompTimeStdMessage);
+        _msgQueries.insert(EMessageId::ExtSatIndex, queryExtSatIndexStdMessage);
+        _msgHandlers.insert(EMessageId::ExtSatIndex, handlerExtSatIndexStdMessage);
         _msgQueries.insert(EMessageId::SatIndex, querySatIndexStdMessage);
         _msgHandlers.insert(EMessageId::SatIndex, handlerSatIndexStdMessage);
         _msgQueries.insert(EMessageId::AntName, queryAntNameStdMessage);
@@ -1754,6 +1955,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::RPR, handlerRPRStdMessage);
         _msgQueries.insert(EMessageId::SRPR, querySRPRStdMessage);
         _msgHandlers.insert(EMessageId::SRPR, handlerSRPRStdMessage);
+        _msgQueries.insert(EMessageId::PrCorr, queryPrCorrStdMessage);
+        _msgHandlers.insert(EMessageId::PrCorr, handlerPrCorrStdMessage);
         _msgQueries.insert(EMessageId::SC, querySCStdMessage);
         _msgHandlers.insert(EMessageId::SC, handlerSCStdMessage);
         _msgQueries.insert(EMessageId::SS, querySSStdMessage);
@@ -1766,6 +1969,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::RCPRC0, handlerRCPRC0StdMessage);
         _msgQueries.insert(EMessageId::RCPRc1, queryRCPRc1StdMessage);
         _msgHandlers.insert(EMessageId::RCPRc1, handlerRCPRc1StdMessage);
+        _msgQueries.insert(EMessageId::PhCorr, queryPhCorrStdMessage);
+        _msgHandlers.insert(EMessageId::PhCorr, handlerPhCorrStdMessage);
         _msgQueries.insert(EMessageId::DP, queryDPStdMessage);
         _msgHandlers.insert(EMessageId::DP, handlerDPStdMessage);
         _msgQueries.insert(EMessageId::SRDP, querySRDPStdMessage);
@@ -1774,6 +1979,10 @@ namespace Greis
         _msgHandlers.insert(EMessageId::CNR, handlerCNRStdMessage);
         _msgQueries.insert(EMessageId::CNR4, queryCNR4StdMessage);
         _msgHandlers.insert(EMessageId::CNR4, handlerCNR4StdMessage);
+        _msgQueries.insert(EMessageId::CNR2560, queryCNR2560StdMessage);
+        _msgHandlers.insert(EMessageId::CNR2560, handlerCNR2560StdMessage);
+        _msgQueries.insert(EMessageId::CNR2561, queryCNR2561StdMessage);
+        _msgHandlers.insert(EMessageId::CNR2561, handlerCNR2561StdMessage);
         _msgQueries.insert(EMessageId::Flags, queryFlagsStdMessage);
         _msgHandlers.insert(EMessageId::Flags, handlerFlagsStdMessage);
         _msgQueries.insert(EMessageId::IAmp, queryIAmpStdMessage);
@@ -1798,6 +2007,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::QZSSAlm, handlerQZSSAlmStdMessage);
         _msgQueries.insert(EMessageId::BeiDouAlm, queryBeiDouAlmStdMessage);
         _msgHandlers.insert(EMessageId::BeiDouAlm, handlerBeiDouAlmStdMessage);
+        _msgQueries.insert(EMessageId::IrnssAlm, queryIrnssAlmStdMessage);
+        _msgHandlers.insert(EMessageId::IrnssAlm, handlerIrnssAlmStdMessage);
         _msgQueries.insert(EMessageId::GLOAlmanac, queryGLOAlmanacStdMessage);
         _msgHandlers.insert(EMessageId::GLOAlmanac, handlerGLOAlmanacStdMessage);
         _msgQueries.insert(EMessageId::SBASAlmanac, querySBASAlmanacStdMessage);
@@ -1814,16 +2025,12 @@ namespace Greis
         _msgHandlers.insert(EMessageId::GLOEphemeris, handlerGLOEphemerisStdMessage);
         _msgQueries.insert(EMessageId::SBASEhemeris, querySBASEhemerisStdMessage);
         _msgHandlers.insert(EMessageId::SBASEhemeris, handlerSBASEhemerisStdMessage);
-        _msgQueries.insert(EMessageId::GpsNavData0, queryGpsNavData0StdMessage);
-        _msgHandlers.insert(EMessageId::GpsNavData0, handlerGpsNavData0StdMessage);
+        _msgQueries.insert(EMessageId::IrnssEphemeris, queryIrnssEphemerisStdMessage);
+        _msgHandlers.insert(EMessageId::IrnssEphemeris, handlerIrnssEphemerisStdMessage);
         _msgQueries.insert(EMessageId::GpsRawNavData0, queryGpsRawNavData0StdMessage);
         _msgHandlers.insert(EMessageId::GpsRawNavData0, handlerGpsRawNavData0StdMessage);
-        _msgQueries.insert(EMessageId::QzssNavData, queryQzssNavDataStdMessage);
-        _msgHandlers.insert(EMessageId::QzssNavData, handlerQzssNavDataStdMessage);
         _msgQueries.insert(EMessageId::QzssRawNavData, queryQzssRawNavDataStdMessage);
         _msgHandlers.insert(EMessageId::QzssRawNavData, handlerQzssRawNavDataStdMessage);
-        _msgQueries.insert(EMessageId::GloNavData, queryGloNavDataStdMessage);
-        _msgHandlers.insert(EMessageId::GloNavData, handlerGloNavDataStdMessage);
         _msgQueries.insert(EMessageId::GloRawNavData, queryGloRawNavDataStdMessage);
         _msgHandlers.insert(EMessageId::GloRawNavData, handlerGloRawNavDataStdMessage);
         _msgQueries.insert(EMessageId::SbasRawNavData, querySbasRawNavDataStdMessage);
@@ -1832,10 +2039,20 @@ namespace Greis
         _msgHandlers.insert(EMessageId::GalRawNavData, handlerGalRawNavDataStdMessage);
         _msgQueries.insert(EMessageId::CompRawNavData, queryCompRawNavDataStdMessage);
         _msgHandlers.insert(EMessageId::CompRawNavData, handlerCompRawNavDataStdMessage);
+        _msgQueries.insert(EMessageId::IrnssRawNavData, queryIrnssRawNavDataStdMessage);
+        _msgHandlers.insert(EMessageId::IrnssRawNavData, handlerIrnssRawNavDataStdMessage);
+        _msgQueries.insert(EMessageId::GpsNavData0, queryGpsNavData0StdMessage);
+        _msgHandlers.insert(EMessageId::GpsNavData0, handlerGpsNavData0StdMessage);
+        _msgQueries.insert(EMessageId::QzssNavData, queryQzssNavDataStdMessage);
+        _msgHandlers.insert(EMessageId::QzssNavData, handlerQzssNavDataStdMessage);
+        _msgQueries.insert(EMessageId::GloNavData, queryGloNavDataStdMessage);
+        _msgHandlers.insert(EMessageId::GloNavData, handlerGloNavDataStdMessage);
         _msgQueries.insert(EMessageId::Spectrum0, querySpectrum0StdMessage);
         _msgHandlers.insert(EMessageId::Spectrum0, handlerSpectrum0StdMessage);
         _msgQueries.insert(EMessageId::Spectrum1, querySpectrum1StdMessage);
         _msgHandlers.insert(EMessageId::Spectrum1, handlerSpectrum1StdMessage);
+        _msgQueries.insert(EMessageId::MDMSpectrum, queryMDMSpectrumStdMessage);
+        _msgHandlers.insert(EMessageId::MDMSpectrum, handlerMDMSpectrumStdMessage);
         _msgQueries.insert(EMessageId::GloDelays, queryGloDelaysStdMessage);
         _msgHandlers.insert(EMessageId::GloDelays, handlerGloDelaysStdMessage);
         _msgQueries.insert(EMessageId::CalBandsDelay, queryCalBandsDelayStdMessage);
@@ -1850,6 +2067,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::AngularVelocity, handlerAngularVelocityStdMessage);
         _msgQueries.insert(EMessageId::InertialMeasurements, queryInertialMeasurementsStdMessage);
         _msgHandlers.insert(EMessageId::InertialMeasurements, handlerInertialMeasurementsStdMessage);
+        _msgQueries.insert(EMessageId::AccMag, queryAccMagStdMessage);
+        _msgHandlers.insert(EMessageId::AccMag, handlerAccMagStdMessage);
         _msgQueries.insert(EMessageId::ExtEvent, queryExtEventStdMessage);
         _msgHandlers.insert(EMessageId::ExtEvent, handlerExtEventStdMessage);
         _msgQueries.insert(EMessageId::PPSOffset, queryPPSOffsetStdMessage);
@@ -1876,6 +2095,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::QzssIonoParams, handlerQzssIonoParamsStdMessage);
         _msgQueries.insert(EMessageId::BeiDouIonoParams, queryBeiDouIonoParamsStdMessage);
         _msgHandlers.insert(EMessageId::BeiDouIonoParams, handlerBeiDouIonoParamsStdMessage);
+        _msgQueries.insert(EMessageId::IrnssIonoParams, queryIrnssIonoParamsStdMessage);
+        _msgHandlers.insert(EMessageId::IrnssIonoParams, handlerIrnssIonoParamsStdMessage);
         _msgQueries.insert(EMessageId::Event, queryEventStdMessage);
         _msgHandlers.insert(EMessageId::Event, handlerEventStdMessage);
         _msgQueries.insert(EMessageId::Latency, queryLatencyStdMessage);
@@ -1896,7 +2117,5 @@ namespace Greis
         _msgHandlers.insert(EMessageId::TrackingTime, handlerTrackingTimeStdMessage);
         _msgQueries.insert(EMessageId::RcvOscOffs, queryRcvOscOffsStdMessage);
         _msgHandlers.insert(EMessageId::RcvOscOffs, handlerRcvOscOffsStdMessage);
-        _msgQueries.insert(EMessageId::EpochEnd, queryEpochEndStdMessage);
-        _msgHandlers.insert(EMessageId::EpochEnd, handlerEpochEndStdMessage);
     }
 }
