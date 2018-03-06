@@ -1,15 +1,20 @@
-#include "GloDelaysCustomType.h"
+#include "SvDelayCustomType.h"
 #include <cassert>
 #include "Common/Logger.h"
 
 namespace Greis
 {
-    GloDelaysCustomType::GloDelaysCustomType( const char* pc_message, int p_length )
+    SvDelayCustomType::SvDelayCustomType( const char* pc_message, int p_length )
         : _size(p_length)
     {
         char* p_message = const_cast<char*>(pc_message);
     
-        /*throw Common::NotImplementedException();*/
+        _serializer.Deserialize(p_message, _fcn);
+        p_message += sizeof(_fcn);
+        _serializer.Deserialize(p_message, _phase);
+        p_message += sizeof(_phase);
+        _serializer.Deserialize(p_message, _range);
+        p_message += sizeof(_range);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -19,13 +24,13 @@ namespace Greis
         }
     }
     
-    GloDelaysCustomType::GloDelaysCustomType( int p_size ) 
+    SvDelayCustomType::SvDelayCustomType( int p_size ) 
         : _size(p_size)
     {
         _isCorrect = true;
     }
 
-    QByteArray GloDelaysCustomType::ToByteArray() const
+    QByteArray SvDelayCustomType::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -33,8 +38,9 @@ namespace Greis
             return result;
         }
 
-        _serializer.Serialize(_del, result);
-        _serializer.Serialize(_cs, result);
+        _serializer.Serialize(_fcn, result);
+        _serializer.Serialize(_phase, result);
+        _serializer.Serialize(_range, result);
         
         assert(result.size() == Size());
         return result;

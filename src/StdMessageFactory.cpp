@@ -94,6 +94,8 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new GeoVelStdMessage(p_message, p_length));
             case EMessageId::GLOAlmanac:
                 return StdMessage::UniquePtr_t(new GLOAlmanacStdMessage(p_message, p_length));
+            case EMessageId::GloDelays:
+                return StdMessage::UniquePtr_t(new GloDelaysStdMessage(p_message, p_length));
             case EMessageId::GLOEphemeris:
                 return StdMessage::UniquePtr_t(new GLOEphemerisStdMessage(p_message, p_length));
             case EMessageId::GloNavData:
@@ -278,8 +280,6 @@ namespace Greis
                 return StdMessage::UniquePtr_t(new SRPRStdMessage(p_message, p_length));
             case EMessageId::SS:
                 return StdMessage::UniquePtr_t(new SSStdMessage(p_message, p_length));
-            case EMessageId::SvDelays:
-                return StdMessage::UniquePtr_t(new SvDelaysStdMessage(p_message, p_length));
             case EMessageId::TrackingTime:
                 return StdMessage::UniquePtr_t(new TrackingTimeStdMessage(p_message, p_length));
             case EMessageId::TrackingTimeCA:

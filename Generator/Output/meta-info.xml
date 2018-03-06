@@ -2942,19 +2942,17 @@ N=([Message Length] - 2) / recSize) </Comment>
         <Code>ms</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="SvDelays" Size="9" Title="[gC], [g1], [g2], [g3]: GLONASS Delays " Validation="None" Type="Unknown">
+    <StandardMessage Name="GloDelays" Size="-2" Title="[gC], [g1], [g2], [g3]: GLONASS Delays " Validation="Checksum" Type="Unknown">
       <Variables>
-        <Variable GreisType="i1" Name="fcn" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>GLONASS FCN[-7…6]</Comment>
+        <Variable GreisType="SvDelay" Name="del" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>-2</Dimension>
+          </SizeOfDimensions>
+          <Comment>Delays</Comment>
         </Variable>
-        <Variable GreisType="f4" Name="phase" RequiredValue="">
+        <Variable GreisType="u1" Name="cs" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Phase delay [cycles]</Comment>
-        </Variable>
-        <Variable GreisType="f4" Name="range" RequiredValue="">
-          <SizeOfDimensions />
-          <Comment>Range delay [s]</Comment>
+          <Comment>Checksum </Comment>
         </Variable>
       </Variables>
       <Codes>
@@ -4202,17 +4200,19 @@ string of a GLONASS sub-frame for given FCN. </Comment>
         </Variable>
       </Variables>
     </CustomType>
-    <CustomType Name="GloDelays" Size="-1">
+    <CustomType Name="SvDelay" Size="9">
       <Variables>
-        <Variable GreisType="SvDelay" Name="del" RequiredValue="">
-          <SizeOfDimensions>
-            <Dimension>-2</Dimension>
-          </SizeOfDimensions>
-          <Comment>Delays</Comment>
-        </Variable>
-        <Variable GreisType="u1" Name="cs" RequiredValue="">
+        <Variable GreisType="i1" Name="fcn" RequiredValue="">
           <SizeOfDimensions />
-          <Comment>Checksum </Comment>
+          <Comment>GLONASS FCN[-7…6]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="phase" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Phase delay [cycles]</Comment>
+        </Variable>
+        <Variable GreisType="f4" Name="range" RequiredValue="">
+          <SizeOfDimensions />
+          <Comment>Range delay [s]</Comment>
         </Variable>
       </Variables>
     </CustomType>

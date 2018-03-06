@@ -11,7 +11,6 @@ namespace Greis
             ClkOffs,
             ESI,
             ExtSpecData,
-            GloDelays,
             GPSAlm1,
             GPSEphemeris1,
             GpsEphOptData,
@@ -26,6 +25,7 @@ namespace Greis
             SvData0,
             SvData1,
             SvData2,
+            SvDelay,
             UtcOffs
         };
     };

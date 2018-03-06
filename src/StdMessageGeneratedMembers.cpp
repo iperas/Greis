@@ -84,6 +84,10 @@ namespace Greis
             cache[CHAR2_TO_USHORT("PG")] = EMessageId::GeoPos;
             cache[CHAR2_TO_USHORT("VG")] = EMessageId::GeoVel;
             cache[CHAR2_TO_USHORT("NA")] = EMessageId::GLOAlmanac;
+            cache[CHAR2_TO_USHORT("gC")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g1")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g2")] = EMessageId::GloDelays;
+            cache[CHAR2_TO_USHORT("g3")] = EMessageId::GloDelays;
             cache[CHAR2_TO_USHORT("NE")] = EMessageId::GLOEphemeris;
             cache[CHAR2_TO_USHORT("LD")] = EMessageId::GloNavData;
             cache[CHAR2_TO_USHORT("lD")] = EMessageId::GloRawNavData;
@@ -248,10 +252,6 @@ namespace Greis
             cache[CHAR2_TO_USHORT("c3")] = EMessageId::SS;
             cache[CHAR2_TO_USHORT("c5")] = EMessageId::SS;
             cache[CHAR2_TO_USHORT("cl")] = EMessageId::SS;
-            cache[CHAR2_TO_USHORT("gC")] = EMessageId::SvDelays;
-            cache[CHAR2_TO_USHORT("g1")] = EMessageId::SvDelays;
-            cache[CHAR2_TO_USHORT("g2")] = EMessageId::SvDelays;
-            cache[CHAR2_TO_USHORT("g3")] = EMessageId::SvDelays;
             cache[CHAR2_TO_USHORT("TT")] = EMessageId::TrackingTime;
             cache[CHAR2_TO_USHORT("TC")] = EMessageId::TrackingTimeCA;
             cache[CHAR2_TO_USHORT("VE")] = EMessageId::Vel;

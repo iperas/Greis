@@ -140,13 +140,14 @@ namespace Greis
                 /*throw Common::NotImplementedException();*/
             };
         
-        auto queryGloDelaysCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `del`, `cs` FROM `ct_GloDelays`");
-        auto handlerGloDelaysCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
+        auto querySvDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `fcn`, `phase`, `range` FROM `ct_SvDelay`");
+        auto handlerSvDelayCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
-                ct = new GloDelaysCustomType(size);
-                auto c = dynamic_cast<GloDelaysCustomType*>(ct);
-                
-                /*throw Common::NotImplementedException();*/
+                ct = new SvDelayCustomType(size);
+                auto c = dynamic_cast<SvDelayCustomType*>(ct);
+                serializer.Deserialize(q.value(4), c->Fcn());
+                serializer.Deserialize(q.value(5), c->Phase());
+                serializer.Deserialize(q.value(6), c->Range());
             };
         
         auto queryBandDelayCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `band`, `signal`, `delay` FROM `ct_BandDelay`");
@@ -289,8 +290,8 @@ namespace Greis
         _ctHandlers.insert(ECustomTypeId::SpecData, handlerSpecDataCustomType);
         _ctQueries.insert(ECustomTypeId::ExtSpecData, queryExtSpecDataCustomType);
         _ctHandlers.insert(ECustomTypeId::ExtSpecData, handlerExtSpecDataCustomType);
-        _ctQueries.insert(ECustomTypeId::GloDelays, queryGloDelaysCustomType);
-        _ctHandlers.insert(ECustomTypeId::GloDelays, handlerGloDelaysCustomType);
+        _ctQueries.insert(ECustomTypeId::SvDelay, querySvDelayCustomType);
+        _ctHandlers.insert(ECustomTypeId::SvDelay, handlerSvDelayCustomType);
         _ctQueries.insert(ECustomTypeId::BandDelay, queryBandDelayCustomType);
         _ctHandlers.insert(ECustomTypeId::BandDelay, handlerBandDelayCustomType);
         _ctQueries.insert(ECustomTypeId::SvData2, querySvData2CustomType);
@@ -1496,13 +1497,12 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto querySvDelaysStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `fcn`, `phase`, `range` FROM `msg_SvDelays`");
-        auto handlerSvDelaysStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
+        auto queryGloDelaysStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `del`, `cs` FROM `msg_GloDelays`");
+        auto handlerGloDelaysStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
-                auto c = new SvDelaysStdMessage(id, bodySize);
-                serializer.Deserialize(q.value(6), c->Fcn());
-                serializer.Deserialize(q.value(7), c->Phase());
-                serializer.Deserialize(q.value(8), c->Range());
+                auto c = new GloDelaysStdMessage(id, bodySize);
+                c->Del() = this->deserializeAndGetCustomTypes<SvDelayCustomType>(ECustomTypeId::SvDelay, q.value(6));
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -2053,8 +2053,8 @@ namespace Greis
         _msgHandlers.insert(EMessageId::Spectrum1, handlerSpectrum1StdMessage);
         _msgQueries.insert(EMessageId::MDMSpectrum, queryMDMSpectrumStdMessage);
         _msgHandlers.insert(EMessageId::MDMSpectrum, handlerMDMSpectrumStdMessage);
-        _msgQueries.insert(EMessageId::SvDelays, querySvDelaysStdMessage);
-        _msgHandlers.insert(EMessageId::SvDelays, handlerSvDelaysStdMessage);
+        _msgQueries.insert(EMessageId::GloDelays, queryGloDelaysStdMessage);
+        _msgHandlers.insert(EMessageId::GloDelays, handlerGloDelaysStdMessage);
         _msgQueries.insert(EMessageId::CalBandsDelay, queryCalBandsDelayStdMessage);
         _msgHandlers.insert(EMessageId::CalBandsDelay, handlerCalBandsDelayStdMessage);
         _msgQueries.insert(EMessageId::RotationMatrix, queryRotationMatrixStdMessage);

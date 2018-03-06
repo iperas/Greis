@@ -1,23 +1,23 @@
-#include "SvDelaysStdMessage.h"
+#include "GloDelaysStdMessage.h"
 #include <cassert>
 #include "Common/Logger.h"
 #include "Greis/ChecksumComputer.h"
 
 namespace Greis
 {
-    SvDelaysStdMessage::SvDelaysStdMessage( const char* pc_message, int p_length ) 
+    GloDelaysStdMessage::GloDelaysStdMessage( const char* pc_message, int p_length ) 
         : _id(pc_message, 2), _bodySize(p_length - HeadSize())
     {
         char* p_message = const_cast<char*>(pc_message);
         
         p_message += HeadSize();
     
-        _serializer.Deserialize(p_message, _fcn);
-        p_message += sizeof(_fcn);
-        _serializer.Deserialize(p_message, _phase);
-        p_message += sizeof(_phase);
-        _serializer.Deserialize(p_message, _range);
-        p_message += sizeof(_range);
+        int arraySizeInUniformFillFields = (BodySize() - 1) / 9;
+
+        _serializer.Deserialize(p_message, 9 * arraySizeInUniformFillFields, 9, _del);
+        p_message += 9 * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
@@ -27,37 +27,39 @@ namespace Greis
         }
     }
     
-    SvDelaysStdMessage::SvDelaysStdMessage( const std::string& p_id, int p_size ) 
+    GloDelaysStdMessage::GloDelaysStdMessage( const std::string& p_id, int p_size ) 
         : _id(p_id), _bodySize(p_size - HeadSize())
     {
         _isCorrect = true;
     }
 
-    std::string SvDelaysStdMessage::ToString() const
+    std::string GloDelaysStdMessage::ToString() const
     {
-        return toString("SvDelaysStdMessage");
+        return toString("GloDelaysStdMessage");
     }
     
-    bool SvDelaysStdMessage::Validate() const
+    bool GloDelaysStdMessage::Validate() const
     {
         if (!_isCorrect || !StdMessage::Validate())
         {
             return false;
         }
 
-        return true;
+        auto message = ToByteArray();
+        return validateChecksum8Bin(message.data(), message.size());
     }
     
-    void SvDelaysStdMessage::RecalculateChecksum()
+    void GloDelaysStdMessage::RecalculateChecksum()
     {
         if (!_isCorrect)
         {
             return;
         }
-        
+        auto message = ToByteArray();
+        _cs = ChecksumComputer::ComputeCs8(message, message.size() - 1);
     }
 
-    QByteArray SvDelaysStdMessage::ToByteArray() const
+    QByteArray GloDelaysStdMessage::ToByteArray() const
     {
         QByteArray result;
         if (!_isCorrect)
@@ -67,9 +69,8 @@ namespace Greis
 
         result.append(headToByteArray());
 
-        _serializer.Serialize(_fcn, result);
-        _serializer.Serialize(_phase, result);
-        _serializer.Serialize(_range, result);
+        _serializer.Serialize(_del, result);
+        _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());
         return result;

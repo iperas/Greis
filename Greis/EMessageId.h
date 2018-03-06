@@ -42,6 +42,7 @@ namespace Greis
             GeoPos, // [PG] Geodetic Position 
             GeoVel, // [VG] Geodetic Velocity 
             GLOAlmanac, // [NA] GLONASS Almanac 
+            GloDelays, // [gC], [g1], [g2], [g3]: GLONASS Delays 
             GLOEphemeris, // [NE] GLONASS Ephemeris 
             GloNavData, // [LD] GLONASS Raw Navigation Data (obsolete) 
             GloRawNavData, // [lD] GLONASS Raw Navigation Data 
@@ -134,7 +135,6 @@ namespace Greis
             SRDP, // [0d],[1d], [2d], [3d], [5d], [ld]: Relative Doppler 
             SRPR, // [cr], [1r], [2r], [3r], [5r], [lr]: Integer Relative Pseudo-ranges 
             SS, // [cc],[c1],[c2],[c3],[c5],[cl]: Smoothing Corrections 
-            SvDelays, // [gC], [g1], [g2], [g3]: GLONASS Delays 
             TrackingTime, // [TT] CA/L1 Overall Continuous Tracking Time 
             TrackingTimeCA, // [TC] CA/L1 Continuous Tracking Time 
             Vel, // [VE] Cartesian Velocity 
