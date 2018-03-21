@@ -28,7 +28,7 @@ static int rate_to_constant(int baudrate) {
 #endif
 
 #include "IBinaryStream.h"
-#include "common/Exception.h"
+#include "Common/Exception.h"
 
 namespace Greis
 {

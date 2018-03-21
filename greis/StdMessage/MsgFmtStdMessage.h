@@ -36,8 +36,8 @@ namespace Greis
         std::string& MinorVer() { return _minorVer; }
 
         // Bytes order
-        // '0' ï¿½ LSB first;
-        // '1' ï¿½ MSB first 
+        // '0' — LSB first;
+        // '1' — MSB first 
         const Types::a1& Order() const { return _order; }
         Types::a1& Order() { return _order; }
 

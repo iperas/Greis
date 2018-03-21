@@ -2,7 +2,8 @@
 [JP] File Identifier 
 
 struct FileId {85} {
-a1 id[5]; // File type identifiera1 description[80]; // Human-readable stream description
+a1 id[5]; // File type identifier
+a1 description[80]; // Human-readable stream description
 
 }; 
 
@@ -262,7 +263,8 @@ u1 cs; // Checksum
 [UO] GPS UTC Time Parameters 
 
 struct GpsUtcParam {24} {
-UtcOffs utc; // GPS UTC time offset parametersu1 cs; // Checksum 
+UtcOffs utc; // GPS UTC time offset parameters
+u1 cs; // Checksum 
 
 }; 
 
@@ -1986,7 +1988,8 @@ u1 healthA; // Health summary (from almanac), [bitfield]
 
 // 0…4 - code for health of SV signal components 
 
-// 5…7 - navigation data health indicatorsu1 healthS; // Satellite health (page 25 of subframe 5) []
+// 5…7 - navigation data health indicators
+u1 healthS; // Satellite health (page 25 of subframe 5) []
 u1 config; // Satellite configuration (page 25 of subframe 4)
 
 // [bitfield]: 

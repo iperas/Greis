@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Elevation angle [degrees] [-90ï¿½90)
+        // Elevation angle [degrees] [-90…90)
         const std::vector<Types::i1>& Elev() const { return _elev; }
         std::vector<Types::i1>& Elev() { return _elev; }
 

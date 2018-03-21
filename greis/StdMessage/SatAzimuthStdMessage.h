@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Azimuth angle [degrees*2] [0ï¿½180)
+        // Azimuth angle [degrees*2] [0…180)
         const std::vector<Types::u1>& Azim() const { return _azim; }
         std::vector<Types::u1>& Azim() { return _azim; }
 

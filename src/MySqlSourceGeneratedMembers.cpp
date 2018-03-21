@@ -318,11 +318,12 @@ namespace Greis
     {
         GreisMysqlSerializer& serializer = _serializer;
 
-        auto queryFileIdStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar` FROM `msg_FileId`");
+        auto queryFileIdStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `description` FROM `msg_FileId`");
         auto handlerFileIdStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new FileIdStdMessage(id, bodySize);
                 serializer.Deserialize(q.value(6), c->IdField());
+                serializer.Deserialize(q.value(7), c->Description());
                 return (Message*)c;
             };
         
@@ -839,8 +840,8 @@ namespace Greis
         auto handlerExtSatIndexStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new ExtSatIndexStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                c->Esi() = this->deserializeAndGetCustomTypes<ESICustomType>(ECustomTypeId::ESI, q.value(6));
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         

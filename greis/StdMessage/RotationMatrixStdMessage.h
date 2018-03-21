@@ -51,7 +51,7 @@ namespace Greis
         const std::vector<Types::u1>& SolType() const { return _solType; }
         std::vector<Types::u1>& SolType() { return _solType; }
 
-        // 0 ï¿½ components of matrix Q are invalid, 1 - valid 
+        // 0 – components of matrix Q are invalid, 1 - valid 
         const Types::u1& Flag() const { return _flag; }
         Types::u1& Flag() { return _flag; }
 

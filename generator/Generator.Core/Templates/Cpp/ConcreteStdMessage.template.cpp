@@ -17,7 +17,7 @@ namespace Greis
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)
         {
-            sLogger.Debug(QString("The message %1 is incorrect. Excepted size is %2 whilst the actual size is %3.")
+            sLogger.Debug(QString("The message %1 is incorrect. Expected size is %2. Actual size is %3.")
                 .arg(QString::fromStdString(ToString())).arg(p_length).arg(p_message - pc_message));
         }
     }

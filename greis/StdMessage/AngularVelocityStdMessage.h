@@ -46,7 +46,7 @@ namespace Greis
         // flags [bitfield]: 
         // 0: 0 - no data available 
         // 1 - data are valid 
-        // 7ï¿½1: reserved 
+        // 7…1: reserved 
         const Types::u1& Flags() const { return _flags; }
         Types::u1& Flags() { return _flags; }
 

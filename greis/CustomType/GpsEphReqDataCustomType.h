@@ -19,7 +19,7 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // SV PRN number within the range [1ï¿½37] 
+        // SV PRN number within the range [1…37] 
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 
@@ -30,7 +30,7 @@ namespace Greis
         // Flags (see GPS ICD for details)[bitfield]:
         // 0 - curve fit interval 
         // 1 - data flag for L2 P-code// 2,3 - code on L2 channel// 4 - anti-spoof (A-S) flag (from HOW) 
-        // 5 - ï¿½Alertï¿½ flag (from HOW) 
+        // 5 - ‘Alert’ flag (from HOW) 
         // 6 - ephemeris was retrieved from non-volatile memory 
         // 7 -reserved 
         // ===== Clock data (Subframe 1) =====
@@ -97,7 +97,7 @@ namespace Greis
         Types::f8& M0() { return _m0; }
 
         // Longitude of ascending node of orbit plane at the 
-        // start of week ï¿½wnï¿½ [semi-circles] 
+        // start of week ‘wn’ [semi-circles] 
         const Types::f8& Omega0() const { return _omega0; }
         Types::f8& Omega0() { return _omega0; }
 

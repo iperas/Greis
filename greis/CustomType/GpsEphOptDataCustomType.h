@@ -63,7 +63,7 @@ namespace Greis
         const Types::f4& FIscL1CP() const { return _fIscL1CP; }
         Types::f4& FIscL1CP() { return _fIscL1CP; }
 
-        // correction to ï¿½af0ï¿½. Exact term = af0 + DAF0 
+        // correction to ‘af0’. Exact term = af0 + DAF0 
         const Types::f4& DAf0() const { return _DAf0; }
         Types::f4& DAf0() { return _DAf0; }
     private:

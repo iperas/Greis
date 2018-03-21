@@ -44,7 +44,7 @@ namespace Greis
         const Types::u1& KP() const { return _KP; }
         Types::u1& KP() { return _KP; }
 
-        // Number of 4-year cycle [1ï¿½31] 
+        // Number of 4-year cycle [1…31] 
         const Types::u1& N4() const { return _N4; }
         Types::u1& N4() { return _N4; }
 

@@ -25,7 +25,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Without ï¿½csï¿½, ï¿½gps.svï¿½ within the range[1ï¿½7]
+        // Without ‘cs’, ‘gps.sv’ within the range[1…7]
         const GPSEphemeris1CustomType::UniquePtr_t& Gps() const { return _gps; }
         GPSEphemeris1CustomType::UniquePtr_t& Gps() { return _gps; }
 

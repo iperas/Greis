@@ -45,7 +45,7 @@ namespace Greis
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
-        // Length of the navigation data block ï¿½dataï¿½u4 data[len]; // Navigation data blocki1 errCorr; // Error correctionsu1 cs; // Checksum 
+        // Length of the navigation data block ‘data’u4 data[len]; // Navigation data blocki1 errCorr; // Error correctionsu1 cs; // Checksum 
         const Types::u1& Len() const { return _len; }
         Types::u1& Len() { return _len; }
     private:

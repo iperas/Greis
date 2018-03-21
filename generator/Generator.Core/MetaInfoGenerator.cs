@@ -12,12 +12,13 @@ namespace Generator.Core
         private static readonly List<string> MessagesWithFillBehavior = new List<string>
             {
                 "SI",
+				"SX",
                 "AN",
                 "NN",
                 "EL",
                 "AZ",
-                "RC",
-                "rc",
+                "RX",
+                "rx",
                 "1R",
                 "1r",
                 "CC",

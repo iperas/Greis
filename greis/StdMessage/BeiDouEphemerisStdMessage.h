@@ -25,7 +25,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // GPS required data, ï¿½req.svï¿½ within the range [1ï¿½30]
+        // GPS required data, ‘req.sv’ within the range [1…30]
         // --- BeiDou-specific data block --
         const GpsEphReqDataCustomType::UniquePtr_t& Req() const { return _req; }
         GpsEphReqDataCustomType::UniquePtr_t& Req() { return _req; }
@@ -41,7 +41,7 @@ namespace Greis
         const Types::u1& NavType() const { return _navType; }
         Types::u1& NavType() { return _navType; }
 
-        // correction to ï¿½af0ï¿½. Exact term = af0 + DAF0
+        // correction to ‘af0’. Exact term = af0 + DAF0
         // --- End of BeiDou-specific data block --
         const Types::f4& DAf0() const { return _DAf0; }
         Types::f4& DAf0() { return _DAf0; }

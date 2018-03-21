@@ -35,8 +35,8 @@ namespace Greis
         Types::u2& Reserved() { return _reserved; }
 
         // Clock offsets (see below). 
-        // ï¿½Nï¿½ can be derived from the following expression:
-        // N = (len - 7) / recSize, where ï¿½lenï¿½ is message body// length taken from message header
+        // ‘N’ can be derived from the following expression:
+        // N = (len - 7) / recSize, where ‘len’ is message body// length taken from message header
         const std::vector<ClkOffsCustomType::UniquePtr_t>& Offs() const { return _Offs; }
         std::vector<ClkOffsCustomType::UniquePtr_t>& Offs() { return _Offs; }
 

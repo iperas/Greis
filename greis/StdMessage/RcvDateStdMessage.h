@@ -23,24 +23,24 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Current year [1ï¿½65534][] 
+        // Current year [1…65534][] 
         const Types::u2& Year() const { return _year; }
         Types::u2& Year() { return _year; }
 
-        // Current month [1ï¿½12] []
+        // Current month [1…12] []
         const Types::u1& Month() const { return _month; }
         Types::u1& Month() { return _month; }
 
-        // Current day [1ï¿½31] [] 
+        // Current day [1…31] [] 
         const Types::u1& Day() const { return _day; }
         Types::u1& Day() { return _day; }
 
         // Receiver reference time [enumerated]
-        // 0 ï¿½ GPS 
-        // 1 ï¿½ UTC_USNO 
-        // 2 ï¿½ GLONASS 
-        // 3 ï¿½ UTC_SU 
-        // 4ï¿½254 ï¿½ Reserved 
+        // 0 — GPS 
+        // 1 — UTC_USNO 
+        // 2 — GLONASS 
+        // 3 — UTC_SU 
+        // 4…254 — Reserved 
         const Types::u1& Base() const { return _base; }
         Types::u1& Base() { return _base; }
 

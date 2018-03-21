@@ -39,7 +39,7 @@ namespace Greis
         const Types::u1& Type() const { return _type; }
         Types::u1& Type() { return _type; }
 
-        // Length of the navigation data block ï¿½dataï¿½
+        // Length of the navigation data block ‘data’
         const Types::u1& Len() const { return _len; }
         Types::u1& Len() { return _len; }
 

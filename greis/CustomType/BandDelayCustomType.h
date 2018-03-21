@@ -13,7 +13,7 @@ namespace Greis
 
         BandDelayCustomType(const char* p_message, int p_length);
         BandDelayCustomType(int p_size);
-
+        
         virtual ECustomTypeId::Type IdNumber() const { return ECustomTypeId::BandDelay; }
         virtual QByteArray ToByteArray() const;
         virtual int Size() const { return _size; }
@@ -27,7 +27,7 @@ namespace Greis
         const Types::i1& Signal() const { return _signal; }
         Types::i1& Signal() { return _signal; }
 
-        // Code delay [s]
+        // Code delay [s] 
         const Types::f4& Delay() const { return _delay; }
         Types::f4& Delay() { return _delay; }
     private:

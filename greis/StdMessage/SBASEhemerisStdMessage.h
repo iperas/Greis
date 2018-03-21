@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SBAS SV PRN number within [120ï¿½142] 
+        // SBAS SV PRN number within [120…142] 
         const Types::u1& WaasPrn() const { return _waasPrn; }
         Types::u1& WaasPrn() { return _waasPrn; }
 
@@ -79,11 +79,11 @@ namespace Greis
         const Types::f4& Vvzg() const { return _vvzg; }
         Types::f4& Vvzg() { return _vvzg; }
 
-        // SBAS SV clock offset factor ï¿½aoï¿½ [s] 
+        // SBAS SV clock offset factor ‘ao’ [s] 
         const Types::f4& Agf0() const { return _agf0; }
         Types::f4& Agf0() { return _agf0; }
 
-        // SBAS SV clock offset factor ï¿½a1ï¿½ [s/s] 
+        // SBAS SV clock offset factor ‘a1’ [s/s] 
         const Types::f4& Agf1() const { return _agf1; }
         Types::f4& Agf1() { return _agf1; }
 
@@ -97,9 +97,9 @@ namespace Greis
         Types::u2& Wn() { return _wn; }
 
         // Flags [bitfield]:
-        // 0ï¿½5 - reserved 
+        // 0…5 - reserved 
         // 6 - ephemeris was retrieved from NV-memory 
-        // 7ï¿½15 - reserved 
+        // 7…15 - reserved 
         const Types::u2& Flags() const { return _flags; }
         Types::u2& Flags() { return _flags; }
 

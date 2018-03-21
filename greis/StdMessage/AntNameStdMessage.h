@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Antenna names[aï¿½z]
+        // Antenna names[a…z]
         const std::string& Name() const { return _name; }
         std::string& Name() { return _name; }
 

@@ -28,8 +28,8 @@ namespace Greis
         Types::u1& Usi() { return _usi; }
 
         // Number of slot records (M) [bitfield]: 
-        // 7ï¿½3: reserved 
-        // 2ï¿½0: number of slot records minus one (M) 
+        // 7…3: reserved 
+        // 2…0: number of slot records minus one (M) 
         const Types::u1& Num() const { return _num; }
         Types::u1& Num() { return _num; }
     private:

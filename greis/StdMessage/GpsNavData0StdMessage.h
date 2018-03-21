@@ -29,7 +29,7 @@ namespace Greis
         const Types::u1& RecSize() const { return _recSize; }
         Types::u1& RecSize() { return _recSize; }
 
-        // Satellite data. ï¿½Nï¿½ can be derived from the 
+        // Satellite data. “N” can be derived from the 
         // following expression:
         // N=([Message Length] - 2) / recSize) 
         const std::vector<SvData0CustomType::UniquePtr_t>& Dat() const { return _dat; }

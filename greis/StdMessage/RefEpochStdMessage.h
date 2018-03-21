@@ -29,24 +29,24 @@ namespace Greis
 
         // Time scale ID, leap second status and
         // week/day part of epoch representation [bitfield]
-        // 15ï¿½13: time scale ID: 
-        // 0 ï¿½ GPS, 1 ï¿½ GLONASS, 2 ï¿½ UTC; 
-        // 12ï¿½11: leap second status: 
-        // 0 ï¿½ no leap second epoch; 
-        // 1 ï¿½ positive leap second; 
-        // 2 ï¿½ negative leap second; 
-        // 3 ï¿½ leap second status is unknown; 
+        // 15…13: time scale ID: 
+        // 0 – GPS, 1 – GLONASS, 2 – UTC; 
+        // 12…11: leap second status: 
+        // 0 – no leap second epoch; 
+        // 1 – positive leap second; 
+        // 2 – negative leap second; 
+        // 3 – leap second status is unknown; 
         // this flag shows whether a leap second 
         // occurred at the current epoch; 
-        // 10ï¿½0: week/day representation: 
+        // 10…0: week/day representation: 
         // (a) if time scale ID is GPS: 
-        // week number [0ï¿½1023], 
+        // week number [0…1023], 
         // 1024 indicates unknown week number; 
         // (b) if time scale ID is GLONASS: 
-        // day number within 4-year period [1ï¿½1461], 
+        // day number within 4-year period [1…1461], 
         // 0 indicates unknown day number 
         // (c) if time scale ID is UTC: 
-        // day number within the year [1ï¿½366], 
+        // day number within the year [1…366], 
         // 0 indicates unknown day number;
         const Types::u2& Scale() const { return _scale; }
         Types::u2& Scale() { return _scale; }

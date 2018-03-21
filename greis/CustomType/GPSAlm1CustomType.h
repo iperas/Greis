@@ -19,7 +19,7 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // SV PRN number within the range [1ï¿½37] 
+        // SV PRN number within the range [1…37] 
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 
@@ -32,16 +32,20 @@ namespace Greis
         Types::i4& Toa() { return _toa; }
 
         // Health summary (from almanac), [bitfield]
-        // 0ï¿½4 - code for health of SV signal components 
-        // 5ï¿½7 - navigation data health indicatorsu1 healthS; // Satellite health (page 25 of subframe 5) []
+        // 0…4 - code for health of SV signal components 
+        // 5…7 - navigation data health indicators
         const Types::u1& HealthA() const { return _healthA; }
         Types::u1& HealthA() { return _healthA; }
 
+        // Satellite health (page 25 of subframe 5) []
+        const Types::u1& HealthS() const { return _healthS; }
+        Types::u1& HealthS() { return _healthS; }
+
         // Satellite configuration (page 25 of subframe 4)
         // [bitfield]: 
-        // 0ï¿½2 - satellite configuration 
+        // 0…2 - satellite configuration 
         // 3 - anti-spoofing flag 
-        // 4ï¿½7 - reserved 
+        // 4…7 - reserved 
         // ======= Clock data =======
         const Types::u1& Config() const { return _config; }
         Types::u1& Config() { return _config; }
@@ -69,7 +73,7 @@ namespace Greis
         Types::f4& M0() { return _m0; }
 
         // Longitude of ascending node of orbit plane
-        // at the start of week ï¿½wnaï¿½ [semi-circles] 
+        // at the start of week ‘wna’ [semi-circles] 
         const Types::f4& Omega0() const { return _omega0; }
         Types::f4& Omega0() { return _omega0; }
 
@@ -93,6 +97,7 @@ namespace Greis
         Types::i2 _wna;
         Types::i4 _toa;
         Types::u1 _healthA;
+        Types::u1 _healthS;
         Types::u1 _config;
         Types::f4 _af1;
         Types::f4 _af0;

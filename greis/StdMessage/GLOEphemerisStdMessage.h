@@ -23,11 +23,11 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // Satellite orbit slot number [1ï¿½32] []
+        // Satellite orbit slot number [1…32] []
         const Types::u1& Sv() const { return _sv; }
         Types::u1& Sv() { return _sv; }
 
-        // Satellite frequency channel number [-7ï¿½24] []
+        // Satellite frequency channel number [-7…24] []
         const Types::i1& FrqNum() const { return _frqNum; }
         Types::i1& FrqNum() { return _frqNum; }
 
@@ -39,7 +39,7 @@ namespace Greis
         const Types::i4& Tk() const { return _tk; }
         Types::i4& Tk() { return _tk; }
 
-        // Ephemeris reference time (for day ï¿½dneï¿½) [s]
+        // Ephemeris reference time (for day ‘dne’) [s]
         const Types::i4& Tb() const { return _tb; }
         Types::i4& Tb() { return _tb; }
 
@@ -49,18 +49,18 @@ namespace Greis
         // 1 - satellite is unhealthy 
         // 0 - satellite is healthy 
         // 1 - If set, this flag indicates that params 
-        // ï¿½tauï¿½ and ï¿½gammaï¿½ may be wrong 
+        // ‘tau’ and ‘gamma’ may be wrong 
         // (Note that receiver performs several 
-        // ï¿½internalï¿½ data consistency checks allowing 
+        // ‘internal’ data consistency checks allowing 
         // detection of problem broadcast parameters) 
         // 2 - If set, this flag indicates that initial 
-        // conditions ï¿½r[3]ï¿½ and ï¿½v[3]ï¿½ may be wrong 
+        // conditions ‘r[3]’ and ‘v[3]’ may be wrong 
         // 3 - SV health (Cn word) status from almanac: 
         // 0 - satellite is unhealthy 
         // 1 - satellite is healthy 
         // 4 - If set, this flag indicates that SV health 
         // status from almanac is available 
-        // 5ï¿½7 - reserved 
+        // 5…7 - reserved 
         // ===== Ephemeris data ======
         const Types::u1& Health() const { return _health; }
         Types::u1& Health() { return _health; }
@@ -70,10 +70,10 @@ namespace Greis
         Types::u1& Age() { return _age; }
 
         // Flags (for details, see GLONASS ICD) [bitfield]:
-        // 0ï¿½1 - p1 word 
+        // 0…1 - p1 word 
         // 2 - p2 word 
         // 3 - p3 word 
-        // 4ï¿½5 - 2 LSB taken from Bn word 
+        // 4…5 - 2 LSB taken from Bn word 
         // 6 - ephemeris was retrieved from NV-memory 
         // 7 - SV is GLONASS-M or newer 
         const Types::u1& Flags() const { return _flags; }
@@ -116,17 +116,17 @@ namespace Greis
         const Types::u1& NFt() const { return _nFt; }
         Types::u1& NFt() { return _nFt; }
 
-        // Number of 4-year cycle [1ï¿½31]
+        // Number of 4-year cycle [1…31]
         const Types::u1& NN4() const { return _nN4; }
         Types::u1& NN4() { return _nN4; }
 
         // Flags (for details, see GLONASS ICD) [bitfield]:
         // 0 - GLONASS-M ln (third string) 
-        // 1ï¿½2 - GLONASS-M P 
+        // 1…2 - GLONASS-M P 
         // 3 - GLONASS-M P4 
-        // 4ï¿½5 - GLONASS-M M 
+        // 4…5 - GLONASS-M M 
         // 6 - GLONASS-M ln (fifth string) 
-        // 7ï¿½15 - reserved 
+        // 7…15 - reserved 
         // --- Optional data block --
         const Types::u2& Flags2() const { return _flags2; }
         Types::u2& Flags2() { return _flags2; }
@@ -144,7 +144,7 @@ namespace Greis
         const Types::f4& Beta() const { return _beta; }
         Types::f4& Beta() { return _beta; }
 
-        // Derivation of ï¿½tauSysï¿½ [s/s]
+        // Derivation of ‘tauSys’ [s/s]
         const Types::f4& TauSysDot() const { return _tauSysDot; }
         Types::f4& TauSysDot() { return _tauSysDot; }
 

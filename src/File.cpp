@@ -8,7 +8,7 @@ namespace Common
         QFilePtr file(new QFile(filename));
         if (!file->open(QIODevice::ReadOnly))
         {
-            throw FileException(QString("Ошибка при открытии файла '%1': %2.").arg(filename).arg(file->errorString()));
+            throw FileException(QString("Failed to read from file '%1': %2.").arg(filename).arg(file->errorString()));
         }
         return file;
     }
@@ -18,7 +18,7 @@ namespace Common
         QFilePtr file(new QFile(filename));
         if (!file->open(QIODevice::WriteOnly | QIODevice::Truncate))
         {
-            throw FileException(QString("Ошибка при открытии файла '%1': %2.").arg(filename).arg(file->errorString()));
+            throw FileException(QString("Failed to write to file '%1': %2.").arg(filename).arg(file->errorString()));
         }
         return file;
     }

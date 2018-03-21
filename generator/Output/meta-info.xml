@@ -7,7 +7,13 @@
           <SizeOfDimensions>
             <Dimension>5</Dimension>
           </SizeOfDimensions>
-          <Comment>File type identifiera1 description[80]; // Human-readable stream description</Comment>
+          <Comment>File type identifier</Comment>
+        </Variable>
+        <Variable GreisType="a1" Name="description" RequiredValue="">
+          <SizeOfDimensions>
+            <Dimension>80</Dimension>
+          </SizeOfDimensions>
+          <Comment>Human-readable stream description</Comment>
         </Variable>
       </Variables>
       <Codes>
@@ -1222,7 +1228,7 @@ controllable by RTK engine [%] </Comment>
         <Code>PT</Code>
       </Codes>
     </StandardMessage>
-    <StandardMessage Name="ExtSatIndex" Size="-1" Title="[SX] Extended Satellite Indices " Validation="Checksum" Type="Unknown">
+    <StandardMessage Name="ExtSatIndex" Size="-2" Title="[SX] Extended Satellite Indices " Validation="Checksum" Type="Unknown">
       <Variables>
         <Variable GreisType="ESI" Name="esi" RequiredValue="">
           <SizeOfDimensions>

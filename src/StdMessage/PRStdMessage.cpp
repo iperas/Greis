@@ -12,7 +12,12 @@ namespace Greis
         
         p_message += HeadSize();
     
-        /*throw Common::NotImplementedException();*/
+        int arraySizeInUniformFillFields = (BodySize() - 1) / 8;
+
+        _serializer.Deserialize(p_message, sizeof(std::vector<Types::f8>::value_type) * arraySizeInUniformFillFields, _pr);
+        p_message += sizeof(std::vector<Types::f8>::value_type) * arraySizeInUniformFillFields;
+        _serializer.Deserialize(p_message, _cs);
+        p_message += sizeof(_cs);
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)

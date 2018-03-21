@@ -28,10 +28,10 @@ namespace Greis
         Types::u2& Sample() { return _sample; }
 
         // [bitfield]:
-        // 15ï¿½5: Difference between the raw measurement time 
+        // 15…5: Difference between the raw measurement time 
         // (available from either [rM] or [rE] message) 
-        // and the position time tag [-1024ï¿½1023], [5 ms] 
-        // 4ï¿½0: reserved 
+        // and the position time tag [-1024…1023], [5 ms] 
+        // 4…0: reserved 
         const Types::u2& Delta() const { return _delta; }
         Types::u2& Delta() { return _delta; }
 
@@ -40,24 +40,24 @@ namespace Greis
         Types::u4& Word1() { return _word1; }
 
         // [bitfield]:
-        // 31ï¿½24: 8 LSB of Position ECEF X-component [10-4 m]
+        // 31…24: 8 LSB of Position ECEF X-component [10-4 m]
         // or Latitude [10-11 radians] 
         // or Grid (Local) X-component [10-4 m];
         // 23: 1 - indicates that Position is valid 
-        // 22ï¿½21: 0 ï¿½ Position is given in ECEF system 
-        // 1 ï¿½ Position is given in geodetic coordinates 
+        // 22…21: 0 – Position is given in ECEF system 
+        // 1 – Position is given in geodetic coordinates 
         // (latitude, longitude, height above 
         // ellipsoid) 
-        // 2 ï¿½ Position is given in grid (or local) 
+        // 2 – Position is given in grid (or local) 
         // coordinates 
-        // 3 ï¿½ reserved 
-        // 20ï¿½16: Number of GPS SVs used in computation; 
+        // 3 – reserved 
+        // 20…16: Number of GPS SVs used in computation; 
         // 15: 1 - indicates that Velocity is valid 
-        // 14ï¿½13: reserved 
-        // 12ï¿½8: Number of GLONASS SVs used in computation; 
-        // 7ï¿½4: Position computation mode 
+        // 14…13: reserved 
+        // 12…8: Number of GLONASS SVs used in computation; 
+        // 7…4: Position computation mode 
         // (see Table 3-3 on page 66); 
-        // 3ï¿½0: Velocity computation mode 
+        // 3…0: Velocity computation mode 
         // (see Table 3-3 on page 66); 
         const Types::u4& Word2() const { return _word2; }
         Types::u4& Word2() { return _word2; }
@@ -66,11 +66,11 @@ namespace Greis
         const Types::u4& Word3() const { return _word3; }
         Types::u4& Word3() { return _word3; }
 
-        // 31ï¿½24: 8 LSB of Position ECEF Y-component [10-4 m]
+        // 31…24: 8 LSB of Position ECEF Y-component [10-4 m]
         // or Longitude [10-11 radians] 
         // or Grid (Local) Y-component [10-4 m];
-        // 23ï¿½15: PDOP * 10 []; 
-        // 14ï¿½0: RMS velocity error [0.001 meters]; 
+        // 23…15: PDOP * 10 []; 
+        // 14…0: RMS velocity error [0.001 meters]; 
         const Types::u4& Word4() const { return _word4; }
         Types::u4& Word4() { return _word4; }
 
@@ -79,35 +79,35 @@ namespace Greis
         Types::u4& Word5() { return _word5; }
 
         // [bitfield]:
-        // 31ï¿½24: 8 LSB of position ECEF Z-component 
+        // 31…24: 8 LSB of position ECEF Z-component 
         // or Height above ellipsoid or geoid11 [10-4 m]; 
-        // 23ï¿½20: reserved; 
-        // 19ï¿½0: RMS Position error [0.001 m]; 
+        // 23…20: reserved; 
+        // 19…0: RMS Position error [0.001 m]; 
         const Types::u4& Word6() const { return _word6; }
         Types::u4& Word6() { return _word6; }
 
         // [bitfield]:
-        // 31ï¿½4: velocity X-component [10-4 m/s]
+        // 31…4: velocity X-component [10-4 m/s]
         // or East component (if types 1 and 2 are 
-        // selected in bits 22ï¿½21 of the ï¿½word2ï¿½ field); 
-        // 3ï¿½2: reserved; 
-        // 1ï¿½0: 2 MSB of GREIS datum number (see note below); 
+        // selected in bits 22…21 of the ‘word2’ field); 
+        // 3…2: reserved; 
+        // 1…0: 2 MSB of GREIS datum number (see note below); 
         const Types::u4& Word7() const { return _word7; }
         Types::u4& Word7() { return _word7; }
 
         // [bitfield]:
-        // 31ï¿½4: velocity Y-component [10-4 m/s]
+        // 31…4: velocity Y-component [10-4 m/s]
         // or North component (if types 1 and 2 are 
-        // selected in bits 22ï¿½21 of the ï¿½word2ï¿½ field); 
-        // 3ï¿½0: bits 7ï¿½4 of datum number; 
+        // selected in bits 22…21 of the ‘word2’ field); 
+        // 3…0: bits 7…4 of datum number; 
         const Types::u4& Word8() const { return _word8; }
         Types::u4& Word8() { return _word8; }
 
         // [bitfield]:
-        // 31ï¿½4: velocity Z-component [10-4 m/s]
+        // 31…4: velocity Z-component [10-4 m/s]
         // or Height component (if types 1 and 2 are 
-        // selected in bits 22ï¿½21 of the ï¿½word2ï¿½ field); 
-        // 3ï¿½0: 4 LSB of GREIS datum number; 
+        // selected in bits 22…21 of the ‘word2’ field); 
+        // 3…0: 4 LSB of GREIS datum number; 
         const Types::u4& Word9() const { return _word9; }
         Types::u4& Word9() { return _word9; }
 

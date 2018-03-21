@@ -43,7 +43,7 @@ namespace Greis
 
         // Flags of data availability [bitfield]
         // 0 - GGTO availability 
-        // 1ï¿½15 - reserved 
+        // 1…15 - reserved 
         const Types::u2& Flags() const { return _flags; }
         Types::u2& Flags() { return _flags; }
 

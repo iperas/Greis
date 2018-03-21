@@ -91,8 +91,8 @@ namespace Greis
             "INSERT INTO `msg_ExtSatIndex` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `esi`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_ExtSatIndex", _inserterBatchSize);
         auto fileIdInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_FileId` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`) VALUES (?, ?, ?, ?, ?, ?)", 
-            6, _connection, "msg_FileId", _inserterBatchSize);
+            "INSERT INTO `msg_FileId` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `id_sugar`, `description`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_FileId", _inserterBatchSize);
         auto flagsInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_Flags` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `flags`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "msg_Flags", _inserterBatchSize);
@@ -1080,14 +1080,15 @@ namespace Greis
         case EMessageId::ExtSatIndex:
             {
                 auto c = dynamic_cast<ExtSatIndexStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << addCustomTypesAndSerialize(c->Esi());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::FileId:
             {
                 auto c = dynamic_cast<FileIdStdMessage*>(msg);
                 out << _serializer.Serialize(c->IdField());
+                out << _serializer.Serialize(c->Description());
             }
             break;
         case EMessageId::Flags:

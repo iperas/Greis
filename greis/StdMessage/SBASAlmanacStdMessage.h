@@ -23,7 +23,7 @@ namespace Greis
         virtual int BodySize() const { return _bodySize; }
         virtual QByteArray ToByteArray() const;
         
-        // SBAS SV PRN number within [120ï¿½142] 
+        // SBAS SV PRN number within [120…142] 
         const Types::u1& WaasPrn() const { return _waasPrn; }
         Types::u1& WaasPrn() { return _waasPrn; }
 

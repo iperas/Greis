@@ -38,24 +38,24 @@ namespace Greis
         Types::u4& Reftime() { return _reftime; }
 
         // Clock offset:
-        // 15ï¿½2: Clock offset 
+        // 15…2: Clock offset 
         // -213 /+(213-1) [125 nanoseconds]: 
-        // 1ï¿½0: Clock offset ID: 
-        // 0 ï¿½ clock offset is unavailable 
-        // 1 ï¿½ [GPS - Receiver time] 
-        // 2 ï¿½ [GLONASS - Receiver time] 
+        // 1…0: Clock offset ID: 
+        // 0 – clock offset is unavailable 
+        // 1 – [GPS - Receiver time] 
+        // 2 – [GLONASS - Receiver time] 
         // 3 - reserved 
         const Types::i2& Clock() const { return _clock; }
         Types::i2& Clock() { return _clock; }
 
         // Flags [bitfield]: 
-        // 15ï¿½13: message version [0ï¿½7] 
-        // 12ï¿½8: total number of ï¿½svdï¿½ records (N) 
-        // 7ï¿½5: this value plus 6 makes the length 
-        // of the structure ï¿½Headerï¿½ in bytes 
-        // 4ï¿½0: this value plus 10 (for ï¿½versionï¿½ 0 and 1), 
-        // or 6 (for ï¿½versionï¿½ [2ï¿½7]) makes the length 
-        // of the structure ï¿½SlotRecï¿½ in bytes
+        // 15…13: message version [0…7] 
+        // 12…8: total number of “svd” records (N) 
+        // 7…5: this value plus 6 makes the length 
+        // of the structure “Header” in bytes 
+        // 4…0: this value plus 10 (for “version” 0 and 1), 
+        // or 6 (for “version” [2…7]) makes the length 
+        // of the structure “SlotRec” in bytes
         const Types::u2& Flags() const { return _flags; }
         Types::u2& Flags() { return _flags; }
 

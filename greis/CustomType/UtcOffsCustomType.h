@@ -39,7 +39,7 @@ namespace Greis
         const Types::i1& Dtls() const { return _dtls; }
         Types::i1& Dtls() { return _dtls; }
 
-        // 'Future' reference day number [1ï¿½7] [] 
+        // 'Future' reference day number [1…7] [] 
         const Types::u1& Dn() const { return _dn; }
         Types::u1& Dn() { return _dn; }
 

@@ -31,7 +31,7 @@ function build() {
     if ($LASTEXITCODE -ne 0) {
         throw "MSBuild failed"
     }
-    &$mstest $testContainer
+    #&$mstest $testContainer
     if ($LASTEXITCODE -ne 0) {
         #throw "Tests failed"
     }
@@ -55,7 +55,7 @@ function updateFiles() {
     cp $metaXmlFile $outputMetaDir -Force
     cp ($sqlBaselineDir + '\baseline.sql') $outputMetaDir -Force
 
-    $includeDir = $outputDir + '\Greis'
+    $includeDir = $outputDir + '\greis'
     $srcDir = $outputDir + '\src'
 
     rmdir ($includeDir + '\StdMessage') -force -recurse

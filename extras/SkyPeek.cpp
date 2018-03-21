@@ -24,7 +24,11 @@ namespace Greis
 			ESI.SSID=SkyPeek::Systems::QZSS; ESI.SVID=USI;
 		} else if (211<=USI<=247) { // BeiDou
 			ESI.SSID=SkyPeek::Systems::BeiDou; ESI.SVID=USI-210;
+		} else {
+			ESI.SSID=0;
+			ESI.SVID=0;
 		}
+		return ESI;
 	}
 	int SkyPeek::getUSI(SkyPeek::ESIdx ESI)
 	{
@@ -210,7 +214,7 @@ namespace Greis
 					SVs[i].Ksys = getKsys(SVs[i].ESI);
 					SVs[i].CarrierFrequency = getCarrierFrequency(SVs[i].ESI);
 					if(SVs[i].ESI.SSID==0 || SVs[i].ESI.SSID>7)
-					sLogger.Warn(QString("SkyPeek: unknown satellite in lock: SSID: %1, SVID: %2").arg(SVs[i].ESI.SSID).arg(SVs[i].ESI.SVID));
+					sLogger.Warn(QString("SkyPeek: unknown satellite in lock: SSID: %1, SVID: %2, USI: %3").arg(SVs[i].ESI.SSID).arg(SVs[i].ESI.SVID).arg(SVs[i].USI));
             	}
 			}  else if (stdMsg->IdNumber() == EMessageId::ExtSatIndex) // [SX]
             {

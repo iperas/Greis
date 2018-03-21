@@ -19,7 +19,7 @@ namespace Greis
         virtual int Size() const { return _size; }
         virtual bool IsCorrect() const { return _isCorrect; }
 
-        // GLONASS FCN[-7ï¿½6]
+        // GLONASS FCN[-7…6]
         const Types::i1& Fcn() const { return _fcn; }
         Types::i1& Fcn() { return _fcn; }
 
