@@ -23,10 +23,12 @@ namespace Greis
         virtual bool IsCorrect() const { return _isCorrect; }
 
         // Required data
+        // --- Optional data block --
         const GpsEphReqDataCustomType::UniquePtr_t& Req() const { return _req; }
         GpsEphReqDataCustomType::UniquePtr_t& Req() { return _req; }
 
-        // Optional data. Present when length > 123.
+        // Optional data block. Present when length > 123.
+        // --- End of optional data block --
         const GpsEphOptDataCustomType::UniquePtr_t& Opt() const { return _opt; }
         GpsEphOptDataCustomType::UniquePtr_t& Opt() { return _opt; }
     private:

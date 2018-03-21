@@ -11,8 +11,8 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 122, _req);
         p_message += 122;
-        _serializer.Deserialize(p_message, 36, _opt);
-        p_message += 36;
+        _serializer.Deserialize(p_message, -3, _opt);
+        p_message += -3;
 
         _isCorrect = (p_message - pc_message == p_length);
         if (!_isCorrect)

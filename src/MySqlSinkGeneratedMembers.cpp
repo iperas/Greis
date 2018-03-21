@@ -139,8 +139,8 @@ namespace Greis
             "INSERT INTO `msg_GloUtcGpsParam` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tauSys`, `tauGps`, `B1`, `B2`, `KP`, `N4`, `Dn`, `Nt`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             14, _connection, "msg_GloUtcGpsParam", _inserterBatchSize);
         auto gPSAlm0Inserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GPSAlm0` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            20, _connection, "msg_GPSAlm0", _inserterBatchSize);
+            "INSERT INTO `msg_GPSAlm0` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            21, _connection, "msg_GPSAlm0", _inserterBatchSize);
         auto gPSEphemeris0Inserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_GPSEphemeris0` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `req`, `opt`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             8, _connection, "msg_GPSEphemeris0", _inserterBatchSize);
@@ -154,8 +154,8 @@ namespace Greis
             "INSERT INTO `msg_GPSTime` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `tow`, `wn`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             8, _connection, "msg_GPSTime", _inserterBatchSize);
         auto gpsUtcParamInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `msg_GpsUtcParam` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`) VALUES (?, ?, ?, ?, ?, ?)", 
-            6, _connection, "msg_GpsUtcParam", _inserterBatchSize);
+            "INSERT INTO `msg_GpsUtcParam` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            7, _connection, "msg_GpsUtcParam", _inserterBatchSize);
         auto headAndPitchInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `msg_HeadAndPitch` (`idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `heading`, `pitch`, `solType`, `cs`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             9, _connection, "msg_HeadAndPitch", _inserterBatchSize);
@@ -430,14 +430,14 @@ namespace Greis
             "INSERT INTO `ct_ExtSpecData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `spec`, `agcmin`, `agcmax`) VALUES (?, ?, ?, ?, ?, ?, ?)", 
             7, _connection, "ct_ExtSpecData", _inserterBatchSize);
         auto gPSAlm1Inserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `ct_GPSAlm1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            18, _connection, "ct_GPSAlm1", _inserterBatchSize);
+            "INSERT INTO `ct_GPSAlm1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            19, _connection, "ct_GPSAlm1", _inserterBatchSize);
         auto gPSEphemeris1Inserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_GPSEphemeris1` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `opt`) VALUES (?, ?, ?, ?, ?, ?)", 
             6, _connection, "ct_GPSEphemeris1", _inserterBatchSize);
         auto gpsEphOptDataInserter = std::make_shared<DataBatchInserter>(
-            "INSERT INTO `ct_GpsEphOptData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `navType`, `lTope`, `lTopc`, `dADot`, `cURAoc`, `cURAoc1`, `cURAoc2`, `fIscL1CA`, `fIscL5I5`, `fIscL1CP`, `DAf0`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            15, _connection, "ct_GpsEphOptData", _inserterBatchSize);
+            "INSERT INTO `ct_GpsEphOptData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `navType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `fIscL1CA`, `fIscL2C`, `fIscL5I5`, `fIscL5Q5`, `DAf0`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            18, _connection, "ct_GpsEphOptData", _inserterBatchSize);
         auto gpsEphReqDataInserter = std::make_shared<DataBatchInserter>(
             "INSERT INTO `ct_GpsEphReqData` (`id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `tow`, `flags`, `iodc`, `toc`, `ura`, `healthS`, `wn`, `tgd`, `af2`, `af1`, `af0`, `toe`, `iode`, `rootA`, `ecc`, `m0`, `omega0`, `inc0`, `argPer`, `deln`, `omegaDot`, `incDot`, `crc`, `crs`, `cuc`, `cus`, `cic`, `cis`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             33, _connection, "ct_GpsEphReqData", _inserterBatchSize);
@@ -994,15 +994,15 @@ namespace Greis
         case EMessageId::CNR2560:
             {
                 auto c = dynamic_cast<CNR2560StdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->CnrX256());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::CNR2561:
             {
                 auto c = dynamic_cast<CNR2561StdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->CnrX256());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::CNR4:
@@ -1042,8 +1042,8 @@ namespace Greis
         case EMessageId::DP:
             {
                 auto c = dynamic_cast<DPStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Dp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::EpochTime:
@@ -1312,6 +1312,7 @@ namespace Greis
                 out << _serializer.Serialize(c->Wna());
                 out << _serializer.Serialize(c->Toa());
                 out << _serializer.Serialize(c->HealthA());
+                out << _serializer.Serialize(c->HealthS());
                 out << _serializer.Serialize(c->Config());
                 out << _serializer.Serialize(c->Af1());
                 out << _serializer.Serialize(c->Af0());
@@ -1329,7 +1330,13 @@ namespace Greis
             {
                 auto c = dynamic_cast<GPSEphemeris0StdMessage*>(msg);
                 out << addCustomType(c->Req().get());
-                out << addCustomType(c->Opt().get());
+                if (c->BodySize() == 120)
+                {
+                    // Optional Data Block
+                    out << addCustomType(c->Opt().get());
+                } else {
+                    out << QVariant(QVariant::Int);
+                }
                 out << _serializer.Serialize(c->Cs());
             }
             break;
@@ -1365,6 +1372,7 @@ namespace Greis
             {
                 auto c = dynamic_cast<GpsUtcParamStdMessage*>(msg);
                 out << addCustomType(c->Utc().get());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::HeadAndPitch:
@@ -1379,8 +1387,8 @@ namespace Greis
         case EMessageId::IAmp:
             {
                 auto c = dynamic_cast<IAmpStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Amp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::InertialMeasurements:
@@ -1513,8 +1521,9 @@ namespace Greis
         case EMessageId::PhCorr:
             {
                 auto c = dynamic_cast<PhCorrStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Phc());
+                out << _serializer.Serialize(c->Mode());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::Pos:
@@ -1608,22 +1617,23 @@ namespace Greis
         case EMessageId::PR:
             {
                 auto c = dynamic_cast<PRStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Pr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::PrCorr:
             {
                 auto c = dynamic_cast<PrCorrStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Prc());
+                out << _serializer.Serialize(c->Mode());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::QAmp:
             {
                 auto c = dynamic_cast<QAmpStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Amp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::QZSSAlm:
@@ -1635,8 +1645,8 @@ namespace Greis
         case EMessageId::QZSSEphemeris:
             {
                 auto c = dynamic_cast<QZSSEphemerisStdMessage*>(msg);
-                out << addCustomType(c->Gps().get());
-                out << _serializer.Serialize(c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
             }
             break;
         case EMessageId::QzssIonoParams:
@@ -1879,8 +1889,8 @@ namespace Greis
         case EMessageId::RPR:
             {
                 auto c = dynamic_cast<RPRStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Rpr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::RSLocalPlanePos:
@@ -2069,22 +2079,22 @@ namespace Greis
         case EMessageId::SPR:
             {
                 auto c = dynamic_cast<SPRStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Spr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SRDP:
             {
                 auto c = dynamic_cast<SRDPStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Srdp());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SRPR:
             {
                 auto c = dynamic_cast<SRPRStdMessage*>(msg);
-                
-                /*throw Common::NotImplementedException();*/
+                out << _serializer.Serialize(c->Srpr());
+                out << _serializer.Serialize(c->Cs());
             }
             break;
         case EMessageId::SS:
@@ -2203,6 +2213,7 @@ namespace Greis
                 out << _serializer.Serialize(c->Wna());
                 out << _serializer.Serialize(c->Toa());
                 out << _serializer.Serialize(c->HealthA());
+                out << _serializer.Serialize(c->HealthS());
                 out << _serializer.Serialize(c->Config());
                 out << _serializer.Serialize(c->Af1());
                 out << _serializer.Serialize(c->Af0());
@@ -2229,12 +2240,22 @@ namespace Greis
                 out << _serializer.Serialize(c->LTope());
                 out << _serializer.Serialize(c->LTopc());
                 out << _serializer.Serialize(c->DADot());
+                out << _serializer.Serialize(c->FDelnDot());
+                out << _serializer.Serialize(c->CURAoe());
                 out << _serializer.Serialize(c->CURAoc());
                 out << _serializer.Serialize(c->CURAoc1());
                 out << _serializer.Serialize(c->CURAoc2());
                 out << _serializer.Serialize(c->FIscL1CA());
-                out << _serializer.Serialize(c->FIscL5I5());
-                out << _serializer.Serialize(c->FIscL1CP());
+                out << _serializer.Serialize(c->FIscL2C());
+                if (c->Size() == 45)
+                {
+                    // Optional Data Block
+                    out << _serializer.Serialize(c->FIscL5I5());
+                    out << _serializer.Serialize(c->FIscL5Q5());
+                } else {
+                    out << QVariant(QVariant::Double);
+                    out << QVariant(QVariant::Double);
+                }
                 out << _serializer.Serialize(c->DAf0());
             }
             break;

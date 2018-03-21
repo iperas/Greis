@@ -17,6 +17,10 @@ namespace Greis
         p_message += sizeof(_lTopc);
         _serializer.Deserialize(p_message, _dADot);
         p_message += sizeof(_dADot);
+        _serializer.Deserialize(p_message, _fDelnDot);
+        p_message += sizeof(_fDelnDot);
+        _serializer.Deserialize(p_message, _cURAoe);
+        p_message += sizeof(_cURAoe);
         _serializer.Deserialize(p_message, _cURAoc);
         p_message += sizeof(_cURAoc);
         _serializer.Deserialize(p_message, _cURAoc1);
@@ -25,10 +29,16 @@ namespace Greis
         p_message += sizeof(_cURAoc2);
         _serializer.Deserialize(p_message, _fIscL1CA);
         p_message += sizeof(_fIscL1CA);
-        _serializer.Deserialize(p_message, _fIscL5I5);
-        p_message += sizeof(_fIscL5I5);
-        _serializer.Deserialize(p_message, _fIscL1CP);
-        p_message += sizeof(_fIscL1CP);
+        _serializer.Deserialize(p_message, _fIscL2C);
+        p_message += sizeof(_fIscL2C);
+        if (Size() == 45)
+        {
+            // Optional Data Block
+            _serializer.Deserialize(p_message, _fIscL5I5);
+            p_message += sizeof(_fIscL5I5);
+            _serializer.Deserialize(p_message, _fIscL5Q5);
+            p_message += sizeof(_fIscL5Q5);
+        }
         _serializer.Deserialize(p_message, _DAf0);
         p_message += sizeof(_DAf0);
 
@@ -58,12 +68,19 @@ namespace Greis
         _serializer.Serialize(_lTope, result);
         _serializer.Serialize(_lTopc, result);
         _serializer.Serialize(_dADot, result);
+        _serializer.Serialize(_fDelnDot, result);
+        _serializer.Serialize(_cURAoe, result);
         _serializer.Serialize(_cURAoc, result);
         _serializer.Serialize(_cURAoc1, result);
         _serializer.Serialize(_cURAoc2, result);
         _serializer.Serialize(_fIscL1CA, result);
-        _serializer.Serialize(_fIscL5I5, result);
-        _serializer.Serialize(_fIscL1CP, result);
+        _serializer.Serialize(_fIscL2C, result);
+        if (Size() == 45)
+        {
+            // Optional Data Block
+            _serializer.Serialize(_fIscL5I5, result);
+            _serializer.Serialize(_fIscL5Q5, result);
+        }
         _serializer.Serialize(_DAf0, result);
         
         assert(result.size() == Size());
