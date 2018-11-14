@@ -1,0 +1,38 @@
+os:
+  - linux
+
+language: cpp
+
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
+      - sourceline: 'ppa:adrozdoff/cmake'
+    packages:
+      - cmake
+      - gcc-7
+      - g++-7
+      - qt510-meta-minimal
+      - qt510serialport
+      - qt510tools
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update ;
+      brew install qt5 cmake ;
+      brew link --force qt ;
+    fi
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      export CC=gcc-7 ;
+      export CXX=g++-7 ;
+      source /opt/qt510/bin/qt510-env.sh ;
+    fi
+  - cmake --version
+  - qmake --version
+  - cmake .
+  - make
