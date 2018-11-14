@@ -90,10 +90,6 @@ FIND_PACKAGE(Boost COMPONENTS regex system thread REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
 
-## Gtest
-
-INCLUDE(CMakeGTest.txt)
-
 # Common
 
 include(ExternalProject)
@@ -158,10 +154,4 @@ export ( TARGETS ${PROJECT} FILE ${CMAKE_BINARY_DIR}/${PROJECT}-config.cmake )
 export ( PACKAGE ${PROJECT} )
 
 
-# Tests
 
-add_subdirectory(greis.Tests)
-add_subdirectory(common.Tests)
-ENABLE_TESTING()
-ADD_TEST_EX(common.Tests)
-ADD_TEST_EX(greis.Tests)
