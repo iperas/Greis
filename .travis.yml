@@ -9,7 +9,6 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - sourceline: 'ppa:mhier/libboost-latest'
       - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
       - sourceline: 'ppa:adrozdoff/cmake'
     packages:
@@ -18,8 +17,6 @@ addons:
       - g++-7
       - qt510-meta-minimal
       - qt510serialport
-      - qt510tools
-      - boost1.67
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then

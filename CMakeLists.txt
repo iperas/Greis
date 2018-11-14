@@ -82,14 +82,6 @@ endif()
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Sql)
 
-## Boost
-
-SET(Boost_USE_STATIC_LIBS ON)
-SET(Boost_USE_MULTITHREADED ON)
-FIND_PACKAGE(Boost COMPONENTS regex system thread REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
-
 # Common
 
 include(ExternalProject)
@@ -144,7 +136,6 @@ SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(
     ${PROJECT}
     ${DEPENDS_ON_PROJECTS}
-    ${Boost_LIBRARIES}
     Qt5::Core
         Qt5::Sql)
 
