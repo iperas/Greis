@@ -143,6 +143,4 @@ target_link_libraries(
 install ( TARGETS ${PROJECT} EXPORT ${PROJECT} ARCHIVE DESTINATION ${CMAKE_BINARY_DIR}/build/lib)
 export ( TARGETS ${PROJECT} FILE ${CMAKE_BINARY_DIR}/${PROJECT}-config.cmake )
 export ( PACKAGE ${PROJECT} )
-
-
-
+add_subdirectory(test)

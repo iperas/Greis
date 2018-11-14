@@ -3,7 +3,6 @@
 
 #include "GreisMessageStream.h"
 #include <vector>
-#include <boost/utility.hpp>
 #include "Epoch.h"
 #include "common/SmartPtr.h"
 #include "StdMessage/RcvTimeStdMessage.h"
@@ -12,10 +11,13 @@
 
 namespace Greis
 {
-    class DataChunk : private boost::noncopyable
+    class DataChunk
     {
     public:
         SMART_PTR_T(DataChunk);
+
+        DataChunk (const DataChunk&) = delete;
+        DataChunk& operator=(const DataChunk&) = delete;
 
         static DataChunk::UniquePtr_t FromFile(QString filename, bool skipInvalid = false);
         void ReadHead(GreisMessageStream& stream);

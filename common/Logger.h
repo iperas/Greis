@@ -2,14 +2,13 @@
 #define Logger_h__
 
 #include "Singleton.h"
-#include <boost/utility.hpp>
 //#include <log4cxx/logger.h>
 //#include <log4cxx/log4cxx.h>
 #include <QtCore/QString>
 
 namespace Common
 {
-    class Logger : boost::noncopyable
+    class Logger
     {
         SINGLETON_BLOCK(Logger)
     private:
@@ -18,7 +17,6 @@ namespace Common
         int logLevel;
     public:
         Logger() {}
-
         void Initialize(int logLevel);
 
         void Debug(const QString& message);

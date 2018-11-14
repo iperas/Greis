@@ -1,14 +1,13 @@
 #ifndef Message_h__
 #define Message_h__
 
-#include <boost/utility.hpp>
 #include <QtCore/QByteArray>
 #include "common/SmartPtr.h"
 #include "EMessageKind.h"
 
 namespace Greis
 {
-    class Message : private boost::noncopyable
+    class Message
     {
     private:
         const EMessageKind::Type _kind;
@@ -22,6 +21,9 @@ namespace Greis
         virtual ~Message()
         {
         }
+
+        Message(const Message&) = delete;
+        Message& operator=(const Message&) = delete;
 
         virtual std::string ToString() const = 0;
         virtual bool Validate() const = 0;

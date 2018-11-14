@@ -2,7 +2,6 @@
 #define MySqlSource_h__
 
 #include <functional>
-#include <boost/noncopyable.hpp>
 #include <QtCore/QMap>
 #include <QtCore/QDateTime>
 #include "common/Connection.h"
@@ -25,7 +24,7 @@ namespace Greis
         return (((unsigned short)(c_id)[0]) << 8) | (c_id)[1];
     }
 
-    class MySqlSource : private boost::noncopyable
+    class MySqlSource 
     {
     private:
         struct MessageEx
@@ -38,6 +37,8 @@ namespace Greis
             int epochIndex;
         };
     public:
+        MySqlSource(const MySqlSource&) = delete;
+        MySqlSource& operator=(const MySqlSource&) = delete;
         SMART_PTR_T(MySqlSource);
 
         MySqlSource(Connection::SharedPtr_t connection);

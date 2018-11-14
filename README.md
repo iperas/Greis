@@ -9,7 +9,6 @@ The repository consists of a Generator that parses the reference manual and prod
 ### Prerequisites
 To build the CPP code:
 * C++11 compiler
-* Boost (regex, system, thread)
 * CMake
 
 To build the Generator:

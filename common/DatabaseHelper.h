@@ -3,17 +3,19 @@
 
 #include <QtCore/QtCore>
 #include <QtSql/QtSql>
-#include <boost/utility.hpp>
 #include "SmartPtr.h"
 
 namespace Common 
 {
-    class DatabaseHelper : boost::noncopyable
+    class DatabaseHelper
     {
     private:
         QSqlDatabase _db;
     public:
         SMART_PTR_T(DatabaseHelper);
+
+        DatabaseHelper(const DatabaseHelper&) = delete;
+        DatabaseHelper& operator=(const DatabaseHelper&) = delete;
 
         DatabaseHelper(const QSqlDatabase& db) : _db(db)
         {

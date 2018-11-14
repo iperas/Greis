@@ -2,7 +2,6 @@
 #define DataInserter_h__
 
 #include <QtCore/QtCore>
-#include <boost/utility.hpp>
 #include "Exception.h"
 #include "Logger.h"
 #include "Connection.h"
@@ -10,7 +9,7 @@
 
 namespace Common 
 {
-    class DataInserter : boost::noncopyable
+    class DataInserter 
     {
         QString _resultInsertQuery;
         QString _insertTemplate;
@@ -19,6 +18,9 @@ namespace Common
         DatabaseHelper* _dbHelper;
         QList<QVariant> _boundValues;
     public:
+        DataInserter(const DataInserter&) = delete;
+        DataInserter& operator=(const DataInserter&) = delete;
+
         // insertTemplate: "INSERT INTO <table name>(<column name>[, <column name>]) VALUES "
         // connection: pointer to connection class
         DataInserter(const QString& insertTemplate, Connection::SharedPtr_t connection)

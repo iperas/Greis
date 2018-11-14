@@ -1,8 +1,6 @@
 #include "RawStdMessage.h"
 #include "GreisTypes.h"
 #include "ChecksumComputer.h"
-#include "boost/format.hpp"
-
 using std::string;
 using std::vector;
 using namespace Common;
