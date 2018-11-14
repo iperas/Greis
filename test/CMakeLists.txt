@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
 # variables declaration
 
-SET(PROJECT test)
+SET(PROJECT testBed)
 
 SET(DEPENDS_ON_PROJECTS greis)
 

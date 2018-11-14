@@ -17,6 +17,7 @@ addons:
       - g++-7
       - qt510-meta-minimal
       - qt510serialport
+      - python3
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
