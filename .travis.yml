@@ -37,4 +37,4 @@ script:
   - qmake --version
   - cmake .
   - make
-  - python3 test/test.py
+  - python3.5 test/test.py
