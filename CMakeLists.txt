@@ -82,18 +82,6 @@ endif()
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Sql)
 
-## Boost
-
-SET(Boost_USE_STATIC_LIBS ON)
-SET(Boost_USE_MULTITHREADED ON)
-FIND_PACKAGE(Boost COMPONENTS regex system thread REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
-
-## Gtest
-
-INCLUDE(CMakeGTest.txt)
-
 # Common
 
 include(ExternalProject)
@@ -148,7 +136,6 @@ SET_TARGET_PROPERTIES(${PROJECT} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(
     ${PROJECT}
     ${DEPENDS_ON_PROJECTS}
-    ${Boost_LIBRARIES}
     Qt5::Core
         Qt5::Sql)
 
@@ -156,12 +143,4 @@ target_link_libraries(
 install ( TARGETS ${PROJECT} EXPORT ${PROJECT} ARCHIVE DESTINATION ${CMAKE_BINARY_DIR}/build/lib)
 export ( TARGETS ${PROJECT} FILE ${CMAKE_BINARY_DIR}/${PROJECT}-config.cmake )
 export ( PACKAGE ${PROJECT} )
-
-
-# Tests
-
-add_subdirectory(greis.Tests)
-add_subdirectory(common.Tests)
-ENABLE_TESTING()
-ADD_TEST_EX(common.Tests)
-ADD_TEST_EX(greis.Tests)
+add_subdirectory(test)

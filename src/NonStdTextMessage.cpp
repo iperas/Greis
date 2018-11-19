@@ -1,5 +1,5 @@
 #include "NonStdTextMessage.h"
-#include <boost/format.hpp>
+#include <QtCore/QtCore>
 #include "common/SmartPtr.h"
 
 using std::string;
@@ -24,9 +24,8 @@ namespace Greis
     std::string NonStdTextMessage::ToString() const
     {
         string eomStr = _eom == '\r' ? "\\r" : (_eom == '\n' ? "\\n" : string(1, _eom));
-        string ret = boost::str(boost::format(
-            "<NonStdTextMessage id=0x%1$02X body_length=%2% eom='%3%'>%4%</NonStdTextMessage>") % (int)_id 
-            % _body.size() % eomStr % _body);
+        string ret = QString(
+            "<NonStdTextMessage id=0x%1$02X body_length=%2% eom='%3%'>%4%</NonStdTextMessage>").arg((int)_id).arg(_body.size()).arg(QString::fromStdString(eomStr)).arg(QString::fromStdString(_body)).toStdString();
         return ret;
     }
 

@@ -4,12 +4,11 @@
 #include <QtCore/QSettings>
 #include <QtCore/QString>
 #include <memory>
-#include <boost/utility.hpp>
 #include "Singleton.h"
 
 namespace Common
 {
-    class IniSettings : boost::noncopyable
+    class IniSettings 
     {
         SINGLETON_BLOCK(IniSettings)
     public:

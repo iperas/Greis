@@ -14,8 +14,18 @@ namespace Greis
     
         _serializer.Deserialize(p_message, 122, _req);
         p_message += 122;
-        _serializer.Deserialize(p_message, 36, _opt);
-        p_message += 36;
+        if (BodySize() == 160)
+        {
+            // Optional Data Block
+            _serializer.Deserialize(p_message, 37, _opt);
+            p_message += 37;
+        }
+        if (BodySize() == 168)
+        {
+            // Optional Data Block
+            _serializer.Deserialize(p_message, 45, _opt);
+            p_message += 45;
+        }
         _serializer.Deserialize(p_message, _cs);
         p_message += sizeof(_cs);
 
@@ -70,7 +80,11 @@ namespace Greis
         result.append(headToByteArray());
 
         _serializer.Serialize(_req, result);
-        _serializer.Serialize(_opt, result);
+        if (BodySize() == 120)
+        {
+            // Optional Data Block
+            _serializer.Serialize(_opt, result);
+        }
         _serializer.Serialize(_cs, result);
         
         assert(result.size() == Size());

@@ -84,7 +84,7 @@ namespace Greis
                 serializer.Deserialize(q.value(32), c->Cis());
             };
         
-        auto queryGpsEphOptDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `navType`, `lTope`, `lTopc`, `dADot`, `cURAoc`, `cURAoc1`, `cURAoc2`, `fIscL1CA`, `fIscL5I5`, `fIscL1CP`, `DAf0` FROM `ct_GpsEphOptData`");
+        auto queryGpsEphOptDataCustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `navType`, `lTope`, `lTopc`, `dADot`, `fDelnDot`, `cURAoe`, `cURAoc`, `cURAoc1`, `cURAoc2`, `fIscL1CA`, `fIscL2C`, `fIscL5I5`, `fIscL5Q5`, `DAf0` FROM `ct_GpsEphOptData`");
         auto handlerGpsEphOptDataCustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GpsEphOptDataCustomType(size);
@@ -93,13 +93,20 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->LTope());
                 serializer.Deserialize(q.value(6), c->LTopc());
                 serializer.Deserialize(q.value(7), c->DADot());
-                serializer.Deserialize(q.value(8), c->CURAoc());
-                serializer.Deserialize(q.value(9), c->CURAoc1());
-                serializer.Deserialize(q.value(10), c->CURAoc2());
-                serializer.Deserialize(q.value(11), c->FIscL1CA());
-                serializer.Deserialize(q.value(12), c->FIscL5I5());
-                serializer.Deserialize(q.value(13), c->FIscL1CP());
-                serializer.Deserialize(q.value(14), c->DAf0());
+                serializer.Deserialize(q.value(8), c->FDelnDot());
+                serializer.Deserialize(q.value(9), c->CURAoe());
+                serializer.Deserialize(q.value(10), c->CURAoc());
+                serializer.Deserialize(q.value(11), c->CURAoc1());
+                serializer.Deserialize(q.value(12), c->CURAoc2());
+                serializer.Deserialize(q.value(13), c->FIscL1CA());
+                serializer.Deserialize(q.value(14), c->FIscL2C());
+                if (size == 45)
+                {
+                    // Optional Data Block
+                    serializer.Deserialize(q.value(15), c->FIscL5I5());
+                    serializer.Deserialize(q.value(16), c->FIscL5Q5());
+                }
+                serializer.Deserialize(q.value(17), c->DAf0());
             };
         
         auto querySvData0CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `prn`, `cnt`, `data` FROM `ct_SvData0`");
@@ -200,7 +207,7 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Word2());
             };
         
-        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1`");
+        auto queryGPSAlm1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot` FROM `ct_GPSAlm1`");
         auto handlerGPSAlm1CustomType = [&serializer, this] (int size, const QSqlQuery& q, CustomType*& ct)
             {
                 ct = new GPSAlm1CustomType(size);
@@ -209,16 +216,17 @@ namespace Greis
                 serializer.Deserialize(q.value(5), c->Wna());
                 serializer.Deserialize(q.value(6), c->Toa());
                 serializer.Deserialize(q.value(7), c->HealthA());
-                serializer.Deserialize(q.value(8), c->Config());
-                serializer.Deserialize(q.value(9), c->Af1());
-                serializer.Deserialize(q.value(10), c->Af0());
-                serializer.Deserialize(q.value(11), c->RootA());
-                serializer.Deserialize(q.value(12), c->Ecc());
-                serializer.Deserialize(q.value(13), c->M0());
-                serializer.Deserialize(q.value(14), c->Omega0());
-                serializer.Deserialize(q.value(15), c->ArgPer());
-                serializer.Deserialize(q.value(16), c->Deli());
-                serializer.Deserialize(q.value(17), c->OmegaDot());
+                serializer.Deserialize(q.value(8), c->HealthS());
+                serializer.Deserialize(q.value(9), c->Config());
+                serializer.Deserialize(q.value(10), c->Af1());
+                serializer.Deserialize(q.value(11), c->Af0());
+                serializer.Deserialize(q.value(12), c->RootA());
+                serializer.Deserialize(q.value(13), c->Ecc());
+                serializer.Deserialize(q.value(14), c->M0());
+                serializer.Deserialize(q.value(15), c->Omega0());
+                serializer.Deserialize(q.value(16), c->ArgPer());
+                serializer.Deserialize(q.value(17), c->Deli());
+                serializer.Deserialize(q.value(18), c->OmegaDot());
             };
         
         auto queryGPSEphemeris1CustomType = QString("SELECT `id`, `idEpoch`, `unixTimeEpoch`, `bodySize`, `req`, `opt` FROM `ct_GPSEphemeris1`");
@@ -488,11 +496,12 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGpsUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc` FROM `msg_GpsUtcParam`");
+        auto queryGpsUtcParamStdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `utc`, `cs` FROM `msg_GpsUtcParam`");
         auto handlerGpsUtcParamStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GpsUtcParamStdMessage(id, bodySize);
                 c->Utc() = this->extractCustomType<UtcOffsCustomType>(ECustomTypeId::UtcOffs, q.value(6).toInt());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -894,8 +903,8 @@ namespace Greis
         auto handlerPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new PRStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Pr());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -903,8 +912,8 @@ namespace Greis
         auto handlerSPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SPRStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Spr());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -912,8 +921,8 @@ namespace Greis
         auto handlerRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new RPRStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Rpr());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -921,8 +930,8 @@ namespace Greis
         auto handlerSRPRStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SRPRStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Srpr());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -930,8 +939,9 @@ namespace Greis
         auto handlerPrCorrStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new PrCorrStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Prc());
+                serializer.Deserialize(q.value(7), c->Mode());
+                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
@@ -993,8 +1003,9 @@ namespace Greis
         auto handlerPhCorrStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new PhCorrStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Phc());
+                serializer.Deserialize(q.value(7), c->Mode());
+                serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
         
@@ -1002,8 +1013,8 @@ namespace Greis
         auto handlerDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new DPStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Dp());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1011,8 +1022,8 @@ namespace Greis
         auto handlerSRDPStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new SRDPStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Srdp());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1038,8 +1049,8 @@ namespace Greis
         auto handlerCNR2560StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new CNR2560StdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->CnrX256());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1047,8 +1058,8 @@ namespace Greis
         auto handlerCNR2561StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new CNR2561StdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->CnrX256());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1065,8 +1076,8 @@ namespace Greis
         auto handlerIAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new IAmpStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Amp());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1074,8 +1085,8 @@ namespace Greis
         auto handlerQAmpStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new QAmpStdMessage(id, bodySize);
-                
-                /*throw Common::NotImplementedException();*/
+                serializer.Deserialize(q.value(6), c->Amp());
+                serializer.Deserialize(q.value(7), c->Cs());
                 return (Message*)c;
             };
         
@@ -1125,7 +1136,7 @@ namespace Greis
                 return (Message*)c;
             };
         
-        auto queryGPSAlm0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs` FROM `msg_GPSAlm0`");
+        auto queryGPSAlm0StdMessage = QString("SELECT `id`, `idEpoch`, `epochIndex`, `unixTimeEpoch`, `idMessageCode`, `bodySize`, `sv`, `wna`, `toa`, `healthA`, `healthS`, `config`, `af1`, `af0`, `rootA`, `ecc`, `m0`, `omega0`, `argPer`, `deli`, `omegaDot`, `cs` FROM `msg_GPSAlm0`");
         auto handlerGPSAlm0StdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new GPSAlm0StdMessage(id, bodySize);
@@ -1133,17 +1144,18 @@ namespace Greis
                 serializer.Deserialize(q.value(7), c->Wna());
                 serializer.Deserialize(q.value(8), c->Toa());
                 serializer.Deserialize(q.value(9), c->HealthA());
-                serializer.Deserialize(q.value(10), c->Config());
-                serializer.Deserialize(q.value(11), c->Af1());
-                serializer.Deserialize(q.value(12), c->Af0());
-                serializer.Deserialize(q.value(13), c->RootA());
-                serializer.Deserialize(q.value(14), c->Ecc());
-                serializer.Deserialize(q.value(15), c->M0());
-                serializer.Deserialize(q.value(16), c->Omega0());
-                serializer.Deserialize(q.value(17), c->ArgPer());
-                serializer.Deserialize(q.value(18), c->Deli());
-                serializer.Deserialize(q.value(19), c->OmegaDot());
-                serializer.Deserialize(q.value(20), c->Cs());
+                serializer.Deserialize(q.value(10), c->HealthS());
+                serializer.Deserialize(q.value(11), c->Config());
+                serializer.Deserialize(q.value(12), c->Af1());
+                serializer.Deserialize(q.value(13), c->Af0());
+                serializer.Deserialize(q.value(14), c->RootA());
+                serializer.Deserialize(q.value(15), c->Ecc());
+                serializer.Deserialize(q.value(16), c->M0());
+                serializer.Deserialize(q.value(17), c->Omega0());
+                serializer.Deserialize(q.value(18), c->ArgPer());
+                serializer.Deserialize(q.value(19), c->Deli());
+                serializer.Deserialize(q.value(20), c->OmegaDot());
+                serializer.Deserialize(q.value(21), c->Cs());
                 return (Message*)c;
             };
         
@@ -1235,7 +1247,11 @@ namespace Greis
             {
                 auto c = new GPSEphemeris0StdMessage(id, bodySize);
                 c->Req() = this->extractCustomType<GpsEphReqDataCustomType>(ECustomTypeId::GpsEphReqData, q.value(6).toInt());
-                c->Opt() = this->extractCustomType<GpsEphOptDataCustomType>(ECustomTypeId::GpsEphOptData, q.value(7).toInt());
+                if (bodySize == 120)
+                {
+                    // Optional Data Block
+                    c->Opt() = this->extractCustomType<GpsEphOptDataCustomType>(ECustomTypeId::GpsEphOptData, q.value(7).toInt());
+                }
                 serializer.Deserialize(q.value(8), c->Cs());
                 return (Message*)c;
             };
@@ -1261,8 +1277,8 @@ namespace Greis
         auto handlerQZSSEphemerisStdMessage = [&serializer, this] (const std::string& id, int bodySize, const QSqlQuery& q)
             {
                 auto c = new QZSSEphemerisStdMessage(id, bodySize);
-                c->Gps() = this->extractCustomType<GPSEphemeris1CustomType>(ECustomTypeId::GPSEphemeris1, q.value(6).toInt());
-                serializer.Deserialize(q.value(7), c->Cs());
+                
+                /*throw Common::NotImplementedException();*/
                 return (Message*)c;
             };
         

@@ -1,7 +1,6 @@
 #ifndef MySqlSink_h__
 #define MySqlSink_h__
 
-#include <boost/noncopyable.hpp>
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include "common/Connection.h"
@@ -20,11 +19,13 @@ using namespace Common;
 
 namespace Greis
 {
-    class MySqlSink : private boost::noncopyable
+    class MySqlSink
     {
     public:
         SMART_PTR_T(MySqlSink);
 
+        MySqlSink(const MySqlSink&) = delete;
+        MySqlSink& operator=(const MySqlSink&) = delete;
         MySqlSink(Connection::SharedPtr_t connection, int inserterBatchSize = 10000);
         ~MySqlSink();
 

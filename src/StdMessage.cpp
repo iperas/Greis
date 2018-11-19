@@ -1,7 +1,6 @@
 #include "StdMessage.h"
 #include "GreisTypes.h"
 #include "ChecksumComputer.h"
-#include "boost/format.hpp"
 #include "common/BitConverter.h"
 #include "RawStdMessage.h"
 #include <iostream>
@@ -81,7 +80,7 @@ namespace Greis
             }
             else
             {
-                ret.append(boost::str(boost::format("{0x%1$02X}") % (unsigned int)(unsigned char)ch));
+                ret.append(QString("{0x%1$02X}").arg((unsigned int)(unsigned char)ch).toStdString());
             }
         }
         return ret;
@@ -91,8 +90,7 @@ namespace Greis
     {
         auto messageBytes = ToByteArray();
         auto bodyStr = convertByteArrayToReadableString(messageBytes.data() + 5, messageBytes.size() - 5);
-        string ret = boost::str(boost::format("<%1% id='%2%' body_length=%3%>%4%</%1%>") 
-            % tagName % Id() % BodySize() % bodyStr);
+        string ret = QString("<%1% id='%2%' body_length=%3%>%4%</%1%>").arg(QString::fromStdString(tagName)).arg(QString::fromStdString(Id())).arg(BodySize()).arg(QString::fromStdString(bodyStr)).toStdString();
         return ret;
     }
 
