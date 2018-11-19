@@ -19,6 +19,8 @@
 #include "greis/StdMessage/SPRStdMessage.h"
 #include "greis/StdMessage/SRPRStdMessage.h"
 #include "greis/StdMessage/ExtSatIndexStdMessage.h"
+#include "greis/StdMessage/RcvTimeStdMessage.h"
+#include "greis/StdMessage/RcvDateStdMessage.h"
 #include "common/Logger.h"
 
 namespace Greis
@@ -78,6 +80,16 @@ namespace Greis
 
         ESIdx getESI(int USI);
         int getUSI(ESIdx ESI);
+
+        void updateTimePart( RcvTimeStdMessage* msg )
+        {
+            DateTime.setTime(QTime(0, 0).addMSecs(msg->Tod()));
+        }
+
+        void updateDatePart( RcvDateStdMessage* msg ) 
+        {
+            DateTime.setDate(QDate(msg->Year(), msg->Month(), msg->Day()));
+        }
     };
 }
 

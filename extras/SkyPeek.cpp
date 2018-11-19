@@ -201,7 +201,15 @@ namespace Greis
         {
 			sLogger.Trace(QString("SkyPeek: standard message"));
         	auto stdMsg = dynamic_cast<StdMessage*>(msg);
-            if (stdMsg->IdNumber() == EMessageId::SatIndex) // [SI]
+			if (stdMsg->IdNumber() == EMessageId::RcvTime)
+            {
+                this->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
+            }
+            else if (stdMsg->IdNumber() == EMessageId::RcvDate)
+            {
+                this->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
+            }
+            else if (stdMsg->IdNumber() == EMessageId::SatIndex) // [SI]
             {
 				sLogger.Trace(QString("SkyPeek: new [SI]"));
             	SVs.clear();
