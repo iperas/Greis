@@ -50,11 +50,14 @@ namespace Greis
             std::array<double,6> CarrierPhase;
             std::array<double,6> CarrierFrequency;
             double pr_ref;
+            bool pr_ref_use_rx;
             float Ksys;
             float Asys;
         };
 
         QHash<uint,SV> SVs;
+
+        QHash<uint,SV> pSVs; //Previous
 
         SMART_PTR_T(SkyPeek);
 
@@ -62,6 +65,7 @@ namespace Greis
 
         void AddMessage(Message * msg);
 
+        SkyPeek();
     private:
 
         uint revision;

@@ -7,6 +7,10 @@ using namespace Common;
 
 namespace Greis
 {
+	SkyPeek::SkyPeek()
+	{
+		
+	}
 	SkyPeek::ESIdx SkyPeek::getESI(int USI)
 	{
 		ESIdx ESI;
@@ -174,7 +178,7 @@ namespace Greis
 	double SkyPeek::recoverIntegerRelativePseudoRange(int integerRelativePseudoRange, int seq)
 	{
 		double PR;
-		PR = (integerRelativePseudoRange * 1e-11) + 2e-7 + SVs[seq].pr_ref;
+		PR = ((double)integerRelativePseudoRange * 1e-11) + 2e-7 + SVs[seq].pr_ref;
 		return PR;
 	}
 	double SkyPeek::recoverIntegerCarrierPhases(uint integerCarrierPhase, int seq)
@@ -199,19 +203,21 @@ namespace Greis
 	{
 		if (msg->Kind() == EMessageKind::StdMessage)
         {
-			sLogger.Trace(QString("SkyPeek: standard message"));
         	auto stdMsg = dynamic_cast<StdMessage*>(msg);
 			if (stdMsg->IdNumber() == EMessageId::RcvTime)
             {
+				sLogger.Trace(QString("SkyPeek: new [RT]"));
                 this->updateTimePart(dynamic_cast<RcvTimeStdMessage*>(stdMsg));
             }
             else if (stdMsg->IdNumber() == EMessageId::RcvDate)
             {
+				sLogger.Trace(QString("SkyPeek: new [RD]"));
                 this->updateDatePart(dynamic_cast<RcvDateStdMessage*>(stdMsg));
             }
             else if (stdMsg->IdNumber() == EMessageId::SatIndex) // [SI]
             {
 				sLogger.Trace(QString("SkyPeek: new [SI]"));
+				pSVs = SVs;
             	SVs.clear();
             	auto satIndexMsg = dynamic_cast<SatIndexStdMessage*>(msg);
             	auto usis = satIndexMsg->Usi();
@@ -221,12 +227,14 @@ namespace Greis
 					SVs[i].Asys = getAsys(SVs[i].ESI);
 					SVs[i].Ksys = getKsys(SVs[i].ESI);
 					SVs[i].CarrierFrequency = getCarrierFrequency(SVs[i].ESI);
+					SVs[i].pr_ref_use_rx = false;
 					if(SVs[i].ESI.SSID==0 || SVs[i].ESI.SSID>7)
 					sLogger.Warn(QString("SkyPeek: unknown satellite in lock: SSID: %1, SVID: %2, USI: %3").arg(SVs[i].ESI.SSID).arg(SVs[i].ESI.SVID).arg(SVs[i].USI));
             	}
 			}  else if (stdMsg->IdNumber() == EMessageId::ExtSatIndex) // [SX]
             {
 				sLogger.Trace(QString("SkyPeek: new [SX]"));
+				pSVs = SVs;
             	SVs.clear();
             	auto satIndexMsg = dynamic_cast<ExtSatIndexStdMessage*>(msg);
             	for(int i=0;i<satIndexMsg->Esi().size();i++){
@@ -238,11 +246,12 @@ namespace Greis
             	}
             }  else if (stdMsg->IdNumber() == EMessageId::PR) // [RX], [RC], [R1], [R2], [R3], [R5], [Rl]
             {
-				sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+				sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto pRMsg = dynamic_cast<PRStdMessage*>(msg);
             	auto pRs = pRMsg->Pr();
             	if(stdMsg->Id() == "RC"){
             		for(int i=0;i<pRs.size();i++){
+						if (!SVs[i].pr_ref_use_rx) SVs[i].pr_ref = std::trunc(((double)pRs[i]-SVs[i].Asys)/SVs[i].Ksys)*SVs[i].Ksys+SVs[i].Asys;
             			SVs[i].Pseudorange[Signals::caL1] = (double)pRs[i];
             		}
             	} else if (stdMsg->Id() == "R1"){
@@ -267,12 +276,13 @@ namespace Greis
 					}
 				} else if (stdMsg->Id() == "RX"){
             		for(int i=0;i<pRs.size();i++){
+						SVs[i].pr_ref_use_rx = true;
             			SVs[i].pr_ref = std::trunc(((double)pRs[i]-SVs[i].Asys)/SVs[i].Ksys)*SVs[i].Ksys+SVs[i].Asys;
             		}
             	}
             } else if (stdMsg->IdNumber() == EMessageId::RPR) // [CR], [1R], [2R], [3R], [5R], [lR]
             {
-            	sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+            	sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto rPRMsg = dynamic_cast<RPRStdMessage*>(msg);
             	auto rPRs = rPRMsg->Rpr();	
             	if(stdMsg->Id() == "1R"){
@@ -302,11 +312,12 @@ namespace Greis
             	}
             } else if (stdMsg->IdNumber() == EMessageId::SPR) // [rx], [rc], [r1], [r2], [r3], [r5], [rl]
             {
-            	sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+            	sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto sPRMsg = dynamic_cast<SPRStdMessage*>(msg);
             	auto sPRs = sPRMsg->Spr();
             	if(stdMsg->Id() == "rc"){
             		for(int i=0;i<sPRs.size();i++){
+						if (!SVs[i].pr_ref_use_rx) SVs[i].pr_ref = (double)recoverIntegerPseudoRange((int)sPRs[i],i);
             			SVs[i].Pseudorange[Signals::caL1] = recoverIntegerPseudoRange((int)sPRs[i],i);
             		}
             	} else if (stdMsg->Id() == "r1"){
@@ -328,11 +339,16 @@ namespace Greis
 				} else if (stdMsg->Id() == "rl"){
             		for(int i=0;i<sPRs.size();i++){
             			SVs[i].Pseudorange[Signals::L1C] = recoverIntegerPseudoRange((int)sPRs[i],i);
-            		}
+					}
+            	} else if (stdMsg->Id() == "rx"){
+					for(int i=0;i<sPRs.size();i++){
+						SVs[i].pr_ref_use_rx = true;
+            			SVs[i].pr_ref = (double)sPRs[i];
+					}
             	}
             } else if (stdMsg->IdNumber() == EMessageId::SRPR) // [cr], [1r], [2r], [3r], [5r], [lr]
             {
-            	sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+            	sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto sRPRMsg = dynamic_cast<SRPRStdMessage*>(msg);
             	auto sRPRs = sRPRMsg->Srpr();
 				if(stdMsg->Id() == "cr"){
@@ -362,37 +378,37 @@ namespace Greis
             	}
             } else if (stdMsg->IdNumber() == EMessageId::CP)
             {
-            	sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+            	sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto cPMsg = dynamic_cast<CPStdMessage*>(msg);
             	auto cPs = cPMsg->Cp();
             	if(stdMsg->Id() == "PC"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::caL1] = (double)cPs[i];
             		}
             	} else if (stdMsg->Id() == "P1"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::pL1] = (double)cPs[i];
             		}
             	} else if (stdMsg->Id() == "P2"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::pL2] = (double)cPs[i];
             		}
             	} else if (stdMsg->Id() == "P3"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::caL2] = (double)cPs[i];
             		}
 				} else if (stdMsg->Id() == "P5"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::L5] = (double)cPs[i];
             		}
 				} else if (stdMsg->Id() == "Pl"){
-            		for(int i=0;i++;i<cPs.size()){
+            		for(int i=0;i<cPs.size();i++){
             			SVs[i].CarrierPhase[Signals::L1C] = (double)cPs[i];
             		}
             	}
             } else if (stdMsg->IdNumber() == EMessageId::SCP)
             {
-				sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+				sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto sCPMsg = dynamic_cast<SCPStdMessage*>(msg);
             	auto sCPs = sCPMsg->Scp();
             	if(stdMsg->Id() == "pc"){
@@ -415,14 +431,14 @@ namespace Greis
             		for(int i=0;i<sCPs.size();i++){
             			SVs[i].CarrierPhase[Signals::L5] = recoverIntegerCarrierPhases((uint)sCPs[i],i);
             		}
-				} else if (stdMsg->Id() == "Pl"){
+				} else if (stdMsg->Id() == "pl"){
             		for(int i=0;i++;i<sCPs.size()){
             			SVs[i].CarrierPhase[Signals::L1C] = recoverIntegerCarrierPhases((uint)sCPs[i],i);
             		}
             	}
 			} else if (stdMsg->IdNumber() == EMessageId::RCPRC0)
             {
-				sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+				sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto rCPRC0Msg = dynamic_cast<RCPRC0StdMessage*>(msg);
             	auto rCPRC0s = rCPRC0Msg->Rcp();
            		if(stdMsg->Id() == "CP"){
@@ -452,7 +468,7 @@ namespace Greis
             	}
 			} else if (stdMsg->IdNumber() == EMessageId::RCPRc1)
             {
-				sLogger.Trace(QString("SkyPeek: new %1").arg(QString::fromStdString(stdMsg->Id())));
+				sLogger.Trace(QString("SkyPeek: new [%1]").arg(QString::fromStdString(stdMsg->Id())));
             	auto rCPRc1Msg = dynamic_cast<RCPRc1StdMessage*>(msg);
             	auto rCPRc1s = rCPRc1Msg->Rcp();
            		if(stdMsg->Id() == "cp"){
@@ -482,7 +498,7 @@ namespace Greis
             	}
 			} else if (stdMsg->IdNumber() == EMessageId::SatElevation)
             {
-				sLogger.Trace(QString("SkyPeek: updating EL"));
+				sLogger.Trace(QString("SkyPeek: new [EL]"));
             	auto SatElevationMsg = dynamic_cast<SatElevationStdMessage*>(msg);
             	auto SatElevations = SatElevationMsg->Elev();
             	for(int i=0;i<SatElevations.size();i++){
@@ -490,7 +506,7 @@ namespace Greis
             	}
 			} else if (stdMsg->IdNumber() == EMessageId::SatAzimuth)
             {
-				sLogger.Trace(QString("SkyPeek: updating AZ"));
+				sLogger.Trace(QString("SkyPeek: new [AZ]"));
             	auto SatAzimuthMsg = dynamic_cast<SatAzimuthStdMessage*>(msg);
             	auto SatAzimuths = SatAzimuthMsg->Azim();
             	for(int i=0;i<SatAzimuths.size();i++){
