@@ -9,7 +9,7 @@ namespace Greis
 {
 	SkyPeek::SkyPeek()
 	{
-		
+		pv.x,pv.y,pv.z,pv.perror,pv.vx,pv.vy,pv.vz,pv.verror = 0;
 	}
 	SkyPeek::ESIdx SkyPeek::getESI(int USI)
 	{
@@ -512,8 +512,23 @@ namespace Greis
             	for(int i=0;i<SatAzimuths.size();i++){
             			SVs[i].Azimuth = (int)SatAzimuths[i] * 2;
             	}
+            } else if (stdMsg->IdNumber() == EMessageId::GeoPos)
+            {
+				sLogger.Trace(QString("SkyPeek: new [PG]"));
+            	auto GeoPosMsg = dynamic_cast<GeoPosStdMessage*>(msg);
+				pv.x = GeoPosMsg->Lon();
+				pv.y = GeoPosMsg->Lat();
+				pv.z = GeoPosMsg->Alt();
+				pv.perror = GeoPosMsg->PSigma();
+            } else if (stdMsg->IdNumber() == EMessageId::GeoVel)
+            {
+				sLogger.Trace(QString("SkyPeek: new [VG]"));
+            	auto GeoVelMsg = dynamic_cast<GeoVelStdMessage*>(msg);
+				pv.vx = GeoVelMsg->Lon();
+				pv.vy = GeoVelMsg->Lat();
+				pv.vz = GeoVelMsg->Alt();
+				pv.verror = GeoVelMsg->VSigma();
             }
-
         }
 	}
 }

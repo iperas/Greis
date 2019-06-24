@@ -12,6 +12,8 @@
 #include "greis/StdMessage/SCPStdMessage.h"
 #include "greis/StdMessage/CPStdMessage.h"
 #include "greis/StdMessage/PRStdMessage.h"
+#include "greis/StdMessage/GeoPosStdMessage.h"
+#include "greis/StdMessage/GeoVelStdMessage.h"
 #include "greis/StdMessage/RCPRc1StdMessage.h"
 #include "greis/StdMessage/RCPRC0StdMessage.h"
 #include "greis/StdMessage/RPRStdMessage.h"
@@ -54,6 +56,21 @@ namespace Greis
             float Ksys;
             float Asys;
         };
+
+        struct NAV
+        {
+            double x;
+            double y;
+            double z;
+            double perror;
+            double vx;
+            double vy;
+            double vz;
+            double verror;
+            
+        };
+
+        NAV pv;
 
         QHash<uint,SV> SVs;
 
